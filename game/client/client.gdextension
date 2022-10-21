@@ -1,0 +1,14 @@
+[configuration]
+
+entry_symbol = "cl_entrypoint"
+
+[libraries]
+
+macos.debug = "res://client_debug.framework"
+macos.release = "res://client.framework"
+windows.debug.x86_32 = "res://bin/client_debug.x86_32.dll"
+windows.release.x86_32 = "res://bin/client.x86_32.dll"
+windows.debug.x86_64 = "res://client_debug.x86_64.dll"
+windows.release.x86_64 = "res://bin/client.x86_64.dll"
+linux.debug.x86_64 = "res://bin/libclient_debug.x86_64.so"
+linux.release.x86_64 = "res://libclient.x86_64.so"
