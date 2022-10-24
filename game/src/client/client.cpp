@@ -19,6 +19,7 @@ void Client::_ready()
     multiplayerPeer->create_client("localhost", 7654, 4);
 
     Ref<MultiplayerAPI> mAPI = memnew(MultiplayerAPI);
+    mAPI->set_multiplayer_peer(multiplayerPeer);
 
     this->get_tree()->set_multiplayer(mAPI);
 }
