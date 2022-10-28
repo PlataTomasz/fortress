@@ -8,12 +8,13 @@
 
 void Client::_enter_tree()
 {
-    this->add_child(ui);
+    //this->add_child(ui);
 
 }
 
 void Client::_ready()
 {
+    /*
     //Initialize network Peer
     multiplayerPeer = memnew(ENetMultiplayerPeer);
     multiplayerPeer->create_client("localhost", 7654, 4);
@@ -22,6 +23,7 @@ void Client::_ready()
     mAPI->set_multiplayer_peer(multiplayerPeer);
 
     this->get_tree()->set_multiplayer(mAPI);
+    */
 }
 
 void Client::_process()

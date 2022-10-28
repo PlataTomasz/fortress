@@ -13,7 +13,7 @@ GDCLASS(Client, Node);
 private:
     ENetMultiplayerPeer *multiplayerPeer = nullptr;
 
-    Control *ui = memnew(Control);
+    //Control *ui = memnew(Control);
     Node *game = nullptr;
 public:
     void _process();

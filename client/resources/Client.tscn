@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://dwpxf2syqywyi"]
+[gd_scene load_steps=2 format=3 uid="uid://dwpxf2syqywyi"]
+
+[ext_resource type="PackedScene" uid="uid://mjs6y0bwvg8p" path="res://maps/map01.tscn" id="1_ohokr"]
 
 [node name="Client" type="Client"]
+metadata/_edit_horizontal_guides_ = [646.0]
 
 [node name="Networking" type="Node" parent="."]
 
@@ -10,4 +13,15 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Game" type="Node" parent="."]
+[node name="Panel" type="Panel" parent="UI"]
+layout_mode = 0
+offset_top = 385.0
+offset_right = 1145.0
+offset_bottom = 646.0
+
+[node name="Game" type="Game" parent="."]
+
+[node name="Map" parent="Game" instance=ExtResource("1_ohokr")]
+
+[node name="Camera" type="Camera3D" parent="Game"]
+transform = Transform3D(0.48496, -0.498088, 0.718834, -0.018516, 0.815928, 0.577858, -0.87434, -0.293548, 0.38647, 1.66169, 0.822818, 1.2462)
