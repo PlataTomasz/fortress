@@ -4,7 +4,9 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include "game.hpp"
 #include "client.h"
+#include "entities/entity.hpp"
 
 using namespace godot;
 
@@ -15,7 +17,9 @@ void initialize_client(ModuleInitializationLevel p_level)
         return;
     }
 
+    ClassDB::register_class<Game>();
     ClassDB::register_class<Client>();
+    ClassDB::register_class<Entity>();
 }
 
 void uninitialize_client(ModuleInitializationLevel p_level)
