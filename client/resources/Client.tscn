@@ -23,5 +23,10 @@ offset_bottom = 646.0
 
 [node name="Map" parent="Game" instance=ExtResource("1_ohokr")]
 
-[node name="Camera" type="Camera3D" parent="Game"]
+[node name="Camera_old" type="Camera3D" parent="Game"]
 transform = Transform3D(0.48496, -0.498088, 0.718834, -0.018516, 0.815928, 0.577858, -0.87434, -0.293548, 0.38647, 1.66169, 0.822818, 1.2462)
+visible = false
+
+[node name="Camera" type="Camera3D" parent="Game"]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 4, 0)
+current = true
