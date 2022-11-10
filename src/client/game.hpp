@@ -25,6 +25,7 @@ private:
     Node3D *mapInstance = nullptr;
     Camera3D *camera = nullptr;
 public:
+
     virtual void _ready();
     virtual void _unhandled_input(const Ref<InputEvent> &event);
 

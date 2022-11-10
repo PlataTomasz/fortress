@@ -4,6 +4,8 @@
 #include <godot_cpp/variant/node_path.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/sphere_mesh.hpp>
+#include <godot_cpp/classes/box_mesh.hpp>
+#include "entities/entity.hpp"
 #include <iostream>
 
 Game::Game()
@@ -64,8 +66,6 @@ Vector3 Game::screenToWorld(const Vector2 &screenPos)
 
 void Game::_unhandled_input(const Ref<InputEvent> &event)
 {
-    bool wasMousePressReleased = false;
-
     const InputEventMouseButton *event_ptr = Object::cast_to<InputEventMouseButton>(event.ptr());
     //Check if we got MouseButton input event
     if(event_ptr)
@@ -73,29 +73,38 @@ void Game::_unhandled_input(const Ref<InputEvent> &event)
         Vector2 screenPos = event_ptr->get_position();
         Vector3 worldPos = screenToWorld(screenPos);
 
-
         //Convert screen to world cordinates
-
         printf("{ %f, %f, %f}\n", worldPos.x, worldPos.y, worldPos.z);
 
         //Create entity
         MeshInstance3D *meshInstance = memnew(MeshInstance3D);
 
-        SphereMesh *sphereMesh = memnew(SphereMesh);
-        sphereMesh->set_radius(0.3);
+        BoxMesh *boxMesh = memnew(BoxMesh);
 
-        Ref<Mesh> mesh(sphereMesh);
+        Ref<Mesh> mesh(boxMesh);
+        boxMesh->set_size(Vector3(0.1,0.1,0.1));
 
 
         meshInstance->set_mesh(mesh);
 
+        Entity *ent = memnew(Entity);
 
-        Transform3D meshTransform = meshInstance->get_transform();
-        meshTransform.set_origin(worldPos);
+        ent->add_child(meshInstance);
 
-        meshInstance->set_transform(meshTransform);
-        meshInstance->set_name("DEBUG_BOI");
-        add_child(meshInstance);
+        ent->set_position(worldPos);
+
+        ent->set_name("DEBUG_BOI");
+        add_child(ent);
+
+        ent->look_at(Vector3(0,0,0));
+        Vector3 currRotation = ent->get_rotation();
+        printf("Angles(rad): { %f, %f, %f}\n", currRotation.x, currRotation.y, currRotation.z);
+        printf("Angles(deg): { %f, %f, %f}\n", currRotation.x*180/M_PI, (currRotation.y*180/M_PI), currRotation.z*180/M_PI);
+        printf("Cosine of y angle: %f\n", cos(currRotation.y));
+        printf("Sine of y angle: %f\n", sin(currRotation.y));
+
+        //Make it move in the direction of worldPos(click world position)
+        //meshInstance
 
 
         if(event_ptr->is_action_pressed("basic_attack"))

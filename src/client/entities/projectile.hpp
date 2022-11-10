@@ -8,8 +8,12 @@ class Projectile : public Entity
 GDCLASS(Projectile, Entity);
 
 protected:
-    static void _bind_methods(){};
+    static void _bind_methods();
 public:
+   // void onCollision(const Area3D &collider);
+
+    virtual void _ready();
+
     Projectile();
     ~Projectile();
 };
