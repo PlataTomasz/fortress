@@ -2,13 +2,15 @@
 #define ENTITY_MANAGER_HPP_INCLUDED
 
 #include "entities/entity.hpp"
-
+/**
+ * Class responsible for storing all entities in map.
+*/
 class EntityManager
 {
 private:
-    
-public:
 
+public:
+    
 };
 
 #endif // ENTITY_MANAGER_HPP_INCLUDED
