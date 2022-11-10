@@ -1,5 +1,5 @@
 /*************************************************************************/
-/*  memory.cpp                                                           */
+/*  register_types.cpp                                                   */
 /*************************************************************************/
 /*                       This file is part of:                           */
 /*                           GODOT ENGINE                                */
@@ -28,58 +28,25 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include <godot_cpp/core/memory.hpp>
+#include "register_types.h"
 
-#include <godot_cpp/godot.hpp>
+#include "client/game.hpp"
+#include "client/client.h"
+#include "client/entities/entity.hpp"
 
-namespace godot {
+void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
+{
+    if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
+    {
+        return;
+    }
 
-void *Memory::alloc_static(size_t p_bytes) {
-	return internal::gdn_interface->mem_alloc(p_bytes);
+    ClassDB::register_class<Game>();
+    ClassDB::register_class<Client>();
+    ClassDB::register_class<Entity>();
 }
 
-void *Memory::realloc_static(void *p_memory, size_t p_bytes) {
-	return internal::gdn_interface->mem_realloc(p_memory, p_bytes);
+void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
+{
+
 }
-
-void Memory::free_static(void *p_ptr) {
-	internal::gdn_interface->mem_free(p_ptr);
-}
-
-_GlobalNil::_GlobalNil() {
-	left = this;
-	right = this;
-	parent = this;
-}
-
-_GlobalNil _GlobalNilClass::_nil;
-
-} // namespace godot
-
-void *operator new(size_t p_size, const char *p_description) {
-	return godot::Memory::alloc_static(p_size);
-}
-
-void *operator new(size_t p_size, void *(*p_allocfunc)(size_t p_size)) {
-	return p_allocfunc(p_size);
-}
-
-using namespace godot;
-
-#ifdef _MSC_VER
-void operator delete(void *p_mem, const char *p_description) {
-	ERR_PRINT("Call to placement delete should not happen.");
-	CRASH_NOW();
-}
-
-void operator delete(void *p_mem, void *(*p_allocfunc)(size_t p_size)) {
-	ERR_PRINT("Call to placement delete should not happen.");
-	CRASH_NOW();
-}
-
-void operator delete(void *p_mem, void *p_pointer, size_t check, const char *p_description) {
-	ERR_PRINT("Call to placement delete should not happen.");
-	CRASH_NOW();
-}
-
-#endif
