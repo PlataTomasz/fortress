@@ -4,6 +4,8 @@
 #include <scene/scene_string_names.h>
 #include <scene/3d/collision_shape_3d.h> 
 #include <scene/resources/box_shape_3d.h>
+#include <scene/3d/mesh_instance_3d.h>
+#include <scene/resources/primitive_meshes.h>
 
 Entity::Entity()
 {
@@ -22,6 +24,12 @@ Entity::~Entity()
 
 void Entity::ready()
 {
+    //TODO: Mesh should be loaded from model
+    MeshInstance3D *meshInstance = memnew(MeshInstance3D);
+    BoxMesh *mesh = memnew(BoxMesh);
+
+    meshInstance->set_mesh(mesh);
+
     Area3D *area3d = memnew(Area3D);
     CollisionShape3D *collisionShape3d = memnew(CollisionShape3D);
 
@@ -36,6 +44,7 @@ void Entity::ready()
 
     area3d->set_monitoring(true);
     add_child(area3d);
+    add_child(meshInstance);
     area3d->connect("area_entered", callable_mp(this, &Entity::onCollision));
 
     get_tree()->connect("physics_frame", callable_mp(this, &Entity::physics_frame));

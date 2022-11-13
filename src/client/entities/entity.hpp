@@ -17,6 +17,25 @@ class Entity : public Node3D
 GDCLASS(Entity, Node3D);
 
 protected:
+    //START: RETHINK
+    //TODO: Rethink
+    enum Ability
+    {
+        CAN_NOTHING = 0,
+
+        CAN_MOVE = 1,
+        CAN_CAST_SPELLS = 1<<1,
+        CAN_USE_ITEMS = 1<<2,
+        CAN_DASH = 1<<3,
+        CAN_EVERYTHING = 1<<15
+    };
+
+    /**
+     * Bitmask representing what Entity can perform.
+    */
+    unsigned short abilityMask;
+    //END: RETHINK
+
     /**
      * Amount of units that entity should move by with every second of movement.
     */

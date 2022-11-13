@@ -10,18 +10,16 @@ class Client : public Node
 {
 GDCLASS(Client, Node);
 private:
-    ENetMultiplayerPeer *multiplayerPeer = nullptr;
 
-    //Control *ui = memnew(Control);
-    Node *game = nullptr;
 public:
+
     void _process();
     void _ready();
     void _enter_tree();
 protected:
     static void _bind_methods();
 public:
-    Client(){};
+    Client();
     ~Client(){};
 };
 

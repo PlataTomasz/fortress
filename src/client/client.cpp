@@ -1,11 +1,8 @@
-#include "client.h"
-#include <iostream>
+#include "client.hpp"
 
-
-void Client::_enter_tree()
+Client::Client()
 {
-    //this->add_child(ui);
-
+    
 }
 
 void Client::_ready()
@@ -20,11 +17,6 @@ void Client::_ready()
 
     this->get_tree()->set_multiplayer(mAPI);
     */
-}
-
-void Client::_process()
-{
-
 }
 
 void Client::_bind_methods()

@@ -5,6 +5,7 @@
 #include <scene/main/node.h>
 #include <scene/3d/node_3d.h>
 #include <core/math/vector3.h>
+#include "player.hpp"
 
 #include "map_loader.hpp"
 
@@ -17,12 +18,14 @@ class Game : public Node
 {
 GDCLASS(Game, Node);
 private:
+
     /**
      * Current map.
     */
     Node3D *mapInstance = nullptr;
     Camera3D *camera = nullptr;
 public:
+    Player *player;
 
     virtual void _ready();
     virtual void unhandled_input(const Ref<InputEvent> &event) override;

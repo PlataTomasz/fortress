@@ -20,6 +20,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Panel" type="Panel" parent="UI"]
+layout_mode = 0
 offset_top = 385.0
 offset_right = 1145.0
 offset_bottom = 646.0
