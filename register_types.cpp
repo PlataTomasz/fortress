@@ -30,9 +30,9 @@
 
 #include "register_types.h"
 
-#include "client/game.hpp"
-#include "client/client.h"
-#include "client/entities/entity.hpp"
+#include "src/client/game.hpp"
+#include "src/client/client.h"
+#include "src/client/entities/entity.hpp"
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {

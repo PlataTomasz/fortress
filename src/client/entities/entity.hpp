@@ -1,14 +1,8 @@
 #if !defined(ENTITY_HPP_INCLUDED)
 #define ENTITY_HPP_INCLUDED
 
-#include <godot_cpp/classes/global_constants.hpp>
-#include <godot_cpp/classes/node3d.hpp>
-#include <godot_cpp/classes/mesh_instance3d.hpp>
-#include <godot_cpp/classes/ref.hpp>
-#include <godot_cpp/classes/mesh.hpp>
-#include <godot_cpp/classes/visual_instance3d.hpp>
-#include <godot_cpp/classes/geometry_instance3d.hpp>
-#include <godot_cpp/classes/area3d.hpp>
+#include <scene/3d/node_3d.h>
+#include <scene/3d/area_3d.h>
 
 
 using namespace godot;
@@ -22,11 +16,13 @@ class Entity : public Node3D
 {
 GDCLASS(Entity, Node3D);
 
-private:
+protected:
     /**
      * Amount of units that entity should move by with every second of movement.
     */
     unsigned int movementSpeed = 2;
+
+    // TODO: Implement different collision behaviours(for collision logic handling)
 
     virtual void movementProcess();
 
@@ -37,11 +33,12 @@ private:
     unsigned int currLifetime = 0;
 
 public:
-    virtual void _physics_process(double delta);
-    virtual void _ready();
+    //Called every physics frame
+    void physics_frame();
+    void ready();
     void onCollision(Area3D *collider);
 protected:
-    static void _bind_methods();
+    static void _bind_methods(){};
 public:
     Entity();
     ~Entity();

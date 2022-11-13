@@ -1,9 +1,8 @@
 #ifndef CLIENT_H_INCLUDED
 #define CLIENT_H_INCLUDED
 
-#include <godot_cpp/classes/e_net_multiplayer_peer.hpp>
-#include <godot_cpp/classes/global_constants.hpp>
-#include <godot_cpp/classes/node.hpp>
+#include <scene/main/node.h>
+#include <modules/enet/enet_multiplayer_peer.h>
 
 using namespace godot;
 

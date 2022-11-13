@@ -1,12 +1,10 @@
 #if !defined(GAME_H_INCLUDED)
 #define GAME_H_INCLUDED
 
-#include <godot_cpp/classes/node.hpp>
-#include <godot_cpp/classes/global_constants.hpp>
-#include <godot_cpp/classes/input_event.hpp>
-#include <godot_cpp/classes/ref.hpp>
-#include <godot_cpp/classes/node3d.hpp>
-#include <godot_cpp/classes/camera3d.hpp>
+#include <scene/3d/camera_3d.h>
+#include <scene/main/node.h>
+#include <scene/3d/node_3d.h>
+#include <core/math/vector3.h>
 
 #include "map_loader.hpp"
 
@@ -27,7 +25,7 @@ private:
 public:
 
     virtual void _ready();
-    virtual void _unhandled_input(const Ref<InputEvent> &event);
+    virtual void unhandled_input(const Ref<InputEvent> &event) override;
 
     //Utilis
     Vector3 screenToWorld(const Vector2 &screenPos);

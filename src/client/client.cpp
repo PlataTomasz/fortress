@@ -1,10 +1,6 @@
 #include "client.h"
 #include <iostream>
 
-#include <godot_cpp/classes/control.hpp>
-#include <godot_cpp/classes/scene_tree.hpp>
-#include <godot_cpp/classes/multiplayer_api.hpp>
-#include <godot_cpp/classes/resource_loader.hpp>
 
 void Client::_enter_tree()
 {

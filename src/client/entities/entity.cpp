@@ -1,10 +1,18 @@
 #include "entity.hpp"
-#include <godot_cpp/core/math.hpp>
-#include <godot_cpp/core/class_db.hpp>
+#include <scene/3d/area_3d.h>
+#include <core/string/string_name.h>
+#include <scene/scene_string_names.h>
+#include <scene/3d/collision_shape_3d.h> 
+#include <scene/resources/box_shape_3d.h>
 
 Entity::Entity()
 {
+    if(!Engine::get_singleton()->is_editor_hint())
+    {
+        set_physics_process(true);
 
+        connect("ready", callable_mp(this, &Entity::ready));
+    }
 }
 
 Entity::~Entity()
@@ -12,66 +20,54 @@ Entity::~Entity()
 
 }
 
-void Entity::_ready()
+void Entity::ready()
 {
     Area3D *area3d = memnew(Area3D);
+    CollisionShape3D *collisionShape3d = memnew(CollisionShape3D);
+
+    BoxShape3D *boxShapePtr = memnew(BoxShape3D);
+    boxShapePtr->set_size(Vector3(0.1f, 0.1f, 0.1f));
+
+    Ref<Shape3D> boxShape(boxShapePtr);
+
+    collisionShape3d->set_shape(boxShape);
+    area3d->add_child(collisionShape3d);
+
+
+    area3d->set_monitoring(true);
     add_child(area3d);
-    area3d->connect("area_entered", Callable(this, "onCollision"));
+    area3d->connect("area_entered", callable_mp(this, &Entity::onCollision));
+
+    get_tree()->connect("physics_frame", callable_mp(this, &Entity::physics_frame));
 }
 
 void Entity::onCollision(Area3D *collider)
 {
-    //Area3D *collider = Object::cast_to<Area3D>(area3d);
-
     if(collider)
     {
-        printf("Collision with: %s", collider->get_name());
-        this->queue_free();
+        if(collider->get_class() != "Entity")
+        {
+            printf("Collision with: %s", collider->get_name());
+            this->queue_free();
+        }
     }
     else
         printf("Invalid collider!\n");
 }
 
-void Entity::_bind_methods()
-{
-    ClassDB::bind_method(D_METHOD("onCollision", "collider"), &Entity::onCollision);
-}
-
 //
 void Entity::movementProcess()
 {
-    //FIXME: Assuming that game logic tickrate(aka physics tickrate) is 60 per second
-    float movementSpeedPerTick = this->movementSpeed/60.0f;
 
-    Vector3 currPos = get_position();
-    auto rotation = get_rotation();
-
-    auto angleRad = rotation.y; //Alpha angle
-    auto invertedAngleRad = M_PI - rotation.y; //Beta angle
-
-    /*
-    // This block causes entities to simulate circular movement
-
-    auto newX = cos(invertedAngleRad)*movementSpeedPerTick;
-    auto newY = sin(invertedAngleRad)*movementSpeedPerTick;
-    */
-
-    auto newX = cosf(angleRad)*movementSpeedPerTick;
-    auto newZ = sinf(angleRad)*movementSpeedPerTick;
-
-    float nextPos_x = currPos.x - newZ;
-    float nextPos_z = currPos.z - newX;
-
-    set_position(Vector3(nextPos_x, currPos.y, nextPos_z));
 }
 
-void Entity::_physics_process(double delta)
+void Entity::physics_frame()
 {
     movementProcess();
     currLifetime++;
 
     if(currLifetime >= maxLifetime)
     {
-        this->queue_free();
+        //this->queue_free();
     }
 }

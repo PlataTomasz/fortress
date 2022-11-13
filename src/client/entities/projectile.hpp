@@ -7,12 +7,15 @@ class Projectile : public Entity
 {
 GDCLASS(Projectile, Entity);
 
-protected:
-    static void _bind_methods();
-public:
-   // void onCollision(const Area3D &collider);
+private:
+    float contactDamage = 30.0f;
 
-    virtual void _ready();
+protected:
+    static void _bind_methods(){};
+    void movementProcess() override;
+public:
+    void ready();
+
 
     Projectile();
     ~Projectile();
