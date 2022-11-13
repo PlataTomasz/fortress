@@ -9,6 +9,7 @@
 #include <core/core_bind.h>
 #include <iostream>
 #include "entities/entity.hpp"
+#include "entities/mercenaries/mercenary.hpp"
 
 Game::Game()
 {
@@ -52,7 +53,16 @@ void Game::_ready()
         //TODO: Load map from file - currently left in undefined state
         std::cout<<"Camera was not loaded!"<<std::endl;
     }
+
+    Entity *ent = dynamic_cast<Entity*>(memnew(Mercenary));
+    ent->set_name("ControlledEntity");
+    this->add_child(ent);
+    ent->set_position(Vector3( 2, 2, 2));
+    
+    player = new Player();
+    player->controlledEntity = ent;
 }
+
 
 Vector3 Game::screenToWorld(const Vector2 &screenPos)
 {
@@ -132,6 +142,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         else if(event_ptr->is_action_pressed("movement"))
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
+            player->controlledEntity->set_position(worldPos);
         }
     }
 }
