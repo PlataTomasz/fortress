@@ -5,10 +5,11 @@ Import("env_modules")
 
 env_artifact_seekers = env_modules.Clone()
 
-cl_src_dir = "./client/"
-sh_src_dir = "./shared/"
+cl_src_dir = "./src/client/"
+sh_src_dir = "./src/shared/"
 
 sources = Glob("*.cpp")
+sources += Glob("src/*.cpp")
 sources += Glob(cl_src_dir+"*.cpp")
 sources += Glob(cl_src_dir+"entities/*.cpp")
 
