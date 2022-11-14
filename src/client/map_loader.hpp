@@ -6,7 +6,7 @@
 */
 class MapLoader
 {
-
+    static Node *loadMap(String filename);
 };
 
 #endif // MAP_LOADER_H_INCLUDED

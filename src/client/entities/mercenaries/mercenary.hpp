@@ -2,6 +2,7 @@
 #define MERCENARY_HPP_INCLUDED
 
 #include "../entity.hpp"
+#include "../../game_logic/abilities/ability.hpp"
 
 /**
  * Mercenary is a class responsible for representing
@@ -13,9 +14,14 @@ class Mercenary : public Entity
 GDCLASS(Mercenary, Entity);
 
 private:
-
-protected:
     
+protected:
+    /**
+     * [0] - Passive
+     * [1, 2, 3] - Other abilities
+     * [4] - Ultimate
+    */
+    Ability *skillSet[5];
 
     static void _bind_methods(){};
 public:

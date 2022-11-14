@@ -85,6 +85,7 @@ Vector3 Game::screenToWorld(const Vector2 &screenPos)
 
 void Game::unhandled_input(const Ref<InputEvent> &event)
 {
+    //Casting to InputEventMouseButton - If succeeds: It is valid type
     const InputEventMouseButton *event_ptr = Object::cast_to<InputEventMouseButton>(event.ptr());
     //Check if we got MouseButton input event
     if(event_ptr)
@@ -105,44 +106,26 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
             //Create new entity
 
             //Create entity
-            MeshInstance3D *meshInstance = memnew(MeshInstance3D);
-
-            BoxMesh *boxMesh = memnew(BoxMesh);
-
-            Ref<Mesh> mesh(boxMesh);
-            boxMesh->set_size(Vector3(0.1,0.1,0.1));
-
-
-            meshInstance->set_mesh(mesh);
-
             Entity *ent = memnew(Entity);
-
-            ent->add_child(meshInstance);
 
             ent->set_position(worldPos);
 
             ent->set_name("DEBUG_BOI");
             add_child(ent);
 
+            //TODO: Check if below works for different look_at Vector3 values
             ent->look_at(Vector3(0,0,0));
             Vector3 currRotation = ent->get_rotation();
             printf("Angles(rad): { %f, %f, %f}\n", currRotation.x, currRotation.y, currRotation.z);
             printf("Angles(deg): { %f, %f, %f}\n", currRotation.x*180/M_PI, (currRotation.y*180/M_PI), currRotation.z*180/M_PI);
             printf("Cosine of y angle: %f\n", cos(currRotation.y));
             printf("Sine of y angle: %f\n", sin(currRotation.y));
-
-            //Make it move in the direction of worldPos(click world position)
-            //meshInstance
-
-            /*
-            var raycast_origin = cam.project_ray_origin(event.position)
-            var world_hitpos = raycast_origin + cam.project_ray_normal(event.position) * 1000
-            */
         }
         else if(event_ptr->is_action_pressed("movement"))
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
             player->controlledEntity->set_position(worldPos);
+            //TODO: Send propper movement command - Check AStar Node
         }
     }
 }

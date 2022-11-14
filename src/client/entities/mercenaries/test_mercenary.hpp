@@ -5,8 +5,9 @@
 
 class TestMercenary : public Mercenary
 {
-
-
+public:
+    TestMercenary();
+    ~TestMercenary();
 
 };
 
