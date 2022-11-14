@@ -30,6 +30,7 @@ void Entity::ready()
 
     meshInstance->set_mesh(mesh);
 
+    //Setting up collisions
     Area3D *area3d = memnew(Area3D);
     CollisionShape3D *collisionShape3d = memnew(CollisionShape3D);
 
@@ -41,7 +42,7 @@ void Entity::ready()
     collisionShape3d->set_shape(boxShape);
     area3d->add_child(collisionShape3d);
 
-
+    //Require to make entities collide with eachother
     area3d->set_monitoring(true);
     add_child(area3d);
     add_child(meshInstance);

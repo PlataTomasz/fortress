@@ -19,7 +19,7 @@ GDCLASS(Entity, Node3D);
 protected:
     //START: RETHINK
     //TODO: Rethink
-    enum Ability
+    enum Capablities
     {
         CAN_NOTHING = 0,
 
