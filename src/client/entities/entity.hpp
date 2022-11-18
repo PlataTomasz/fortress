@@ -61,6 +61,8 @@ protected:
     unsigned int currLifetime = 0;
 
 public:
+    void castAbility(int abilityId);
+
     //Called every physics frame
     void physics_frame();
     void ready();

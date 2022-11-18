@@ -6,7 +6,7 @@
 
 Player::Player()
 {
-    freeCam = false;
+
 }
 
 

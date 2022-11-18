@@ -54,7 +54,7 @@ void Game::_ready()
         std::cout<<"Camera was not loaded!"<<std::endl;
     }
 
-    Entity *ent = dynamic_cast<Entity*>(memnew(Mercenary));
+    Mercenary *ent = memnew(Mercenary);
     ent->set_name("ControlledEntity");
     this->add_child(ent);
     ent->set_position(Vector3( 2, 2, 2));
@@ -141,6 +141,29 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
             player->controlledEntity->set_position(worldPos);
             //TODO: Send propper movement command - Check AStar Node
+        }
+    }
+    else if(const InputEventKey *event_ptr = Object::cast_to<InputEventKey>(event.ptr()))
+    {
+        if(event_ptr->is_action_pressed("cast_ability_1"))
+        {
+            printf("Q press\n");
+            player->controlledEntity->castAbility(1);
+        }
+        else if(event_ptr->is_action_pressed("cast_ability_2"))
+        {
+            printf("W press\n");
+            player->controlledEntity->castAbility(2);
+        }
+        else if(event_ptr->is_action_pressed("cast_ability_3"))
+        {
+            printf("E press\n");
+            player->controlledEntity->castAbility(3);
+        }
+        else if(event_ptr->is_action_pressed("cast_ability_4"))
+        {
+            printf("R press\n");
+            player->controlledEntity->castAbility(4);
         }
     }
 }

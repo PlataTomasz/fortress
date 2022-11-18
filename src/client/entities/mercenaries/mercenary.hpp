@@ -25,8 +25,10 @@ protected:
 
     static void _bind_methods(){};
 public:
-    Mercenary(){};
-    ~Mercenary(){};
+    void castAbility(int abilityId);
+
+    Mercenary();
+    ~Mercenary();
 };
 
 #endif // MERCENARY_HPP_INCLUDED
