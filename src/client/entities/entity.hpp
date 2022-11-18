@@ -17,6 +17,15 @@ class Entity : public Node3D
 GDCLASS(Entity, Node3D);
 
 protected:
+    enum Team
+    {
+        TEAM_NONE = 0,
+        TEAM_RED = 1,
+        TEAM_BLUE = 2
+    };
+
+    Team currentTeam;
+
     //START: RETHINK
     //TODO: Rethink
     enum Capablities

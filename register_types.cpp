@@ -33,6 +33,7 @@
 #include "src/client/game.hpp"
 #include "src/client/client.hpp"
 #include "src/client/entities/entity.hpp"
+#include "src/client/game_camera.hpp"
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -44,6 +45,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<Game>();
     ClassDB::register_class<Client>();
     ClassDB::register_class<Entity>();
+    ClassDB::register_class<GameCamera>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)

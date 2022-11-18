@@ -7,7 +7,7 @@ class Player : public Node
 {
 private:
     //Is camera free or attached to controlled entity
-    bool freeCam;    
+    bool freeCam;
 
 protected:
     static void _bind_methods(){};

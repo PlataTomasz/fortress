@@ -42,11 +42,11 @@ void Game::_ready()
         std::cout<<"Map was not loaded!"<<std::endl;
     }
 
-    Camera3D *tmp_camera = (Camera3D*)get_node(NodePath("Camera"));
+    GameCamera *tmp_camera = (GameCamera*)get_node(NodePath("Camera"));
     if(tmp_camera)
     {
         this->camera = tmp_camera;
-        std::cout<<"Camera detected!"<<std::endl;
+        std::cout<<"Game Camera detected!"<<std::endl;
     }
     else
     {
@@ -59,8 +59,23 @@ void Game::_ready()
     this->add_child(ent);
     ent->set_position(Vector3( 2, 2, 2));
     
+    Vector3 redSpawnPoint = Vector3();
+    Node3D *redSpawnNode = (Node3D*)get_node(NodePath("Map/SpawnRed"));
+
+    if(!redSpawnNode)
+    {
+        printf("No spawn node defined! Defaulting to map center (0, 0)");
+    }
+    else
+    {
+        redSpawnPoint = redSpawnNode->get_position();
+    }
+
     player = new Player();
     player->controlledEntity = ent;
+    player->controlledEntity->set_position(redSpawnPoint);
+
+    camera->startFollowingNode(ent);
 }
 
 

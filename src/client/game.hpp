@@ -6,6 +6,7 @@
 #include <scene/3d/node_3d.h>
 #include <core/math/vector3.h>
 #include "player.hpp"
+#include "game_camera.hpp"
 
 #include "map_loader.hpp"
 
@@ -23,7 +24,7 @@ private:
      * Current map.
     */
     Node3D *mapInstance = nullptr;
-    Camera3D *camera = nullptr;
+    GameCamera *camera = nullptr;
 public:
     Player *player;
 
