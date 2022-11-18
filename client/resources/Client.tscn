@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwpxf2syqywyi"]
+[gd_scene load_steps=7 format=3 uid="uid://dwpxf2syqywyi"]
 
+[ext_resource type="Texture2D" uid="uid://c52erp8kttr5b" path="res://textures/gui.png" id="1_drgaa"]
 [ext_resource type="PackedScene" uid="uid://mjs6y0bwvg8p" path="res://maps/map01.tscn" id="1_ohokr"]
+[ext_resource type="PackedScene" uid="uid://bag4fdm0jbppq" path="res://resources/UI/Game/PassiveAbility.tscn" id="2_fvj04"]
+[ext_resource type="PackedScene" uid="uid://cv500ah8rakwh" path="res://resources/UI/Game/Ability.tscn" id="2_rn5un"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n6561"]
 size = Vector3(0.2, 0.2, 0.2)
@@ -9,21 +12,115 @@ size = Vector3(0.2, 0.2, 0.2)
 size = Vector3(0.2, 0.2, 0.2)
 
 [node name="Client" type="Client"]
-metadata/_edit_horizontal_guides_ = [646.0]
 
 [node name="Networking" type="Node" parent="."]
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
 [node name="Panel" type="Panel" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 480.0
+offset_top = -162.0
+offset_right = -480.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Reference" type="TextureRect" parent="UI/Panel"]
+visible = false
 layout_mode = 0
-offset_top = 385.0
-offset_right = 1145.0
-offset_bottom = 646.0
+offset_left = -480.0
+offset_top = -918.0
+offset_right = 1440.0
+offset_bottom = 162.0
+texture = ExtResource("1_drgaa")
+
+[node name="ManaBarBg" type="ColorRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 126.0
+offset_right = 755.0
+offset_bottom = 150.0
+color = Color(0.00392157, 0.160784, 0.32549, 1)
+
+[node name="ManaBar" type="ColorRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 126.0
+offset_right = 755.0
+offset_bottom = 150.0
+color = Color(0.0431373, 0.486275, 0.894118, 1)
+
+[node name="HealthBarBg" type="ColorRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 94.0
+offset_right = 755.0
+offset_bottom = 118.0
+color = Color(0.121569, 0, 0, 1)
+
+[node name="HealthBar" type="ColorRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 94.0
+offset_right = 755.0
+offset_bottom = 118.0
+color = Color(0.666667, 0, 0.0784314, 1)
+
+[node name="Abilities" type="Control" parent="UI/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -80.5
+offset_right = 480.0
+offset_bottom = 80.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Passive" parent="UI/Panel/Abilities" instance=ExtResource("2_fvj04")]
+layout_mode = 1
+
+[node name="1" parent="UI/Panel/Abilities" instance=ExtResource("2_rn5un")]
+layout_mode = 1
+offset_left = 328.0
+offset_top = 13.5
+offset_right = 392.0
+offset_bottom = 77.5
+
+[node name="2" parent="UI/Panel/Abilities" instance=ExtResource("2_rn5un")]
+layout_mode = 1
+offset_left = 408.0
+offset_top = 13.5
+offset_right = 472.0
+offset_bottom = 77.5
+
+[node name="3" parent="UI/Panel/Abilities" instance=ExtResource("2_rn5un")]
+layout_mode = 1
+offset_left = 488.0
+offset_top = 13.5
+offset_right = 552.0
+offset_bottom = 77.5
+
+[node name="4" parent="UI/Panel/Abilities" instance=ExtResource("2_rn5un")]
+layout_mode = 1
+offset_left = 568.0
+offset_top = 13.5
+offset_right = 632.0
+offset_bottom = 77.5
 
 [node name="Game" type="Game" parent="."]
 

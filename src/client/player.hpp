@@ -1,7 +1,7 @@
 #if !defined(PLAYER_HPP_INCLUDED)
 #define PLAYER_HPP_INCLUDED
 
-#include "entities/entity.hpp"
+#include "entities/mercenaries/mercenary.hpp"
 
 class Player : public Node
 {
@@ -15,7 +15,7 @@ public:
     /**
     * Entity the player is currently controlling.
     */
-    Entity *controlledEntity;
+    Mercenary *controlledEntity;
 
     Player();
     ~Player();
