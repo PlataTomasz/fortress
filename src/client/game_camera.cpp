@@ -12,6 +12,14 @@ GameCamera::GameCamera()
 void GameCamera::ready()
 {
     get_tree()->connect("process_frame", callable_mp(this, &GameCamera::process));
+    //That may help when I'll make manager responsible for camera
+    //camera->connect("tree_exiting", callable_mp(this, &GameCamera::onCameraNodeExpire));
+}
+
+void GameCamera::onCameraNodeExpire()
+{
+    followedNode = nullptr;
+    enableFreeCam();
 }
 
 void GameCamera::setFollowedNode(Node3D *node)
@@ -50,11 +58,6 @@ void GameCamera::process()
             camPos.x = nodePos.x+GameCamera::CAMERA_OFFSET.x;
             camPos.z = nodePos.z+GameCamera::CAMERA_OFFSET.z;
             this->set_position(camPos);
-        }
-        else
-        {
-            //What should happen if Followed node is no longer valid?
-            printf("Followed node was never set!");
         }
     }
 }

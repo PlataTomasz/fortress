@@ -10,6 +10,8 @@
 #include <iostream>
 #include "entities/entity.hpp"
 #include "entities/mercenaries/mercenary.hpp"
+#include "game_logic/abilities/cast_context.hpp"
+#include <scene/main/viewport.h>
 
 Game::Game()
 {
@@ -145,25 +147,31 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
     else if(const InputEventKey *event_ptr = Object::cast_to<InputEventKey>(event.ptr()))
     {
+        //TODO: Ability cast context
+        
+        Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
+
+        CastContext castContext(player->controlledEntity, worldPos);
+
         if(event_ptr->is_action_pressed("cast_ability_1"))
         {
             printf("Q press\n");
-            player->controlledEntity->castAbility(1);
+            player->controlledEntity->castAbility(1, castContext);
         }
         else if(event_ptr->is_action_pressed("cast_ability_2"))
         {
             printf("W press\n");
-            player->controlledEntity->castAbility(2);
+            player->controlledEntity->castAbility(2, castContext);
         }
         else if(event_ptr->is_action_pressed("cast_ability_3"))
         {
             printf("E press\n");
-            player->controlledEntity->castAbility(3);
+            player->controlledEntity->castAbility(3, castContext);
         }
         else if(event_ptr->is_action_pressed("cast_ability_4"))
         {
             printf("R press\n");
-            player->controlledEntity->castAbility(4);
+            player->controlledEntity->castAbility(4, castContext);
         }
     }
 }

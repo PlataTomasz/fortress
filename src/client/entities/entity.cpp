@@ -53,6 +53,7 @@ void Entity::ready()
 
 void Entity::onCollision(Area3D *collider)
 {
+    /*
     if(collider)
     {
         if(collider->get_class() != "Entity")
@@ -63,6 +64,7 @@ void Entity::onCollision(Area3D *collider)
     }
     else
         printf("Invalid collider!\n");
+    */
 }
 
 //
