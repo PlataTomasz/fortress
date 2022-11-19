@@ -14,6 +14,8 @@
 #include <scene/main/viewport.h>
 #include "status_effects/status_effect_manager.hpp"
 
+#include "entities/mercenaries/tundra/tundra.hpp"
+
 Game::Game()
 {
     //Register signals
@@ -61,7 +63,7 @@ void Game::_ready()
     StatusEffectManager::get_singleton();
     printf("Done!");
 
-    Mercenary *ent = memnew(Mercenary);
+    Tundra *ent = memnew(Tundra);
     ent->set_name("ControlledEntity");
     this->add_child(ent);
     ent->set_position(Vector3( 2, 2, 2));
