@@ -25,7 +25,16 @@ protected:
 
     static void _bind_methods(){};
 public:
-    void castAbility(int abilityId);
+    enum AbilitySkillSetIndex
+    {
+        ABILITY_PASSIVE = 0,
+        ABILITY_FIRST = 1,
+        ABILITY_SECOND = 2,
+        ABILITY_THIRD = 3,
+        ABILITY_ULTIMATE = 4
+    };
+
+    void castAbility(int abilityId, CastContext castContext);
 
     Mercenary();
     ~Mercenary();

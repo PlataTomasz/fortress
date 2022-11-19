@@ -18,6 +18,7 @@ protected:
     Node3D *followedNode;
 
     void ready();
+    void onCameraNodeExpire();
     void setFollowedNode(Node3D *node);
     /**
      * Changes currecntly followed node and disables freecam
