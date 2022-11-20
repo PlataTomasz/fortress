@@ -4,6 +4,9 @@
 #include <scene/3d/node_3d.h>
 #include <scene/3d/area_3d.h>
 
+#include "../status_effects/status_effect_manager.hpp"
+
+#include <unordered_map>
 
 using namespace godot;
 
@@ -60,6 +63,9 @@ protected:
     unsigned int maxLifetime = 100;
     unsigned int currLifetime = 0;
 
+    //Max 256 effects at the same time
+    std::unordered_map<String, StatusEffect*> statusEffects;
+
 public:
     void castAbility(int abilityId);
 
@@ -67,6 +73,9 @@ public:
     void physics_frame();
     void ready();
     void onCollision(Area3D *collider);
+
+    StatusEffectManager::Error applyStatusEffect(String statusEffectName, float durration, Entity *inflictor);
+    bool hasStatusEffect(String statusEffectName);
 protected:
     static void _bind_methods(){};
 public:

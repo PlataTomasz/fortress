@@ -83,3 +83,29 @@ void Entity::physics_frame()
         //this->queue_free();
     }
 }
+
+StatusEffectManager::Error Entity::applyStatusEffect(String statusEffectName, float durration, Entity *inflictor)
+{
+    //NOTE: Status effect should start ticking once entity enters the tree(is ready)
+    if(StatusEffectData *statusEffectData = StatusEffectManager::get_singleton()->getStatusEffectData(statusEffectName))
+    {
+        StatusEffect *statusEffect = new StatusEffect(statusEffectData, durration, inflictor);
+
+        statusEffects.insert(std::pair<String, StatusEffect*>(statusEffectName, statusEffect));
+
+        return StatusEffectManager::Error::OK;
+    }
+    else
+    {
+        return StatusEffectManager::Error::NO_SUCH_EFFECT;
+    }
+}
+
+bool Entity::hasStatusEffect(String statusEffectName)
+{
+    //Check if status effect is registered
+    if(statusEffects.find(statusEffectName) != statusEffects.end())
+        return true;
+    else
+        return false;
+}
