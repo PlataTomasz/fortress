@@ -3,8 +3,11 @@
 
 #include "status_effect.hpp"
 #include <unordered_map>
-#include <core/string/ustring.h>
+//No hashing function for that type!
+//#include <core/string/ustring.h>
+#include <string>
 #include "../entities/entity.hpp"
+#include <core/templates/hash_map.h>
 
 class StatusEffectManager
 {
@@ -15,7 +18,7 @@ private:
     /**
      * Stores all registered status effects by their name
     */
-    std::unordered_map<String, StatusEffectData*> registeredStatusEffects;
+    std::unordered_map<std::string, StatusEffectData*> registeredStatusEffects;
 public:
     static StatusEffectManager *get_singleton();
 
@@ -26,15 +29,17 @@ public:
         NO_SUCH_EFFECT,
     };
 
-    bool isStatusEffectRegistered(String statusEffectName);
+    bool isStatusEffectRegistered(std::string statusEffectName);
     /**
      * Registers status effect. If allowOverride is true, status effect will be overriden
     */
     StatusEffectManager::Error registerStatusEffect(StatusEffectData *statusEffectData);
 
-    
+    StatusEffect *applyStatusEffect(std::string statusEffectName, float durration, Entity *target, Entity *inflictor);
 
-    StatusEffectData *getStatusEffectData(String statusEffectName);
+    bool hasStatusEffect(std::string statusEffectName, Entity *ent);
+
+    StatusEffectData *getStatusEffectData(std::string statusEffectName);
 };
 
 #endif // STATUS_EFFECT_MANAGER_HPP

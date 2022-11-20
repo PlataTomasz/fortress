@@ -6,6 +6,8 @@
 #include <scene/resources/box_shape_3d.h>
 #include <scene/3d/mesh_instance_3d.h>
 #include <scene/resources/primitive_meshes.h>
+#include "../status_effects/status_effect_manager.hpp"
+
 
 Entity::Entity()
 {
@@ -24,6 +26,7 @@ Entity::~Entity()
 
 void Entity::ready()
 {
+
     //TODO: Mesh should be loaded from model
     MeshInstance3D *meshInstance = memnew(MeshInstance3D);
     BoxMesh *mesh = memnew(BoxMesh);
@@ -84,24 +87,29 @@ void Entity::physics_frame()
     }
 }
 
-StatusEffectManager::Error Entity::applyStatusEffect(String statusEffectName, float durration, Entity *inflictor)
+StatusEffect *Entity::applyStatusEffect(std::string statusEffectName, float durration, Entity *inflictor)
 {
     //NOTE: Status effect should start ticking once entity enters the tree(is ready)
     if(StatusEffectData *statusEffectData = StatusEffectManager::get_singleton()->getStatusEffectData(statusEffectName))
     {
         StatusEffect *statusEffect = new StatusEffect(statusEffectData, durration, inflictor);
 
-        statusEffects.insert(std::pair<String, StatusEffect*>(statusEffectName, statusEffect));
+        statusEffects.insert(std::pair<std::string, StatusEffect*>(statusEffectName, statusEffect));
 
-        return StatusEffectManager::Error::OK;
+        return statusEffect;
     }
     else
     {
-        return StatusEffectManager::Error::NO_SUCH_EFFECT;
+        return nullptr;
     }
 }
 
-bool Entity::hasStatusEffect(String statusEffectName)
+void Entity::applyStatusEffect(StatusEffect *statusEffect)
+{
+
+}
+
+bool Entity::hasStatusEffect(std::string statusEffectName)
 {
     //Check if status effect is registered
     if(statusEffects.find(statusEffectName) != statusEffects.end())

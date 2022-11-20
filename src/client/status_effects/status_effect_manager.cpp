@@ -6,7 +6,7 @@ StatusEffectManager *StatusEffectManager::get_singleton()
     return &instancePtr;
 }
 
-bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
+bool StatusEffectManager::isStatusEffectRegistered(std::string statusEffectName)
 {
     if(registeredStatusEffects.find(statusEffectName) != registeredStatusEffects.end())
         return true;
@@ -14,13 +14,14 @@ bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
         return false;
 }
 
+
 StatusEffectManager::Error StatusEffectManager::registerStatusEffect(StatusEffectData *statusEffectData)
 {
-    const String name = statusEffectData->getName();
+    const std::string name = statusEffectData->getName();
 
     if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
     {
-        registeredStatusEffects.insert(std::pair<String, StatusEffectData*>(name, statusEffectData));
+        registeredStatusEffects.insert(std::pair<std::string, StatusEffectData*>(name, statusEffectData));
 
         return OK;
     }
@@ -30,7 +31,7 @@ StatusEffectManager::Error StatusEffectManager::registerStatusEffect(StatusEffec
     }
 }
 
-StatusEffectData *StatusEffectManager::getStatusEffectData(String statusEffectName)
+StatusEffectData *StatusEffectManager::getStatusEffectData(std::string statusEffectName)
 {
     auto it = registeredStatusEffects.find(statusEffectName);
     if(it != registeredStatusEffects.end())
