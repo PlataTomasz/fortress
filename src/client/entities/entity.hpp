@@ -4,11 +4,12 @@
 #include <scene/3d/node_3d.h>
 #include <scene/3d/area_3d.h>
 
-#include "../status_effects/status_effect_manager.hpp"
-
 #include <unordered_map>
+#include <string>
 
 using namespace godot;
+
+class StatusEffect;
 
 /**
  * Object that is used to represent most of the beings on the GameMap
@@ -62,9 +63,9 @@ protected:
     */
     unsigned int maxLifetime = 100;
     unsigned int currLifetime = 0;
-
+public:
     //Max 256 effects at the same time
-    std::unordered_map<String, StatusEffect*> statusEffects;
+    std::unordered_map<std::string, StatusEffect*> statusEffects;
 
 public:
     void castAbility(int abilityId);
@@ -74,8 +75,9 @@ public:
     void ready();
     void onCollision(Area3D *collider);
 
-    StatusEffectManager::Error applyStatusEffect(String statusEffectName, float durration, Entity *inflictor);
-    bool hasStatusEffect(String statusEffectName);
+    void applyStatusEffect(StatusEffect *statusEffect);
+    StatusEffect *applyStatusEffect(std::string statusEffectName, float durration, Entity *inflictor);
+    bool hasStatusEffect(std::string statusEffectName);
 protected:
     static void _bind_methods(){};
 public:
