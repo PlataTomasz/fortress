@@ -12,6 +12,7 @@
 #include "entities/mercenaries/mercenary.hpp"
 #include "game_logic/abilities/cast_context.hpp"
 #include <scene/main/viewport.h>
+#include "status_effects/status_effect_manager.hpp"
 
 Game::Game()
 {
@@ -54,7 +55,11 @@ void Game::_ready()
     {
         //TODO: Load map from file - currently left in undefined state
         std::cout<<"Camera was not loaded!"<<std::endl;
-    }
+    }  
+
+    printf("Initializing StatusEffectManager...");
+    StatusEffectManager::get_singleton();
+    printf("Done!");
 
     Mercenary *ent = memnew(Mercenary);
     ent->set_name("ControlledEntity");

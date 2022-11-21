@@ -20,7 +20,7 @@ protected:
         IS_CROWD_CONTROL = 1 << 3,
     } uint16_t;
 
-    std::string name;
+    const std::string name;
     /**
      * Initial max durration of status effect in frames
     */
@@ -34,7 +34,7 @@ public:
 
     StatusEffectData(const char *_name) : name{_name}
     {
-
+        
     }
 };
 
@@ -46,6 +46,15 @@ protected:
     */
     int currentDuration;
     int maxDuration;
+
+    /**
+     * Who has the status?
+    */
+    Entity *target;
+    /**
+     * Who inflicted status?
+    */
+    Entity *inflictor;
 
     const StatusEffectData *statusEffectData;
 
@@ -63,7 +72,9 @@ public:
     */
     void onProcessFrame();
 
-    StatusEffect(StatusEffectData *statusEffectData, float durration, Entity *inflictor);
+    StatusEffect(StatusEffectData *statusEffectData, float durration, Entity *inflictor){};
+    //Read from file constructor
+    StatusEffect(){};
 };
 
 #endif // STATUS_EFFECT_HPP
