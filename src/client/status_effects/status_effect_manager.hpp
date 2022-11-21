@@ -9,6 +9,10 @@
 #include "../entities/entity.hpp"
 #include <core/templates/hash_map.h>
 
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
 class StatusEffectManager
 {
 private:
@@ -22,24 +26,23 @@ private:
 public:
     static StatusEffectManager *get_singleton();
 
-    enum Error
-    {
-        OK = 0,
-        ALREADY_REGISTERED,
-        NO_SUCH_EFFECT,
-    };
-
     bool isStatusEffectRegistered(std::string statusEffectName);
     /**
      * Registers status effect. If allowOverride is true, status effect will be overriden
     */
-    StatusEffectManager::Error registerStatusEffect(StatusEffectData *statusEffectData);
+    Error registerStatusEffect(StatusEffectData *statusEffectData);
 
     StatusEffect *applyStatusEffect(std::string statusEffectName, float durration, Entity *target, Entity *inflictor);
 
     bool hasStatusEffect(std::string statusEffectName, Entity *ent);
 
     StatusEffectData *getStatusEffectData(std::string statusEffectName);
+
+    //FIXME: Temporary fix to resolve linker error caused by template parameter
+    /**
+     * Loads status effects from files under path directory
+    */
+    void loadFromDirectory();
 };
 
 #endif // STATUS_EFFECT_MANAGER_HPP

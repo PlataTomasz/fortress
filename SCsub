@@ -11,6 +11,7 @@ sh_src_dir = "./src/shared/"
 sources = Glob("*.cpp")
 sources += Glob("src/*.cpp")
 sources += Glob(cl_src_dir+"*.cpp")
+sources += Glob(cl_src_dir+"status_effects/*.cpp")
 sources += Glob(cl_src_dir+"entities/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/*.cpp")
