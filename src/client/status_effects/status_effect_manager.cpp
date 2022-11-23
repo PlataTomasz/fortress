@@ -2,7 +2,6 @@
 #include <core/io/dir_access.h>
 #include <core/io/json.h>
 
-
 StatusEffectManager::StatusEffectManager()
 {
     //Path where all deafult status effects are stored
@@ -97,17 +96,43 @@ void StatusEffectManager::loadFromDirectory()
             {
                 String jsonStr = file->get_as_text(true);
 
-                Ref<JSON> json;
+                JSON *json = memnew(JSON);
+                Error err = json->parse(jsonStr);
 
-                //printf("JSON parse error = %d\n", err);
+                if(err != OK)
+                {
+                   //Parse error at line x
+                }
+                else
+                {
+                    Dictionary jsonData = Dictionary(json->get_data());
 
-                Variant data = json->parse_string(jsonStr);
+                    //Loading from JSON works
 
-                Variant k = Dictionary(data).get(Variant("name"), Variant());
+                    String effectName;
 
-                printf("Variant type: %d\n", k.get_type());
+                    //If type is invalid 0 is set instead
+                    int damage = int(jsonData.get("damage", 5));
+                    int duration = int(jsonData.get("duration", 5));
 
-                printf("%s\n", jsonStr.ascii().ptr());
+                    printf("Damage = %d\n", damage);
+                    printf("Duration = %d\n", duration);
+
+                    /*
+                    if(fileName.size() > 5)
+                        name = fileName.substr(fileName.size() - 5, fileName.size() - 5);
+                    */
+
+
+
+                    StatusEffectData *statusEffectData = new StatusEffectData(
+                        
+                    );
+
+
+
+                    //registerStatusEffect(statusEffectData);
+                }
             }
         }
     }
