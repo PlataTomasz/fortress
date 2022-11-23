@@ -4,6 +4,23 @@
 #include <string>
 
 class Entity;
+class StatusEffectBehaviour
+{
+public:
+    /**
+     * Called when status wears off
+    */
+    virtual void onExpire(StatusEffectData *statusEffectData);
+    /**
+     * Called when status is applied to entity
+    */
+    virtual void onApply(StatusEffectData *statusEffectData);
+    /**
+     * Called every process frame
+    */
+    virtual void onProcessFrame(StatusEffectData *statusEffectData);
+};
+
 
 /**
  * Stores initial properties of the buff. Most of them are read only.
@@ -29,10 +46,13 @@ protected:
     StatusEffectData::StatusEffectFlags statusEffectFlags;
 
 
+    //Store function pointers? - Or pointer to object storing functions?
+    StatusEffectBehaviour *statusEffectBehaviour;
+
 public:
     std::string getName();
 
-    StatusEffectData(const char *_name) : name{_name}
+    StatusEffectData(const char *_name, int maxStacks, int damage, int durration) : name{_name}
     {
         
     }
