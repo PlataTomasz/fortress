@@ -1,5 +1,6 @@
 {
     "maxStacks" : 1,
     "damage" : 30,
-    "durration" : 8
+    "durration" : 8,
+    "logicObjectName" : ""
 }

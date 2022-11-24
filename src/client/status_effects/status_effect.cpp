@@ -1,7 +1,12 @@
 #include "status_effect.hpp"
 #include "../entities/entity.hpp"
 
-std::string StatusEffectData::getName()
+String StatusEffectData::getName()
 {
     return name;
+}
+
+StatusEffectData::operator String() const
+{
+    return "Damage: " + damage;
 }
