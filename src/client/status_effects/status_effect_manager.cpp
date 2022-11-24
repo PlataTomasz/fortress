@@ -66,6 +66,11 @@ StatusEffect *StatusEffectManager::getStatusEffect(String statusEffectName)
     }
 }
 
+bool StatusEffectManager::removeStatusEffect(String statusEffectName, Entity *target)
+{
+    return target->statusEffects.erase(statusEffectName);
+}
+
 StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor)
 {
     //NOTE: Status effect should start ticking once entity enters the tree(is ready)
@@ -148,7 +153,9 @@ void StatusEffectManager::loadFromDirectory()
                     //If type is invalid 0 is set instead
                     int maxStacks = int(jsonData.get("maxStacks", 5));
                     int damage = int(jsonData.get("damage", 5));
-                    int duration = int(jsonData.get("duration", 5));
+                    int secondsDuration = int(jsonData.get("duration", 5));
+                    //TODO: Get process frames per second from somewhere
+                    int duration = secondsDuration*60;
 
                     int scriptID = int(jsonData.get("scriptId", StatusEffectScriptID::NONE));
 
@@ -178,6 +185,7 @@ void StatusEffectManager::loadFromDirectory()
 
 
 
+
                     registerStatusEffect(statusEffect);
 
                     printf("Size registered effects: %d\n", registeredStatusEffects.size());
@@ -189,7 +197,8 @@ void StatusEffectManager::loadFromDirectory()
 
     for(auto effectData : registeredStatusEffects)
     {
-        printf("Saved effect name = %s\n", effectData.value->statusEffectData->name.ascii().ptr());
+        printf("Registered effect name = %s\n", effectData.value->statusEffectData->name.ascii().ptr());
+        printf("%s\n", String(*(effectData.value->statusEffectData)).ascii().ptr());        
     }
 
 }

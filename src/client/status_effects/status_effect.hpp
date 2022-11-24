@@ -14,10 +14,11 @@ protected:
 
     int maxStacks;
     /**
-    * Initial max durration of status effect in frames
+    * Max durration of status effect in frames
     */
     int currDuration;
     int maxDuration;
+
     int damage;
 
     /**
@@ -31,6 +32,8 @@ protected:
     Entity *inflictor;
 
 public:
+
+    operator String() const;
 
     StatusEffectData(
         String _name,
@@ -58,9 +61,11 @@ public:
 
 class StatusEffectScript
 {
-private:
+protected:
     StatusEffectData *statusEffectData;
 public:
+    virtual void onProcessFrameImpl() final;
+
     /**
      * Called when status wears off
     */
@@ -95,6 +100,9 @@ public:
         return dynamic_cast<T*>(this);
     }
 
+    //operator String() const;
+
+    friend class Entity;
     friend class StatusEffectManager;
 };
 

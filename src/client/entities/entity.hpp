@@ -71,11 +71,11 @@ public:
     void castAbility(int abilityId);
 
     //Called every physics frame
-    void physics_frame();
-    void ready();
+    void onPhysicsFrame();
+    void onReady();
     void onCollision(Area3D *collider);
 
-    void applyStatusEffect(StatusEffect *statusEffect);
+    bool removeStatusEffect(String statusEffectName);
     StatusEffect *applyStatusEffect(String statusEffectName, float duration, Entity *inflictor);
     bool hasStatusEffect(String statusEffectName);
 protected:

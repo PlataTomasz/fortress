@@ -15,7 +15,7 @@ Entity::Entity()
     {
         set_physics_process(true);
 
-        connect("ready", callable_mp(this, &Entity::ready));
+        connect("ready", callable_mp(this, &Entity::onReady));
     }
 }
 
@@ -24,7 +24,7 @@ Entity::~Entity()
 
 }
 
-void Entity::ready()
+void Entity::onReady()
 {
 
     //TODO: Mesh should be loaded from model
@@ -51,7 +51,7 @@ void Entity::ready()
     add_child(meshInstance);
     area3d->connect("area_entered", callable_mp(this, &Entity::onCollision));
 
-    get_tree()->connect("physics_frame", callable_mp(this, &Entity::physics_frame));
+    get_tree()->connect("physics_frame", callable_mp(this, &Entity::onPhysicsFrame));
 }
 
 void Entity::onCollision(Area3D *collider)
@@ -76,7 +76,7 @@ void Entity::movementProcess()
 
 }
 
-void Entity::physics_frame()
+void Entity::onPhysicsFrame()
 {
     movementProcess();
     currLifetime++;
@@ -85,6 +85,17 @@ void Entity::physics_frame()
     {
         //this->queue_free();
     }
+
+    //StatusEffect handling
+    for(auto effect : statusEffects)
+    {
+        effect.value->statusEffectScript->onProcessFrameImpl();
+    }
+}
+
+bool Entity::removeStatusEffect(String statusEffectName)
+{
+    return StatusEffectManager::get_singleton()->removeStatusEffect(statusEffectName, this);
 }
 
 StatusEffect *Entity::applyStatusEffect(String statusEffectName, float duration, Entity *inflictor)
@@ -92,10 +103,6 @@ StatusEffect *Entity::applyStatusEffect(String statusEffectName, float duration,
     return StatusEffectManager::get_singleton()->applyStatusEffect(statusEffectName, duration, this, inflictor);
 }
 
-void Entity::applyStatusEffect(StatusEffect *statusEffect)
-{
-
-}
 
 bool Entity::hasStatusEffect(String statusEffectName)
 {
