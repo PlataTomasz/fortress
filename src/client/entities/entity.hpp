@@ -76,7 +76,7 @@ public:
     void onCollision(Area3D *collider);
 
     void applyStatusEffect(StatusEffect *statusEffect);
-    StatusEffect *applyStatusEffect(String statusEffectName, float durration, Entity *inflictor);
+    StatusEffect *applyStatusEffect(String statusEffectName, float duration, Entity *inflictor);
     bool hasStatusEffect(String statusEffectName);
 protected:
     static void _bind_methods(){};

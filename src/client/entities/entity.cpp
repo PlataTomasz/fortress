@@ -87,21 +87,9 @@ void Entity::physics_frame()
     }
 }
 
-StatusEffect *Entity::applyStatusEffect(String statusEffectName, float durration, Entity *inflictor)
+StatusEffect *Entity::applyStatusEffect(String statusEffectName, float duration, Entity *inflictor)
 {
-    //NOTE: Status effect should start ticking once entity enters the tree(is ready)
-    if(StatusEffectData *statusEffectData = StatusEffectManager::get_singleton()->getStatusEffectData(statusEffectName))
-    {
-        StatusEffect *statusEffect = new StatusEffect(statusEffectData, durration, inflictor);
-
-        statusEffects.insert(statusEffectName, statusEffect);
-
-        return statusEffect;
-    }
-    else
-    {
-        return nullptr;
-    }
+    return StatusEffectManager::get_singleton()->applyStatusEffect(statusEffectName, duration, this, inflictor);
 }
 
 void Entity::applyStatusEffect(StatusEffect *statusEffect)

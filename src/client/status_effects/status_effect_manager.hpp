@@ -12,10 +12,11 @@ private:
     StatusEffectManager();
 
 private:
+
     /**
-     * Stores all registered status effects by their name
+     * Stores all registered status effects by their name. These are default objects and converted into instances via copy constructor.
     */
-    HashMap<String, StatusEffectData*> registeredStatusEffects;
+    HashMap<String, StatusEffect*> registeredStatusEffects;
 public:
     static StatusEffectManager *get_singleton();
 

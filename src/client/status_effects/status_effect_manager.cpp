@@ -11,7 +11,9 @@ StatusEffectManager::StatusEffectManager()
 
     //loadFromDirectory(defaultStatusEffectPath);
     loadFromDirectory();
-    loadStatusEffectBehaviours();
+
+    //Register StatusEffectBehaviour codes
+    //REGISTER_STATUS_EFFECT();
 }
 
 StatusEffectManager *StatusEffectManager::get_singleton()
@@ -35,7 +37,7 @@ Error StatusEffectManager::registerStatusEffect(StatusEffectData *statusEffectDa
 
     if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
     {
-        registeredStatusEffects.insert(name, statusEffectData);
+        registeredStatusEffects.insert(name, {statusEffectData});
 
         return OK;
     }
@@ -53,6 +55,23 @@ StatusEffectData *StatusEffectManager::getStatusEffectData(String statusEffectNa
         StatusEffectData *statusEffectData = it->value;
 
         return statusEffectData;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor)
+{
+    //NOTE: Status effect should start ticking once entity enters the tree(is ready)
+    if(StatusEffectData *statusEffectData = getStatusEffectData(statusEffectName))
+    {
+        StatusEffect *statusEffect = new StatusEffect(statusEffectData, durration, inflictor);
+
+        target->statusEffects.insert(statusEffectName, statusEffect);
+
+        return statusEffect;
     }
     else
     {
@@ -142,7 +161,6 @@ void StatusEffectManager::loadFromDirectory()
                         maxStacks,
                         damage,
                         duration
-                        //statusEffectBehaviour
                     );
 
 

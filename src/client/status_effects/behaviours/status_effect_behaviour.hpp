@@ -8,19 +8,30 @@ class StatusEffect;
 */
 class StatusEffectBehaviour
 {
+protected:
+    StatusEffect *statusEffect;
 public:
     /**
      * Called when status wears off
     */
-    virtual void onExpire(StatusEffect *statusEffect){};
+    virtual void onExpire()
+    {
+        
+    };
     /**
      * Called when status is applied to entity
     */
-    virtual void onApply(StatusEffect *statusEffect){};
+    virtual void onApply()
+    {
+
+    };
     /**
      * Called every process frame
     */
-    virtual void onProcessFrame(StatusEffect *statusEffect){};
+    virtual void onProcessFrame()
+    {
+
+    };
 };
 
 #endif // STATUS_EFFECT_BEHAVIOUR
