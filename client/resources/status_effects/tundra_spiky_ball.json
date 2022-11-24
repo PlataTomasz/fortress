@@ -1,0 +1,7 @@
+{
+	"readableName" : "Spiky ball",
+	"tooltip" : "Tundra has spiky ball, which can be moved by her abilities.",
+    "maxStacks" : 1,
+    "damage" : 30,
+    "durration" : 8
+}

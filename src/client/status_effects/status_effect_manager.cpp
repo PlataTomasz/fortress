@@ -2,23 +2,28 @@
 #include <core/io/dir_access.h>
 #include <core/io/json.h>
 
-
+#include "mercenaries/tundra/tundra_spiky_ball.hpp"
 
 StatusEffectManager::StatusEffectManager()
 {
     //Path where all deafult status effects are stored
     String defaultStatusEffectPath = "resources/status_effects";
 
-    //loadFromDirectory(defaultStatusEffectPath);
-    loadFromDirectory();
-
     //Register StatusEffectBehaviour codes
-    //REGISTER_STATUS_EFFECT();
+    statusEffectScripts = new StatusEffectScript*[StatusEffectScriptID::STATUS_EFFECT_SCRIPT_ID_MAX]();
+
+    //Empty scripts - used mostly for StatusEffects that don't do any logic
+    statusEffectScripts[StatusEffectScriptID::NONE] = new StatusEffectScript();
+    statusEffectScripts[StatusEffectScriptID::TUNDRA_SPIKY_BALL] = statusEffectScripts[StatusEffectScriptID::NONE];
+
+
+    loadFromDirectory();
 }
 
 StatusEffectManager *StatusEffectManager::get_singleton()
 {
     static StatusEffectManager instancePtr;
+
     return &instancePtr;
 }
 
@@ -30,14 +35,13 @@ bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
         return false;
 }
 
-
-Error StatusEffectManager::registerStatusEffect(StatusEffectData *statusEffectData)
+Error StatusEffectManager::registerStatusEffect(StatusEffect *statusEffect)
 {
-    const String name = statusEffectData->getName();
+    const String name = statusEffect->statusEffectData->name;
 
     if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
     {
-        registeredStatusEffects.insert(name, {statusEffectData});
+        registeredStatusEffects.insert(name, statusEffect);
 
         return OK;
     }
@@ -47,12 +51,12 @@ Error StatusEffectManager::registerStatusEffect(StatusEffectData *statusEffectDa
     }
 }
 
-StatusEffectData *StatusEffectManager::getStatusEffectData(String statusEffectName)
+StatusEffect *StatusEffectManager::getStatusEffect(String statusEffectName)
 {
     auto it = registeredStatusEffects.find(statusEffectName);
     if(it != registeredStatusEffects.end())
     {
-        StatusEffectData *statusEffectData = it->value;
+        StatusEffect *statusEffectData = it->value;
 
         return statusEffectData;
     }
@@ -65,9 +69,9 @@ StatusEffectData *StatusEffectManager::getStatusEffectData(String statusEffectNa
 StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor)
 {
     //NOTE: Status effect should start ticking once entity enters the tree(is ready)
-    if(StatusEffectData *statusEffectData = getStatusEffectData(statusEffectName))
+    if(StatusEffect *statusEffectInternal = getStatusEffect(statusEffectName))
     {
-        StatusEffect *statusEffect = new StatusEffect(statusEffectData, durration, inflictor);
+        StatusEffect *statusEffect;
 
         target->statusEffects.insert(statusEffectName, statusEffect);
 
@@ -137,6 +141,7 @@ void StatusEffectManager::loadFromDirectory()
                     //What icon does the buff have?
                     String iconName;
 
+                    String tooltip = jsonData.get("tooltip", "game_tooltip_" + effectName);
 
                     printf("EffectName = %s\n", effectName.ascii().ptr());
 
@@ -145,36 +150,46 @@ void StatusEffectManager::loadFromDirectory()
                     int damage = int(jsonData.get("damage", 5));
                     int duration = int(jsonData.get("duration", 5));
 
+                    int scriptID = int(jsonData.get("scriptId", StatusEffectScriptID::NONE));
+
+                    if( !(scriptID >= 0 || scriptID < STATUS_EFFECT_SCRIPT_ID_MAX))
+                    {
+                        //Log warning that no logic is attached to StatusEffect because of invalid ID
+                        scriptID = StatusEffectScriptID::NONE;
+                    }
+
                     /**
                      * Check what logic should be tied to that status effect
                     */
                     String logicObjectName = effectName;
 
-                    StatusEffectBehaviour *statusEffectBehaviour;
-
                     printf("Damage = %d\n", damage);
                     printf("Duration = %d\n", duration);
 
-
                     StatusEffectData *statusEffectData = new StatusEffectData(
                         effectName,
+                        effectName,
+                        tooltip,
                         maxStacks,
-                        damage,
-                        duration
+                        duration,
+                        damage
                     );
+                    StatusEffect *statusEffect = new StatusEffect(statusEffectData, statusEffectScripts[scriptID]);
 
 
 
-                    registerStatusEffect(statusEffectData);
+                    registerStatusEffect(statusEffect);
 
                     printf("Size registered effects: %d\n", registeredStatusEffects.size());
 
-                    for(auto effectData : registeredStatusEffects)
-                    {
-                        printf("Saved effect name = %s\n", effectData.value->getName().ascii().ptr());
-                    }
                 }
             }
         }
     }
+
+    for(auto effectData : registeredStatusEffects)
+    {
+        printf("Saved effect name = %s\n", effectData.value->statusEffectData->name.ascii().ptr());
+    }
+
 }
