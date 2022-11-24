@@ -12,6 +12,14 @@ private:
     StatusEffectManager();
 
 private:
+    enum StatusEffectScriptID
+    {
+        NONE = 0,
+        TUNDRA_SPIKY_BALL,
+        STATUS_EFFECT_SCRIPT_ID_MAX
+    };
+
+    StatusEffectScript *(*statusEffectScripts);
 
     /**
      * Stores all registered status effects by their name. These are default objects and converted into instances via copy constructor.
@@ -24,13 +32,13 @@ public:
     /**
      * Registers status effect. If allowOverride is true, status effect will be overriden
     */
-    Error registerStatusEffect(StatusEffectData *statusEffectData);
+    Error registerStatusEffect(StatusEffect *statusEffect);
 
     StatusEffect *applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor);
 
     bool hasStatusEffect(String statusEffectName, Entity *ent);
 
-    StatusEffectData *getStatusEffectData(String statusEffectName);
+    StatusEffect *getStatusEffect(String statusEffectName);
 
     //FIXME: Temporary fix to resolve linker error caused by template parameter
     /**
