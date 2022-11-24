@@ -36,11 +36,17 @@ public:
 
     StatusEffect *applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor);
 
+    /**
+     * Removes status effect from target Entity
+    */
+    bool removeStatusEffect(String statusEffectName, Entity *target);
+
     bool hasStatusEffect(String statusEffectName, Entity *ent);
 
     StatusEffect *getStatusEffect(String statusEffectName);
 
-    //FIXME: Temporary fix to resolve linker error caused by template parameter
+
+
     /**
      * Loads status effects from files under path directory
     */
