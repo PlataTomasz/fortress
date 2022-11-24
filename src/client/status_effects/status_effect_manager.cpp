@@ -2,13 +2,16 @@
 #include <core/io/dir_access.h>
 #include <core/io/json.h>
 
+
+
 StatusEffectManager::StatusEffectManager()
 {
     //Path where all deafult status effects are stored
-    std::string defaultStatusEffectPath = "resources/status_effects";
+    String defaultStatusEffectPath = "resources/status_effects";
 
     //loadFromDirectory(defaultStatusEffectPath);
     loadFromDirectory();
+    loadStatusEffectBehaviours();
 }
 
 StatusEffectManager *StatusEffectManager::get_singleton()
@@ -17,7 +20,7 @@ StatusEffectManager *StatusEffectManager::get_singleton()
     return &instancePtr;
 }
 
-bool StatusEffectManager::isStatusEffectRegistered(std::string statusEffectName)
+bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
 {
     if(registeredStatusEffects.find(statusEffectName) != registeredStatusEffects.end())
         return true;
@@ -28,11 +31,11 @@ bool StatusEffectManager::isStatusEffectRegistered(std::string statusEffectName)
 
 Error StatusEffectManager::registerStatusEffect(StatusEffectData *statusEffectData)
 {
-    const std::string name = statusEffectData->getName();
+    const String name = statusEffectData->getName();
 
     if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
     {
-        registeredStatusEffects.insert(std::pair<std::string, StatusEffectData*>(name, statusEffectData));
+        registeredStatusEffects.insert(name, statusEffectData);
 
         return OK;
     }
@@ -42,12 +45,12 @@ Error StatusEffectManager::registerStatusEffect(StatusEffectData *statusEffectDa
     }
 }
 
-StatusEffectData *StatusEffectManager::getStatusEffectData(std::string statusEffectName)
+StatusEffectData *StatusEffectManager::getStatusEffectData(String statusEffectName)
 {
     auto it = registeredStatusEffects.find(statusEffectName);
     if(it != registeredStatusEffects.end())
     {
-        StatusEffectData *statusEffectData = it->second;
+        StatusEffectData *statusEffectData = it->value;
 
         return statusEffectData;
     }
@@ -81,6 +84,7 @@ void StatusEffectManager::loadFromDirectory()
 
     for(auto fileName : dir->get_files())
     {
+        printf("------------------------------------------\n");
         if(fileName.ends_with(".json"))
         {
             printf("%s\n", fileName.ascii().ptr());
@@ -96,7 +100,7 @@ void StatusEffectManager::loadFromDirectory()
             {
                 String jsonStr = file->get_as_text(true);
 
-                JSON *json = memnew(JSON);
+                Ref<JSON> json = memnew(JSON);
                 Error err = json->parse(jsonStr);
 
                 if(err != OK)
@@ -109,29 +113,48 @@ void StatusEffectManager::loadFromDirectory()
 
                     //Loading from JSON works
 
-                    String effectName;
+                    String effectName = fileName.substr(0, fileName.size() - 6);
+
+                    //What icon does the buff have?
+                    String iconName;
+
+
+                    printf("EffectName = %s\n", effectName.ascii().ptr());
 
                     //If type is invalid 0 is set instead
+                    int maxStacks = int(jsonData.get("maxStacks", 5));
                     int damage = int(jsonData.get("damage", 5));
                     int duration = int(jsonData.get("duration", 5));
+
+                    /**
+                     * Check what logic should be tied to that status effect
+                    */
+                    String logicObjectName = effectName;
+
+                    StatusEffectBehaviour *statusEffectBehaviour;
 
                     printf("Damage = %d\n", damage);
                     printf("Duration = %d\n", duration);
 
-                    /*
-                    if(fileName.size() > 5)
-                        name = fileName.substr(fileName.size() - 5, fileName.size() - 5);
-                    */
-
-
 
                     StatusEffectData *statusEffectData = new StatusEffectData(
-                        
+                        effectName,
+                        maxStacks,
+                        damage,
+                        duration
+                        //statusEffectBehaviour
                     );
 
 
 
-                    //registerStatusEffect(statusEffectData);
+                    registerStatusEffect(statusEffectData);
+
+                    printf("Size registered effects: %d\n", registeredStatusEffects.size());
+
+                    for(auto effectData : registeredStatusEffects)
+                    {
+                        printf("Saved effect name = %s\n", effectData.value->getName().ascii().ptr());
+                    }
                 }
             }
         }

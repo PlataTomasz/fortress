@@ -1,63 +1,47 @@
 #if !defined(STATUS_EFFECT_HPP)
 #define STATUS_EFFECT_HPP
 
-#include <string>
+#include <core/string/ustring.h>
 
 class Entity;
-class StatusEffectBehaviour
-{
-public:
-    /**
-     * Called when status wears off
-    */
-    virtual void onExpire(StatusEffectData *statusEffectData);
-    /**
-     * Called when status is applied to entity
-    */
-    virtual void onApply(StatusEffectData *statusEffectData);
-    /**
-     * Called every process frame
-    */
-    virtual void onProcessFrame(StatusEffectData *statusEffectData);
-};
-
+class StatusEffectBehaviour;
 
 /**
- * Stores initial properties of the buff. Most of them are read only.
+ * Class storing status effect data. Most likely read from file.
 */
 class StatusEffectData
 {
 protected:
 
-    enum StatusEffectFlags
-    {
-        IS_DEBUFF = 1,
-        IS_DAMAGING = 1 << 1,
-        IS_HEALING = 1 << 2,
-        IS_CROWD_CONTROL = 1 << 3,
-    } uint16_t;
-
-    const std::string name;
+    String name;
+    int maxStacks;
     /**
-     * Initial max durration of status effect in frames
+    * Initial max durration of status effect in frames
     */
-    int maxDuration;
+    int duration;
+    int damage;
 
-    StatusEffectData::StatusEffectFlags statusEffectFlags;
-
-
-    //Store function pointers? - Or pointer to object storing functions?
+    /**
+     * Object that stores method pointers to be called on this object.
+    */
     StatusEffectBehaviour *statusEffectBehaviour;
 
 public:
-    std::string getName();
+    operator String() const;
 
-    StatusEffectData(const char *_name, int maxStacks, int damage, int durration) : name{_name}
+    
+
+    String getName();
+
+    StatusEffectData(String _name, int maxStacks, int damage, int durration) : name{_name}
     {
         
     }
 };
 
+/**
+ * Class representing currently applied status effect
+*/
 class StatusEffect
 {
 protected:
@@ -92,7 +76,7 @@ public:
     */
     void onProcessFrame();
 
-    StatusEffect(StatusEffectData *statusEffectData, float durration, Entity *inflictor){};
+    StatusEffect(StatusEffectData *statusEffectData, float duration, Entity *inflictor){};
     //Read from file constructor
     StatusEffect(){};
 };

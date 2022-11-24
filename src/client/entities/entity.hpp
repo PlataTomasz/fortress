@@ -4,8 +4,8 @@
 #include <scene/3d/node_3d.h>
 #include <scene/3d/area_3d.h>
 
-#include <unordered_map>
-#include <string>
+#include <core/string/ustring.h>
+#include <core/templates/hash_map.h>
 
 using namespace godot;
 
@@ -65,7 +65,7 @@ protected:
     unsigned int currLifetime = 0;
 public:
     //Max 256 effects at the same time
-    std::unordered_map<std::string, StatusEffect*> statusEffects;
+    HashMap<String, StatusEffect*> statusEffects;
 
 public:
     void castAbility(int abilityId);
@@ -76,8 +76,8 @@ public:
     void onCollision(Area3D *collider);
 
     void applyStatusEffect(StatusEffect *statusEffect);
-    StatusEffect *applyStatusEffect(std::string statusEffectName, float durration, Entity *inflictor);
-    bool hasStatusEffect(std::string statusEffectName);
+    StatusEffect *applyStatusEffect(String statusEffectName, float durration, Entity *inflictor);
+    bool hasStatusEffect(String statusEffectName);
 protected:
     static void _bind_methods(){};
 public:
