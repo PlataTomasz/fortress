@@ -32,6 +32,9 @@ protected:
     Entity *inflictor;
 
 public:
+    //Getters/setters
+    void setTarget(Entity* owner);
+    Entity* getTarget();
 
     operator String() const;
 
@@ -54,6 +57,15 @@ public:
         target{_target},
         inflictor{_inflictor}
     {};
+
+    /**
+     * Returns StatusEffectData pointer as T class pointer. Returns nullptr if conversion failed - Most likely non child class of StatusEffectData.
+    */
+    template<class T>
+    T* get()
+    {
+        return dynamic_cast<T*>(this)
+    }
 
     friend class StatusEffectScript;
     friend class StatusEffectManager;
