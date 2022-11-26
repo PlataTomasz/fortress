@@ -58,15 +58,6 @@ public:
         inflictor{_inflictor}
     {};
 
-    /**
-     * Returns StatusEffectData pointer as T class pointer. Returns nullptr if conversion failed - Most likely non child class of StatusEffectData.
-    */
-    template<class T>
-    T* get()
-    {
-        return dynamic_cast<T*>(this)
-    }
-
     friend class StatusEffectScript;
     friend class StatusEffectManager;
 };
@@ -102,15 +93,6 @@ protected:
 
 public:
     StatusEffect(StatusEffectData *_statusEffectData, StatusEffectScript *_statusEffectScript) : statusEffectData{_statusEffectData}, statusEffectScript{_statusEffectScript}{};
-
-    /**
-     * Returns field statusEffectData converted to type T.
-    */
-    template<class T = StatusEffect>
-    T *getStatusEffectData()
-    {
-        return dynamic_cast<T*>(this);
-    }
 
     //operator String() const;
 
