@@ -6,17 +6,17 @@
 class TundraBall : public Entity
 {
 private:
-    Mercenary *owner;
+    Entity* owner;
     /**
      * How far owner can be from this entity before it'll be forced to move toward owner?
     */
     float maxRangeFromOwner;
 
-    void onCollision(Area3D *collider);
+    void onCollision(Area3D* collider);
     void onPhysicsFrame();
     void onReady();
 public:
-    TundraBall(Mercenary *owner);
+    TundraBall(Entity* owner);
 };
 
 #endif // TUNDRA_BALL_HPP
