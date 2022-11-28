@@ -5,19 +5,15 @@
 
 class TundraBall;
 
-//TODO: Replace with (MiscStatusEffect : StatusEffect)
-class TundraSpikyBallStatusData : public StatusEffectData
+class TundraSpikyBallStatus : public StatusEffect
 {
 private:
     TundraBall *tundraBall;
 public:
+    //Setters/Getters
     void setBallInstance(TundraBall *tundraBall);
     TundraBall *getBallInstance();
-};
 
-class TundraSpikyBallStatusScript : public StatusEffectScript
-{
-public:
     /**
      * Called when status wears off
     */
@@ -28,10 +24,7 @@ public:
     /**
      * Called when status is applied to entity
     */
-    virtual void onApply()
-    {
-
-    };
+    virtual void onApply();
     /**
      * Called every process frame
     */
