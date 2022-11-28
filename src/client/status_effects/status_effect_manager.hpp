@@ -12,15 +12,6 @@ private:
     StatusEffectManager();
 
 private:
-    enum StatusEffectScriptID
-    {
-        NONE = 0,
-        TUNDRA_SPIKY_BALL,
-        STATUS_EFFECT_SCRIPT_ID_MAX
-    };
-
-    StatusEffectScript *(*statusEffectScripts);
-
     /**
      * Stores all registered status effects by their name. These are default objects and converted into instances via copy constructor.
     */
@@ -43,14 +34,13 @@ public:
 
     bool hasStatusEffect(String statusEffectName, Entity *ent);
 
-    StatusEffect *getStatusEffect(String statusEffectName);
-
+    StatusEffect *getRegisteredStatusEffect(String statusEffectName);
 
 
     /**
      * Loads status effects from files under path directory
     */
-    void loadFromDirectory();
+    void loadDataFromDirectory();
 };
 
 #endif // STATUS_EFFECT_MANAGER_HPP

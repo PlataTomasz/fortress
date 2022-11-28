@@ -3,15 +3,47 @@
 
 #include <core/string/ustring.h>
 
+#define VIRTUAL_COPY(DerivedClassName, BaseClassName)               \
+public:                                                             \
+    BaseClassName* copy()                                           \
+    {                                                               \
+        return new DerivedClassName(*this);                         \
+    }   
+
+#define VIRTUAL_COPY(ClassName)                                     \
+public:                                                             \
+    ClassName* copy()                                               \
+    {                                                               \
+        return new ClassName(*this);                                \
+    } 
+
 class Entity;
 
 class StatusEffectData
 {
 protected:
+
+
+public:
+    //Getters/setters
+
+
+
+
+    friend class StatusEffectScript;
+    friend class StatusEffectManager;
+};
+
+class StatusEffect
+{
+VIRTUAL_COPY(StatusEffect);
+
+protected:
     String name;
     String friendlyName;
     String tooltip;
 
+    int currStacks;
     int maxStacks;
     /**
     * Max durration of status effect in frames
@@ -30,43 +62,15 @@ protected:
      * Who inflicted status?
     */
     Entity *inflictor;
-
 public:
-    //Getters/setters
+    //Getters/Setters
     void setTarget(Entity* owner);
     Entity* getTarget();
 
-    operator String() const;
+    //TODO: Maybe return value, informing that stack was not added and why?
+    void addStacks(int stackCount);
 
-    StatusEffectData(
-        String _name,
-        String _friendlyName,
-        String _tooltip,
-        int _maxStacks,
-        int _maxDuration,
-        int _damage,
-        Entity *_target = nullptr,
-        Entity *_inflictor = nullptr
-    ) : 
-        name{_name},
-        friendlyName{_friendlyName},
-        tooltip{_tooltip},
-        maxStacks{_maxStacks},
-        maxDuration{_maxDuration},
-        damage{_damage},
-        target{_target},
-        inflictor{_inflictor}
-    {};
-
-    friend class StatusEffectScript;
-    friend class StatusEffectManager;
-};
-
-class StatusEffectScript
-{
-protected:
-    StatusEffectData *statusEffectData;
-public:
+    //Callbacks
     virtual void onProcessFrameImpl() final;
 
     /**
@@ -82,19 +86,31 @@ public:
     */
     virtual void onProcessFrame(){};
 
-    friend class StatusEffectManager;
-};
 
-class StatusEffect
-{
-protected:
-    StatusEffectData *statusEffectData;
-    StatusEffectScript *statusEffectScript;
+    void loadData(Dictionary data)
+    {
+        //TODO: Validate types in json to avoid hard to debug bugs
 
-public:
-    StatusEffect(StatusEffectData *_statusEffectData, StatusEffectScript *_statusEffectScript) : statusEffectData{_statusEffectData}, statusEffectScript{_statusEffectScript}{};
+        name = data.get("name", "none");
+        friendlyName = data.get("readableName", name);
 
-    //operator String() const;
+        tooltip = data.get("tooltip", "game_tooltip_" + name);
+
+
+        //If type is invalid 0 is set instead
+        maxStacks = int(data.get("maxStacks", 5));
+        float secondsDuration = float(data.get("duration", 5));
+        //TODO: Get process frames per second from somewhere
+        currDuration = 0;
+        maxDuration = secondsDuration*60;
+    }
+
+    operator String() const;
+
+    StatusEffect(Dictionary data)
+    {
+        loadData(data);
+    };
 
     friend class Entity;
     friend class StatusEffectManager;
