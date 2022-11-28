@@ -9,15 +9,9 @@ StatusEffectManager::StatusEffectManager()
     //Path where all deafult status effects are stored
     String defaultStatusEffectPath = "resources/status_effects";
 
-    //Register StatusEffectBehaviour codes
-    statusEffectScripts = new StatusEffectScript*[StatusEffectScriptID::STATUS_EFFECT_SCRIPT_ID_MAX]();
+    //
 
-    //Empty scripts - used mostly for StatusEffects that don't do any logic
-    statusEffectScripts[StatusEffectScriptID::NONE] = new StatusEffectScript();
-    statusEffectScripts[StatusEffectScriptID::TUNDRA_SPIKY_BALL] = statusEffectScripts[StatusEffectScriptID::NONE];
-
-
-    loadFromDirectory();
+    loadDataFromDirectory();
 }
 
 StatusEffectManager *StatusEffectManager::get_singleton()
@@ -37,7 +31,7 @@ bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
 
 Error StatusEffectManager::registerStatusEffect(StatusEffect *statusEffect)
 {
-    const String name = statusEffect->statusEffectData->name;
+    const String name = statusEffect->name;
 
     if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
     {
@@ -50,8 +44,9 @@ Error StatusEffectManager::registerStatusEffect(StatusEffect *statusEffect)
         return ERR_DUPLICATE_SYMBOL;
     }
 }
-
-StatusEffect *StatusEffectManager::getStatusEffect(String statusEffectName)
+/*
+//Previous Implementation
+StatusEffect *StatusEffectManager::getRegisteredStatusEffect(String statusEffectName)
 {
     auto it = registeredStatusEffects.find(statusEffectName);
     if(it != registeredStatusEffects.end())
@@ -65,22 +60,60 @@ StatusEffect *StatusEffectManager::getStatusEffect(String statusEffectName)
         return nullptr;
     }
 }
-
+*/
 bool StatusEffectManager::removeStatusEffect(String statusEffectName, Entity *target)
 {
-    return target->statusEffects.erase(statusEffectName);
+    if(StatusEffect* statusEffect = target->getStatusEffect(statusEffectName))
+    {
+        statusEffect->onExpire();
+        //Remove status effect here?
+        return true;
+    }
+    else
+    {
+        //Effect was not removed
+        return false;
+    }
+}
+
+StatusEffect* StatusEffectManager::getRegisteredStatusEffect(String statusEffectName)
+{
+    return registeredStatusEffects.get(statusEffectName);
 }
 
 StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor)
 {
+    /*
+    What should happen if status effect limit is reached?
+    - Status effects shouldn't have limit in the first place
+    - Vector seems most suitable for that purpose
+        - Entity should be able to store concurent status effect. If there are more - Vector takes care of reallocating it
+    */
+
     //NOTE: Status effect should start ticking once entity enters the tree(is ready)
-    if(StatusEffect *statusEffectInternal = getStatusEffect(statusEffectName))
+    if(StatusEffect *statusEffectInternal = getRegisteredStatusEffect(statusEffectName))
     {
-        StatusEffect *statusEffect;
+        if(StatusEffect* statusEffectAppliedInstance = target->getStatusEffect(statusEffectName))
+        {
+            /*
+            - If no buff with passed name is applied on entity, apply an instance of it.
+            - If buff instance with passed name is applied on entity:
+                - If buff is non-stackable: replace it with new instance
+                - If buff is stackable: Add another stack to that buff instance 
+                    - and reset duration(maybe inside StatusEffect?)
+            */
 
-        target->statusEffects.insert(statusEffectName, statusEffect);
+   
+            statusEffectAppliedInstance->addStacks(1);
+        }
+        else
+        {
+            StatusEffect* statusEffectInstance = statusEffectInternal->copy();
 
-        return statusEffect;
+            target->appliedStatusEffects.append(statusEffectInstance);
+            //Effect is considered active when onApply() is called
+            statusEffectInstance->onApply();
+        }
     }
     else
     {
@@ -88,7 +121,7 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
     }
 }
 
-void StatusEffectManager::loadFromDirectory()
+void StatusEffectManager::loadDataFromDirectory()
 {
     //Load status effect data from *.json files.
     //File name will be the name status effect will be registered under
@@ -137,59 +170,23 @@ void StatusEffectManager::loadFromDirectory()
                 }
                 else
                 {
-                    Dictionary jsonData = Dictionary(json->get_data());
-
-                    //Loading from JSON works
-
                     String effectName = fileName.substr(0, fileName.size() - 6);
-
-                    //What icon does the buff have?
-                    String iconName;
-
-                    String tooltip = jsonData.get("tooltip", "game_tooltip_" + effectName);
-
-                    printf("EffectName = %s\n", effectName.ascii().ptr());
-
-                    //If type is invalid 0 is set instead
-                    int maxStacks = int(jsonData.get("maxStacks", 5));
-                    int damage = int(jsonData.get("damage", 5));
-                    int secondsDuration = int(jsonData.get("duration", 5));
-                    //TODO: Get process frames per second from somewhere
-                    int duration = secondsDuration*60;
-
-                    int scriptID = int(jsonData.get("scriptId", StatusEffectScriptID::NONE));
-
-                    if( !(scriptID >= 0 || scriptID < STATUS_EFFECT_SCRIPT_ID_MAX))
-                    {
-                        //Log warning that no logic is attached to StatusEffect because of invalid ID
-                        scriptID = StatusEffectScriptID::NONE;
-                    }
 
                     /**
                      * Check what logic should be tied to that status effect
                     */
                     String logicObjectName = effectName;
 
-                    printf("Damage = %d\n", damage);
-                    printf("Duration = %d\n", duration);
-
-                    StatusEffectData *statusEffectData = new StatusEffectData(
-                        effectName,
-                        effectName,
-                        tooltip,
-                        maxStacks,
-                        duration,
-                        damage
-                    );
-                    StatusEffect *statusEffect = new StatusEffect(statusEffectData, statusEffectScripts[scriptID]);
-
-
-
-
-                    registerStatusEffect(statusEffect);
-
-                    printf("Size registered effects: %d\n", registeredStatusEffects.size());
-
+                    if(StatusEffect* statusEffectReg = getRegisteredStatusEffect(effectName))
+                    {
+                        Dictionary data = Dictionary(json->get_data());
+                        
+                        statusEffectReg->loadData(data);
+                    }
+                    else
+                    {
+                        //No such status effect - ignoring
+                    }
                 }
             }
         }
@@ -197,8 +194,10 @@ void StatusEffectManager::loadFromDirectory()
 
     for(auto effectData : registeredStatusEffects)
     {
-        printf("Registered effect name = %s\n", effectData.value->statusEffectData->name.ascii().ptr());
-        printf("%s\n", String(*(effectData.value->statusEffectData)).ascii().ptr());        
+        /*
+        printf("Registered effect name = %s\n", effectData.value->name.ascii().ptr());
+        printf("%s\n", String(*(effectData.value->statusEffectData)).ascii().ptr());  
+        */      
     }
 
 }

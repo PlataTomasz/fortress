@@ -1,33 +1,40 @@
 #include "status_effect.hpp"
 #include "../entities/entity.hpp"
 
-Entity *StatusEffectData::getTarget()
+Entity *StatusEffect::getTarget()
 {
     return target;
 }
 
-void StatusEffectData::setTarget(Entity* target)
+void StatusEffect::setTarget(Entity* target)
 {
     //Disallow change of owner if it was already set
-    if(target = nullptr)
+    if(target == nullptr)
         this->target = target;
 }
 
-void StatusEffectScript::onProcessFrameImpl()
+void StatusEffect::addStacks(int stackCount)
+{
+    this->currStacks = this->currStacks + stackCount;
+    //Renew status effect
+    currDuration = 0;
+}
+
+void StatusEffect::onProcessFrameImpl()
 {
     onProcessFrame();
-    if(statusEffectData->currDuration >= statusEffectData->maxDuration)
+    if(currDuration >= maxDuration)
     {
         //Effect duration ended - remove it
-        statusEffectData->target->removeStatusEffect(statusEffectData->name);
+        target->removeStatusEffect(name);
     }
     else
     {
-        statusEffectData->currDuration--;
+        currDuration--;
     }
 }
 
-StatusEffectData::operator String() const
+StatusEffect::operator String() const
 {
     String str = "{\n"
     "   name : %\n"

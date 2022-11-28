@@ -87,9 +87,9 @@ void Entity::onPhysicsFrame()
     }
 
     //StatusEffect handling
-    for(auto effect : statusEffects)
+    for(auto effect : appliedStatusEffects)
     {
-        effect.value->statusEffectScript->onProcessFrameImpl();
+        effect->onProcessFrameImpl();
     }
 }
 
@@ -106,9 +106,20 @@ StatusEffect *Entity::applyStatusEffect(String statusEffectName, float duration,
 
 bool Entity::hasStatusEffect(String statusEffectName)
 {
-    //Check if status effect is registered
-    if(statusEffects.find(statusEffectName) != statusEffects.end())
+    if(getStatusEffect(statusEffectName) != nullptr)
         return true;
     else
         return false;
+}
+
+StatusEffect *Entity::getStatusEffect(String statusEffectName)
+{
+    for(auto effect : appliedStatusEffects)
+    {
+        if(effect->name == statusEffectName)
+        {
+            return effect;
+        }
+    }
+    return nullptr;
 }

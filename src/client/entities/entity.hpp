@@ -65,7 +65,7 @@ protected:
     unsigned int currLifetime = 0;
 public:
     //Max 256 effects at the same time
-    HashMap<String, StatusEffect*> statusEffects;
+    Vector<StatusEffect*> appliedStatusEffects;
 
 public:
     void castAbility(int abilityId);
@@ -76,7 +76,8 @@ public:
     void onCollision(Area3D *collider);
 
     bool removeStatusEffect(String statusEffectName);
-    StatusEffect *applyStatusEffect(String statusEffectName, float duration, Entity *inflictor);
+    StatusEffect* applyStatusEffect(String statusEffectName, float duration, Entity *inflictor);
+    StatusEffect* getStatusEffect(String statusEffectName);
     bool hasStatusEffect(String statusEffectName);
 protected:
     static void _bind_methods(){};
