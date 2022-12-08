@@ -7,8 +7,13 @@ class TundraChainLashAbility : public Ability
 {
     virtual void initialize(){};
     virtual void onCast();
-    virtual void onTick(){};
+    virtual void onTick();
     virtual void onCooldownChange(){};
+
+    ~TundraChainLashAbility()
+    {
+        
+    }
 };
 
 #endif // TUNDRA_CHAIN_LASH_HPP

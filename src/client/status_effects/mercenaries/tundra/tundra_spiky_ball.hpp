@@ -7,6 +7,8 @@ class TundraBall;
 
 class TundraSpikyBallStatus : public StatusEffect
 {
+VIRTUAL_COPY(TundraSpikyBallStatus);
+
 private:
     TundraBall *tundraBall;
 public:
@@ -19,7 +21,7 @@ public:
     */
     virtual void onExpire()
     {
-
+        printf("%s (TundraSpikyBall) expired!\n", this->name.ascii().ptr());
     };
     /**
      * Called when status is applied to entity
@@ -32,6 +34,21 @@ public:
     {
 
     };
+
+    TundraSpikyBallStatus(Dictionary dict) : StatusEffect(dict)
+    {
+        
+    }
+
+    TundraSpikyBallStatus()
+    {
+
+    }
+
+    ~TundraSpikyBallStatus()
+    {
+        
+    }
 };
 
 #endif // TUNDRA_HAS_BALL_HPP

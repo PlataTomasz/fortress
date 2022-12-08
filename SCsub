@@ -12,8 +12,13 @@ sources = Glob("*.cpp")
 sources += Glob("src/*.cpp")
 sources += Glob(cl_src_dir+"*.cpp")
 sources += Glob(cl_src_dir+"status_effects/*.cpp")
+sources += Glob(cl_src_dir+"status_effects/mercenaries/tundra/*.cpp")
+
 sources += Glob(cl_src_dir+"entities/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/*.cpp")
+sources += Glob(cl_src_dir+"entities/mercenaries/tundra/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/*.cpp")
+sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
+
 
 env_artifact_seekers.add_source_files(env.modules_sources, sources)

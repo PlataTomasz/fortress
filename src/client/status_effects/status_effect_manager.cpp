@@ -9,7 +9,9 @@ StatusEffectManager::StatusEffectManager()
     //Path where all deafult status effects are stored
     String defaultStatusEffectPath = "resources/status_effects";
 
-    //
+    //Register empty status effects as templates for copying
+    registerStatusEffect("tundra_spiky_ball", new TundraSpikyBallStatus());
+
 
     loadDataFromDirectory();
 }
@@ -29,9 +31,9 @@ bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
         return false;
 }
 
-Error StatusEffectManager::registerStatusEffect(StatusEffect *statusEffect)
+Error StatusEffectManager::registerStatusEffect(String name, StatusEffect *statusEffect)
 {
-    const String name = statusEffect->name;
+    //const String name = statusEffect->name;
 
     if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
     {
@@ -78,7 +80,14 @@ bool StatusEffectManager::removeStatusEffect(String statusEffectName, Entity *ta
 
 StatusEffect* StatusEffectManager::getRegisteredStatusEffect(String statusEffectName)
 {
-    return registeredStatusEffects.get(statusEffectName);
+    if(registeredStatusEffects.has(statusEffectName))
+    {
+        return registeredStatusEffects.get(statusEffectName);
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor)
@@ -109,6 +118,7 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
         else
         {
             StatusEffect* statusEffectInstance = statusEffectInternal->copy();
+            statusEffectInstance->setTarget(target);
 
             target->appliedStatusEffects.append(statusEffectInstance);
             //Effect is considered active when onApply() is called
@@ -177,6 +187,7 @@ void StatusEffectManager::loadDataFromDirectory()
                     */
                     String logicObjectName = effectName;
 
+                    //Update registered status effect with default values
                     if(StatusEffect* statusEffectReg = getRegisteredStatusEffect(effectName))
                     {
                         Dictionary data = Dictionary(json->get_data());

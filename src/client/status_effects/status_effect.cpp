@@ -9,8 +9,13 @@ Entity *StatusEffect::getTarget()
 void StatusEffect::setTarget(Entity* target)
 {
     //Disallow change of owner if it was already set
-    if(target == nullptr)
+    /*
+    if(this->target == nullptr)
+    {
         this->target = target;
+    }
+    */
+   this->target = target;
 }
 
 void StatusEffect::addStacks(int stackCount)

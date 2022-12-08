@@ -2,17 +2,19 @@
 #define STATUS_EFFECT_HPP
 
 #include <core/string/ustring.h>
+#include <core/variant/dictionary.h>
+#include <core/variant/variant.h>
 
-#define VIRTUAL_COPY(DerivedClassName, BaseClassName)               \
+#define VIRTUAL_COPY_STATUS_EFFECT(DerivedClassName, BaseClassName)               \
 public:                                                             \
-    BaseClassName* copy()                                           \
+    virtual BaseClassName* copy()                                           \
     {                                                               \
         return new DerivedClassName(*this);                         \
     }   
 
 #define VIRTUAL_COPY(ClassName)                                     \
 public:                                                             \
-    ClassName* copy()                                               \
+    virtual StatusEffect* copy()                                    \
     {                                                               \
         return new ClassName(*this);                                \
     } 
@@ -80,7 +82,10 @@ public:
     /**
      * Called when status is applied to entity
     */
-    virtual void onApply(){};
+    virtual void onApply()
+    {
+        printf("StatusEffect::onApply callled!\n");
+    };
     /**
      * Called every process frame
     */
@@ -111,6 +116,12 @@ public:
     {
         loadData(data);
     };
+
+    //Should be used only for register purpose
+    StatusEffect()
+    {
+
+    }
 
     friend class Entity;
     friend class StatusEffectManager;

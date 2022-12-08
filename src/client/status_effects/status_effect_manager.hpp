@@ -23,7 +23,7 @@ public:
     /**
      * Registers status effect. If allowOverride is true, status effect will be overriden
     */
-    Error registerStatusEffect(StatusEffect *statusEffect);
+    Error registerStatusEffect(String name, StatusEffect *statusEffect);
 
     StatusEffect *applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor);
 
