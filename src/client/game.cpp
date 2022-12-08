@@ -33,10 +33,10 @@ Game::~Game()
 
 void Game::_ready()
 {
-    Node3D *tmp_mapInstance = (Node3D*)get_node(NodePath("Map"));
+    GameMap *tmp_mapInstance = (GameMap*)get_node(NodePath("Map"));
     if(tmp_mapInstance)
     {
-        this->mapInstance = tmp_mapInstance;
+        this->gameMap = tmp_mapInstance;
         std::cout<<"Map detected!"<<std::endl;
     }
     else
@@ -67,7 +67,8 @@ void Game::_ready()
     ent->set_position(Vector3( 2, 2, 2));
     
     Vector3 redSpawnPoint = Vector3();
-    Node3D *redSpawnNode = (Node3D*)get_node(NodePath("Map/SpawnRed"));
+    Node3D *redSpawnNode = nullptr;
+    //(Node3D*)get_node(NodePath("Map/SpawnRed"));
 
     if(!redSpawnNode)
     {
@@ -124,7 +125,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
 
             //Player tries to use basic attack
 
-            Node3D *entitiesNode = (Node3D*)(this->mapInstance->get_node(NodePath("Entities")));
+            
             //Create new entity
 
             //Create entity
@@ -133,9 +134,9 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
             ent->set_position(worldPos);
 
             ent->set_name("DEBUG_BOI");
-            add_child(ent);
+            this->getGameMap()->addEntity(ent);
 
-            //TODO: Check if below works for different look_at Vector3 values
+            //TODO: Check if below works for different look_at Vector3 values -  It does
             ent->look_at(Vector3(0,0,0));
             Vector3 currRotation = ent->get_rotation();
             printf("Angles(rad): { %f, %f, %f}\n", currRotation.x, currRotation.y, currRotation.z);
