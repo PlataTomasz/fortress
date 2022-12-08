@@ -9,6 +9,7 @@
 #include "game_camera.hpp"
 
 #include "map_loader.hpp"
+#include "game_map.hpp"
 
 using namespace godot;
 /**
@@ -23,13 +24,34 @@ private:
     /**
      * Current map.
     */
-    Node3D *mapInstance = nullptr;
+    GameMap *gameMap = nullptr;
     GameCamera *camera = nullptr;
 public:
     Player *player;
 
     virtual void _ready();
     virtual void unhandled_input(const Ref<InputEvent> &event) override;
+
+    void onChildExitTree(Node* node)
+    {
+        //Detecting if GameMap was removed for some reason(why?)
+        if(GameMap* ent = Object::cast_to<GameMap>(node))
+        {
+            gameMap = nullptr;
+        }
+
+        //Otherwise do nothing
+    }
+
+    void onChildEnterTree(Node* node)
+    {
+        //Auto detect map change
+    }
+
+    GameMap* getGameMap()
+    {
+        return this->gameMap;
+    }
 
     //Utilis
     Vector3 screenToWorld(const Vector2 &screenPos);
