@@ -108,11 +108,11 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
             - If no buff with passed name is applied on entity, apply an instance of it.
             - If buff instance with passed name is applied on entity:
                 - If buff is non-stackable: replace it with new instance
-                - If buff is stackable: Add another stack to that buff instance 
+                - If buff is stackable: Add another stack to that buff instance
                     - and reset duration(maybe inside StatusEffect?)
             */
 
-   
+
             statusEffectAppliedInstance->addStacks(1);
         }
         else
@@ -138,7 +138,7 @@ void StatusEffectManager::loadDataFromDirectory()
     //Allows loading after initialization
 
      //Register status effect based on data from each file
-     
+
     /*
     Effect won't register if:
         - Effect with such name already exists
@@ -191,7 +191,7 @@ void StatusEffectManager::loadDataFromDirectory()
                     if(StatusEffect* statusEffectReg = getRegisteredStatusEffect(effectName))
                     {
                         Dictionary data = Dictionary(json->get_data());
-                        
+
                         statusEffectReg->loadData(data);
                     }
                     else
@@ -207,8 +207,8 @@ void StatusEffectManager::loadDataFromDirectory()
     {
         /*
         printf("Registered effect name = %s\n", effectData.value->name.ascii().ptr());
-        printf("%s\n", String(*(effectData.value->statusEffectData)).ascii().ptr());  
-        */      
+        printf("%s\n", String(*(effectData.value->statusEffectData)).ascii().ptr());
+        */
     }
 
 }
