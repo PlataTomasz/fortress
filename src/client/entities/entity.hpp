@@ -6,6 +6,7 @@
 
 #include <core/string/ustring.h>
 #include <core/templates/hash_map.h>
+#include "../stats/stat_modifier.hpp"
 
 using namespace godot;
 
@@ -13,12 +14,51 @@ class StatusEffect;
 
 /**
  * Object that is used to represent most of the beings on the GameMap
- * 
+ *
  * @note Game logic happens in two dimensions, the third one is used ocassionally in special scenarios.
 */
 class Entity : public Node3D
 {
 GDCLASS(Entity, Node3D);
+
+private:
+	struct Stats
+	{
+		//Defefnsive stats
+		BaseBonusStat health;
+		Stat healthRegeneration;
+		BaseBonusStat physicalResistance;
+		BaseBonusStat magicResistance;
+		//Damage reduction can be: magical, physical, global(any type of damage except true)
+		Stat globalDamageReduction;
+		Stat physicalDamageReduction;
+		Stat magicDamageReduction;
+
+		//Offensive
+		BaseBonusStat physicalDamage;
+		BaseBonusStat magicPower;
+		BaseBonusStat attackRecovery;
+
+		//Damage multipliers
+		Stat globalDamageIncrease;
+		Stat physicalDamageIncrease;
+		Stat magicDamageIncrease;
+
+		//Damage increases over time - per basic attack hit
+		Stat rampup;
+
+		//Healing from damage dealt
+		Stat vamp;
+
+		//Utility
+		BaseBonusStat movementSpeed;
+		Stat spellRecovery;
+
+		BaseBonusStat resource;
+		Stat resourceRegeneration;
+	};
+
+	Stats stats;
 
 protected:
     enum Team
