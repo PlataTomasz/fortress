@@ -8,7 +8,6 @@
 #include <scene/resources/primitive_meshes.h>
 #include "../status_effects/status_effect_manager.hpp"
 
-
 Entity::Entity()
 {
     if(!Engine::get_singleton()->is_editor_hint())
@@ -22,6 +21,12 @@ Entity::Entity()
 Entity::~Entity()
 {
 
+}
+
+void Entity::_bind_methods()
+{
+    ADD_SIGNAL(MethodInfo("health_lost", PropertyInfo(Variant::FLOAT, "value")));
+    ADD_SIGNAL(MethodInfo("health_recover", PropertyInfo(Variant::FLOAT, "value")));
 }
 
 void Entity::onReady()

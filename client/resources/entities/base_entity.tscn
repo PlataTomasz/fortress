@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3 uid="uid://cduts7eno7ego"]
+
+[ext_resource type="Texture2D" uid="uid://7r71kbdyb0fy" path="res://textures/HealthBar.png" id="1_pl813"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_thix4"]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mmmn2"]
+bg_color = Color(0.627451, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_45wh1"]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ohmcg"]
+bg_color = Color(0, 0, 0.823529, 1)
+
+[node name="Entity" type="Entity"]
+
+[node name="Model" type="MeshInstance3D" parent="."]
+
+[node name="HealthBarOverlay" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_pl813")
+
+[node name="HealthBar" type="ProgressBar" parent="HealthBarOverlay"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 3.0
+offset_right = 159.0
+offset_bottom = 22.0
+theme_override_styles/background = SubResource("StyleBoxFlat_thix4")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mmmn2")
+value = 100.0
+show_percentage = false
+
+[node name="ResourceBar" type="ProgressBar" parent="HealthBarOverlay"]
+layout_mode = 1
+offset_left = 38.0
+offset_top = 24.0
+offset_right = 134.0
+offset_bottom = 37.0
+theme_override_font_sizes/font_size = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_45wh1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ohmcg")
+value = 100.0
+show_percentage = false
