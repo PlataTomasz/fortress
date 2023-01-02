@@ -120,7 +120,7 @@ public:
     StatusEffect* getStatusEffect(String statusEffectName);
     bool hasStatusEffect(String statusEffectName);
 protected:
-    static void _bind_methods(){};
+    static void _bind_methods();
 public:
     Entity();
     ~Entity();
