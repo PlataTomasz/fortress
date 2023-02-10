@@ -21,7 +21,7 @@ public:
     */
     virtual void onExpire()
     {
-        printf("%s (TundraSpikyBall) expired!\n", this->name.ascii().ptr());
+        printf("%s (TundraSpikyBall) expired!\n", this->name.ascii().get_data());
     };
     /**
      * Called when status is applied to entity

@@ -1,5 +1,7 @@
 #include "projectile.hpp"
 
+#include <classes/engine.hpp>
+
 class ThrowBallProjectile : public Projectile
 {
 GDCLASS(ThrowBallProjectile, Projectile);
@@ -15,7 +17,8 @@ public:
     {
         if(!Engine::get_singleton()->is_editor_hint())
         {
-            connect("ready", callable_mp(this, &ThrowBallProjectile::ready));
+            //TODO: Find alternative for callable_mp
+            //connect("ready", callable_mp(this, &ThrowBallProjectile::ready));
         }
     }
 

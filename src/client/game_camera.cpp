@@ -1,4 +1,8 @@
 #include "game_camera.hpp"
+#include <classes/node3d.hpp>
+#include <variant/vector3.hpp>
+
+using namespace godot;
 
 Vector3 GameCamera::CAMERA_OFFSET = Vector3(-1,0,-1);
 
@@ -6,12 +10,15 @@ GameCamera::GameCamera()
 {
     followedNode = nullptr;
     freeCam = true;
-    connect("ready", callable_mp(this, &GameCamera::ready));
+    
+    //TODO: Find alternative for callable_mp
+    //connect("ready", callable_mp(this, &GameCamera::ready));
 }
 
 void GameCamera::ready()
 {
-    get_tree()->connect("process_frame", callable_mp(this, &GameCamera::process));
+    //TODO: Find alternative for callable_mp
+    //get_tree()->connect("process_frame", callable_mp(this, &GameCamera::process));
     //That may help when I'll make manager responsible for camera
     //camera->connect("tree_exiting", callable_mp(this, &GameCamera::onCameraNodeExpire));
 }
@@ -22,12 +29,12 @@ void GameCamera::onCameraNodeExpire()
     enableFreeCam();
 }
 
-void GameCamera::setFollowedNode(Node3D *node)
+void GameCamera::setFollowedNode(Node3D* node)
 {
     followedNode = node;
 }
 
-void GameCamera::startFollowingNode(Node3D *node)
+void GameCamera::startFollowingNode(Node3D* node)
 {
     followedNode = node;
     freeCam = false;

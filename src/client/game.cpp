@@ -1,18 +1,18 @@
 #include "game.hpp"
-#include <scene/3d/node_3d.h>
-#include <scene/3d/camera_3d.h>
-#include <scene/3d/mesh_instance_3d.h>
-#include <scene/resources/primitive_meshes.h>
-#include <core/input/input_event.h>
-#include <core/object/class_db.h>
-#include <core/object/method_bind.h>
-#include <core/core_bind.h>
+#include <classes/node3d.hpp>
+#include <classes/camera3d.hpp>
+#include <classes/mesh_instance3d.hpp>
+#include <classes/primitive_mesh.hpp>
+#include <classes/input_event.hpp>
 #include <iostream>
 #include "entities/entity.hpp"
 #include "entities/mercenaries/mercenary.hpp"
 #include "game_logic/abilities/cast_context.hpp"
-#include <scene/main/viewport.h>
+#include <classes/viewport.hpp>
+#include <classes/engine.hpp>
 #include "status_effects/status_effect_manager.hpp"
+#include <classes/input_event_mouse_button.hpp>
+#include <classes/input_event_key.hpp>
 
 #include "entities/mercenaries/tundra/tundra.hpp"
 
@@ -21,7 +21,8 @@ Game::Game()
     //Register signals
     if(!Engine::get_singleton()->is_editor_hint())
     {
-        connect("ready", callable_mp(this, &Game::_ready));
+        //TODO: Find alternative for callable_mp
+        //connect("ready", callable_mp(this, &Game::_ready));
         //Allow node to process inputs
         set_process_unhandled_input(true);
         printf("%d\n", is_processing_unhandled_input());
@@ -35,7 +36,7 @@ Game::~Game()
 
 void Game::_ready()
 {
-    GameMap *tmp_mapInstance = (GameMap*)get_node(NodePath("Map"));
+    GameMap *tmp_mapInstance = get_node<GameMap>(NodePath("Map"));
     if(tmp_mapInstance)
     {
         this->gameMap = tmp_mapInstance;
@@ -47,7 +48,7 @@ void Game::_ready()
         std::cout<<"Map was not loaded!"<<std::endl;
     }
 
-    GameCamera *tmp_camera = (GameCamera*)get_node(NodePath("Camera"));
+    GameCamera *tmp_camera = get_node<GameCamera>(NodePath("Camera"));
     if(tmp_camera)
     {
         this->camera = tmp_camera;

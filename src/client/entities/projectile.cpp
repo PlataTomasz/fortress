@@ -1,12 +1,13 @@
 #include "projectile.hpp"
+#include <classes/engine.hpp>
 
 Projectile::Projectile()
 {
     if(!Engine::get_singleton()->is_editor_hint())
     {
         set_physics_process(true);
-
-        connect("ready", callable_mp(this, &Projectile::ready));
+        //TODO: Find alternative for callable_mp
+        //connect("ready", callable_mp(this, &Projectile::ready));
     }
 }
 

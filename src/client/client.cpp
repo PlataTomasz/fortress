@@ -19,6 +19,16 @@ void Client::_ready()
     */
 }
 
+void Client::_enter_tree()
+{
+
+}
+
+void Client::_process()
+{
+    
+}
+
 void Client::_bind_methods()
 {
     //ClassDB::bind_method(D_METHOD("_process"), &Client::_process);

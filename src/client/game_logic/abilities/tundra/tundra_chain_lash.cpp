@@ -1,6 +1,9 @@
 #include "tundra_chain_lash.hpp"
-#include <scene/3d/collision_shape_3d.h>
-#include <scene/resources/box_shape_3d.h>
+
+#include <classes/collision_shape3d.hpp>
+#include <classes/box_shape3d.hpp>
+#include <classes/area3d.hpp>
+#include <classes/object.hpp>
 #include "../../../entities/mercenaries/tundra/tundra_ball.hpp"
 
 void TundraChainLashAbility::onCast()
@@ -36,8 +39,10 @@ void TundraChainLashAbility::onCast()
 
     for(int i = 0;i<colliders.size();i++)
     {
-        Area3D *collider = (Area3D*)(colliders[i].get_validated_object());
-        printf("Colliding Area3D: %s\n", String(collider->get_name()).ascii().ptr());
+        //TODO: Figure out what can be used to retrieve variant as type
+        //Area3D* collider =  Object::cast_to<Area3D>(&(*colliders[i]));
+        Area3D* collider = Object::cast_to<Area3D>((Object*)colliders[i]);
+        printf("Colliding Area3D: %s\n", String(collider->get_name()).ascii().get_data());
 
         //Here damage should be dealt to entity that owns collider
     }

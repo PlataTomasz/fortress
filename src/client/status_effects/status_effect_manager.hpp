@@ -2,9 +2,9 @@
 #define STATUS_EFFECT_MANAGER_HPP
 
 #include "status_effect.hpp"
-#include <core/string/ustring.h>
+#include <variant/string.hpp>
 #include "../entities/entity.hpp"
-#include <core/templates/hash_map.h>
+#include <templates/hash_map.hpp>
 
 class StatusEffectManager
 {

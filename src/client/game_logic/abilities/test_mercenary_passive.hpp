@@ -13,5 +13,4 @@ public:
     virtual void onCooldownChange();
 };
 
-
 #endif // TEST_MERCENARY_ABILITY

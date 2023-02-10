@@ -2,7 +2,7 @@
 #include "entities/mercenaries/mercenary.hpp"
 #include "client.hpp"
 #include "game.hpp"
-#include <scene/main/window.h>
+#include <classes/window.hpp>
 
 Player::Player()
 {

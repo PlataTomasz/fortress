@@ -1,12 +1,14 @@
 #include "entity.hpp"
-#include <scene/3d/area_3d.h>
-#include <core/string/string_name.h>
-#include <scene/scene_string_names.h>
-#include <scene/3d/collision_shape_3d.h> 
-#include <scene/resources/box_shape_3d.h>
-#include <scene/3d/mesh_instance_3d.h>
-#include <scene/resources/primitive_meshes.h>
+#include <classes/area3d.hpp>
+#include <variant/string_name.hpp>
+#include <classes/collision_shape3d.hpp>
+#include <classes/box_shape3d.hpp>
+#include <classes/mesh_instance3d.hpp>
+#include <classes/engine.hpp>
+#include <classes/box_mesh.hpp>
 #include "../status_effects/status_effect_manager.hpp"
+
+using namespace godot;
 
 Entity::Entity()
 {
@@ -14,7 +16,8 @@ Entity::Entity()
     {
         set_physics_process(true);
 
-        connect("ready", callable_mp(this, &Entity::onReady));
+        //TODO: Find alternative for callable_mp
+        //connect("ready", callable_mp(this, &Entity::onReady));
     }
 }
 
@@ -54,9 +57,9 @@ void Entity::onReady()
     area3d->set_monitoring(true);
     add_child(area3d);
     add_child(meshInstance);
-    area3d->connect("area_entered", callable_mp(this, &Entity::onCollision));
-
-    get_tree()->connect("physics_frame", callable_mp(this, &Entity::onPhysicsFrame));
+    //TODO: Find alternative for callable_mp
+    //area3d->connect("area_entered", callable_mp(this, &Entity::onCollision));
+    //get_tree()->connect("physics_frame", callable_mp(this, &Entity::onPhysicsFrame));
 }
 
 void Entity::onCollision(Area3D *collider)

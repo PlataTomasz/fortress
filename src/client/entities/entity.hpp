@@ -1,11 +1,12 @@
 #if !defined(ENTITY_HPP_INCLUDED)
 #define ENTITY_HPP_INCLUDED
 
-#include <scene/3d/node_3d.h>
-#include <scene/3d/area_3d.h>
+#include <classes/node3d.hpp>
+#include <classes/area3d.hpp>
 
-#include <core/string/ustring.h>
-#include <core/templates/hash_map.h>
+#include <variant/string.hpp>
+#include <templates/hash_map.hpp>
+#include <templates/vector.hpp>
 #include "../stats/stat_modifier.hpp"
 
 using namespace godot;

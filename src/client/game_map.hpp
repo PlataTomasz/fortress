@@ -1,8 +1,10 @@
 #if !defined(GAME_MAP_HPP)
 #define GAME_MAP_HPP
 
-#include <scene/3d/node_3d.h>
+#include <classes/node3d.hpp>
 #include "entities/entity.hpp"
+#include <templates/vector.hpp>
+#include <classes/engine.hpp>
 
 /**
  * GameMap is a Node which should be root of any map.
@@ -72,11 +74,12 @@ public:
     void onReady()
     {
         printf("GameMap ready!");
-        connect("child_exiting_tree", callable_mp(this, &GameMap::onChildExitingTree));
+        //TODO: Find alternative for callable_mp
+        //connect("child_exiting_tree", callable_mp(this, &GameMap::onChildExitingTree));
         
         //Load spawn points for each team
-        Node* redSpawnsNode = get_node(NodePath("SpawnPoints/Red"));
-        Node* blueSpawnsNode = get_node(NodePath("SpawnPoints/Blue"));
+        Node* redSpawnsNode = get_node<Node>(NodePath("SpawnPoints/Red"));
+        Node* blueSpawnsNode = get_node<Node>(NodePath("SpawnPoints/Blue"));
 
         if(redSpawnsNode)
         {
@@ -143,8 +146,8 @@ public:
             entities.resize(8192);
             entities.resize(32);
             entities.resize(32);
-
-            connect("ready", callable_mp(this, &GameMap::onReady));
+            //TODO: Find alternative for callable_mp
+            //connect("ready", callable_mp(this, &GameMap::onReady));
         }
     }
 
