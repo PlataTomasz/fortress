@@ -1,7 +1,9 @@
 #include "tundra_ball.hpp"
-#include <scene/resources/box_shape_3d.h>
-#include <scene/3d/mesh_instance_3d.h>
-#include <scene/resources/primitive_meshes.h>
+#include <classes/box_shape3d.hpp>
+#include <classes/mesh_instance3d.hpp>
+#include <classes/engine.hpp>
+#include <gdextension_helper.hpp>
+#include <classes/sphere_mesh.hpp>
 
 TundraBall::TundraBall(Entity *owner)
 {
@@ -9,8 +11,8 @@ TundraBall::TundraBall(Entity *owner)
     {
         this->owner = owner;
         this->maxRangeFromOwner = 0.8;
-
-        connect("ready", callable_mp(this, &TundraBall::onReady));
+        //TODO: Find alternative for callable_mp
+        //connect("ready", callable_mp(this, &TundraBall::onReady));
         //area3d->connect("area_entered", callable_mp(this, &TundraBall::onCollision));
     }
 }
@@ -29,7 +31,8 @@ void TundraBall::onCollision(Area3D *collider)
 void TundraBall::onPhysicsFrame()
 {
     //Get delta
-    double delta = SceneTree::get_singleton()->get_physics_process_time();
+    //FIXME: Delta is invalid
+    double delta = 0;
 
     //Get owner position and move toward him if It's too far away
     Vector3 ballPos = this->get_position();
@@ -37,7 +40,7 @@ void TundraBall::onPhysicsFrame()
     {
         Vector3 lerpResult = this->get_position().lerp(owner->get_position(), delta);
 
-        printf("lerpResult: %s\n", String(lerpResult).ascii().ptr());
+        printf("lerpResult: %s\n", String(lerpResult).ascii().get_data());
 
         this->set_position(lerpResult);
 
@@ -60,6 +63,6 @@ void TundraBall::onReady()
     meshInstance->set_mesh(mesh);
 
     add_child(meshInstance);
-
-    get_tree()->connect("physics_frame", callable_mp(this, &TundraBall::onPhysicsFrame));
+    //TODO: Find alternative for callable_mp
+    //get_tree()->connect("physics_frame", callable_mp(this, &TundraBall::onPhysicsFrame));
 }

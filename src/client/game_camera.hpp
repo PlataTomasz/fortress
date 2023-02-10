@@ -1,7 +1,12 @@
 #if !defined(GAME_CAMERA_HPP)
 #define GAME_CAMERA_HPP
 
-#include <scene/3d/camera_3d.h>
+#include <classes/camera3d.hpp>
+#include <variant/vector3.hpp>
+#include <classes/node3d.hpp>
+
+using namespace godot;
+
 //Maybe changing it into camera controller would do better job?
 class GameCamera : public Camera3D
 {

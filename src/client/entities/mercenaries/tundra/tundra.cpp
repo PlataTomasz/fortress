@@ -1,6 +1,7 @@
 #include "tundra.hpp"
 #include "../../../game_logic/abilities/test_ability.hpp"
 #include "../../../game_logic/abilities/tundra/tundra_chain_lash.hpp"
+#include <classes/engine.hpp>
 
 Tundra::Tundra()
 {
@@ -12,7 +13,8 @@ Tundra::Tundra()
         skillSet[ABILITY_THIRD] = new TestAbility();
         skillSet[ABILITY_ULTIMATE] = new TestAbility();
 
-        connect("ready", callable_mp(this, &Tundra::onReady));
+        //TODO: Find alternative for callable_mp
+        //connect("ready", callable_mp(this, &Tundra::onReady));
     }
 }
 

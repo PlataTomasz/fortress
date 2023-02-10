@@ -1,7 +1,7 @@
 #if !defined(CAST_CONTEXT_HPP)
 #define CAST_CONTEXT_HPP
 
-#include <core/math/vector3.h>
+#include <variant/vector3.hpp>
 #include "../../entities/entity.hpp"
 
 /**

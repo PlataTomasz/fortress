@@ -1,6 +1,7 @@
 #include "status_effect_manager.hpp"
-#include <core/io/dir_access.h>
-#include <core/io/json.h>
+#include <classes/dir_access.hpp>
+#include <classes/json.hpp>
+#include <classes/file_access.hpp>
 
 #include "mercenaries/tundra/tundra_spiky_ball.hpp"
 
@@ -158,10 +159,10 @@ void StatusEffectManager::loadDataFromDirectory()
         printf("------------------------------------------\n");
         if(fileName.ends_with(".json"))
         {
-            printf("%s\n", fileName.ascii().ptr());
+            printf("%s\n", fileName.ascii().get_data());
             Error readErr;
 
-            Ref<FileAccess> file = FileAccess::open(dir->get_current_dir()+"/"+fileName, FileAccess::READ, &readErr);
+            Ref<FileAccess> file = FileAccess::open(dir->get_current_dir()+"/"+fileName, FileAccess::READ);
 
             if(readErr != OK)
             {
@@ -180,7 +181,7 @@ void StatusEffectManager::loadDataFromDirectory()
                 }
                 else
                 {
-                    String effectName = fileName.substr(0, fileName.size() - 6);
+                    String effectName = fileName.substr(0, fileName.length() - 6);
 
                     /**
                      * Check what logic should be tied to that status effect

@@ -1,8 +1,8 @@
 #ifndef CLIENT_H_INCLUDED
 #define CLIENT_H_INCLUDED
 
-#include <scene/main/node.h>
-#include <modules/enet/enet_multiplayer_peer.h>
+#include <classes/node.hpp>
+//#include <modules/enet/enet_multiplayer_peer.h>
 
 using namespace godot;
 

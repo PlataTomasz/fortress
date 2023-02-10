@@ -1,10 +1,10 @@
 #if !defined(GAME_H_INCLUDED)
 #define GAME_H_INCLUDED
 
-#include <scene/3d/camera_3d.h>
-#include <scene/main/node.h>
-#include <scene/3d/node_3d.h>
-#include <core/math/vector3.h>
+#include <classes/camera3d.hpp>
+#include <classes/node.hpp>
+#include <classes/node3d.hpp>
+#include <variant/vector3.hpp>
 #include "player.hpp"
 #include "game_camera.hpp"
 
@@ -30,7 +30,7 @@ public:
     Player *player;
 
     virtual void _ready();
-    virtual void unhandled_input(const Ref<InputEvent> &event) override;
+    virtual void unhandled_input(const Ref<InputEvent> &event);
 
     void onChildExitTree(Node* node)
     {
