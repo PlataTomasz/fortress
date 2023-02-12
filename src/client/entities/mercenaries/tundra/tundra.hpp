@@ -5,7 +5,7 @@ class Tundra : public Mercenary
 protected:
 
 public:
-    void onReady();
-    void onSpawn();
+    void _ready();
+    void _spawn();
     Tundra();
 };

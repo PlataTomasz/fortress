@@ -19,7 +19,7 @@ public:
 
         ThrowBallProjectile *proj = memnew(ThrowBallProjectile);
 
-        Game *game = (get_scene_tree()->get_root()->get_node<Game>(NodePath("Client/Game")));
+        Game* game = (get_scene_tree()->get_root()->get_node<Game>(NodePath("Client/Game")));
         proj->set_position(castContext.getCaster()->get_position());
         game->add_child(proj);
         proj->look_at(targetPos);

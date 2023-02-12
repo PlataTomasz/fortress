@@ -6,8 +6,6 @@ Projectile::Projectile()
     if(!Engine::get_singleton()->is_editor_hint())
     {
         set_physics_process(true);
-        //TODO: Find alternative for callable_mp
-        //connect("ready", callable_mp(this, &Projectile::ready));
     }
 }
 
@@ -43,7 +41,7 @@ Projectile::~Projectile()
     
 }
 
-void Projectile::ready()
+void Projectile::_ready()
 {
 
 }

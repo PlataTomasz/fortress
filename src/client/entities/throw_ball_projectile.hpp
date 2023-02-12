@@ -15,11 +15,7 @@ static void _bind_methods(){};
 public:
     ThrowBallProjectile()
     {
-        if(!Engine::get_singleton()->is_editor_hint())
-        {
-            //TODO: Find alternative for callable_mp
-            //connect("ready", callable_mp(this, &ThrowBallProjectile::ready));
-        }
+
     }
 
     ~ThrowBallProjectile()

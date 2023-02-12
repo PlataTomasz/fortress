@@ -12,9 +12,11 @@ private:
     */
     float maxRangeFromOwner;
 
-    void onCollision(Area3D* collider);
-    void onPhysicsFrame();
-    void onReady();
+    void onCollide(Area3D* collider);
+    void _physics_process(double delta) override;
+    void _ready() override;
+
+    static void _bind_methods();
 public:
     TundraBall(Entity* owner);
 };

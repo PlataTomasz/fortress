@@ -22,14 +22,15 @@ protected:
 
     Node3D *followedNode;
 
-    void ready();
-    void onCameraNodeExpire();
-    void setFollowedNode(Node3D *node);
     /**
      * Changes currecntly followed node and disables freecam
     */
-    void process();
+    void setFollowedNode(Node3D *node);
 public:
+    void _ready() override;
+    void _exit_tree() override;
+    void _process(double delta);
+
     void startFollowingNode(Node3D *node);
     void enableFreeCam();
 

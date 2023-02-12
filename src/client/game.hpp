@@ -5,6 +5,7 @@
 #include <classes/node.hpp>
 #include <classes/node3d.hpp>
 #include <variant/vector3.hpp>
+#include <classes/input_event.hpp>
 #include "player.hpp"
 #include "game_camera.hpp"
 
@@ -29,8 +30,8 @@ private:
 public:
     Player *player;
 
-    virtual void _ready();
-    virtual void unhandled_input(const Ref<InputEvent> &event);
+    void _ready() override;
+    void _unhandled_input(const Ref<InputEvent> &event) override;
 
     void onChildExitTree(Node* node)
     {

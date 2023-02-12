@@ -21,8 +21,6 @@ Game::Game()
     //Register signals
     if(!Engine::get_singleton()->is_editor_hint())
     {
-        //TODO: Find alternative for callable_mp
-        //connect("ready", callable_mp(this, &Game::_ready));
         //Allow node to process inputs
         set_process_unhandled_input(true);
         printf("%d\n", is_processing_unhandled_input());
@@ -109,7 +107,7 @@ Vector3 Game::screenToWorld(const Vector2 &screenPos)
     return Vector3(world_x, 0, world_z);
 }
 
-void Game::unhandled_input(const Ref<InputEvent> &event)
+void Game::_unhandled_input(const Ref<InputEvent> &event)
 {
     //Casting to InputEventMouseButton - If succeeds: It is valid type
     const InputEventMouseButton *event_ptr = Object::cast_to<InputEventMouseButton>(event.ptr());

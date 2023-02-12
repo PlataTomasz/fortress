@@ -15,9 +15,6 @@ Entity::Entity()
     if(!Engine::get_singleton()->is_editor_hint())
     {
         set_physics_process(true);
-
-        //TODO: Find alternative for callable_mp
-        //connect("ready", callable_mp(this, &Entity::onReady));
     }
 }
 
@@ -30,9 +27,11 @@ void Entity::_bind_methods()
 {
     ADD_SIGNAL(MethodInfo("health_lost", PropertyInfo(Variant::FLOAT, "value")));
     ADD_SIGNAL(MethodInfo("health_recover", PropertyInfo(Variant::FLOAT, "value")));
+
+    //ClassDB::bind_method(D_METHOD("onCollision"), &Entity::onCollision);
 }
 
-void Entity::onReady()
+void Entity::_ready()
 {
 
     //TODO: Mesh should be loaded from model
@@ -57,9 +56,7 @@ void Entity::onReady()
     area3d->set_monitoring(true);
     add_child(area3d);
     add_child(meshInstance);
-    //TODO: Find alternative for callable_mp
-    //area3d->connect("area_entered", callable_mp(this, &Entity::onCollision));
-    //get_tree()->connect("physics_frame", callable_mp(this, &Entity::onPhysicsFrame));
+    //area3d->connect("area_entered", Callable(this, "onCollision"));
 }
 
 void Entity::onCollision(Area3D *collider)
@@ -84,7 +81,7 @@ void Entity::movementProcess()
 
 }
 
-void Entity::onPhysicsFrame()
+void Entity::_physics_process(double delta)
 {
     movementProcess();
     currLifetime++;
