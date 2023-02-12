@@ -112,8 +112,8 @@ public:
     void castAbility(int abilityId);
 
     //Called every physics frame
-    void onPhysicsFrame();
-    void onReady();
+    void _physics_process(double delta) override;
+    void _ready() override;
     void onCollision(Area3D *collider);
 
     bool removeStatusEffect(String statusEffectName);

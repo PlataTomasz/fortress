@@ -25,5 +25,6 @@ void TundraSpikyBallStatus::onApply()
 
     Game* game = (get_scene_tree()->get_root()->get_node<Game>(NodePath("Client/Game")));
 
+
     game->getGameMap()->addEntity(instance);
 }

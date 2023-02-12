@@ -10,20 +10,13 @@ GameCamera::GameCamera()
 {
     followedNode = nullptr;
     freeCam = true;
-    
-    //TODO: Find alternative for callable_mp
-    //connect("ready", callable_mp(this, &GameCamera::ready));
 }
 
-void GameCamera::ready()
+void GameCamera::_ready()
 {
-    //TODO: Find alternative for callable_mp
-    //get_tree()->connect("process_frame", callable_mp(this, &GameCamera::process));
-    //That may help when I'll make manager responsible for camera
-    //camera->connect("tree_exiting", callable_mp(this, &GameCamera::onCameraNodeExpire));
 }
 
-void GameCamera::onCameraNodeExpire()
+void GameCamera::_exit_tree()
 {
     followedNode = nullptr;
     enableFreeCam();
@@ -45,7 +38,7 @@ void GameCamera::enableFreeCam()
     freeCam = true;
 }
 
-void GameCamera::process()
+void GameCamera::_process(double delta)
 {
     //Camera behaviour
     /*

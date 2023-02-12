@@ -7,17 +7,11 @@
 
 TundraBall::TundraBall(Entity *owner)
 {
-    if(!Engine::get_singleton()->is_editor_hint())
-    {
-        this->owner = owner;
-        this->maxRangeFromOwner = 0.8;
-        //TODO: Find alternative for callable_mp
-        //connect("ready", callable_mp(this, &TundraBall::onReady));
-        //area3d->connect("area_entered", callable_mp(this, &TundraBall::onCollision));
-    }
+    this->owner = owner;
+    this->maxRangeFromOwner = 0.8;
 }
 
-void TundraBall::onCollision(Area3D *collider)
+void TundraBall::onCollide(Area3D *collider)
 {
     //Deal damage when the ball moved into other entity as a result of other ability or result of displacement toward ball
 
@@ -28,12 +22,8 @@ void TundraBall::onCollision(Area3D *collider)
 
 }
 
-void TundraBall::onPhysicsFrame()
+void TundraBall::_physics_process(double delta)
 {
-    //Get delta
-    //FIXME: Delta is invalid
-    double delta = 0;
-
     //Get owner position and move toward him if It's too far away
     Vector3 ballPos = this->get_position();
     if(ballPos.distance_to(owner->get_position()) > maxRangeFromOwner)
@@ -51,7 +41,7 @@ void TundraBall::onPhysicsFrame()
     }
 }
 
-void TundraBall::onReady()
+void TundraBall::_ready()
 {
     printf("TundraBall ready!");
     //TODO: Visuals for Entities
@@ -63,6 +53,7 @@ void TundraBall::onReady()
     meshInstance->set_mesh(mesh);
 
     add_child(meshInstance);
-    //TODO: Find alternative for callable_mp
-    //get_tree()->connect("physics_frame", callable_mp(this, &TundraBall::onPhysicsFrame));
+
+    //TODO: Sync with current state of dev/tundra - missing area3d field
+    //area3d->connect("area_entered", Callable(this, "onCollide"));
 }

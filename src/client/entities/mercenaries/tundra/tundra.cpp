@@ -2,6 +2,7 @@
 #include "../../../game_logic/abilities/test_ability.hpp"
 #include "../../../game_logic/abilities/tundra/tundra_chain_lash.hpp"
 #include <classes/engine.hpp>
+#include <gdextension_helper.hpp>
 
 Tundra::Tundra()
 {
@@ -12,22 +13,19 @@ Tundra::Tundra()
         skillSet[ABILITY_SECOND] = new TestAbility();
         skillSet[ABILITY_THIRD] = new TestAbility();
         skillSet[ABILITY_ULTIMATE] = new TestAbility();
-
-        //TODO: Find alternative for callable_mp
-        //connect("ready", callable_mp(this, &Tundra::onReady));
     }
 }
 
-void Tundra::onReady()
+void Tundra::_ready()
 {
-    onSpawn();
+    DISABLE_IN_EDITOR();
+    _spawn();
 }
 
-void Tundra::onSpawn()
+void Tundra::_spawn()
 {
     printf("Tundra::onSpawn() called!\n");
     //Create ball entity
     applyStatusEffect("tundra_spiky_ball", 15, this);
 
-    
 }

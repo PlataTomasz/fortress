@@ -30,6 +30,7 @@ public:
     {
         T* entCopy = new T(ent);
         addEntity(entCopy);
+        return entCopy;
     }
 
     Vector<Entity*>& getEntities()
@@ -59,23 +60,9 @@ public:
     }
 
     //Event callbacks
-
-    void onChildExitingTree(Node *node)
-    {
-        //If node that left was entity, delete it from entities that are in map
-        if(Entity* ent = Object::cast_to<Entity>(node))
-        {
-            entities.erase(ent);
-        }
-
-        //Otherwise do nothing
-    }
-
-    void onReady()
+    void _ready() override
     {
         printf("GameMap ready!");
-        //TODO: Find alternative for callable_mp
-        //connect("child_exiting_tree", callable_mp(this, &GameMap::onChildExitingTree));
         
         //Load spawn points for each team
         Node* redSpawnsNode = get_node<Node>(NodePath("SpawnPoints/Red"));
@@ -144,10 +131,6 @@ public:
         {
             //Sizes for entity arrays
             entities.resize(8192);
-            entities.resize(32);
-            entities.resize(32);
-            //TODO: Find alternative for callable_mp
-            //connect("ready", callable_mp(this, &GameMap::onReady));
         }
     }
 

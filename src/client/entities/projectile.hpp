@@ -14,7 +14,7 @@ protected:
     static void _bind_methods(){};
     void movementProcess() override;
 public:
-    void ready();
+    void _ready() override;
 
 
     Projectile();
