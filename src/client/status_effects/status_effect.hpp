@@ -58,6 +58,11 @@ protected:
 
     int damage;
 
+    virtual bool isPermament()
+    {
+        return false;
+    }
+
     /**
     * Who has the status?
     */

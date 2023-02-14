@@ -35,6 +35,11 @@ public:
 
     };
 
+    bool isPermament() override
+    {
+        return true;
+    }
+
     TundraSpikyBallStatus(Dictionary dict) : StatusEffect(dict)
     {
         

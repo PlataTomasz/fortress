@@ -16,6 +16,7 @@
 #include "entities/entity.hpp"
 #include "game_camera.hpp"
 #include "game_map.hpp"
+#include "entities/mercenaries/tundra/tundra_ball.hpp"
 #include "entities/mercenaries/mercenary.hpp"
 
 using namespace godot;
@@ -27,10 +28,12 @@ void initialize_client(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<Game>();
     ClassDB::register_class<Client>();
-    ClassDB::register_class<Entity>();
     ClassDB::register_class<GameCamera>();
     ClassDB::register_class<GameMap>();
+	ClassDB::register_class<Entity>();
 	ClassDB::register_class<Mercenary>();
+	ClassDB::register_class<TundraBall>();
+
 }
 
 void uninitialize_client(ModuleInitializationLevel p_level) {
