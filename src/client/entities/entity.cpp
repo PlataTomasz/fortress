@@ -94,7 +94,7 @@ void Entity::_physics_process(double delta)
     //StatusEffect handling
     for(auto effect : appliedStatusEffects)
     {
-        effect->onProcessFrameImpl();
+        effect.value->onProcessFrameImpl();
     }
 }
 
@@ -121,9 +121,9 @@ StatusEffect *Entity::getStatusEffect(String statusEffectName)
 {
     for(auto effect : appliedStatusEffects)
     {
-        if(effect->name == statusEffectName)
+        if(effect.value->name == statusEffectName)
         {
-            return effect;
+            return effect.value;
         }
     }
     return nullptr;

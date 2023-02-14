@@ -66,10 +66,13 @@ StatusEffect *StatusEffectManager::getRegisteredStatusEffect(String statusEffect
 */
 bool StatusEffectManager::removeStatusEffect(String statusEffectName, Entity *target)
 {
-    if(StatusEffect* statusEffect = target->getStatusEffect(statusEffectName))
+    StatusEffect* statusEffect = target->getStatusEffect(statusEffectName);
+    if(statusEffect && !statusEffect->isPermament())
     {
         statusEffect->onExpire();
-        //Remove status effect here?
+        auto hashMapIter = target->appliedStatusEffects.find(statusEffectName);
+        target->appliedStatusEffects.remove(hashMapIter);
+
         return true;
     }
     else
@@ -121,7 +124,8 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
             StatusEffect* statusEffectInstance = statusEffectInternal->copy();
             statusEffectInstance->setTarget(target);
 
-            target->appliedStatusEffects.append(statusEffectInstance);
+            //target->appliedStatusEffects.append(statusEffectInstance);
+            target->appliedStatusEffects.insert(statusEffectInstance->name, statusEffectInstance);
             //Effect is considered active when onApply() is called
             statusEffectInstance->onApply();
         }

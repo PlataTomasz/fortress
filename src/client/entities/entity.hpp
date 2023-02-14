@@ -106,7 +106,8 @@ protected:
     unsigned int currLifetime = 0;
 public:
     //Max 256 effects at the same time
-    Vector<StatusEffect*> appliedStatusEffects;
+    //Vector<StatusEffect*> appliedStatusEffects;
+    HashMap<String, StatusEffect*> appliedStatusEffects;
 
 public:
     void castAbility(int abilityId);
