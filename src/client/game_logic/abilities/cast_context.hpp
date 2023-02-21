@@ -12,6 +12,8 @@ class CastContext
 private:
     Entity *caster;
     //World position where the entity should appear
+
+    //TODO: Support multiple target positions
     Vector3 targetPos;
 public:
     Entity *getCaster()
