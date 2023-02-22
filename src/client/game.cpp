@@ -7,7 +7,7 @@
 #include <iostream>
 #include "entities/entity.hpp"
 #include "entities/mercenaries/mercenary.hpp"
-#include "game_logic/abilities/cast_context.hpp"
+#include "game_logic/abilities/use_context.hpp"
 #include <classes/viewport.hpp>
 #include <classes/engine.hpp>
 #include "status_effects/status_effect_manager.hpp"
@@ -158,27 +158,29 @@ void Game::_unhandled_input(const Ref<InputEvent> &event)
         
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
-        CastContext castContext(player->controlledEntity, worldPos);
+        UseContext use_context = {
+            player->controlledEntity,
+            player->controlledEntity->get_position(),
+            Vector<Vector3>({worldPos}),
+            Vector<Entity*>()
+        };
 
         if(event_ptr->is_action_pressed("cast_ability_1"))
         {
             printf("Q press\n");
-            player->controlledEntity->castAbility(1, castContext);
+            player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, use_context);
         }
         else if(event_ptr->is_action_pressed("cast_ability_2"))
         {
             printf("W press\n");
-            player->controlledEntity->castAbility(2, castContext);
         }
         else if(event_ptr->is_action_pressed("cast_ability_3"))
         {
             printf("E press\n");
-            player->controlledEntity->castAbility(3, castContext);
         }
         else if(event_ptr->is_action_pressed("cast_ability_4"))
         {
             printf("R press\n");
-            player->controlledEntity->castAbility(4, castContext);
         }
     }
 }

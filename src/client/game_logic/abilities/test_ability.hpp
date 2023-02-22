@@ -1,15 +1,14 @@
 #if !defined(TEST_ABILITY_HPP)
 #define TEST_ABILITY_HPP
 
-#include "ability.hpp"
+#include <client/game_logic/abilities/ability.hpp>
 
 class TestAbility : public Ability
 {
+
 public:
-    virtual void initialize(){};
-    virtual void onCast() override;
-    virtual void onTick(){};
-    virtual void onCooldownChange(){};
+    void use_impl(UseContext use_context) override;
+    TestAbility();
 };
 
 #endif // TEST_ABILITY_HPP

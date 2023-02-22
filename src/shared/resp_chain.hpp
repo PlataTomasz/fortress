@@ -1,35 +1,37 @@
 #if !defined(RESPONSIBILITY_CHAIN_HPP)
 #define RESPONSIBILITY_CHAIN_HPP
 
+#include <variant/string.hpp>
+
 /**
  * Generic Responsiblity Chain Link class - RCL
 */
-template<class RetType>
+template<typename RetType, typename ArgType>
 class RCL
 {
 protected:
     //NOTE: Currently identifier doesn't need to be unique, but if 2 links have the same identifier, the eariel will have priority
     String identifier;
 
-    RCL<RetType>* prev = nullptr;
-    RCL<RetType>* next = nullptr;
+    RCL<RetType, ArgType>* prev = nullptr;
+    RCL<RetType, ArgType>* next = nullptr;
     /**
      * Internal logic for current responsibility chain link evaluation step. Override it for your use.
     */
-    virtual RetType evaluate_impl() = 0;
+    virtual RetType evaluate_impl(ArgType data) = 0;
 public:
-    RetType evaluate()
+    RetType evaluate(ArgType data)
     {
-        if(RetType result = this->execute_impl())
+        if(RetType result = this->evaluate_impl(data))
         {
             if(next != nullptr)
             {
-                return this->next->execute();
+                return this->next->evaluate(data);
             }
             else
             {
                 //No next link in chain - everything went right
-                return 0;
+                return static_cast<RetType>(0);
             }
         }
         else
@@ -51,9 +53,9 @@ public:
     /**
      * Replaces next link in responsibility chain with new one without any connection to previous ones
     */
-    RCL<RetType>* set_next(RCL<RetType>* new_next)
+    RCL<RetType, ArgType>* set_next(RCL<RetType, ArgType>* new_next)
     {
-        this->next = new_next
+        this->next = new_next;
         this->next->prev = this;
 
         return new_next;
@@ -62,13 +64,13 @@ public:
     /**
      * Adds new link to responsibility chain. Unlike set_next() method, this adds new link between this and next.
     */
-    void add_next_link(RCL<RetType>* added)
+    void add_next_link(RCL<RetType, ArgType>* added)
     {
         if(!this->is_last_link())
         {
             //Current value of next pointer
-            RCL<RetType>* old_next = this->next;
-            RCL<RetType>* last_added_link = added->get_last_link();
+            RCL<RetType, ArgType>* old_next = this->next;
+            RCL<RetType, ArgType>* last_added_link = added->get_last_link();
 
             this->next = added;
             this->next->prev = this;
@@ -83,13 +85,13 @@ public:
         }
     }
 
-    void add_prev_link(RCL<RetType>* added)
+    void add_prev_link(RCL<RetType, ArgType>* added)
     {
         if(!this->is_first_link())
         {
             //Current value of prev pointer
-            RCL<RetType>* old_prev = this->prev;
-            RCL<RetType>* last_added_link = added->get_last_link();
+            RCL<RetType, ArgType>* old_prev = this->prev;
+            RCL<RetType, ArgType>* last_added_link = added->get_last_link();
 
             old_prev->next = added;
             added->prev = old_prev;
@@ -107,7 +109,7 @@ public:
     /**
      * Replaces previous link in responsibility chain with new one without any connection to previous ones
     */
-    RCL<RetType>* set_prev(RCL<T>* new_prev)
+    RCL<RetType, ArgType>* set_prev(RCL<RetType, ArgType>* new_prev)
     {
         this->prev = new_prev;
         this->prev->next = this;
@@ -115,9 +117,9 @@ public:
         return new_prev;
     }
 
-    RCL<RetType>* get_first_link()
+    RCL<RetType, ArgType>* get_first_link()
     {
-        RCL<RetType>* link = this->prev;
+        RCL<RetType, ArgType>* link = this->prev;
 
         //Iterate through this->prev
         while(link != nullptr)
@@ -128,10 +130,10 @@ public:
         return link;
     }
 
-    RCL<RetType>* get_last_link()
+    RCL<RetType, ArgType>* get_last_link()
     {
         //Iterate through this->next
-        RCL<RetType>* link = this->next;
+        RCL<RetType, ArgType>* link = this->next;
 
         while(link != nullptr)
         {
@@ -144,10 +146,10 @@ public:
     /**
      * Finds responsibility chain link based on It's identifier.
     */
-    RCL<RetType>* find_link(String identifier)
+    RCL<RetType, ArgType>* find_link(String identifier)
     {
-        RCL<RetType>* first = this->get_first_link();
-        RCL<RetType>* link = this->next;
+        RCL<RetType, ArgType>* first = this->get_first_link();
+        RCL<RetType, ArgType>* link = this->next;
 
         while(link != nullptr)
         {
@@ -164,9 +166,34 @@ public:
         return link;
     }
 
+    /**
+     * Destroys each RCL objects starting from this object
+    */
+    void destroy_chain()
+    {
+        RCL<RetType, ArgType> current_link = this->get_last_link();
+
+        while(current_link != this->next)
+        {
+            RCL<RetType, ArgType> tmp = current_link->prev;
+            delete current_link;
+
+            //Move to previous link
+            current_link = tmp;
+        }
+        
+        //Ensure that this RCL object will be deleted as last
+        delete this;
+    }
+
     RCL(String identifier)
     {
         this->identifier = identifier;
+    }
+
+    virtual ~RCL()
+    {
+
     }
 };
 
