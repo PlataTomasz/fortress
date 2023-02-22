@@ -10,6 +10,8 @@ class TundraChainLashAbility : public Ability
     virtual void onTick();
     virtual void onCooldownChange(){};
 
+    virtual void use(UseContext use_context);
+
     ~TundraChainLashAbility()
     {
         

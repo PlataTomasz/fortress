@@ -6,7 +6,7 @@
 #include <classes/object.hpp>
 #include "../../../entities/mercenaries/tundra/tundra_ball.hpp"
 
-void TundraChainLashAbility::onCast()
+void TundraChainLashAbility::use(UseContext use_context)
 {
     //START: TODO: Move to different place - that's gonna be used a lot
     //Create rectangular area between ball origin and character origin
@@ -18,13 +18,13 @@ void TundraChainLashAbility::onCast()
     //Calculate length between character and ball
     //TODO: Get TundraBall
 
-    Entity *caster = castContext.getCaster();
+    Entity* caster = use_context.get_user();
 
     //Maybe buff/debuff under the hood?
-    TundraBall *tundraBall;
+    TundraBall* tundraBall;
 
     float hitboxWidth = 30.0f;
-    float hitboxLength = castContext.getCaster()->get_position().distance_to(tundraBall->get_position());
+    float hitboxLength = use_context.get_user()->get_position().distance_to(tundraBall->get_position());
 
     hitboxShape->set_size(Vector3(hitboxWidth, 0, hitboxLength));
 
@@ -32,7 +32,7 @@ void TundraChainLashAbility::onCast()
 
     caster->add_child(area3d);
 
-    hitbox->look_at(castContext.getTargetPos());
+    hitbox->look_at(use_context.get_target_position());
     //END
     
     TypedArray<Area3D> colliders = area3d->get_overlapping_areas();

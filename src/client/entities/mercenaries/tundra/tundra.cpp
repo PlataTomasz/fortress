@@ -1,19 +1,18 @@
 #include "tundra.hpp"
-#include "../../../game_logic/abilities/test_ability.hpp"
-#include "../../../game_logic/abilities/tundra/tundra_chain_lash.hpp"
+#include <client/game_logic/abilities/tundra/tundra_chain_lash.hpp>
+#include <client/game_logic/abilities/test_ability.hpp>
 #include <classes/engine.hpp>
 #include <gdextension_helper.hpp>
 
 Tundra::Tundra()
 {
-    if(!Engine::get_singleton()->is_editor_hint())
-    {
-        skillSet[ABILITY_PASSIVE] = new TestAbility();
-        skillSet[ABILITY_FIRST] = new TundraChainLashAbility();
-        skillSet[ABILITY_SECOND] = new TestAbility();
-        skillSet[ABILITY_THIRD] = new TestAbility();
-        skillSet[ABILITY_ULTIMATE] = new TestAbility();
-    }
+    DISABLE_IN_EDITOR();
+
+    abilitySet[ABILITY_PASSIVE] = new TestAbility();
+    abilitySet[ABILITY_FIRST] = new TestAbility();
+    abilitySet[ABILITY_SECOND] = new TestAbility();
+    abilitySet[ABILITY_THIRD] = new TestAbility();
+    abilitySet[ABILITY_ULTIMATE] = new TestAbility();
 }
 
 void Tundra::_ready()

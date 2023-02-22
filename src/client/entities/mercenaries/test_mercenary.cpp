@@ -1,13 +1,14 @@
 #include "test_mercenary.hpp"
+#include <client/game_logic/abilities/test_ability.hpp>
 
 TestMercenary::TestMercenary()
 {
     //Setup abilities
-    skillSet[0] = new Ability();
-    skillSet[1] = new Ability();
-    skillSet[2] = new Ability();
-    skillSet[3] = new Ability();
-    skillSet[4] = new Ability();
+    abilitySet[0] = new TestAbility();
+    abilitySet[1] = new TestAbility();
+    abilitySet[2] = new TestAbility();
+    abilitySet[3] = new TestAbility();
+    abilitySet[4] = new TestAbility();
 }
 
 TestMercenary::~TestMercenary()

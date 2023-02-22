@@ -1,8 +1,8 @@
 #if !defined(MERCENARY_HPP_INCLUDED)
 #define MERCENARY_HPP_INCLUDED
 
-#include "../entity.hpp"
-#include "../../game_logic/abilities/ability.hpp"
+#include <client/entities/entity.hpp>
+#include <client/game_logic/abilities/ability.hpp>
 
 /**
  * Mercenary is a class responsible for representing
@@ -21,11 +21,11 @@ protected:
      * [1, 2, 3] - Other abilities
      * [4] - Ultimate
     */
-    Ability *skillSet[5];
+    Ability* abilitySet[5];
 
     static void _bind_methods(){};
 public:
-    enum AbilitySkillSetIndex
+    enum AbilitySetIndex
     {
         ABILITY_PASSIVE = 0,
         ABILITY_FIRST = 1,
@@ -34,7 +34,7 @@ public:
         ABILITY_ULTIMATE = 4
     };
 
-    void castAbility(int abilityId, CastContext castContext);
+    void use_ability(int ability_id, UseContext use_context);
 
     Mercenary();
     ~Mercenary();
