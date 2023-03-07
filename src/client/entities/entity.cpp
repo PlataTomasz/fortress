@@ -7,15 +7,20 @@
 #include <classes/engine.hpp>
 #include <classes/box_mesh.hpp>
 #include "../status_effects/status_effect_manager.hpp"
+#include <gdextension_helper.hpp>
+#include <client/ui/entity_status_bar.hpp>
+#include <classes/resource_loader.hpp>
+#include <classes/packed_scene.hpp>
+#include <variant/string_name.hpp>
 
 using namespace godot;
 
+//Entity* Entity::NONE = Entity::create_empty();
+
 Entity::Entity()
 {
-    if(!Engine::get_singleton()->is_editor_hint())
-    {
-        set_physics_process(true);
-    }
+    DISABLE_IN_EDITOR();
+    connect("ready", Callable(this, "_shared_ready"));
 }
 
 Entity::~Entity()
@@ -25,36 +30,56 @@ Entity::~Entity()
 
 void Entity::_bind_methods()
 {
-    ADD_SIGNAL(MethodInfo("health_lost", PropertyInfo(Variant::FLOAT, "value")));
-    ADD_SIGNAL(MethodInfo("health_recover", PropertyInfo(Variant::FLOAT, "value")));
+    //Health changed
+    ADD_SIGNAL(MethodInfo("health_change", PropertyInfo(Variant::FLOAT, "value")));
+    //Entity will die soon
+    ADD_SIGNAL(MethodInfo("pre_death"));
+    //Entity died
+    ADD_SIGNAL(MethodInfo("on_death"));
+
+    ClassDB::bind_method(D_METHOD("_shared_ready"), &Entity::_shared_ready);
 
     //ClassDB::bind_method(D_METHOD("onCollision"), &Entity::onCollision);
 }
 
 void Entity::_ready()
 {
+    DISABLE_IN_EDITOR();
 
+    //ResourceLoader("res://resources/UI/Game/entity_status_bars/mercenary_status_bar_3d.tscn");
+    Ref<PackedScene> scene = ResourceLoader::get_singleton()->load("res://resources/UI/Game/entity_status_bars/mercenary_status_bar_3d.tscn");
+
+    EntityStatusBar3D* entity_status_bar = (EntityStatusBar3D*)(*scene)->instantiate();
+
+    add_child(entity_status_bar);
+}
+
+void Entity::_shared_ready()
+{
     //TODO: Mesh should be loaded from model
     MeshInstance3D *meshInstance = memnew(MeshInstance3D);
+    meshInstance->set_name("DEBUG");
     BoxMesh *mesh = memnew(BoxMesh);
+    mesh->set_size(Vector3(0.2f, 0.2f, 0.2f));
 
     meshInstance->set_mesh(mesh);
 
     //Setting up collisions
-    Area3D *area3d = memnew(Area3D);
+    hitbox = memnew(Area3D);
+    hitbox->set_name("Hitbox");
     CollisionShape3D *collisionShape3d = memnew(CollisionShape3D);
 
     BoxShape3D *boxShapePtr = memnew(BoxShape3D);
-    boxShapePtr->set_size(Vector3(0.1f, 0.1f, 0.1f));
+    boxShapePtr->set_size(Vector3(1.0f, 1.0f, 1.0f));
 
     Ref<Shape3D> boxShape(boxShapePtr);
 
     collisionShape3d->set_shape(boxShape);
-    area3d->add_child(collisionShape3d);
+    hitbox->add_child(collisionShape3d);
 
     //Require to make entities collide with eachother
-    area3d->set_monitoring(true);
-    add_child(area3d);
+    hitbox->set_monitoring(true);
+    add_child(hitbox);
     add_child(meshInstance);
     //area3d->connect("area_entered", Callable(this, "onCollision"));
 }
@@ -128,3 +153,53 @@ StatusEffect *Entity::getStatusEffect(String statusEffectName)
     }
     return nullptr;
 }
+
+Vector2 Entity::get_facing_direction()
+{
+    Vector2 result;
+
+    //In Radians - offset to match engine axis
+    double angle = this->get_global_rotation().y - M_PI;
+
+    result.x = Math::sin(angle);
+    result.y = Math::cos(angle);
+
+    return result;
+}
+
+real_t Entity::get_facing_direction_angle()
+{
+    return this->get_global_rotation_degrees().y;
+}
+
+void Entity::take_damage(DamageObject damage_object)
+{
+
+    if(stats.health.current > damage_object.value)
+    {
+        //Damage wont kill that unit
+        stats.health.current -= damage_object.value;
+        emit_signal(StringName("health_change"), stats.health.current);
+        
+        //death
+    }
+    else
+    {
+        //Damage WILL kill that unit
+        UtilityFunctions::print("Entity Death!");
+        stats.health.current = stats.health.max;
+
+        //emit_signal("pre_death");
+        //emit_signal("post_death");
+    }
+}
+
+/*
+Entity* Entity::create_empty()
+{
+    Entity* ent = new Entity();
+    ent->set_name("NONE");
+
+    return ent;
+}
+*/

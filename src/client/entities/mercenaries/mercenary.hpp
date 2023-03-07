@@ -21,9 +21,10 @@ protected:
      * [1, 2, 3] - Other abilities
      * [4] - Ultimate
     */
+    Ability* basic_attack_ability;
     Ability* abilitySet[5];
 
-    static void _bind_methods(){};
+    static void _bind_methods();
 public:
     enum AbilitySetIndex
     {
@@ -35,6 +36,9 @@ public:
     };
 
     void use_ability(int ability_id, UseContext use_context);
+    void use_basic_attack(UseContext use_context);
+
+    void initialize();
 
     Mercenary();
     ~Mercenary();

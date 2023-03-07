@@ -1,15 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dwpxf2syqywyi"]
+[gd_scene load_steps=5 format=3 uid="uid://dwpxf2syqywyi"]
 
 [ext_resource type="Texture2D" uid="uid://c52erp8kttr5b" path="res://textures/gui.png" id="1_drgaa"]
 [ext_resource type="PackedScene" uid="uid://mjs6y0bwvg8p" path="res://maps/map01.tscn" id="1_ohokr"]
 [ext_resource type="PackedScene" uid="uid://bag4fdm0jbppq" path="res://resources/UI/Game/PassiveAbility.tscn" id="2_fvj04"]
 [ext_resource type="PackedScene" uid="uid://cv500ah8rakwh" path="res://resources/UI/Game/Ability.tscn" id="2_rn5un"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_n6561"]
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_7iosp"]
-size = Vector3(0.2, 0.2, 0.2)
 
 [node name="Client" type="Client"]
 
@@ -126,23 +120,13 @@ offset_bottom = 77.5
 
 [node name="Map" parent="Game" instance=ExtResource("1_ohokr")]
 
-[node name="Camera_old" type="Camera3D" parent="Game"]
-transform = Transform3D(0.48496, -0.498088, 0.718834, -0.018516, 0.815928, 0.577858, -0.87434, -0.293548, 0.38647, 1.66169, 0.822818, 1.2462)
-visible = false
-
 [node name="Camera" type="GameCamera" parent="Game"]
-transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, -1, 4, -1)
+transform = Transform3D(1, 0, 0, 0, 0.737277, 0.67559, 0, -0.67559, 0.737277, 0, 2, 2)
 current = true
+fov = 45.0
 
-[node name="Enemy" type="Area3D" parent="Game"]
-
-[node name="EnemyCollision" type="CollisionShape3D" parent="Game/Enemy"]
-shape = SubResource("BoxShape3D_n6561")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Game/Enemy"]
-mesh = SubResource("BoxMesh_7iosp")
-
-[node name="CameraHelper" type="Control" parent="Game"]
+[node name="CameraHelper" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5

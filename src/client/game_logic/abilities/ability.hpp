@@ -24,6 +24,8 @@ enum AbilityUseError
 class Ability
 {
 protected:
+
+    Entity* owner;
     String name;
 
     /**
@@ -65,12 +67,16 @@ public:
     */
     AbilityUseError can_use(UseContext use_context);
 
+    /**
+     * Ability preparation - Here should go initialization code such as setting up helper nodes
+    */
     virtual void initialize(){};
     virtual void onCast(){};
     virtual void onTick(){};
     virtual void onCooldownChange(){};
 
     Ability();
+    Ability(Entity* owner);
 };
 
 #endif // ABILITY_HPP_INCLUDED

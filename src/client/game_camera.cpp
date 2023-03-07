@@ -1,10 +1,11 @@
 #include "game_camera.hpp"
 #include <classes/node3d.hpp>
 #include <variant/vector3.hpp>
+#include <gdextension_helper.hpp>
 
 using namespace godot;
 
-Vector3 GameCamera::CAMERA_OFFSET = Vector3(-1,0,-1);
+Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 2, 2);
 
 GameCamera::GameCamera()
 {
@@ -40,6 +41,8 @@ void GameCamera::enableFreeCam()
 
 void GameCamera::_process(double delta)
 {
+    DISABLE_IN_EDITOR();
+
     //Camera behaviour
     /*
         - Free cam

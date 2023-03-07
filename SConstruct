@@ -29,8 +29,11 @@ sources += Glob(cl_src_dir+"status_effects/mercenaries/tundra/*.cpp")
 sources += Glob(cl_src_dir+"entities/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/tundra/*.cpp")
+sources += Glob(cl_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
+sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
+sources += Glob(cl_src_dir+"ui/*.cpp")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(

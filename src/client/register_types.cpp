@@ -18,6 +18,7 @@
 #include "game_map.hpp"
 #include "entities/mercenaries/tundra/tundra_ball.hpp"
 #include "entities/mercenaries/mercenary.hpp"
+#include <client/ui/entity_status_bar.hpp>
 
 using namespace godot;
 
@@ -33,6 +34,8 @@ void initialize_client(ModuleInitializationLevel p_level) {
 	ClassDB::register_class<Entity>();
 	ClassDB::register_class<Mercenary>();
 	ClassDB::register_class<TundraBall>();
+
+	ClassDB::register_class<EntityStatusBar3D>();
 
 }
 
