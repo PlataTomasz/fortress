@@ -58,3 +58,8 @@ Ability::Ability()
 {
     setup_ability_use_chain();
 }
+
+Ability::Ability(Entity* owner) : owner(owner)
+{
+    setup_ability_use_chain();
+}

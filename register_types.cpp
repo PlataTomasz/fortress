@@ -35,6 +35,7 @@
 #include "src/client/entities/entity.hpp"
 #include "src/client/game_camera.hpp"
 #include "src/client/game_map.hpp"
+#include <client/ui/entity_status_bar.hpp>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {

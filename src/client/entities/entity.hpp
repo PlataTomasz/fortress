@@ -9,6 +9,8 @@
 #include <templates/vector.hpp>
 #include "../stats/stat_modifier.hpp"
 
+#include <client/game_logic/damage_object.hpp>
+
 using namespace godot;
 
 class StatusEffect;
@@ -20,13 +22,25 @@ class StatusEffect;
 */
 class Entity : public Node3D
 {
+    //static Entity* NONE;
+    //static Entity* create_empty();
+
 GDCLASS(Entity, Node3D);
 
-private:
+enum FacingDirection
+{
+    FACING_DIRECTION_DOWN   =   0,
+    FACING_DIRECTION_UP     =   180,
+    FACING_DIRECTION_LEFT   =   -90,
+    FACING_DIRECTION_RIGHT  =   90
+};
+
+public:
 	struct Stats
 	{
 		//Defefnsive stats
-		BaseBonusStat health;
+		//BaseBonusStatCapped health;
+        HealthStat health;
 		Stat healthRegeneration;
 		BaseBonusStat physicalResistance;
 		BaseBonusStat magicResistance;
@@ -57,10 +71,9 @@ private:
 
 		BaseBonusStat resource;
 		Stat resourceRegeneration;
-	};
-
-	Stats stats;
-
+	} stats;
+public:
+    Area3D* hitbox;
 protected:
     enum Team
     {
@@ -114,8 +127,17 @@ public:
 
     //Called every physics frame
     void _physics_process(double delta) override;
+    void _shared_ready();
     void _ready() override;
     void onCollision(Area3D *collider);
+
+    void take_damage(DamageObject damage_object);
+
+    /**
+     * Returns vector which describes where entity is facing
+    */
+    Vector2 get_facing_direction();
+    real_t get_facing_direction_angle();
 
     bool removeStatusEffect(String statusEffectName);
     StatusEffect* applyStatusEffect(String statusEffectName, float duration, Entity *inflictor);

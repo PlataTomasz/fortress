@@ -15,6 +15,7 @@
 #include <classes/input_event_key.hpp>
 
 #include "entities/mercenaries/tundra/tundra.hpp"
+#include <client/entities/mercenaries/fist_mercenary/fist_mercenary.hpp>
 
 Game::Game()
 {
@@ -62,7 +63,8 @@ void Game::_ready()
     StatusEffectManager::get_singleton();
     printf("Done!");
 
-    Tundra *ent = memnew(Tundra);
+    //Tundra *ent = memnew(Tundra);
+    FistMercenary* ent = memnew(FistMercenary);
     ent->set_name("ControlledEntity");
     this->add_child(ent);
     ent->set_position(Vector3( 2, 2, 2));
@@ -117,6 +119,13 @@ void Game::_unhandled_input(const Ref<InputEvent> &event)
         Vector2 screenPos = event_ptr->get_position();
         Vector3 worldPos = screenToWorld(screenPos);
 
+        UseContext use_context = {
+            player->controlledEntity,
+            player->controlledEntity->get_position(),
+            Vector<Vector3>({worldPos}),
+            Vector<Entity*>()
+        };
+
         //Convert screen to world cordinates
         printf("{ %f, %f, %f}\n", worldPos.x, worldPos.y, worldPos.z);
 
@@ -124,26 +133,7 @@ void Game::_unhandled_input(const Ref<InputEvent> &event)
         {
             std::cout<<"ATTACK_ACTION"<<std::endl;
 
-            //Player tries to use basic attack
-
-            
-            //Create new entity
-
-            //Create entity
-            Entity *ent = memnew(Entity);
-
-            ent->set_position(worldPos);
-
-            ent->set_name("DEBUG_BOI");
-            this->getGameMap()->addEntity(ent);
-
-            //TODO: Check if below works for different look_at Vector3 values -  It does
-            ent->look_at(Vector3(0,0,0));
-            Vector3 currRotation = ent->get_rotation();
-            printf("Angles(rad): { %f, %f, %f}\n", currRotation.x, currRotation.y, currRotation.z);
-            printf("Angles(deg): { %f, %f, %f}\n", currRotation.x*180/M_PI, (currRotation.y*180/M_PI), currRotation.z*180/M_PI);
-            printf("Cosine of y angle: %f\n", cos(currRotation.y));
-            printf("Sine of y angle: %f\n", sin(currRotation.y));
+            player->controlledEntity->use_basic_attack(use_context);
         }
         else if(event_ptr->is_action_pressed("movement"))
         {
@@ -154,8 +144,6 @@ void Game::_unhandled_input(const Ref<InputEvent> &event)
     }
     else if(const InputEventKey *event_ptr = Object::cast_to<InputEventKey>(event.ptr()))
     {
-        //TODO: Ability cast context
-        
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
         UseContext use_context = {

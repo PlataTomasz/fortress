@@ -1,11 +1,11 @@
-#if !defined(STAT_MODIFIER_HPP_INCLUDED)
-#define STAT_MODIFIER_HPP_INCLUDED
+#if !defined(STAT_MODIFIER_HPP_INLCUDED)
+#define STAT_MODIFIER_HPP_INLCUDED
 
-#include <cstdio>
+#include <variant/utility_functions.hpp>
 
 /**
  * Stat is object which stores stat value along with It's modifiers, which can be altered by various in-game events.
- * Whenever you change value inside Stat and It's deriving classes, then totalValue is recalculated and difference between new and old totalValue is returned
+ * Whenever you change value inside Stat and It's deriving classes, then total_value is recalculated and difference between new and old total_value is returned
  * @note Be careful with modifying multiple fields as you need to remember each difference manually
 */
 class Stat
@@ -15,131 +15,131 @@ protected:
     /**
      * Initial value of stat - before any modifiers
     */
-    double initialValue;
+    double initial_value = 0;
 
     /**
      * Current value of stat - after recalculation
     */
-    double totalValue;
+    double total_value = 0;
 
     /**
      * Flat modifier of stat
     */
-    double flatModifier;
+    double flat_modifier = 0;
 
     /**
      * % modifier of stat - additive
     */
-    double additivePercentageModifier;
+    double additive_percentage_modifier = 0;
 
     /**
      * % modifier of stat - multiplicative
     */
-    double multiplicativePercentageModifier;
+    double multiplicative_percentage_modifier = 0;
 
     /**
      * Recalculate stat final value - returns difference between new and previous final value
     */
-    double recalculateTotalValue()
+    double recalculate_total_value()
     {
-        double oldTotalValue = this->totalValue;
-        this->totalValue = (initialValue+flatModifier)*(multiplicativePercentageModifier+additivePercentageModifier);
-        return totalValue - oldTotalValue;
+        double old_total_value = this->total_value;
+        this->total_value = (initial_value + flat_modifier) * (multiplicative_percentage_modifier + additive_percentage_modifier);
+        return total_value - old_total_value;
     }
 public:
 
     //Setters/Getters
-    double setInitialValue(double initialValue)
+    double set_initial_value(double initial_value)
     {
-        this->initialValue = initialValue;
-        return this->recalculateTotalValue();
+        this->initial_value = initial_value;
+        return this->recalculate_total_value();
     }
 
-    double getInitialValue()
+    double get_initial_value()
     {
-        return this->initialValue;
+        return this->initial_value;
     }
 
-    double getMultiplicativePercentageModifier()
+    double get_multiplicative_percentage_modifier()
     {
-        return this->multiplicativePercentageModifier;
+        return this->multiplicative_percentage_modifier;
     }
 
-    double getAdditivePercentageModifier()
+    double get_additive_percentage_modifier()
     {
-        return this->additivePercentageModifier;
+        return this->additive_percentage_modifier;
     }
 
-    double getFlatModifier()
+    double get_flat_modifier()
     {
-        return this->flatModifier;
+        return this->flat_modifier;
     }
 
-    double getTotalValue()
+    double get_total_value()
     {
-        return this->totalValue;
+        return this->total_value;
     }
 
-    double addMultiplicativePercentageModifier(double modifier, bool explicitZeroNegative = false)
+    double add_multiplicative_percentage_modifier(double modifier, bool explicit_zero_negative = false)
     {
-        if(modifier > 0 || explicitZeroNegative)
+        if(modifier > 0 || explicit_zero_negative)
         {
-            this->multiplicativePercentageModifier*=modifier;
+            this->multiplicative_percentage_modifier *= modifier;
         }
         else
         {
-            //To avoid negative stat values where unintended
-            printf("Adding multiplicative stat modifier failed because of zero or negativ value. Specify explicitZeroNegative if that was desired\n");
+            //_to avoid negative stat values where unintended
+            WARN_PRINT("Adding multiplicative stat modifier failed because of zero or negativ value. Specify explicit_zero_negative if that was desired.");
         }
 
-        return this->recalculateTotalValue();
+        return this->recalculate_total_value();
     }
 
-    double subtractMultiplicativePercentageModifier(double modifier, bool explicitNegative = false)
+    double subtract_multiplicative_percentage_modifier(double modifier, bool explicit_negative = false)
     {
         //Zero can never be passed as method parameter - div by zero
-        if(modifier > 0 || (modifier < 0 && explicitNegative))
+        if(modifier > 0 || (modifier < 0 && explicit_negative))
         {
-            this->multiplicativePercentageModifier/=modifier;
+            this->multiplicative_percentage_modifier/=modifier;
         }
         else
         {
-            printf("Adding multiplicative stat modifier failed because of zero or negative value. Specify explicitNegative if that was desired\n");
+            WARN_PRINT("Adding multiplicative stat modifier failed because of zero or negative value. Specify explicit_negative if that was desired.");
         }
 
-        return this->recalculateTotalValue();
+        return this->recalculate_total_value();
     }
 
-    double addAdditivePercentageModifier(double modifier)
+    double add_additive_percentage_modifier(double modifier)
     {
-        this->additivePercentageModifier+=modifier;
-        return this->recalculateTotalValue();
+        this->additive_percentage_modifier += modifier;
+        return this->recalculate_total_value();
     }
     //Can be used to subtract stat aswell if value is negative
-    double addFlatModifier(double modifier)
+    double add_flat_modifier(double modifier)
     {
-        this->flatModifier+=modifier;
-        return this->recalculateTotalValue();
+        this->flat_modifier += modifier;
+        return this->recalculate_total_value();
     }
 
-    //TODO: Implement - should increase initialValue
+    //TODO: Implement - should increase initial_value
     Stat operator +(double value)
     {
-        this->initialValue += value;
-        this->recalculateTotalValue();
+        this->initial_value += value;
+        this->recalculate_total_value();
         return *this;
     }
 
     //Adding two separate stat object should also sum their modifier percentage values
     Stat operator +(Stat stat)
     {
-        this->initialValue += stat.initialValue;
-        this->flatModifier += stat.flatModifier;
-        this->addAdditivePercentageModifier(stat.additivePercentageModifier);
-        this->addMultiplicativePercentageModifier(stat.multiplicativePercentageModifier);
+        this->initial_value += stat.initial_value;
+        this->flat_modifier += stat.flat_modifier;
+        this->add_additive_percentage_modifier(stat.additive_percentage_modifier);
+        this->add_multiplicative_percentage_modifier(stat.multiplicative_percentage_modifier);
 
-        //Will Stat::recalculateTotalValue() or BaseBonusStat:recalculateTotalValue() call in BaseBonusStat
-        this->recalculateTotalValue();
+        //Will Stat::recalculate_total_value() or BaseBonusStat:recalculate_total_value() call in BaseBonusStat
+        this->recalculate_total_value();
 
         return *this;
     }
@@ -147,22 +147,18 @@ public:
     //Arithmetiic conversions
     operator double()
     {
-        return this->totalValue;
+        return this->total_value;
     }
 
-    Stat(double initialValue)
+    Stat(double initial_value)
     {
-
+        this->initial_value = initial_value;
     }
 
     //Empty stat constructor
     Stat()
     {
-        this->initialValue = 0;
-        this->totalValue = 0;
-        this->flatModifier = 0;
-        this->additivePercentageModifier = 0;
-        this->multiplicativePercentageModifier = 0;
+
     }
 
     ~Stat()
@@ -192,21 +188,21 @@ private:
     Stat base;
     Stat bonus;
 
-    double recalculateTotalValue()
+    double recalculate_total_value()
     {
-        double oldTotalValue = this->totalValue;
+        double old_total_value = this->total_value;
 
-        //flatModifier applied on BaseBonusStat doesn't change anything currently - How It should be applied? As base stat or bonus stat?
-        this->totalValue = (base.getTotalValue()+bonus.getTotalValue())*(multiplicativePercentageModifier+additivePercentageModifier);
-        return totalValue - oldTotalValue;
+        //flat_modifier applied on BaseBonusStat doesn't change anything currently - How It should be applied? As base stat or bonus stat?
+        this->total_value = (base.get_total_value() + bonus.get_total_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
+        return total_value - old_total_value;
     }
 public:
-    const Stat &getBase()
+    const Stat& get_base()
     {
         return base;
     }
 
-    const Stat &getBonus()
+    const Stat& get_bonus()
     {
         return bonus;
     }
@@ -222,4 +218,26 @@ public:
     }
 };
 
-#endif // STAT_MODIFIER_HPP_INCLUDED
+class BaseBonusStatCapped : public BaseBonusStat
+{
+private:
+    double max;
+public:
+    double get_max()
+    {
+        return this->max;
+    }
+
+    void set_max(double max)
+    {
+        this->max = max;
+    }
+};
+
+class HealthStat
+{
+public:
+    double max = 255;
+    double current = max;
+};
+#endif // STAT_MODIFIER_HPP_INLCUDED
