@@ -40,20 +40,19 @@ public:
 	struct Stats
 	{
 		//Defefnsive stats
-		//BaseBonusStatCapped health;
-        HealthStat health;
+        CappedCompositeStat health;
 		Stat healthRegeneration;
-		BaseBonusStat physicalResistance;
-		BaseBonusStat magicResistance;
+		CompositeStat physicalResistance;
+		CompositeStat magicResistance;
 		//Damage reduction can be: magical, physical, global(any type of damage except true)
 		Stat globalDamageReduction;
 		Stat physicalDamageReduction;
 		Stat magicDamageReduction;
 
 		//Offensive
-		BaseBonusStat physicalDamage;
-		BaseBonusStat magicPower;
-		BaseBonusStat attackRecovery;
+		CompositeStat physicalDamage;
+		CompositeStat magicPower;
+		CompositeStat attackRecovery;
 
 		//Damage multipliers
 		Stat globalDamageIncrease;
@@ -67,10 +66,10 @@ public:
 		Stat vamp;
 
 		//Utility
-		BaseBonusStat movementSpeed;
+		CompositeStat movementSpeed;
 		Stat spellRecovery;
 
-		BaseBonusStat resource;
+		CompositeStat resource;
 		Stat resourceRegeneration;
 	} stats;
 protected:
