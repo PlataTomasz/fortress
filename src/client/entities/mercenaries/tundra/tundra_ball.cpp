@@ -1,9 +1,9 @@
 #include "tundra_ball.hpp"
-#include <classes/box_shape3d.hpp>
-#include <classes/mesh_instance3d.hpp>
-#include <classes/engine.hpp>
+#include <scene/resources/primitive_meshes.h>
+#include <scene/3d/mesh_instance_3d.h>
+#include <core/config/engine.h>
 #include <gdextension_helper.hpp>
-#include <classes/sphere_mesh.hpp>
+#include <scene/resources/primitive_meshes.h>
 
 TundraBall::TundraBall(Entity *owner)
 {
@@ -41,7 +41,7 @@ void TundraBall::_physics_process(double delta)
     }
 }
 
-void TundraBall::_ready()
+void TundraBall::ready()
 {
     printf("TundraBall ready!");
     //TODO: Visuals for Entities

@@ -1,31 +1,33 @@
 #if !defined(GDEXTENSION_HELPER_HPP_INCLUDED)
 #define GDEXTENSION_HELPER_HPP_INCLUDED
 
-#include <classes/engine.hpp>
-#include <classes/window.hpp>
-#include <classes/node.hpp>
-#include <classes/scene_tree.hpp>
+#include <core/config/engine.h>
+#include <scene/main/window.h>
+#include <scene/main/node.h>
+#include <scene/main/scene_tree.h>
+#include <core/string/ustring.h>
+#include <core/string/node_path.h>
 
 #define DISABLE_IN_EDITOR() if(Engine::get_singleton()->is_editor_hint()) return;
 
 class Client;
 class Game;
 
-using namespace godot;
+
 
 static SceneTree* get_scene_tree()
 {
-    SceneTree* sceneTreeSingleton = (SceneTree*)Engine::get_singleton()->get_main_loop();
+    SceneTree* sceneTreeSingleton = (SceneTree*)SceneTree::get_singleton();
     return sceneTreeSingleton;
 }
 
 static Client* get_client()
 {
-    return (Client*)get_scene_tree()->get_root()->get_node<Node>("Client");
+    return (Client*)get_scene_tree()->get_root()->get_node(NodePath("Client"));
 }
 
 static Game* get_game()
 {
-    return (Game*)get_scene_tree()->get_root()->get_node<Node>("Client/Game");
+    return (Game*)get_scene_tree()->get_root()->get_node(NodePath("Client/Game"));
 }
 #endif // GDEXTENSION_HELPER_HPP_INCLUDED

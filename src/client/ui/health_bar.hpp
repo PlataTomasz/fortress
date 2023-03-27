@@ -1,9 +1,9 @@
 #if !defined(HEALTH_BAR_HPP_INCLUDE)
 #define HEALTH_BAR_HPP_INCLUDE
 
-#include <classes/progress_bar.hpp>
+#include <scene/gui/progress_bar.h>
 
-using namespace godot;
+
 
 class EntityHealthBar : public ProgressBar
 {

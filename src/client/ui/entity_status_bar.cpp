@@ -2,20 +2,20 @@
 #include <gdextension_helper.hpp>
 
 #include <client/entities/entity.hpp>
-#include <classes/progress_bar.hpp>
-#include <variant/node_path.hpp>
+#include <scene/gui/progress_bar.h>
+#include <core/string/node_path.h>
 
 EntityStatusBar3D::EntityStatusBar3D()
 {
-   
+    connect("ready", callable_mp(this, &EntityStatusBar3D::ready));
 }
 
-void EntityStatusBar3D::_ready()
+void EntityStatusBar3D::ready()
 {
-    health_bar = get_node<ProgressBar>("SubViewport/HealthBar");
+    health_bar = (ProgressBar*)get_node(NodePath("SubViewport/HealthBar"));
     ERR_FAIL_COND_MSG(health_bar == nullptr, "HealthBar node is missing!");
 
-    resource_bar = get_node<ProgressBar>("SubViewport/HealthBar");
+    resource_bar = (ProgressBar*)get_node(NodePath("SubViewport/HealthBar"));
     ERR_FAIL_COND_MSG(resource_bar == nullptr, "ResourceBar node is missing!");
 }
 

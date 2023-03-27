@@ -6,7 +6,7 @@
 class FistMercenary : public Mercenary
 {
 public:
-    void _ready() override;
+    void _ready();
     void _spawn();
     
     FistMercenary();

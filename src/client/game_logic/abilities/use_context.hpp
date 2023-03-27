@@ -1,7 +1,7 @@
 #if !defined(USE_CONTEXT_HPP_INCLUDED)
 #define USE_CONTEXT_HPP_INCLUDED
 
-#include <variant/vector3.hpp>
+#include <core/math/vector3.h>
 #include <client/entities/entity.hpp>
 
 /**

@@ -1,10 +1,10 @@
 #ifndef CLIENT_H_INCLUDED
 #define CLIENT_H_INCLUDED
 
-#include <classes/node.hpp>
+#include <scene/main/node.h>
 //#include <modules/enet/enet_multiplayer_peer.h>
 
-using namespace godot;
+
 
 class Client : public Node
 {

@@ -2,7 +2,7 @@
 #include "../../entities/throw_ball_projectile.hpp"
 
 #include "../../game.hpp"
-#include <classes/window.hpp>
+#include <scene/main/window.h>
 #include <gdextension_helper.hpp>
 
 class ThrowBallAbility : public Ability
@@ -12,6 +12,7 @@ public:
     {
 
     };
+    /*
     virtual void onCast()
     {
         //Retrieve cast context - where is player pointing
@@ -19,11 +20,12 @@ public:
 
         ThrowBallProjectile *proj = memnew(ThrowBallProjectile);
 
-        Game* game = (get_scene_tree()->get_root()->get_node<Game>(NodePath("Client/Game")));
+        Game* game = (Game*)(get_scene_tree()->get_root()->get_node(NodePath("Client/Game")));
         proj->set_position(castContext.getCaster()->get_position());
         game->add_child(proj);
         proj->look_at(targetPos);
     };
+    */
     virtual void onTick()
     {
 

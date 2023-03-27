@@ -1,26 +1,30 @@
 #include "entity.hpp"
-#include <classes/area3d.hpp>
-#include <variant/string_name.hpp>
-#include <classes/collision_shape3d.hpp>
-#include <classes/box_shape3d.hpp>
-#include <classes/mesh_instance3d.hpp>
-#include <classes/engine.hpp>
-#include <classes/box_mesh.hpp>
+#include <scene/3d/area_3d.h>
+#include <core/string/string_name.h>
+#include <scene/3d/collision_shape_3d.h>
+#include <scene/resources/primitive_meshes.h>
+#include <scene/3d/mesh_instance_3d.h>
+#include <core/config/engine.h>
+#include <scene/resources/primitive_meshes.h>
 #include "../status_effects/status_effect_manager.hpp"
 #include <gdextension_helper.hpp>
 #include <client/ui/entity_status_bar.hpp>
-#include <classes/resource_loader.hpp>
-#include <classes/packed_scene.hpp>
-#include <variant/string_name.hpp>
+#include <core/io/resource_loader.h>
+#include <scene/resources/packed_scene.h>
+#include <scene/resources/box_shape_3d.h>
 
-using namespace godot;
+
 
 //Entity* Entity::NONE = Entity::create_empty();
 
 Entity::Entity()
 {
     DISABLE_IN_EDITOR();
-    connect("ready", Callable(this, "_shared_ready"));
+    //TODO: Call virtual initialize(); ?
+    connect("ready", callable_mp(this, &Entity::ready));
+    connect("ready", callable_mp(this, &Entity::_shared_ready));
+
+    SceneTree::get_singleton()->connect("physics_frame", callable_mp(this, &Entity::physics_frame));
 }
 
 Entity::~Entity()
@@ -42,12 +46,12 @@ void Entity::_bind_methods()
     //ClassDB::bind_method(D_METHOD("onCollision"), &Entity::onCollision);
 }
 
-void Entity::_ready()
+void Entity::ready()
 {
     DISABLE_IN_EDITOR();
 
     //ResourceLoader("res://resources/UI/Game/entity_status_bars/mercenary_status_bar_3d.tscn");
-    Ref<PackedScene> scene = ResourceLoader::get_singleton()->load("res://resources/UI/Game/entity_status_bars/mercenary_status_bar_3d.tscn");
+    Ref<PackedScene> scene = ResourceLoader::load("res://resources/UI/Game/entity_status_bars/mercenary_status_bar_3d.tscn");
 
     EntityStatusBar3D* entity_status_bar = (EntityStatusBar3D*)(*scene)->instantiate();
 
@@ -106,7 +110,7 @@ void Entity::movementProcess()
 
 }
 
-void Entity::_physics_process(double delta)
+void Entity::physics_frame()
 {
     movementProcess();
     currLifetime++;
@@ -186,7 +190,7 @@ void Entity::take_damage(DamageObject damage_object)
     else
     {
         //Damage WILL kill that unit
-        UtilityFunctions::print("Entity Death!");
+        print_line("Entity Death!");
         stats.health.current = stats.health.max;
 
         //emit_signal("pre_death");

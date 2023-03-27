@@ -1,7 +1,8 @@
 #if !defined(STAT_MODIFIER_HPP_INLCUDED)
 #define STAT_MODIFIER_HPP_INLCUDED
 
-#include <variant/utility_functions.hpp>
+//TODO: Non existant in module context
+
 
 /**
  * Stat is object which stores stat value along with It's modifiers, which can be altered by various in-game events.

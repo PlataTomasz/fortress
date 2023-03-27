@@ -3,7 +3,7 @@
 
 #include <godot_cpp/classes/resource.hpp>
 
-using namespace godot;
+
 
 //NOTE: Currently unused
 

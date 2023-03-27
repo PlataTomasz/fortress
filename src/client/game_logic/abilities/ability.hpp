@@ -2,7 +2,7 @@
 #define ABILITY_HPP_INCLUDED
 
 #include <client/game_logic/abilities/use_context.hpp>
-#include <variant/string.hpp>
+#include <core/string/ustring.h>
 
 class AbilityUseRCL;
 

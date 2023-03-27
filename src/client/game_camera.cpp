@@ -1,9 +1,9 @@
 #include "game_camera.hpp"
-#include <classes/node3d.hpp>
-#include <variant/vector3.hpp>
+#include <scene/3d/node_3d.h>
+#include <core/math/vector3.h>
 #include <gdextension_helper.hpp>
 
-using namespace godot;
+
 
 Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 2, 2);
 
@@ -11,6 +11,8 @@ GameCamera::GameCamera()
 {
     followedNode = nullptr;
     freeCam = true;
+
+    SceneTree::get_singleton()->connect("process_frame", callable_mp(this, &GameCamera::process_frame));
 }
 
 void GameCamera::_ready()
@@ -39,7 +41,7 @@ void GameCamera::enableFreeCam()
     freeCam = true;
 }
 
-void GameCamera::_process(double delta)
+void GameCamera::process_frame()
 {
     DISABLE_IN_EDITOR();
 

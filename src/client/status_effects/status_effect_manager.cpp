@@ -1,7 +1,7 @@
 #include "status_effect_manager.hpp"
-#include <classes/dir_access.hpp>
-#include <classes/json.hpp>
-#include <classes/file_access.hpp>
+#include <core/io/dir_access.h>
+#include <core/io/json.h>
+#include <core/io/file_access.h>
 
 #include "mercenaries/tundra/tundra_spiky_ball.hpp"
 

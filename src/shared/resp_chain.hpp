@@ -1,7 +1,7 @@
 #if !defined(RESPONSIBILITY_CHAIN_HPP)
 #define RESPONSIBILITY_CHAIN_HPP
 
-#include <variant/string.hpp>
+#include <core/string/ustring.h>
 
 /**
  * Generic Responsiblity Chain Link class - RCL

@@ -5,7 +5,7 @@
 #include <client/game_logic/abilities/ability.hpp>
 #include <shared/resp_chain.hpp>
 
-using namespace godot;
+
 
 enum AbilityUseError;
 

@@ -1,9 +1,10 @@
 #include "fist_mercenary_basic_attack.hpp"
-#include <classes/collision_shape3d.hpp>
-#include <classes/ray_cast3d.hpp>
-#include <classes/box_shape3d.hpp>
-#include <classes/mesh_instance3d.hpp>
-#include <classes/box_mesh.hpp>
+#include <scene/3d/collision_shape_3d.h>
+#include <scene/3d/ray_cast_3d.h>
+#include <scene/resources/primitive_meshes.h>
+#include <scene/3d/mesh_instance_3d.h>
+#include <scene/resources/primitive_meshes.h>
+#include <scene/resources/box_shape_3d.h>
 
 void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
 {
@@ -20,13 +21,13 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
     Area3D* closest_collider = nullptr;
     double shortest_distance = 0; 
 
-    UtilityFunctions::print("Size of colliders: ", colliders.size());
+    print_line("Size of colliders: ", colliders.size());
 
     for(int i = 0;i < colliders.size();i++)
     {
         Area3D* collider = (Area3D*)&*(colliders[i]);
 
-        UtilityFunctions::print("Current collider: ", collider);
+        print_line("Current collider: ", collider);
 
         raycast->set_target_position(collider->get_position());
 
@@ -43,8 +44,8 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
     //No colliders
     if(closest_collider == nullptr) return;
 
-    UtilityFunctions::print("Closest collider: ", closest_collider);
-    UtilityFunctions::print("Parent: ", closest_collider->get_parent());
+    print_line("Closest collider: ", closest_collider);
+    print_line("Parent: ", closest_collider->get_parent());
 
     //NOTE: We assume that hitbox is direct child of Entity node
     Entity* ent = (Entity*)closest_collider->get_parent();

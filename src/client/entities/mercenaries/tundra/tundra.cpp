@@ -1,7 +1,7 @@
 #include "tundra.hpp"
 #include <client/game_logic/abilities/tundra/tundra_chain_lash.hpp>
 #include <client/game_logic/abilities/test_ability.hpp>
-#include <classes/engine.hpp>
+#include <core/config/engine.h>
 #include <gdextension_helper.hpp>
 
 Tundra::Tundra()
@@ -13,9 +13,11 @@ Tundra::Tundra()
     abilitySet[ABILITY_SECOND] = new TestAbility();
     abilitySet[ABILITY_THIRD] = new TestAbility();
     abilitySet[ABILITY_ULTIMATE] = new TestAbility();
+
+    connect("ready", callable_mp(this, &Tundra::ready));
 }
 
-void Tundra::_ready()
+void Tundra::ready()
 {
     DISABLE_IN_EDITOR();
     _spawn();

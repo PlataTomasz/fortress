@@ -1,9 +1,10 @@
 #include "tundra_chain_lash.hpp"
 
-#include <classes/collision_shape3d.hpp>
-#include <classes/box_shape3d.hpp>
-#include <classes/area3d.hpp>
-#include <classes/object.hpp>
+#include <scene/3d/collision_shape_3d.h>
+#include <scene/resources/primitive_meshes.h>
+#include <scene/3d/area_3d.h>
+#include <core/object/object.h>
+#include <scene/resources/box_shape_3d.h>
 #include "../../../entities/mercenaries/tundra/tundra_ball.hpp"
 
 void TundraChainLashAbility::use(UseContext use_context)
