@@ -6,7 +6,7 @@
 
 #include "server.h"
 
-using namespace godot;
+
 
 void initialize_server(ModuleInitializationLevel p_level)
 {

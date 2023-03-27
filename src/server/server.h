@@ -3,9 +3,9 @@
 
 #include <godot_cpp/classes/global_constants.hpp>
 #include <godot_cpp/classes/e_net_multiplayer_peer.hpp>
-#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/scene/main/node.h>
 
-using namespace godot;
+
 
 class Server : public Node
 {

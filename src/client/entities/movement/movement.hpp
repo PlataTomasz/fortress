@@ -1,9 +1,9 @@
 #if !defined(BASIC_MOVEMENT_HPP)
 #define BASIC_MOVEMENT_HPP
 
-#include <godot_cpp/variant/vector3.hpp>
+#include <godot_cpp/core/math/vector3.h>
 
-using namespace godot;
+
 
 class Movement
 {

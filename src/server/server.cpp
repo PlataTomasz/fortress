@@ -2,9 +2,9 @@
 
 #include <godot_cpp/classes/ref.hpp>
 #include <godot_cpp/classes/multiplayer_api.hpp>
-#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/scene/main/scene_tree.h>
 
-using namespace godot;
+
 
 void Server::_ready()
 {

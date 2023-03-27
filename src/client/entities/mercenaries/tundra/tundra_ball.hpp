@@ -15,9 +15,9 @@ private:
 
 public:
     void onCollide(Area3D* collider);
-    void _physics_process(double delta) override;
-    void _ready() override;
-
+    void _physics_process(double delta);
+    void ready();
+    
     void setOwner(Entity* owner)
     {
         this->owner = owner;
@@ -26,6 +26,7 @@ public:
     TundraBall()
     {
         this->maxRangeFromOwner = 0.8;
+        connect("ready", callable_mp(this, &TundraBall::ready));
     };
     TundraBall(Entity* owner);
 };

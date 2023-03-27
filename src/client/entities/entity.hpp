@@ -1,17 +1,17 @@
 #if !defined(ENTITY_HPP_INCLUDED)
 #define ENTITY_HPP_INCLUDED
 
-#include <classes/node3d.hpp>
-#include <classes/area3d.hpp>
+#include <scene/3d/node_3d.h>
+#include <scene/3d/area_3d.h>
 
-#include <variant/string.hpp>
-#include <templates/hash_map.hpp>
-#include <templates/vector.hpp>
+#include <core/string/ustring.h>
+#include <core/templates/hash_map.h>
+#include <core/templates/vector.h>
 #include "../stats/stat_modifier.hpp"
 
 #include <client/game_logic/damage_object.hpp>
 
-using namespace godot;
+
 
 class StatusEffect;
 
@@ -126,9 +126,9 @@ public:
     void castAbility(int abilityId);
 
     //Called every physics frame
-    void _physics_process(double delta) override;
+    void physics_frame();
     void _shared_ready();
-    void _ready() override;
+    void ready();
     void onCollision(Area3D *collider);
 
     void take_damage(DamageObject damage_object);

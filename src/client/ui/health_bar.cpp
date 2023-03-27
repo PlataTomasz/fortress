@@ -1,7 +1,7 @@
 #include "health_bar.hpp"
 #include <client/entities/entity.hpp>
-#include <classes/viewport.hpp>
-#include <classes/camera3d.hpp>
+#include <scene/main/viewport.h>
+#include <scene/3d/camera_3d.h>
 
 void EntityHealthBar::_bind_methods()
 {

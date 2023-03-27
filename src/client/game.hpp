@@ -1,18 +1,18 @@
 #if !defined(GAME_H_INCLUDED)
 #define GAME_H_INCLUDED
 
-#include <classes/camera3d.hpp>
-#include <classes/node.hpp>
-#include <classes/node3d.hpp>
-#include <variant/vector3.hpp>
-#include <classes/input_event.hpp>
+#include <scene/3d/camera_3d.h>
+#include <scene/main/node.h>
+#include <scene/3d/node_3d.h>
+#include <core/math/vector3.h>
+#include <core/input/input_event.h>
 #include "player.hpp"
 #include "game_camera.hpp"
 
 #include "map_loader.hpp"
 #include "game_map.hpp"
 
-using namespace godot;
+
 /**
  * Performs game related logic such as input handling and managing smaller components.
  * Game is supposed to be added to scene once connection to server was established.
@@ -30,8 +30,8 @@ private:
 public:
     Player *player;
 
-    void _ready() override;
-    void _unhandled_input(const Ref<InputEvent> &event) override;
+    void ready();
+    void unhandled_input(const Ref<InputEvent> &event) override;
 
     void onChildExitTree(Node* node)
     {

@@ -1,10 +1,10 @@
 #if !defined(GAME_MAP_HPP)
 #define GAME_MAP_HPP
 
-#include <classes/node3d.hpp>
+#include <scene/3d/node_3d.h>
 #include "entities/entity.hpp"
-#include <templates/vector.hpp>
-#include <classes/engine.hpp>
+#include <core/templates/vector.h>
+#include <core/config/engine.h>
 
 /**
  * GameMap is a Node which should be root of any map.
@@ -60,13 +60,13 @@ public:
     }
 
     //Event callbacks
-    void _ready() override
+    void ready()
     {
         printf("GameMap ready!");
         
         //Load spawn points for each team
-        Node* redSpawnsNode = get_node<Node>(NodePath("SpawnPoints/Red"));
-        Node* blueSpawnsNode = get_node<Node>(NodePath("SpawnPoints/Blue"));
+        Node* redSpawnsNode = get_node(NodePath("SpawnPoints/Red"));
+        Node* blueSpawnsNode = get_node(NodePath("SpawnPoints/Blue"));
 
         if(redSpawnsNode)
         {
@@ -131,6 +131,7 @@ public:
         {
             //Sizes for entity arrays
             entities.resize(8192);
+            connect("ready", callable_mp(this, &GameMap::ready));
         }
     }
 

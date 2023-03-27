@@ -1,18 +1,18 @@
 #include "game.hpp"
-#include <classes/node3d.hpp>
-#include <classes/camera3d.hpp>
-#include <classes/mesh_instance3d.hpp>
-#include <classes/primitive_mesh.hpp>
-#include <classes/input_event.hpp>
+#include <scene/3d/node_3d.h>
+#include <scene/3d/camera_3d.h>
+#include <scene/3d/mesh_instance_3d.h>
+#include <scene/resources/primitive_meshes.h>
+#include <core/input/input_event.h>
 #include <iostream>
 #include "entities/entity.hpp"
 #include "entities/mercenaries/mercenary.hpp"
 #include "game_logic/abilities/use_context.hpp"
-#include <classes/viewport.hpp>
-#include <classes/engine.hpp>
-#include "status_effects/status_effect_manager.hpp"
-#include <classes/input_event_mouse_button.hpp>
-#include <classes/input_event_key.hpp>
+#include <scene/main/viewport.h>
+#include <core/config/engine.h>
+#include <client/status_effects/status_effect_manager.hpp>
+
+#include <core/input/input_event.h>
 
 #include "entities/mercenaries/tundra/tundra.hpp"
 #include <client/entities/mercenaries/fist_mercenary/fist_mercenary.hpp>
@@ -25,6 +25,8 @@ Game::Game()
         //Allow node to process inputs
         set_process_unhandled_input(true);
         printf("%d\n", is_processing_unhandled_input());
+
+        connect("ready", callable_mp(this, &Game::ready));
     }
 }
 
@@ -33,9 +35,9 @@ Game::~Game()
     
 }
 
-void Game::_ready()
+void Game::ready()
 {
-    GameMap *tmp_mapInstance = get_node<GameMap>(NodePath("Map"));
+    GameMap *tmp_mapInstance = (GameMap*)get_node(NodePath("Map"));
     if(tmp_mapInstance)
     {
         this->gameMap = tmp_mapInstance;
@@ -47,7 +49,7 @@ void Game::_ready()
         std::cout<<"Map was not loaded!"<<std::endl;
     }
 
-    GameCamera *tmp_camera = get_node<GameCamera>(NodePath("Camera"));
+    GameCamera *tmp_camera = (GameCamera*)get_node(NodePath("Camera"));
     if(tmp_camera)
     {
         this->camera = tmp_camera;
@@ -109,7 +111,7 @@ Vector3 Game::screenToWorld(const Vector2 &screenPos)
     return Vector3(world_x, 0, world_z);
 }
 
-void Game::_unhandled_input(const Ref<InputEvent> &event)
+void Game::unhandled_input(const Ref<InputEvent> &event)
 {
     //Casting to InputEventMouseButton - If succeeds: It is valid type
     const InputEventMouseButton *event_ptr = Object::cast_to<InputEventMouseButton>(event.ptr());

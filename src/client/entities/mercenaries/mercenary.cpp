@@ -13,7 +13,7 @@ Mercenary::Mercenary()
     abilitySet[3] = new TestAbility();
     abilitySet[4] = new TestAbility();
 
-    connect("ready", Callable(this, "initialize"));
+    connect("ready", callable_mp(this, &Mercenary::initialize));
 }
 
 void Mercenary::use_ability(int ability_id, UseContext use_context)
@@ -40,7 +40,7 @@ void Mercenary::initialize()
 
 void Mercenary::_bind_methods()
 {
-    ClassDB::bind_method(D_METHOD("initialize"), &Mercenary::initialize);
+
 }
 
 Mercenary::~Mercenary()

@@ -1,12 +1,12 @@
 #if !defined(STATUS_EFFECT_HPP)
 #define STATUS_EFFECT_HPP
 
-#include <variant/string.hpp>
-#include <variant/dictionary.hpp>
-#include <variant/variant.hpp>
+#include <core/string/ustring.h>
+#include <core/variant/dictionary.h>
+#include <core/variant/variant.h>
 #include <cstdio>
 
-using namespace godot;
+
 
 #define VIRTUAL_COPY_STATUS_EFFECT(DerivedClassName, BaseClassName)               \
 public:                                                             \

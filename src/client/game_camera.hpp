@@ -1,11 +1,11 @@
 #if !defined(GAME_CAMERA_HPP)
 #define GAME_CAMERA_HPP
 
-#include <classes/camera3d.hpp>
-#include <variant/vector3.hpp>
-#include <classes/node3d.hpp>
+#include <scene/3d/camera_3d.h>
+#include <core/math/vector3.h>
+#include <scene/3d/node_3d.h>
 
-using namespace godot;
+
 
 //Maybe changing it into camera controller would do better job?
 class GameCamera : public Camera3D
@@ -27,9 +27,9 @@ protected:
     */
     void setFollowedNode(Node3D *node);
 public:
-    void _ready() override;
-    void _exit_tree() override;
-    void _process(double delta);
+    void _ready();
+    void _exit_tree();
+    void process_frame();
 
     void startFollowingNode(Node3D *node);
     void enableFreeCam();

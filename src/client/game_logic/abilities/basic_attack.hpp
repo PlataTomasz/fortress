@@ -2,7 +2,7 @@
 #define BASIC_ATTACK_HPP_INCLUDED
 
 #include <client/game_logic/abilities/ability.hpp>
-#include <classes/area3d.hpp>
+#include <scene/3d/area_3d.h>
 #include <client/game_logic/abilities/use_context.hpp>
 
 /**

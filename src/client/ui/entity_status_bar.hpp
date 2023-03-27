@@ -1,10 +1,10 @@
 #if !defined(ENTITY_STATUS_BAR_HPP_INCLUDED)
 #define ENTITY_STATUS_BAR_HPP_INCLUDED
 
-#include <classes/sprite3d.hpp>
-#include <classes/progress_bar.hpp>
+#include <scene/3d/sprite_3d.h>
+#include <scene/gui/progress_bar.h>
 
-using namespace godot;
+
 
 /**
  * Node responsible for displaying entity status above each entity
@@ -21,8 +21,8 @@ private:
     void on_health_amount_change(float value);
     void on_resource_amount_change(float value);
 public:
-    void _ready() override;
-    void _enter_tree() override;
+    void ready();
+    void _enter_tree();
 
     EntityStatusBar3D();
 };
