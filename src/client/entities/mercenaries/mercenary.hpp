@@ -1,7 +1,7 @@
 #if !defined(MERCENARY_HPP_INCLUDED)
 #define MERCENARY_HPP_INCLUDED
 
-#include <client/entities/entity.hpp>
+#include <client/entities/moving_entity.hpp>
 #include <client/game_logic/abilities/ability.hpp>
 
 /**
@@ -9,7 +9,7 @@
  * specialization of entity which is primarily supposed
  * to be controlled by Player.
 */
-class Mercenary : public Entity
+class Mercenary : public MovingEntity
 {
 GDCLASS(Mercenary, Entity);
 

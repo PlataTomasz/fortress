@@ -14,6 +14,7 @@
 
 
 class StatusEffect;
+class MeshInstance3D;
 
 /**
  * Object that is used to represent most of the beings on the GameMap
@@ -72,9 +73,12 @@ public:
 		BaseBonusStat resource;
 		Stat resourceRegeneration;
 	} stats;
-public:
-    Area3D* hitbox;
 protected:
+    Area3D* hitbox;
+    real_t hitbox_radius = 0.4;
+
+    MeshInstance3D* model;
+
     enum Team
     {
         TEAM_NONE = 0,
@@ -110,7 +114,7 @@ protected:
 
     // TODO: Implement different collision behaviours(for collision logic handling)
 
-    virtual void movementProcess();
+    virtual void movement_process_frame();
 
     /**
      * Amount of ticks that entity will be alive.

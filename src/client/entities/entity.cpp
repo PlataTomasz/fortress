@@ -13,6 +13,8 @@
 #include <scene/resources/packed_scene.h>
 #include <scene/resources/box_shape_3d.h>
 
+#include <scene/resources/cylinder_shape_3d.h>
+
 
 
 //Entity* Entity::NONE = Entity::create_empty();
@@ -60,66 +62,51 @@ void Entity::ready()
 
 void Entity::_shared_ready()
 {
-    //TODO: Mesh should be loaded from model
-    MeshInstance3D *meshInstance = memnew(MeshInstance3D);
-    meshInstance->set_name("DEBUG");
-    BoxMesh *mesh = memnew(BoxMesh);
-    mesh->set_size(Vector3(0.2f, 0.2f, 0.2f));
-
-    meshInstance->set_mesh(mesh);
-
-    //Setting up collisions
-    hitbox = memnew(Area3D);
-    hitbox->set_name("Hitbox");
-    CollisionShape3D *collisionShape3d = memnew(CollisionShape3D);
-
-    BoxShape3D *boxShapePtr = memnew(BoxShape3D);
-    boxShapePtr->set_size(Vector3(1.0f, 1.0f, 1.0f));
-
-    Ref<Shape3D> boxShape(boxShapePtr);
-
-    collisionShape3d->set_shape(boxShape);
-    hitbox->add_child(collisionShape3d);
-
-    //Require to make entities collide with eachother
-    hitbox->set_monitoring(true);
-    add_child(hitbox);
-    add_child(meshInstance);
-    //area3d->connect("area_entered", Callable(this, "onCollision"));
-}
-
-void Entity::onCollision(Area3D *collider)
-{
-    /*
-    if(collider)
+    //Load or default
+    model = (MeshInstance3D*)get_node(NodePath("Model"));
+    if(!model)
     {
-        if(collider->get_class() != "Entity")
-        {
-            printf("Collision with: %s", collider->get_name());
-            this->queue_free();
-        }
+        model = memnew(MeshInstance3D);
+        model->set_name("Model");
+        BoxMesh *mesh = memnew(BoxMesh);
+        mesh->set_size(Vector3(0.2f, 0.2f, 0.2f));
+        //Does mesh automatically becomes a reference? - Yes, implicit conversion occurs.
+        model->set_mesh(mesh);
+
+        add_child(model);
     }
-    else
-        printf("Invalid collider!\n");
-    */
+    
+    //Replace "Hitbox" node with new
+    hitbox = (Area3D*)get_node(NodePath("Hitbox"));
+    if(!hitbox)
+    {
+        //Setting up collisions
+        hitbox = memnew(Area3D);
+        hitbox->set_name("Hitbox");
+        CollisionShape3D* collisionShapeNode = memnew(CollisionShape3D);
+        collisionShapeNode->set_name("CollisionShape");
+
+        CylinderShape3D* collisionShape = memnew(CylinderShape3D);
+
+        collisionShape->set_radius(hitbox_radius);
+
+        collisionShapeNode->set_shape(collisionShape);
+        hitbox->add_child(collisionShapeNode);
+
+        //Require to make entities collide with eachother
+        hitbox->set_monitoring(true);
+
+        add_child(hitbox);
+    }
 }
 
-//
-void Entity::movementProcess()
+void Entity::movement_process_frame()
 {
-
+    
 }
 
 void Entity::physics_frame()
 {
-    movementProcess();
-    currLifetime++;
-
-    if(currLifetime >= maxLifetime)
-    {
-        //this->queue_free();
-    }
-
     //StatusEffect handling
     for(auto effect : appliedStatusEffects)
     {
