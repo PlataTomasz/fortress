@@ -140,7 +140,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         else if(event_ptr->is_action_pressed("movement"))
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
-            player->controlledEntity->set_position(worldPos);
+            player->controlledEntity->set_movement_target_position(worldPos);
             //TODO: Send propper movement command - Check AStar Node
         }
     }
