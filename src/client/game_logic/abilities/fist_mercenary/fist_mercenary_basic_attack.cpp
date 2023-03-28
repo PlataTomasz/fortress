@@ -13,7 +13,7 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
     RayCast3D* raycast = memnew(RayCast3D);
     raycast->set_position(user->get_position());
     raycast->add_exception(hitbox);
-    raycast->add_exception(user->hitbox);
+    raycast->add_exception((Area3D*)user->get_node(NodePath("Hitbox")));
     raycast->set_collide_with_areas(true);
     
     TypedArray<Area3D> colliders = hitbox->get_overlapping_areas();

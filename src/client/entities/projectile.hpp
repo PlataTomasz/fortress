@@ -12,7 +12,7 @@ private:
 
 protected:
     static void _bind_methods(){};
-    void movementProcess() override;
+    void movementProcess();
 public:
     void _ready();
 
