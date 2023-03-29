@@ -23,14 +23,10 @@ void MovingEntity::movement_process_frame()
     
     if(nav_agent->is_navigation_finished())
 		return;
-    
-
-    //TODO: Use MovementSpeed stat instead
-    double movement_speed = 2;
 
     double delta = SceneTree::get_singleton()->get_physics_process_time();
 
-	float movement_delta = movement_speed * delta;
+	float movement_delta = stats.movementSpeed * delta;
 	Vector3 next_path_position = nav_agent->get_next_path_position();
 	Vector3 current_position = get_global_position();
 	Vector3 new_velocity = (next_path_position - current_position).normalized() * movement_delta;

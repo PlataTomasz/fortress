@@ -1,12 +1,11 @@
 #if !defined(STAT_MODIFIER_HPP_INLCUDED)
 #define STAT_MODIFIER_HPP_INLCUDED
 
-//TODO: Non existant in module context
-
+#include <core/error/error_macros.h>
 
 /**
  * Stat is object which stores stat value along with It's modifiers, which can be altered by various in-game events.
- * Whenever you change value inside Stat and It's deriving classes, then current_value is recalculated and difference between new and old current_value is returned
+ * Whenever you change value inside Stat and It's deriving classes, then final_value is recalculated and difference between new and old final_value is returned
  * @note Be careful with modifying multiple fields as you need to remember each difference manually
 */
 class Stat
@@ -21,7 +20,7 @@ protected:
     /**
      * Current value of stat - after recalculation
     */
-    double current_value = 0;
+    double final_value = 0;
 
     /**
      * Flat modifier of stat
@@ -37,47 +36,52 @@ protected:
      * % modifier of stat - multiplicative
     */
     double multiplicative_percentage_modifier = 0;
+
+    /**
+     * Last calculated difference in stat value
+    */
+    double last_recalculate_diff = 0;
 public:
     /**
      * Recalculate stat final value - returns difference between new and previous final value
     */
-    double recalculate()
+    virtual void recalculate()
     {
-        double old_current_value = this->current_value;
-        this->current_value = (initial_value + flat_modifier) * (multiplicative_percentage_modifier + additive_percentage_modifier);
-        return current_value - old_current_value;
+        double old_current_value = this->final_value;
+        this->final_value = (initial_value + flat_modifier) * (multiplicative_percentage_modifier + additive_percentage_modifier);
+        last_recalculate_diff = final_value - old_current_value;
     }
 
     //Setters/Getters
-    double set_initial_value(double initial_value)
+    void set_initial_value(double initial_value)
     {
         this->initial_value = initial_value;
-        return this->recalculate();
+        recalculate();
     }
 
-    double get_initial_value()
+    double get_initial_value() const
     {
         return this->initial_value;
     }
 
-    double get_multiplicative_percentage_modifier()
+    double get_multiplicative_percentage_modifier() const
     {
         return this->multiplicative_percentage_modifier;
     }
 
-    double get_additive_percentage_modifier()
+    double get_additive_percentage_modifier() const
     {
         return this->additive_percentage_modifier;
     }
 
-    double get_flat_modifier()
+    double get_flat_modifier() const
     {
         return this->flat_modifier;
     }
 
-    double get_current_value()
+    double get_final_value() const
     {
-        return this->current_value;
+        return this->final_value;
     }
 
     double add_multiplicative_percentage_modifier(double modifier, bool explicit_zero_negative = false)
@@ -88,11 +92,11 @@ public:
         }
         else
         {
-            //_to avoid negative stat values where unintended
+            //To avoid negative stat values where unintended
             WARN_PRINT("Adding multiplicative stat modifier failed because of zero or negativ value. Specify explicit_zero_negative if that was desired.");
         }
 
-        return this->recalculate();
+        recalculate();
     }
 
     double subtract_multiplicative_percentage_modifier(double modifier, bool explicit_negative = false)
@@ -107,52 +111,31 @@ public:
             WARN_PRINT("Adding multiplicative stat modifier failed because of zero or negative value. Specify explicit_negative if that was desired.");
         }
 
-        return this->recalculate();
+        recalculate();
     }
 
     double add_additive_percentage_modifier(double modifier)
     {
         this->additive_percentage_modifier += modifier;
-        return this->recalculate();
+        recalculate();
     }
     //Can be used to subtract stat aswell if value is negative
     double add_flat_modifier(double modifier)
     {
         this->flat_modifier += modifier;
-        return this->recalculate();
-    }
-
-    //TODO: Implement - should increase initial_value
-    Stat operator +(double value)
-    {
-        this->initial_value += value;
-        this->recalculate();
-        return *this;
-    }
-
-    //Adding two separate stat object should also sum their modifier percentage values
-    Stat operator +(Stat stat)
-    {
-        this->initial_value += stat.initial_value;
-        this->flat_modifier += stat.flat_modifier;
-        this->add_additive_percentage_modifier(stat.additive_percentage_modifier);
-        this->add_multiplicative_percentage_modifier(stat.multiplicative_percentage_modifier);
-
-        //Will Stat::recalculate() or CompositeStat:recalculate() call in CompositeStat
-        this->recalculate();
-
-        return *this;
+        recalculate();
     }
 
     //Arithmetiic conversions
     operator double()
     {
-        return this->current_value;
+        return final_value;
     }
 
     Stat(double initial_value)
     {
         this->initial_value = initial_value;
+        this->recalculate();
     }
 
     //Empty stat constructor
@@ -182,33 +165,40 @@ So in final form:
 /**
  * Class storing advanced stats, which consist of base and bonus Stat
 */
+
 class CompositeStat : public Stat
 {
 protected:
     Stat base;
     Stat bonus;
 
-    double recalculate()
+    void recalculate()
     {
+        //Making sure that both stats are up to date
         base.recalculate();
         bonus.recalculate();
 
-        double old_current_value = this->current_value;
+        double old_current_value = this->final_value;
 
-        //flat_modifier applied on CompositeStat doesn't change anything currently - How It should be applied? As base stat or bonus stat?
-        this->current_value = (base.get_current_value() + bonus.get_current_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
-        return current_value - old_current_value;
+        this->final_value = (base.get_final_value() + bonus.get_final_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
+        last_recalculate_diff = final_value - old_current_value;
     }
 public:
-    const Stat& get_base()
+    Stat& get_base()
     {
         return base;
     }
 
-    const Stat& get_bonus()
+    Stat& get_bonus()
     {
         return bonus;
     }
+
+    Stat operator=(const double& value)
+    {
+        initial_value = value;
+    }
+    
 
     CompositeStat()
     {
@@ -220,6 +210,60 @@ public:
 
     }
 };
+
+class CappedCompositeStat : CompositeStat
+{
+public:
+    void set_max_total_value();
+    void set_max_initial_value(); 
+};
+
+
+class HealthStat : public Stat
+{
+protected:
+    double current_value = 0;
+    CompositeStat max;
+public:
+    void set_current_value(double new_value)
+    {
+        double max_health = max.get_final_value();
+        if(new_value > max_health)
+        {
+            new_value = max_health;
+        }
+
+        current_value = new_value;
+    }
+
+    const double& get_current_value()
+    {
+        return current_value;
+    }
+
+    void recalculate()
+    {
+        double old_current_value = this->final_value;
+        this->final_value = (initial_value + flat_modifier) * (multiplicative_percentage_modifier + additive_percentage_modifier);
+
+        //Cap current health, so it never exceed maximum
+        if(current_value > max.get_final_value())
+        {
+            current_value = max.get_final_value();
+        }
+
+        last_recalculate_diff = final_value - old_current_value;
+
+
+    }
+
+    CompositeStat& get_max_health_stat()
+    {
+        return max;
+    }
+};
+
+/*
 
 class CompositeStatCapped : public CompositeStat
 {
@@ -237,19 +281,21 @@ public:
         //TODO: Emit max health change signal
     }
 
-    double recalculate()
+    void recalculate()
     {   
         this->CompositeStat::recalculate();
 
-        double old_current = this->current_value;
+        double old_current = this->final_value;
 
         //flat_modifier applied on CompositeStat doesn't change anything currently - How It should be applied? As base stat or bonus stat?
-        double new_current = (base.get_current_value() + bonus.get_current_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
-        double new_max = (base.get_current_value() + bonus.get_current_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
+        double new_current = (base.get_final_value() + bonus.get_final_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
 
-        this->current_value = new_current;
+        double new_max = (base.get_final_value() + bonus.get_final_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
 
-        return current_value - old_current;
+        this->final_value = new_current;
+
+        return final_value - old_current;
     }
 };
+*/
 #endif // STAT_MODIFIER_HPP_INLCUDED

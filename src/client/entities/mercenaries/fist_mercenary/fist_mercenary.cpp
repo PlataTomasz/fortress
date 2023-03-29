@@ -9,6 +9,8 @@ FistMercenary::FistMercenary()
     abilitySet[ABILITY_FIRST] = new FistMercenaryStrafeAbility(this);
 
     basic_attack_ability = new FistMercenaryBasicAttackAbility(this);
+
+    
 }
 
 void FistMercenary::_ready()

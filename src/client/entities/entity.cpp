@@ -165,24 +165,25 @@ real_t Entity::get_facing_direction_angle()
 
 void Entity::take_damage(DamageObject damage_object)
 {
+    double current_health = stats.health.get_current_value();
 
-    if(stats.health.current > damage_object.value)
+    if(current_health > damage_object.value)
     {
         //Damage wont kill that unit
-        stats.health.current -= damage_object.value;
-        emit_signal(StringName("health_change"), stats.health.current);
-        
-        //death
+        current_health -= damage_object.value;
+
+        //TODO: What caused health change?
+        emit_signal(StringName("health_change"), current_health);
     }
     else
     {
         //Damage WILL kill that unit
-        print_line("Entity Death!");
-        stats.health.current = stats.health.max;
-
-        //emit_signal("pre_death");
-        //emit_signal("post_death");
+    
+        emit_signal("pre_death");
+        emit_signal("post_death");
     }
+
+    stats.health.set_current_value(current_health);
 }
 
 /*

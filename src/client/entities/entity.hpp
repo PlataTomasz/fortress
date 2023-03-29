@@ -40,7 +40,7 @@ public:
 	struct Stats
 	{
 		//Defefnsive stats
-        CappedCompositeStat health;
+        HealthStat health;
 		Stat healthRegeneration;
 		CompositeStat physicalResistance;
 		CompositeStat magicResistance;
