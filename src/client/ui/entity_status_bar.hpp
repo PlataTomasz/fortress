@@ -18,11 +18,11 @@ private:
     ProgressBar* health_bar;
     ProgressBar* resource_bar;
 
-    void on_health_amount_change(float value);
-    void on_resource_amount_change(float value);
+    void on_health_change();
+    void on_resource_change(float value);
 public:
     void ready();
-    void _enter_tree();
+    void tree_entered();
 
     EntityStatusBar3D();
 };

@@ -106,6 +106,8 @@ protected:
     unsigned short abilityMask;
     //END: RETHINK
 
+    bool alive = true;
+
     /**
      * Amount of units that entity should move by with every second of movement.
     */
@@ -126,6 +128,9 @@ public:
     HashMap<String, StatusEffect*> appliedStatusEffects;
 
 public:
+    bool is_alive();
+    void kill(Entity* killer);
+
     void castAbility(int abilityId);
 
     //Called every physics frame

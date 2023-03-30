@@ -10,7 +10,7 @@ FistMercenary::FistMercenary()
 
     basic_attack_ability = new FistMercenaryBasicAttackAbility(this);
 
-    
+    stats.movementSpeed.set_initial_value(2);
 }
 
 void FistMercenary::_ready()

@@ -45,10 +45,10 @@ public:
     /**
      * Recalculate stat final value - returns difference between new and previous final value
     */
-    virtual void recalculate()
+    void recalculate()
     {
         double old_current_value = this->final_value;
-        this->final_value = (initial_value + flat_modifier) * (multiplicative_percentage_modifier + additive_percentage_modifier);
+        this->final_value = (initial_value + flat_modifier) * (1 + multiplicative_percentage_modifier + additive_percentage_modifier);
         last_recalculate_diff = final_value - old_current_value;
     }
 
@@ -171,19 +171,15 @@ class CompositeStat : public Stat
 protected:
     Stat base;
     Stat bonus;
-
+public:
     void recalculate()
     {
-        //Making sure that both stats are up to date
-        base.recalculate();
-        bonus.recalculate();
-
         double old_current_value = this->final_value;
 
-        this->final_value = (base.get_final_value() + bonus.get_final_value())*(multiplicative_percentage_modifier + additive_percentage_modifier);
+        this->final_value = (base.get_final_value() + bonus.get_final_value())*(1 + multiplicative_percentage_modifier + additive_percentage_modifier);
         last_recalculate_diff = final_value - old_current_value;
     }
-public:
+
     Stat& get_base()
     {
         return base;
@@ -244,7 +240,7 @@ public:
     void recalculate()
     {
         double old_current_value = this->final_value;
-        this->final_value = (initial_value + flat_modifier) * (multiplicative_percentage_modifier + additive_percentage_modifier);
+        this->final_value = (initial_value + flat_modifier) * ( 1 + multiplicative_percentage_modifier + additive_percentage_modifier);
 
         //Cap current health, so it never exceed maximum
         if(current_value > max.get_final_value())

@@ -49,6 +49,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<Entity>();
     ClassDB::register_class<GameCamera>();
     ClassDB::register_class<GameMap>();
+    ClassDB::register_class<EntityStatusBar3D>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
