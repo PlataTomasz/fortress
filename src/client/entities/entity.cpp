@@ -27,6 +27,16 @@ Entity::Entity()
     connect("ready", callable_mp(this, &Entity::_shared_ready));
 
     SceneTree::get_singleton()->connect("physics_frame", callable_mp(this, &Entity::physics_frame));
+
+    stats.health.get_max_health_stat().set_initial_value(1000);
+    stats.health.set_current_value(1000);
+
+    stats.physicalResistance.get_base().set_initial_value(100);
+    stats.magicResistance.get_base().set_initial_value(100);
+
+    //FIXME: Currently explicit recalculate call is required.
+    stats.physicalResistance.recalculate();
+    stats.magicResistance.recalculate();
 }
 
 Entity::~Entity()
@@ -37,7 +47,8 @@ Entity::~Entity()
 void Entity::_bind_methods()
 {
     //Health changed
-    ADD_SIGNAL(MethodInfo("health_change", PropertyInfo(Variant::FLOAT, "value")));
+    //ADD_SIGNAL(MethodInfo("health_change", PropertyInfo(Variant::FLOAT, "value")));
+    ADD_SIGNAL(MethodInfo("health_change"));
     //Entity will die soon
     ADD_SIGNAL(MethodInfo("pre_death"));
     //Entity died
@@ -163,27 +174,63 @@ real_t Entity::get_facing_direction_angle()
     return this->get_global_rotation_degrees().y;
 }
 
+bool Entity::is_alive()
+{
+    return alive;
+}
+
+void Entity::kill(Entity* killer)
+{
+    //"killer" is what entity caused this entity to die
+
+    emit_signal("pre_death");
+    //At this point, entity is no longer considered alive
+    alive = false;
+    emit_signal("post_death");
+}
+
 void Entity::take_damage(DamageObject damage_object)
 {
+    /*
+    //Entity is dead, damage won't apply
+    if(!is_alive())
+        return;
+        */
+
+    double final_damage;
+
     double current_health = stats.health.get_current_value();
 
-    if(current_health > damage_object.value)
+    switch(damage_object.type)
     {
-        //Damage wont kill that unit
-        current_health -= damage_object.value;
+        case DAMAGE_PHYSICAL:
+        {
+            final_damage = damage_object.value * 100/(stats.physicalResistance+100);
+        }
+        break;
 
-        //TODO: What caused health change?
-        emit_signal(StringName("health_change"), current_health);
+        case DAMAGE_MAGICAL:
+        {
+            final_damage = damage_object.value * 100/(stats.magicResistance+100);
+        }
+        break;
+
+        default:
+        {
+            final_damage = damage_object.value;
+        }
     }
-    else
-    {
-        //Damage WILL kill that unit
-    
-        emit_signal("pre_death");
-        emit_signal("post_death");
-    }
+
+    current_health -= final_damage;
 
     stats.health.set_current_value(current_health);
+
+    emit_signal("health_change");
+
+    if(current_health <= 0)
+    {
+        kill(damage_object.inflictor);
+    }
 }
 
 /*
