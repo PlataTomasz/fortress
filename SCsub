@@ -3,14 +3,18 @@
 Import("env")
 Import("env_modules")
 
+import methods
+
 src_dir = "src/"
 cl_src_dir = src_dir+"client/"
 sv_src_dir = src_dir+"server/"
 sh_src_dir = src_dir+"shared/"
 
 env_zip = env_modules.Clone()
-
 env_zip.Append(CPPPATH=["src/"])
+
+if methods.get_cmdline_bool("debug_game", False):
+    env_zip.Append(CCFLAGS=["-g"])
 
 sources = Glob("*.cpp")
 
@@ -29,5 +33,17 @@ sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
 sources += Glob(cl_src_dir+"ui/*.cpp")
 
-# Module files
-env_zip.add_source_files(env.modules_sources, sources)
+#env.Append(CCFLAGS=["-Wl,-rpath,'\$ORIGIN'"])
+
+#if ARGUMENTS.get('summator_shared', 'no') == 'yes':
+if True:
+    # Shared lib compilation
+    env_zip.Append(CCFLAGS=['-fPIC'])
+    env_zip['LIBS'] = []
+    shared_lib = env_zip.SharedLibrary(target='#bin/bin/client', source=sources)
+    shared_lib_shim = shared_lib[0].name.rsplit('.', 1)[0]
+    env.Append(LIBS=[shared_lib_shim])
+    env.Append(LIBPATH=['#bin/bin'])
+else:
+    # Module files
+    env_zip.add_source_files(env.modules_sources, sources)
