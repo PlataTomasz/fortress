@@ -15,32 +15,33 @@ private:
     /**
      * Stores all registered status effects by their name. These are default objects and converted into instances via copy constructor.
     */
-    HashMap<String, StatusEffect*> registeredStatusEffects;
+    HashMap<String, StatusEffect*> registered_status_effects;
 public:
     static StatusEffectManager *get_singleton();
 
-    bool isStatusEffectRegistered(String statusEffectName);
+    bool is_status_effect_registered(String status_effect_name);
     /**
      * Registers status effect. If allowOverride is true, status effect will be overriden
     */
-    Error registerStatusEffect(String name, StatusEffect *statusEffect);
+    Error register_status_effect(String name, StatusEffect* status_effect);
 
-    StatusEffect *applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor);
+    StatusEffect *apply_status_effect(String status_effect_name, float durration, Entity *target, Entity *inflictor);
 
     /**
      * Removes status effect from target Entity
     */
-    bool removeStatusEffect(String statusEffectName, Entity *target);
+    bool remove_status_effect(String status_effect_name, Entity* target);
+    bool remove_status_effect(StatusEffect* status_effect, Entity* target);
 
-    bool hasStatusEffect(String statusEffectName, Entity *ent);
+    bool has_status_effect(String status_effect_name, Entity* ent);
 
-    StatusEffect *getRegisteredStatusEffect(String statusEffectName);
+    StatusEffect *get_registered_status_effect(String status_effect_name);
 
 
     /**
      * Loads status effects from files under path directory
     */
-    void loadDataFromDirectory();
+    void load_data_from_directory();
 };
 
 #endif // STATUS_EFFECT_MANAGER_HPP

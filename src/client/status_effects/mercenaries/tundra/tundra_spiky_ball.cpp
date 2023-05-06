@@ -20,7 +20,7 @@ void TundraSpikyBallStatus::onApply()
     
     //TundraBall* instance = new TundraBall(this->getTarget());
     TundraBall* instance = memnew(TundraBall);
-    instance->setOwner(this->getTarget());
+    instance->setOwner(this->get_target());
     instance->set_name("TundraBall");
     setBallInstance(instance);
     

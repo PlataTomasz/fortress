@@ -35,7 +35,7 @@ public:
 
     };
 
-    bool isPermament() override
+    bool is_permament() override
     {
         return true;
     }

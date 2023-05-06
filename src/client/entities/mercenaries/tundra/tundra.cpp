@@ -27,6 +27,6 @@ void Tundra::_spawn()
 {
     printf("Tundra::onSpawn() called!\n");
     //Create ball entity
-    applyStatusEffect("tundra_spiky_ball", 15, this);
+    apply_status_effect("tundra_spiky_ball", 15, this);
 
 }

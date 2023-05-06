@@ -3,6 +3,8 @@
 
 #include <core/error/error_macros.h>
 
+class CompositeStat;
+
 /**
  * Stat is object which stores stat value along with It's modifiers, which can be altered by various in-game events.
  * Whenever you change value inside Stat and It's deriving classes, then final_value is recalculated and difference between new and old final_value is returned
@@ -11,6 +13,7 @@
 class Stat
 {
 protected:
+    Stat* parent = nullptr;
 
     /**
      * Initial value of stat - before any modifiers
@@ -50,6 +53,9 @@ public:
         double old_current_value = this->final_value;
         this->final_value = (initial_value + flat_modifier) * (1 + multiplicative_percentage_modifier + additive_percentage_modifier);
         last_recalculate_diff = final_value - old_current_value;
+
+        if(parent != nullptr)
+            parent->recalculate();
     }
 
     //Setters/Getters
@@ -71,7 +77,7 @@ public:
 
     double get_additive_percentage_modifier() const
     {
-        return this->additive_percentage_modifier;
+        return additive_percentage_modifier;
     }
 
     double get_flat_modifier() const
@@ -84,7 +90,7 @@ public:
         return this->final_value;
     }
 
-    double add_multiplicative_percentage_modifier(double modifier, bool explicit_zero_negative = false)
+    void add_multiplicative_percentage_modifier(double modifier, bool explicit_zero_negative = false)
     {
         if(modifier > 0 || explicit_zero_negative)
         {
@@ -99,7 +105,7 @@ public:
         recalculate();
     }
 
-    double subtract_multiplicative_percentage_modifier(double modifier, bool explicit_negative = false)
+    void subtract_multiplicative_percentage_modifier(double modifier, bool explicit_negative = false)
     {
         //Zero can never be passed as method parameter - div by zero
         if(modifier > 0 || (modifier < 0 && explicit_negative))
@@ -114,15 +120,15 @@ public:
         recalculate();
     }
 
-    double add_additive_percentage_modifier(double modifier)
+    void add_additive_percentage_modifier(double modifier)
     {
-        this->additive_percentage_modifier += modifier;
+        additive_percentage_modifier += modifier;
         recalculate();
     }
     //Can be used to subtract stat aswell if value is negative
-    double add_flat_modifier(double modifier)
+    void add_flat_modifier(double modifier)
     {
-        this->flat_modifier += modifier;
+        flat_modifier += modifier;
         recalculate();
     }
 
@@ -148,6 +154,8 @@ public:
     {
 
     }
+
+    friend CompositeStat;
 
 };
 
@@ -176,7 +184,7 @@ public:
     {
         double old_current_value = this->final_value;
 
-        this->final_value = (base.get_final_value() + bonus.get_final_value())*(1 + multiplicative_percentage_modifier + additive_percentage_modifier);
+        this->final_value = (base.get_final_value() + bonus.get_final_value())*(1 + multiplicative_percentage_modifier)*(1 + additive_percentage_modifier);
         last_recalculate_diff = final_value - old_current_value;
     }
 
@@ -198,7 +206,8 @@ public:
 
     CompositeStat()
     {
-
+        base.parent = this;
+        bonus.parent = this;
     }
 
     ~CompositeStat()
@@ -240,7 +249,7 @@ public:
     void recalculate()
     {
         double old_current_value = this->final_value;
-        this->final_value = (initial_value + flat_modifier) * ( 1 + multiplicative_percentage_modifier + additive_percentage_modifier);
+        this->final_value = (initial_value + flat_modifier) * ( 1 + multiplicative_percentage_modifier)*(1 + additive_percentage_modifier);
 
         //Cap current health, so it never exceed maximum
         if(current_value > max.get_final_value())

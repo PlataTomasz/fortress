@@ -3,12 +3,12 @@
 
 
 
-Entity *StatusEffect::getTarget()
+Entity *StatusEffect::get_target()
 {
     return target;
 }
 
-void StatusEffect::setTarget(Entity* target)
+void StatusEffect::set_target(Entity* target)
 {
     //Disallow change of owner if it was already set
     /*
@@ -20,25 +20,30 @@ void StatusEffect::setTarget(Entity* target)
    this->target = target;
 }
 
-void StatusEffect::addStacks(int stackCount)
+void StatusEffect::add_stacks(int stack_count)
 {
-    this->currStacks = this->currStacks + stackCount;
+    this->curr_stacks = this->curr_stacks + stack_count;
     //Renew status effect
-    currDuration = 0;
+    curr_duration = 0;
 }
 
-void StatusEffect::onProcessFrameImpl()
+void StatusEffect::on_process_frame_impl()
 {
-    onProcessFrame();
-    if(currDuration >= maxDuration)
+    on_process_frame();
+    if(curr_duration >= max_duration)
     {
         //Effect duration ended - remove it
-        target->removeStatusEffect(name);
+        target->remove_status_effect(name);
     }
     else
     {
-        currDuration--;
+        curr_duration--;
     }
+}
+
+int StatusEffect::get_current_stacks()
+{
+    return curr_stacks;
 }
 
 StatusEffect::operator String() const
@@ -52,13 +57,13 @@ StatusEffect::operator String() const
     "   maxDuration : %\n"
     "}";
 
-    Array formatData;
-    formatData.append(name);
-    formatData.append(friendlyName);
-    formatData.append(tooltip);
-    formatData.append(maxStacks);
-    formatData.append(currDuration);
-    formatData.append(maxDuration);
+    Array format_data;
+    format_data.append(name);
+    format_data.append(friendly_name);
+    format_data.append(tooltip);
+    format_data.append(max_stacks);
+    format_data.append(curr_duration);
+    format_data.append(max_duration);
 
-    return str.format(formatData, "%");
+    return str.format(format_data, "%");
 }

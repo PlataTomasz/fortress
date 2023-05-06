@@ -11,10 +11,10 @@ StatusEffectManager::StatusEffectManager()
     String defaultStatusEffectPath = "resources/status_effects";
 
     //Register empty status effects as templates for copying
-    registerStatusEffect("tundra_spiky_ball", new TundraSpikyBallStatus());
+    register_status_effect("tundra_spiky_ball", new TundraSpikyBallStatus());
 
 
-    loadDataFromDirectory();
+    load_data_from_directory();
 }
 
 StatusEffectManager *StatusEffectManager::get_singleton()
@@ -24,21 +24,21 @@ StatusEffectManager *StatusEffectManager::get_singleton()
     return &instancePtr;
 }
 
-bool StatusEffectManager::isStatusEffectRegistered(String statusEffectName)
+bool StatusEffectManager::is_status_effect_registered(String statusEffectName)
 {
-    if(registeredStatusEffects.find(statusEffectName) != registeredStatusEffects.end())
+    if(registered_status_effects.find(statusEffectName) != registered_status_effects.end())
         return true;
     else
         return false;
 }
 
-Error StatusEffectManager::registerStatusEffect(String name, StatusEffect *statusEffect)
+Error StatusEffectManager::register_status_effect(String name, StatusEffect *statusEffect)
 {
     //const String name = statusEffect->name;
 
-    if(registeredStatusEffects.find(name) == registeredStatusEffects.end())
+    if(registered_status_effects.find(name) == registered_status_effects.end())
     {
-        registeredStatusEffects.insert(name, statusEffect);
+        registered_status_effects.insert(name, statusEffect);
 
         return OK;
     }
@@ -64,14 +64,14 @@ StatusEffect *StatusEffectManager::getRegisteredStatusEffect(String statusEffect
     }
 }
 */
-bool StatusEffectManager::removeStatusEffect(String statusEffectName, Entity *target)
+bool StatusEffectManager::remove_status_effect(String statusEffectName, Entity *target)
 {
-    StatusEffect* statusEffect = target->getStatusEffect(statusEffectName);
-    if(statusEffect && !statusEffect->isPermament())
+    StatusEffect* statusEffect = target->get_status_effect(statusEffectName);
+    if(statusEffect && !statusEffect->is_permament())
     {
-        statusEffect->onExpire();
-        auto hashMapIter = target->appliedStatusEffects.find(statusEffectName);
-        target->appliedStatusEffects.remove(hashMapIter);
+        statusEffect->on_expire();
+        auto hashMapIter = target->applied_status_effects.find(statusEffectName);
+        target->applied_status_effects.remove(hashMapIter);
 
         return true;
     }
@@ -82,11 +82,28 @@ bool StatusEffectManager::removeStatusEffect(String statusEffectName, Entity *ta
     }
 }
 
-StatusEffect* StatusEffectManager::getRegisteredStatusEffect(String statusEffectName)
+bool StatusEffectManager::remove_status_effect(StatusEffect* status_effect, Entity* target)
 {
-    if(registeredStatusEffects.has(statusEffectName))
+    if(status_effect && !status_effect->is_permament())
     {
-        return registeredStatusEffects.get(statusEffectName);
+        status_effect->on_expire();
+        auto hashMapIter = target->applied_status_effects.find(status_effect->name);
+        target->applied_status_effects.remove(hashMapIter);
+
+        return true;
+    }
+    else
+    {
+        //Effect was not removed
+        return false;
+    }
+}
+
+StatusEffect* StatusEffectManager::get_registered_status_effect(String status_effect_name)
+{
+    if(registered_status_effects.has(status_effect_name))
+    {
+        return registered_status_effects.get(status_effect_name);
     }
     else
     {
@@ -94,7 +111,7 @@ StatusEffect* StatusEffectManager::getRegisteredStatusEffect(String statusEffect
     }
 }
 
-StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, float durration, Entity *target, Entity *inflictor)
+StatusEffect *StatusEffectManager::apply_status_effect(String status_effect_name, float duration, Entity *target, Entity *inflictor)
 {
     /*
     What should happen if status effect limit is reached?
@@ -104,9 +121,9 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
     */
 
     //NOTE: Status effect should start ticking once entity enters the tree(is ready)
-    if(StatusEffect *statusEffectInternal = getRegisteredStatusEffect(statusEffectName))
+    if(StatusEffect *statusEffectInternal = get_registered_status_effect(status_effect_name))
     {
-        if(StatusEffect* statusEffectAppliedInstance = target->getStatusEffect(statusEffectName))
+        if(StatusEffect* statusEffectAppliedInstance = target->get_status_effect(status_effect_name))
         {
             /*
             - If no buff with passed name is applied on entity, apply an instance of it.
@@ -117,17 +134,17 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
             */
 
 
-            statusEffectAppliedInstance->addStacks(1);
+            statusEffectAppliedInstance->add_stacks(1);
         }
         else
         {
             StatusEffect* statusEffectInstance = statusEffectInternal->copy();
-            statusEffectInstance->setTarget(target);
+            statusEffectInstance->set_target(target);
 
-            //target->appliedStatusEffects.append(statusEffectInstance);
-            target->appliedStatusEffects.insert(statusEffectInstance->name, statusEffectInstance);
+            //target->applied_status_effects.append(statusEffectInstance);
+            target->applied_status_effects.insert(statusEffectInstance->name, statusEffectInstance);
             //Effect is considered active when onApply() is called
-            statusEffectInstance->onApply();
+            statusEffectInstance->on_apply();
         }
     }
     else
@@ -136,7 +153,7 @@ StatusEffect *StatusEffectManager::applyStatusEffect(String statusEffectName, fl
     }
 }
 
-void StatusEffectManager::loadDataFromDirectory()
+void StatusEffectManager::load_data_from_directory()
 {
     //Load status effect data from *.json files.
     //File name will be the name status effect will be registered under
@@ -193,11 +210,11 @@ void StatusEffectManager::loadDataFromDirectory()
                     String logicObjectName = effectName;
 
                     //Update registered status effect with default values
-                    if(StatusEffect* statusEffectReg = getRegisteredStatusEffect(effectName))
+                    if(StatusEffect* statusEffectReg = get_registered_status_effect(effectName))
                     {
                         Dictionary data = Dictionary(json->get_data());
 
-                        statusEffectReg->loadData(data);
+                        statusEffectReg->load_data(data);
                     }
                     else
                     {
@@ -208,7 +225,7 @@ void StatusEffectManager::loadDataFromDirectory()
         }
     }
 
-    for(auto effectData : registeredStatusEffects)
+    for(auto effectData : registered_status_effects)
     {
         /*
         printf("Registered effect name = %s\n", effectData.value->name.ascii().ptr());

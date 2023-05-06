@@ -116,39 +116,49 @@ void Entity::movement_process_frame()
     
 }
 
+Area3D* Entity::get_hitbox()
+{
+    return hitbox;
+}
+
 void Entity::physics_frame()
 {
     //StatusEffect handling
-    for(auto effect : appliedStatusEffects)
+    for(auto effect : applied_status_effects)
     {
-        effect.value->onProcessFrameImpl();
+        effect.value->on_process_frame_impl();
     }
 }
 
-bool Entity::removeStatusEffect(String statusEffectName)
+bool Entity::remove_status_effect(String status_effect_name)
 {
-    return StatusEffectManager::get_singleton()->removeStatusEffect(statusEffectName, this);
+    return StatusEffectManager::get_singleton()->remove_status_effect(status_effect_name, this);
 }
 
-StatusEffect *Entity::applyStatusEffect(String statusEffectName, float duration, Entity *inflictor)
+bool Entity::remove_status_effect(StatusEffect* status_effect)
 {
-    return StatusEffectManager::get_singleton()->applyStatusEffect(statusEffectName, duration, this, inflictor);
+    return StatusEffectManager::get_singleton()->remove_status_effect(status_effect, this);
+}
+
+StatusEffect *Entity::apply_status_effect(String status_effect_name, float duration, Entity *inflictor)
+{
+    return StatusEffectManager::get_singleton()->apply_status_effect(status_effect_name, duration, this, inflictor);
 }
 
 
-bool Entity::hasStatusEffect(String statusEffectName)
+bool Entity::has_status_effect(String status_effect_name)
 {
-    if(getStatusEffect(statusEffectName) != nullptr)
+    if(get_status_effect(status_effect_name) != nullptr)
         return true;
     else
         return false;
 }
 
-StatusEffect *Entity::getStatusEffect(String statusEffectName)
+StatusEffect *Entity::get_status_effect(String status_effect_name)
 {
-    for(auto effect : appliedStatusEffects)
+    for(auto effect : applied_status_effects)
     {
-        if(effect.value->name == statusEffectName)
+        if(effect.value->name == status_effect_name)
         {
             return effect.value;
         }
