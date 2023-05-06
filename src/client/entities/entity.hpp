@@ -125,7 +125,7 @@ protected:
 public:
     //Max 256 effects at the same time
     //Vector<StatusEffect*> appliedStatusEffects;
-    HashMap<String, StatusEffect*> appliedStatusEffects;
+    HashMap<String, StatusEffect*> applied_status_effects;
 
 public:
     bool is_alive();
@@ -137,7 +137,8 @@ public:
     void physics_frame();
     void _shared_ready();
     void ready();
-    void onCollision(Area3D *collider);
+    void on_collision(Area3D *collider);
+    Area3D* get_hitbox();
 
     void take_damage(DamageObject damage_object);
 
@@ -147,10 +148,11 @@ public:
     Vector2 get_facing_direction();
     real_t get_facing_direction_angle();
 
-    bool removeStatusEffect(String statusEffectName);
-    StatusEffect* applyStatusEffect(String statusEffectName, float duration, Entity *inflictor);
-    StatusEffect* getStatusEffect(String statusEffectName);
-    bool hasStatusEffect(String statusEffectName);
+    bool remove_status_effect(String status_effect_name);
+    bool remove_status_effect(StatusEffect* status_effect);
+    StatusEffect* apply_status_effect(String status_effect_name, float duration, Entity *inflictor);
+    StatusEffect* get_status_effect(String status_effect_name);
+    bool has_status_effect(String status_effect_name);
 protected:
     static void _bind_methods();
 public:

@@ -24,41 +24,26 @@ public:                                                             \
 
 class Entity;
 
-class StatusEffectData
-{
-protected:
-
-
-public:
-    //Getters/setters
-
-
-
-
-    friend class StatusEffectScript;
-    friend class StatusEffectManager;
-};
-
 class StatusEffect
 {
 VIRTUAL_COPY(StatusEffect);
 
 protected:
     String name;
-    String friendlyName;
+    String friendly_name;
     String tooltip;
 
-    int currStacks;
-    int maxStacks;
+    int curr_stacks;
+    int max_stacks;
     /**
     * Max durration of status effect in frames
     */
-    int currDuration;
-    int maxDuration;
+    int curr_duration;
+    int max_duration;
 
     int damage;
 
-    virtual bool isPermament()
+    virtual bool is_permament()
     {
         return false;
     }
@@ -66,63 +51,66 @@ protected:
     /**
     * Who has the status?
     */
-    Entity *target;
+    Entity* target;
     
     /**
      * Who inflicted status?
     */
-    Entity *inflictor;
+    Entity* inflictor;
 public:
     //Getters/Setters
-    void setTarget(Entity* owner);
-    Entity* getTarget();
+    void set_target(Entity* owner);
+    Entity* get_target();
+
+    int get_current_stacks();
+
 
     //TODO: Maybe return value, informing that stack was not added and why?
-    void addStacks(int stackCount);
+    void add_stacks(int stack_count = 1);
 
     //Callbacks
-    virtual void onProcessFrameImpl() final;
+    virtual void on_process_frame_impl() final;
 
     /**
      * Called when status wears off
     */
-    virtual void onExpire(){};
+    virtual void on_expire(){};
     /**
      * Called when status is applied to entity
     */
-    virtual void onApply()
+    virtual void on_apply()
     {
         printf("StatusEffect::onApply callled!\n");
     };
     /**
      * Called every process frame
     */
-    virtual void onProcessFrame(){};
+    virtual void on_process_frame(){};
 
 
-    void loadData(Dictionary data)
+    void load_data(Dictionary data)
     {
         //TODO: Validate types in json to avoid hard to debug bugs
 
         name = data.get("name", "none");
-        friendlyName = data.get("readableName", name);
+        friendly_name = data.get("readableName", name);
 
         tooltip = data.get("tooltip", "game_tooltip_" + name);
 
 
         //If type is invalid 0 is set instead
-        maxStacks = int(data.get("maxStacks", 5));
+        max_stacks = int(data.get("maxStacks", 5));
         float secondsDuration = float(data.get("duration", 5));
         //TODO: Get process frames per second from somewhere
-        currDuration = 0;
-        maxDuration = secondsDuration*60;
+        curr_duration = 0;
+        max_duration = secondsDuration*60;
     }
 
     operator String() const;
 
     StatusEffect(Dictionary data)
     {
-        loadData(data);
+        load_data(data);
     };
 
     //Should be used only for register purpose
@@ -135,4 +123,5 @@ public:
     friend class StatusEffectManager;
 };
 
+//TODO: Maybe implement It with Nodes(create StatusEffectInstance class?)
 #endif // STATUS_EFFECT_HPP

@@ -17,7 +17,7 @@ void FistMercenaryRightPunchAbility::use_impl(UseContext use_context)
         user
     });
 
-    target->applyStatusEffect("fist_mercenary.armor_shred_ult_debuff", 4, user);
+    target->apply_status_effect("fist_mercenary.armor_shred_ult_debuff", 4, user);
 }
 
 FistMercenaryRightPunchAbility::FistMercenaryRightPunchAbility(Entity* owner) : Ability(owner)
