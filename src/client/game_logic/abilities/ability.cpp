@@ -33,6 +33,16 @@ void Ability::set_cost(int cost)
     this->cost = cost;
 }
 
+void Ability::set_owner(Entity* owner)
+{
+    this->owner = owner;
+}
+
+Entity* Ability::get_owner()
+{
+    return owner;
+}
+
 AbilityUseError Ability::use(UseContext use_context)
 {
     AbilityUseError result = this->can_use(use_context);

@@ -1,0 +1,1 @@
+#include "aal_static_void.h"

@@ -31,6 +31,9 @@ void MovingEntity::movement_process_frame()
 	Vector3 current_position = get_global_position();
 	Vector3 new_velocity = (next_path_position - current_position).normalized() * movement_delta;
 	set_global_position(get_global_position() + new_velocity);
+    //FIXME: Rotation looks clunky
+    //NOTE: Facing direction (0,0,0) looking towards "-Z"
+    look_at(nav_agent->get_next_path_position());
 }
 
 void MovingEntity::set_movement_target_position(Vector3 target_pos)

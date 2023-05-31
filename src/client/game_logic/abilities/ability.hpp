@@ -75,6 +75,9 @@ public:
     virtual void onTick(){};
     virtual void onCooldownChange(){};
 
+    void set_owner(Entity* owner);
+    Entity* get_owner();
+
     Ability();
     Ability(Entity* owner);
 };

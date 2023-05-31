@@ -26,22 +26,27 @@ sources += Glob(cl_src_dir+"status_effects/mercenaries/tundra/*.cpp")
 
 sources += Glob(cl_src_dir+"entities/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/*.cpp")
+sources += Glob(cl_src_dir+"entities/mercenaries/aal/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/tundra/*.cpp")
 sources += Glob(cl_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/*.cpp")
+sources += Glob(cl_src_dir+"game_logic/abilities/aal/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
+sources += Glob(cl_src_dir+"string_names/*.cpp")
 sources += Glob(cl_src_dir+"ui/*.cpp")
 
 #env.Append(CCFLAGS=["-Wl,-rpath,'\$ORIGIN'"])
 
 #if ARGUMENTS.get('summator_shared', 'no') == 'yes':
-if True:
+if False:
     # Shared lib compilation
     env_zip.Append(CCFLAGS=['-fPIC'])
-    env_zip['LIBS'] = []
+    #env_zip['LIBS'] = ["godot.linuxbsd.editor.x86_64.old"]
+    #env_zip.Append(LIBPATH=['#bin'])
     shared_lib = env_zip.SharedLibrary(target='#bin/bin/client', source=sources)
     shared_lib_shim = shared_lib[0].name.rsplit('.', 1)[0]
+    print("Here: ", shared_lib_shim)
     env.Append(LIBS=[shared_lib_shim])
     env.Append(LIBPATH=['#bin/bin'])
 else:

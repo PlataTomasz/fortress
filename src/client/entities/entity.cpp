@@ -14,10 +14,7 @@
 #include <scene/resources/box_shape_3d.h>
 
 #include <scene/resources/cylinder_shape_3d.h>
-
-
-
-//Entity* Entity::NONE = Entity::create_empty();
+#include <client/string_names/game_string_names.h>
 
 Entity::Entity()
 {
@@ -37,6 +34,8 @@ Entity::Entity()
     //FIXME: Currently explicit recalculate call is required.
     stats.physicalResistance.recalculate();
     stats.magicResistance.recalculate();
+
+    add_to_group(GameStringNames::get_singleton()->ENTITIES_GROUP);
 }
 
 Entity::~Entity()

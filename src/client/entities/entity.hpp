@@ -23,9 +23,6 @@ class MeshInstance3D;
 */
 class Entity : public Node3D
 {
-    //static Entity* NONE;
-    //static Entity* create_empty();
-
 GDCLASS(Entity, Node3D);
 
 enum FacingDirection
