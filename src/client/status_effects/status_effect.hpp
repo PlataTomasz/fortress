@@ -119,6 +119,11 @@ public:
 
     }
 
+    StatusEffect(String name)
+    {
+        this->name = name;
+    }
+
     friend class Entity;
     friend class StatusEffectManager;
 };

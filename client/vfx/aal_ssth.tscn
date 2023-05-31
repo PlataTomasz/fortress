@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7sjdw8qvsjev"]
+
+[ext_resource type="Shader" uid="uid://bxb65f50i21hc" path="res://vfx/shaders/aal_ssth.tres" id="1_quko1"]
+[ext_resource type="Texture2D" uid="uid://c4w87nd446xbt" path="res://textures/vfx/spark_05.png" id="2_uaend"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0uvt"]
+render_priority = 0
+shader = ExtResource("1_quko1")
+shader_parameter/Texture2DParameter = ExtResource("2_uaend")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3q8re"]
+material = SubResource("ShaderMaterial_g0uvt")
+subdivide_depth = 32
+
+[node name="AalStthLightningMesh" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+mesh = SubResource("PlaneMesh_3q8re")

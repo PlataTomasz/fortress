@@ -13,6 +13,8 @@ Mercenary::Mercenary()
     abilitySet[3] = new TestAbility();
     abilitySet[4] = new TestAbility();
 
+    stats.movementSpeed.set_initial_value(2);
+
     connect("ready", callable_mp(this, &Mercenary::initialize));
 }
 
