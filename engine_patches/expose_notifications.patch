@@ -1,0 +1,119 @@
+diff --git a/core/object/object.cpp b/core/object/object.cpp
+index 57aa1339ec..6b04203b1d 100644
+--- a/core/object/object.cpp
++++ b/core/object/object.cpp
+@@ -789,6 +789,8 @@ Variant Object::call_const(const StringName &p_method, const Variant **p_args, i
+ void Object::notification(int p_notification, bool p_reversed) {
+ 	_notificationv(p_notification, p_reversed);
+ 
++	inform_notification_subscribers(p_notification);
++
+ 	if (script_instance) {
+ 		script_instance->notification(p_notification);
+ 	}
+@@ -2015,3 +2017,68 @@ void ObjectDB::cleanup() {
+ 		memfree(object_slots);
+ 	}
+ }
++
++//ARTSKR-PATCH: Notification patch
++Error Object::connect_notification(int notification, const Callable& callable)
++{
++	notification_subscribers[notification];
++	List<Callable>::Element* e = notification_subscribers[notification].find(callable);
++	notification_subscribers[notification].push_back(callable);
++
++	if(e)
++	{
++		ERR_FAIL_V_MSG(ERR_INVALID_PARAMETER, "Connecting failed! Callable already exists!");
++	}
++
++	return OK;
++}
++
++Error Object::disconnect_notification(int notification, const Callable& callable)
++{
++	if(notification_subscribers.has(notification))
++	{
++		List<Callable> callables = notification_subscribers.get(notification);
++
++		List<Callable>::Element* e = callables.find(callable);
++
++		if(!e)
++		{
++			ERR_FAIL_V_MSG(ERR_INVALID_PARAMETER, "Disconnecting failed! No such callable!");
++		}
++		
++		e->erase();
++	}
++
++	return OK;
++}
++
++void Object::inform_notification_subscribers(int notification)
++{
++	if(notification_subscribers.has(notification))
++	{
++		for(Callable c : notification_subscribers.get(notification))
++		{
++			Array args = Array();
++
++			int argcount = args.size();
++			//TODO: Figure out what is argptrs
++			const Variant **argptrs = nullptr;
++			if (argcount) {
++				argptrs = (const Variant **)alloca(sizeof(Variant *) * argcount);
++				for (int i = 0; i < argcount; i++) {
++					argptrs[i] = &args[i];
++				}
++			}
++			Callable::CallError ce;
++			Variant ret;
++			c.get_custom()->call(argptrs, argcount, ret, ce);
++
++			print_line("Function call result:");
++			print_line("Call error: ", ce.error);
++			print_line("- Expected argcount: ", ce.expected);
++			print_line(" - Got argcount: ", ce.argument);
++			print_line("Return value: ", ret);
++		}
++	}
++	//No subscribers
++}
+\ No newline at end of file
+diff --git a/core/object/object.h b/core/object/object.h
+index 5ec69a371b..5ef10da3f8 100644
+--- a/core/object/object.h
++++ b/core/object/object.h
+@@ -926,6 +926,31 @@ public:
+ 
+ 	Object();
+ 	virtual ~Object();
++
++	//ARTSKR-PATCH: Notification patch
++protected:
++	/*
++	template<typename RetType, typename... Args>
++	class SimpleFunctionCall
++	{
++
++	public:
++		const void* instance;
++		RetType(func_ptr)(Args...);
++
++		SimpleFunctionCall(T* instance, RetType (*func_ptr)(Args...))
++		{
++			this->instance = instance;
++			this->func_ptr = func_ptr;
++		}
++	};
++	*/
++	HashMap<int, List<Callable>> notification_subscribers;
++public:
++	Error connect_notification(int notification, const Callable& callable);
++	Error disconnect_notification(int notification, const Callable& callable);
++protected:
++	void inform_notification_subscribers(int notification);
+ };
+ 
+ bool predelete_handler(Object *p_object);
