@@ -1,58 +1,58 @@
 #if !defined(BASKET_HPP_INCLUDED)
 #define BASKET_HPP_INCLUDED
 
-class Node;
+#include <core/variant/callable.h>
+#include <core/object/class_db.h>
+#include <core/object/object.h>
+
+class NodePath;
 
 /**
- * Basket is a class designed to act as smart pointer for Nodes, which are part of SceneTree.
+ * Basket is a class designed to act as smart pointer for Objects, which are part of SceneTree.
  * @note That class does NOT do any cleanup! It leaves that responsibility to engine.
 */
-class Basket
+class Basket : public Object
 {
 //Compile time check
-//static_assert(std::is_base_of<Node, T>::value, "T must inherit from list");
-
+//static_assert(std::is_base_of<Object, T>::value, "T must inherit from list");
+GDCLASS(Basket, Object);
 private:
-    Node* node = nullptr;
+    Object* node = nullptr;
 
-    Callable node_exit_callable;
+    Callable invalidate_handler_callable;
 
-    /**
-     * Cleanup method, which is called when Node is leaving scene tree
-    */
-    void on_node_exit_scene();
-
+    void invalidate_handler();
 public:
     /**
-     * @return true if pointer to Node is still valid, false otherwise
+     * @return true if pointer to Object is still valid, false otherwise
     */
     bool is_valid();
 
     /**
-     * @returns Node pointer stored by that object, nullptr if invalid
+     * @returns Object pointer stored by that object, nullptr if invalid
      * 
     */
-    Node* get();
+    Object* get();
 
-    void reset(Node* new_ptr);
+    void reset(Object* new_ptr);
 
     //Operator overloads
     /**
      * @returns Reference to object stored in pointer
     */
-    Node& operator*() const;
+    Object& operator*() const;
 
     /**
      * 
     */
     bool operator==(const Basket& other);
-    bool operator==(Node* other);
+    bool operator==(Object* other);
 
-    Basket& operator=(Node* rhs);
+    Basket& operator=(Object* rhs);
     Basket& operator=(Basket& rhs);
 
     //Constructors
-    Basket(Node* node);
+    Basket(Object* node);
     Basket(const NodePath& node_path);
     //Move
     Basket(Basket&& basket);
