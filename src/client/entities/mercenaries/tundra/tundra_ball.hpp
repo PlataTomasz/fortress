@@ -28,7 +28,6 @@ public:
         this->maxRangeFromOwner = 0.8;
         connect("ready", callable_mp(this, &TundraBall::ready));
     };
-    TundraBall(Entity* owner);
 };
 
 #endif // TUNDRA_BALL_HPP

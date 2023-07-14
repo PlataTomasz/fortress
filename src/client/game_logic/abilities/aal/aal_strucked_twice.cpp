@@ -81,7 +81,7 @@ void AalStruckedTwice::on_ability_hit(const AbilityHitData& hit_data)
     position_marker->add_child(hit_area);
 }
 
-void AalStruckedTwice::initialize()
+void AalStruckedTwice::ready_impl()
 {
     //Setting up collisions
     effect_area = memnew(Area3D);

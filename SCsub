@@ -36,6 +36,8 @@ sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
 sources += Glob(cl_src_dir+"string_names/*.cpp")
 sources += Glob(cl_src_dir+"ui/*.cpp")
 
+sources += Glob(sh_src_dir+"helpers/*.cpp")
+
 #env.Append(CCFLAGS=["-Wl,-rpath,'\$ORIGIN'"])
 
 #if ARGUMENTS.get('summator_shared', 'no') == 'yes':

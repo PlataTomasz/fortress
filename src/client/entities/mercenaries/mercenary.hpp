@@ -28,17 +28,21 @@ protected:
 public:
     enum AbilitySetIndex
     {
-        ABILITY_PASSIVE = 0,
-        ABILITY_FIRST = 1,
-        ABILITY_SECOND = 2,
-        ABILITY_THIRD = 3,
-        ABILITY_ULTIMATE = 4
+        ABILITY_PASSIVE,
+        ABILITY_FIRST,
+        ABILITY_SECOND,
+        ABILITY_THIRD,
+        ABILITY_ULTIMATE,
+        ABILITY_MAX
     };
+
+    Ability *set_ability(AbilitySetIndex abilityIndex, Ability *ability);
 
     void use_ability(int ability_id, UseContext use_context);
     void use_basic_attack(UseContext use_context);
 
     void initialize();
+    void physics_frame();
 
     Mercenary();
     ~Mercenary();

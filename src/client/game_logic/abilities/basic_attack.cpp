@@ -5,7 +5,7 @@ void BasicAttackAbility::use_impl(UseContext use_context)
 
 }
 
-BasicAttackAbility::BasicAttackAbility(Entity* owner) : Ability(owner)
+BasicAttackAbility::BasicAttackAbility()
 {
 
 }

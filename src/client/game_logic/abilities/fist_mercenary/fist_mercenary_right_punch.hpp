@@ -7,7 +7,7 @@ class FistMercenaryRightPunchAbility : public Ability
 {
     void use_impl(UseContext use_context) override;
 public:
-    FistMercenaryRightPunchAbility(Entity* owner);
+    FistMercenaryRightPunchAbility();
 };
 
 #endif // FIST_MERCENARY_RIGHT_PUNCH_HPP_INCLUDED

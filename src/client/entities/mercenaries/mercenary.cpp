@@ -16,6 +16,7 @@ Mercenary::Mercenary()
     stats.movementSpeed.set_initial_value(2);
 
     connect("ready", callable_mp(this, &Mercenary::initialize));
+    //connect("physics_frame", callable_mp(this, &Mercenary::physics_frame));
 }
 
 void Mercenary::use_ability(int ability_id, UseContext use_context)
@@ -30,19 +31,27 @@ void Mercenary::use_basic_attack(UseContext use_context)
 
 void Mercenary::initialize()
 {
-    //Initialize abilities
-    basic_attack_ability->initialize();
+   
+}
 
-    abilitySet[ABILITY_PASSIVE]->initialize();
-    abilitySet[ABILITY_FIRST]->initialize();
-    abilitySet[ABILITY_SECOND]->initialize();
-    abilitySet[ABILITY_THIRD]->initialize();
-    abilitySet[ABILITY_ULTIMATE]->initialize();
+Ability *Mercenary::set_ability(AbilitySetIndex abilityIndex, Ability *ability)
+{
+    abilitySet[abilityIndex] = ability;
+    ability->set_owner(this);
 }
 
 void Mercenary::_bind_methods()
 {
 
+}
+
+void Mercenary::physics_frame()
+{
+    //Ability cooldown handling
+    for(int i = 0;i<Mercenary::ABILITY_MAX;i++)
+    {
+        
+    }
 }
 
 Mercenary::~Mercenary()

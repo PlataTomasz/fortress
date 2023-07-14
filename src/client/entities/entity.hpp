@@ -8,9 +8,9 @@
 #include <core/templates/hash_map.h>
 #include <core/templates/vector.h>
 #include "../stats/stat_modifier.hpp"
+#include "ability_charge_data.h"
 
 #include <client/game_logic/damage_object.hpp>
-
 
 
 class StatusEffect;
@@ -72,6 +72,8 @@ public:
 protected:
     Area3D* hitbox;
     real_t hitbox_radius = 0.4;
+    
+    AbilityChargeData abilityChargeData;
 
     MeshInstance3D* model;
 
@@ -139,6 +141,8 @@ public:
 
     void take_damage(DamageObject damage_object);
 
+    void add_child_notify(Node* node) override;
+
     /**
      * Returns vector which describes where entity is facing
     */
@@ -150,6 +154,8 @@ public:
     StatusEffect* apply_status_effect(String status_effect_name, float duration, Entity *inflictor);
     StatusEffect* get_status_effect(String status_effect_name);
     bool has_status_effect(String status_effect_name);
+
+    AbilityChargeData::Error start_charging_ability(IChargeable* ability);
 protected:
     static void _bind_methods();
 public:

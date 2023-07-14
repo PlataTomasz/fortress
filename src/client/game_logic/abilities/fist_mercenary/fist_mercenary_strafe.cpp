@@ -12,7 +12,7 @@ void FistMercenaryStrafeAbility::use_impl(UseContext use_context)
     //TODO: Play animation
 }
 
-FistMercenaryStrafeAbility::FistMercenaryStrafeAbility(Entity* owner) : Ability(owner)
+FistMercenaryStrafeAbility::FistMercenaryStrafeAbility()
 {
 
 }

@@ -8,5 +8,5 @@ void TestAbility::use_impl(UseContext use_context)
 
 TestAbility::TestAbility()
 {
-    name = "test_ability";
+    
 }

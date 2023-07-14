@@ -10,7 +10,7 @@ private:
 protected:
 public:
     void use_impl(UseContext use_context) override;
-    void initialize() override;
+    void ready_impl() override;
 };
 
 #endif // AAL_CHAIN_LIGHTNING_H_INCLUDED

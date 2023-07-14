@@ -5,12 +5,6 @@
 #include <gdextension_helper.hpp>
 #include <scene/resources/primitive_meshes.h>
 
-TundraBall::TundraBall(Entity *owner)
-{
-    this->owner = owner;
-    this->maxRangeFromOwner = 0.8;
-}
-
 void TundraBall::onCollide(Area3D *collider)
 {
     //Deal damage when the ball moved into other entity as a result of other ability or result of displacement toward ball
