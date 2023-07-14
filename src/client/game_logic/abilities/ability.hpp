@@ -3,6 +3,7 @@
 
 #include <client/game_logic/abilities/use_context.hpp>
 #include <core/string/ustring.h>
+#include <shared/helpers/object_ptr.h>
 
 class AbilityUseRCL;
 
@@ -21,12 +22,12 @@ enum AbilityUseError
     ABILITY_ON_COOLDOWN = 1<<3
 };
 
-class Ability
+class Ability : public Object
 {
 protected:
 
-    Entity* owner;
-    String name;
+    ObjectPtr<Entity> owner;
+    ObjectPtr<Entity> old_owner;
 
     /**
      * Current cooldown of ability in ticks
@@ -41,9 +42,12 @@ protected:
 
     AbilityUseRCL* ability_use_chain;
 
-    virtual void use_impl(UseContext use_context) = 0;
+    virtual void use_impl(UseContext use_context){};
 
     virtual void setup_ability_use_chain();
+
+    virtual void ready_impl(){};
+    void ready(){ready_impl();};
 
 public:
     int get_current_cooldown();
@@ -70,16 +74,19 @@ public:
     /**
      * Ability preparation - Here should go initialization code such as setting up helper nodes
     */
-    virtual void initialize(){};
     virtual void onCast(){};
     virtual void onTick(){};
     virtual void onCooldownChange(){};
+
+    void _notification(int p_notification);
+
+    //Owner changed - You might want to do some initialization/cleanup here
+    virtual void set_owner_callback(){};
 
     void set_owner(Entity* owner);
     Entity* get_owner();
 
     Ability();
-    Ability(Entity* owner);
 };
 
 #endif // ABILITY_HPP_INCLUDED

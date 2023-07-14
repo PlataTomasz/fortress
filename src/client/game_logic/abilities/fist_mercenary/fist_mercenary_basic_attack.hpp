@@ -9,9 +9,9 @@ class FistMercenaryBasicAttackAbility : public BasicAttackAbility
     void use_impl(UseContext use_context) override;
 
 public:
-    void initialize() override;
+    void ready_impl() override;
     
-    FistMercenaryBasicAttackAbility(Entity* owner);
+    FistMercenaryBasicAttackAbility();
 };
 
 #endif // FIST_MERCENARY_BASIC_ATTACK_HPP_INCLUDED

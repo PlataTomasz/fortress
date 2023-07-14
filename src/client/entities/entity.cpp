@@ -15,6 +15,7 @@
 
 #include <scene/resources/cylinder_shape_3d.h>
 #include <client/string_names/game_string_names.h>
+#include <client/game_logic/abilities/ability.hpp>
 
 Entity::Entity()
 {
@@ -47,11 +48,11 @@ void Entity::_bind_methods()
 {
     //Health changed
     //ADD_SIGNAL(MethodInfo("health_change", PropertyInfo(Variant::FLOAT, "value")));
-    ADD_SIGNAL(MethodInfo("health_change"));
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_HEALTH_CHANGE, PropertyInfo(Variant::FLOAT, "new_health"), PropertyInfo(Variant::FLOAT, "old_health")));
     //Entity will die soon
-    ADD_SIGNAL(MethodInfo("pre_death"));
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->PRE_DEATH, PropertyInfo(Variant::PACKED_BYTE_ARRAY, "death_cause")));
     //Entity died
-    ADD_SIGNAL(MethodInfo("on_death"));
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DEATH, PropertyInfo(Variant::PACKED_BYTE_ARRAY, "death_cause")));
 
     ClassDB::bind_method(D_METHOD("_shared_ready"), &Entity::_shared_ready);
 
@@ -240,6 +241,27 @@ void Entity::take_damage(DamageObject damage_object)
     {
         kill(damage_object.inflictor);
     }
+}
+
+void Entity::add_child_notify(Node* node)
+{
+    if(Ability* ability = dynamic_cast<Ability*>(node))
+    {
+    
+    }
+    else
+    {
+
+    }
+}
+
+
+
+AbilityChargeData::Error Entity::start_charging_ability(IChargeable* ability)
+{
+    
+
+    return AbilityChargeData::Error::OK;
 }
 
 /*

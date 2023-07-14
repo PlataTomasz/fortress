@@ -8,11 +8,11 @@ AbilityUseError ResourceCostAURCL::evaluate_impl(AbilityUseData data)
     Entity* user = use_context.get_user();
     Ability* ability = data.ability;
 
-    //TODO: Retrieve current resource state - required Stat API
-    if(ability->get_cost() == 0)
-    {
+    //TODO: Resource costs
 
-    }
+
+
+    return AbilityUseError::SUCCESS;
 }
 
 AbilityUseError CooldownAURCL::evaluate_impl(AbilityUseData data)
@@ -26,4 +26,11 @@ AbilityUseError CooldownAURCL::evaluate_impl(AbilityUseData data)
     {
         return AbilityUseError::SUCCESS;
     }
+}
+
+AbilityUseError CooldownAURCL::evaluate(AbilityUseData data)
+{
+    
+
+    return this->evaluate_impl(data);
 }

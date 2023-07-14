@@ -20,6 +20,15 @@ public:
 
     StringName ENTITIES_GROUP;
 
+    //Signals
+    StringName ON_DAMAGE_TAKEN;
+    StringName ON_DAMAGE_DEALT;
+    StringName ON_ABILITY_HIT;
+    StringName ON_ATTACK_HIT;
+    StringName PRE_DEATH;
+    StringName ON_DEATH;
+    StringName ON_HEALTH_CHANGE;
+
     GameStringNames();
 };
 

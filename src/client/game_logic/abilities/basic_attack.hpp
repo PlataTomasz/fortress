@@ -16,7 +16,7 @@ public:
     virtual void use_impl(UseContext use_context);
     virtual void initialize(){};
 
-    BasicAttackAbility(Entity* owner);
+    BasicAttackAbility();
 };
 
 #endif // BASIC_ATTACK_HPP_INCLUDED

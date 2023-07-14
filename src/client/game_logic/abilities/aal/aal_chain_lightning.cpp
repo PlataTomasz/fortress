@@ -22,7 +22,7 @@ void AalChainLightning::use_impl(UseContext use_context)
     print_line("Chain Lightning finished!");
 }
 
-void AalChainLightning::initialize()
+void AalChainLightning::ready_impl()
 {
 
 }

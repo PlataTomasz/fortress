@@ -40,6 +40,8 @@ class CooldownAURCL : public AbilityUseRCL
 protected:
     AbilityUseError evaluate_impl(AbilityUseData data) override;
 public:
+    AbilityUseError evaluate(AbilityUseData data);
+
     CooldownAURCL(String identifier) : AbilityUseRCL(identifier)
     {
         

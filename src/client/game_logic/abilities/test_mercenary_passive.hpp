@@ -7,7 +7,7 @@
 class TestMercenaryPassive : public Ability
 {
 public:
-    virtual void initialize();
+    void ready_impl() override;
     virtual void onCast();
     virtual void onTick();
     virtual void onCooldownChange();

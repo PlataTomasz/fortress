@@ -90,7 +90,7 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
         ent->take_damage({
             DAMAGE_PHYSICAL,
             50,
-            this->owner
+            this->owner.get()
         });
     }
     else
@@ -164,7 +164,7 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
     */
 }
 
-void FistMercenaryBasicAttackAbility::initialize()
+void FistMercenaryBasicAttackAbility::ready_impl()
 {
     double hitbox_width = 0.1;
     double hitbox_length = 0.3;
@@ -188,7 +188,7 @@ void FistMercenaryBasicAttackAbility::initialize()
     hitbox->set_rotation(owner->get_global_rotation());
 }
 
-FistMercenaryBasicAttackAbility::FistMercenaryBasicAttackAbility(Entity* owner) : BasicAttackAbility(owner)
+FistMercenaryBasicAttackAbility::FistMercenaryBasicAttackAbility()
 {
 
 }

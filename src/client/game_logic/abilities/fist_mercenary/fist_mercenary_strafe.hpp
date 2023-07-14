@@ -14,7 +14,7 @@ protected:
 
     void use_impl(UseContext use_context) override;
 public:
-    FistMercenaryStrafeAbility(Entity* owner);
+    FistMercenaryStrafeAbility();
 };
 
 

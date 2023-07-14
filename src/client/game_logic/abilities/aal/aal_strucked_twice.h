@@ -25,7 +25,7 @@ private:
     void on_ability_hit(const AbilityHitData& hit_data);
 protected:
 public:
-    void initialize() override;
+    void ready_impl() override;
     AalStruckedTwice();
 };
 

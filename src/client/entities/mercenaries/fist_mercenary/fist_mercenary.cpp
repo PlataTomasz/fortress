@@ -6,9 +6,9 @@
 FistMercenary::FistMercenary()
 {
     DISABLE_IN_EDITOR();
-    abilitySet[ABILITY_FIRST] = new FistMercenaryStrafeAbility(this);
+    abilitySet[ABILITY_FIRST] = new FistMercenaryStrafeAbility();
 
-    basic_attack_ability = new FistMercenaryBasicAttackAbility(this);
+    basic_attack_ability = new FistMercenaryBasicAttackAbility();
 
     stats.movementSpeed.set_initial_value(2);
 }
