@@ -52,6 +52,14 @@ public:
     {
         
     }
+
+    UseContext(UseContext& use_context)
+    {
+        this->user = use_context.user;
+        this->use_position = use_context.use_position;
+        this->target_positions = use_context.target_positions;
+        this->target_entities = use_context.target_entities;
+    }
 };
 
 #endif // USE_CONTEXT_HPP_INCLUDED

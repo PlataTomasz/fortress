@@ -5,6 +5,7 @@
 
 class Aal : public Mercenary
 {
+GDCLASS(Aal, Mercenary);
 public:
     Aal();
 };

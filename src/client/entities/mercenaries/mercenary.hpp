@@ -11,7 +11,7 @@
 */
 class Mercenary : public MovingEntity
 {
-GDCLASS(Mercenary, Entity);
+GDCLASS(Mercenary, MovingEntity);
 
 private:
     
@@ -36,10 +36,10 @@ public:
         ABILITY_MAX
     };
 
-    Ability *set_ability(AbilitySetIndex abilityIndex, Ability *ability);
+    void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
 
-    void use_ability(int ability_id, UseContext use_context);
-    void use_basic_attack(UseContext use_context);
+    void use_ability(int ability_id, UseContext& use_context);
+    void use_basic_attack(UseContext& use_context);
 
     void initialize();
     void physics_frame();

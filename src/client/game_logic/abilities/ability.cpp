@@ -33,7 +33,7 @@ void Ability::set_cost(int cost)
     this->cost = cost;
 }
 
-AbilityUseError Ability::use(UseContext use_context)
+AbilityUseError Ability::use(UseContext& use_context)
 {
     AbilityUseError result = this->can_use(use_context);
     if(result == 0)
@@ -52,13 +52,13 @@ Entity *Ability::get_owner()
 void Ability::set_owner(Entity *owner)
 {
     this->old_owner = this->owner;
-    this->owner = owner;
-    set_owner_callback();
+    this->owner.reset(owner);
+    //set_owner_callback();
 }
 
-void Ability::force_use(UseContext use_context)
+void Ability::force_use(UseContext& use_context)
 {
-    use_impl(use_context);
+    //use_impl(use_context);
 }
 
 void Ability::_notification(int p_notification) {
@@ -72,7 +72,7 @@ void Ability::_notification(int p_notification) {
     };
 }
 
-AbilityUseError Ability::can_use(UseContext use_context)
+AbilityUseError Ability::can_use(UseContext& use_context)
 {
     return ability_use_chain->evaluate({this, use_context});
 }

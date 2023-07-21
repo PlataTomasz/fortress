@@ -5,7 +5,7 @@
 
 class FistMercenaryRightPunchAbility : public Ability
 {
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
 public:
     FistMercenaryRightPunchAbility();
 };

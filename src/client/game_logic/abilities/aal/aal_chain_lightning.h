@@ -9,7 +9,7 @@ private:
     Area3D* hitbox;
 protected:
 public:
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
     void ready_impl() override;
 };
 

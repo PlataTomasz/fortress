@@ -186,9 +186,9 @@ public:
         delete this;
     }
 
-    RCL(String identifier)
+    RCL()
     {
-        this->identifier = identifier;
+        //this->identifier = identifier;
     }
 
     virtual ~RCL()

@@ -17,7 +17,7 @@ private:
     //TODO: From API - 160 is map max size
     float hit_area_length = 160;
 
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
     void ready_impl() override;
 public:
     //Collisions

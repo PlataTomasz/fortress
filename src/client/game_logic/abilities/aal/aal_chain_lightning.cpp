@@ -1,7 +1,7 @@
 #include <client/game_logic/abilities/aal/aal_chain_lightning.h>
 #include <client/game_logic/collisions/hitbox.h>
 
-void AalChainLightning::use_impl(UseContext use_context)
+void AalChainLightning::use_impl(UseContext& use_context)
 {
     print_line("Chain Lightning used!");
     /*

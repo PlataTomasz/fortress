@@ -11,7 +11,7 @@
 Aal::Aal()
 {
     //Abilities
-    set_ability(ABILITY_PASSIVE, memnew(AalDischarge));
+    //set_ability(ABILITY_PASSIVE, memnew(AalDischarge));
     set_ability(ABILITY_FIRST, memnew(TestAbility));
     set_ability(ABILITY_SECOND, memnew(TestAbility));
     set_ability(ABILITY_THIRD, memnew(TestAbility));

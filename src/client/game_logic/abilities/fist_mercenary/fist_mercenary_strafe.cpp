@@ -1,6 +1,6 @@
 #include "fist_mercenary_strafe.hpp"
 
-void FistMercenaryStrafeAbility::use_impl(UseContext use_context)
+void FistMercenaryStrafeAbility::use_impl(UseContext& use_context)
 {
     Entity* user = use_context.get_user();
     Vector2 facing_direction = user->get_facing_direction();

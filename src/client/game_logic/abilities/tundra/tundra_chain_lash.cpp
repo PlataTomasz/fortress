@@ -7,7 +7,7 @@
 #include <scene/resources/box_shape_3d.h>
 #include "../../../entities/mercenaries/tundra/tundra_ball.hpp"
 
-void TundraChainLashAbility::use(UseContext use_context)
+void TundraChainLashAbility::use(UseContext& use_context)
 {
     //START: TODO: Move to different place - that's gonna be used a lot
     //Create rectangular area between ball origin and character origin

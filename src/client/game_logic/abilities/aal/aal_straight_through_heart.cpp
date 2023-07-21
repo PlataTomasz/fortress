@@ -19,7 +19,7 @@ AalStraightThroughHeart::AalStraightThroughHeart()
 
 
 //NOTE: That ability is prototype - should behave a bit differently
-void AalStraightThroughHeart::use_impl(UseContext use_context)
+void AalStraightThroughHeart::use_impl(UseContext& use_context)
 {
     ERR_FAIL_NULL(owner);
 
