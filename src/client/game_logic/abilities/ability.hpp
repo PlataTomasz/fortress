@@ -42,7 +42,7 @@ protected:
 
     AbilityUseRCL* ability_use_chain;
 
-    virtual void use_impl(UseContext use_context){};
+    virtual void use_impl(UseContext& use_context){};
 
     virtual void setup_ability_use_chain();
 
@@ -59,17 +59,17 @@ public:
     /**
      * Uses ability if possible. Returns AbilityCastError value depending on what happened.
     */
-    AbilityUseError use(UseContext use_context);
+    AbilityUseError use(UseContext& use_context);
 
     /**
      * Uses ability completly ignoring anything that would prevent it
     */
-    void force_use(UseContext use_context);
+    void force_use(UseContext& use_context);
 
     /**
      * Checks if ability can be used. Returns 0 if yes, AbilityCastError value otherwise
     */
-    AbilityUseError can_use(UseContext use_context);
+    AbilityUseError can_use(UseContext& use_context);
 
     /**
      * Ability preparation - Here should go initialization code such as setting up helper nodes
@@ -77,6 +77,12 @@ public:
     virtual void onCast(){};
     virtual void onTick(){};
     virtual void onCooldownChange(){};
+
+    void xdd(Entity *ent)
+    {
+        this->old_owner = this->owner;
+        this->owner.reset(ent);
+    }
 
     void _notification(int p_notification);
 

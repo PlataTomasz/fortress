@@ -4,7 +4,7 @@
 
 AbilityUseError ResourceCostAURCL::evaluate_impl(AbilityUseData data)
 {
-    UseContext use_context = data.use_context;
+    UseContext& use_context = data.use_context;
     Entity* user = use_context.get_user();
     Ability* ability = data.ability;
 

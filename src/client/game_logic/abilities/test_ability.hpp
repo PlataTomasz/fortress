@@ -7,7 +7,7 @@ class TestAbility : public Ability
 {
 
 public:
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
     TestAbility();
 };
 

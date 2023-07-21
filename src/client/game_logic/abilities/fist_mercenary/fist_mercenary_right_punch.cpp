@@ -1,6 +1,6 @@
 #include "fist_mercenary_right_punch.hpp"
 
-void FistMercenaryRightPunchAbility::use_impl(UseContext use_context)
+void FistMercenaryRightPunchAbility::use_impl(UseContext& use_context)
 {
     /*
     Deal damage and knock back enemy hit.

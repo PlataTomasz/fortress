@@ -6,7 +6,7 @@
 
 class FistMercenaryBasicAttackAbility : public BasicAttackAbility
 {
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
 
 public:
     void ready_impl() override;

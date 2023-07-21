@@ -21,7 +21,7 @@ private:
     Area3D* effect_area = nullptr;
 
 
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
     void on_ability_hit(const AbilityHitData& hit_data);
 protected:
 public:

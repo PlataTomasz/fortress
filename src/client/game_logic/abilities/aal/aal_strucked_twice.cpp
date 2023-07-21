@@ -3,7 +3,7 @@
 #include <scene/resources/sphere_shape_3d.h>
 #include <client/string_names/game_string_names.h>
 
-void AalStruckedTwice::use_impl(UseContext use_context)
+void AalStruckedTwice::use_impl(UseContext& use_context)
 {
     const double radius_sq = 15*15;
 

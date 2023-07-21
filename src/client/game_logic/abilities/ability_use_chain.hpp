@@ -12,13 +12,13 @@ enum AbilityUseError;
 struct AbilityUseData
 {
     Ability* ability;
-    UseContext use_context;
+    UseContext& use_context;
 };
 
 class AbilityUseRCL : public RCL<AbilityUseError, AbilityUseData>
 {
 public:
-    AbilityUseRCL(String identifier) : RCL(identifier)
+    AbilityUseRCL()
     {
 
     }
@@ -29,7 +29,7 @@ class ResourceCostAURCL : public AbilityUseRCL
 protected:
     AbilityUseError evaluate_impl(AbilityUseData data) override;
 public:
-    ResourceCostAURCL(String identifier) : AbilityUseRCL(identifier)
+    ResourceCostAURCL(String identifier)
     {
         
     }
@@ -42,7 +42,7 @@ protected:
 public:
     AbilityUseError evaluate(AbilityUseData data);
 
-    CooldownAURCL(String identifier) : AbilityUseRCL(identifier)
+    CooldownAURCL(String identifier)
     {
         
     }

@@ -78,7 +78,9 @@ public:
     {
         return *obj;
     }
-    
+    /**
+     * Objects are same if they are storing the same pointer
+    */
     bool operator==(const ObjectPtr& other)
     {
         return is_valid() && obj == other.obj;
@@ -92,11 +94,6 @@ public:
     ObjectPtr& operator=(ObjectPtr& other)
     {
         this->reset(other.get());
-    }
-
-    ObjectPtr& operator=(T* rhs)
-    {
-        reset(rhs);
         return *this;
     }
 
@@ -110,7 +107,7 @@ public:
     operator Variant()
     {
         //Make sure variant will store valid object - If not, empty variant
-        if(Object *object = get())
+        if(Object *object = get_valid())
         {
             return Variant(object);
         }
@@ -127,11 +124,11 @@ public:
         //Checking if such path is valid
         ERR_FAIL_NULL_MSG(window, "ObjectPtr creation error - Scene tree root is invalid!");
         //Dynamic cast beacuse we don't know type of - Maybe use get_class_name() instead?
-        Object *obj = Object::cast_to<Object*>(window->get_node(node_path));
-        ERR_FAIL_NULL_MSG(obj, "ObjectPtr creation error - Object path is invalid or node doesn't extend template type!");
+        Object *scene_node = Object::cast_to<Object*>(window->get_node(node_path));
+        ERR_FAIL_NULL_MSG(scene_node, "ObjectPtr creation error - Object path is invalid or node doesn't extend template type!");
         
-        this->obj = obj;
-        this->objId = obj->get_instance_id();
+        this->obj = scene_node;
+        this->objId = scene_node->get_instance_id();
     }
 
 
@@ -140,7 +137,6 @@ public:
     //Move
     ObjectPtr(ObjectPtr&& objectPtr)
     {
-        //TODO: How does move constructor work?
         this->reset(objectPtr.obj);
     }
 
@@ -151,9 +147,9 @@ public:
         reset(objectPtr.obj);
     }
 
-    ObjectPtr(T *obj)
+    ObjectPtr(T *_obj)
     {
-        reset(obj);
+        reset(_obj);
     }
 };
 

@@ -13,7 +13,7 @@ class BasicAttackAbility : public Ability
 protected:
     Area3D* hitbox;
 public:
-    virtual void use_impl(UseContext use_context);
+    virtual void use_impl(UseContext& use_context);
     virtual void initialize(){};
 
     BasicAttackAbility();

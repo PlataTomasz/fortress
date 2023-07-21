@@ -13,7 +13,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Dictionary damage_data)
     {
         StatusEffect* status_effect = ent->get_status_effect("aal_discharge");
 
-        if(status_effect == nullptr)
+        if(status_effect != nullptr)
         {
             //Deal damage if attempt to apply more than maximum stacks and purge them
             if(status_effect->get_current_stacks() < 3)

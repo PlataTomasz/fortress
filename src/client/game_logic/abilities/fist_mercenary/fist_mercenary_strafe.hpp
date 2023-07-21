@@ -12,7 +12,7 @@ class FistMercenaryStrafeAbility: public Ability
 protected:
     double dash_range = 0.4;
 
-    void use_impl(UseContext use_context) override;
+    void use_impl(UseContext& use_context) override;
 public:
     FistMercenaryStrafeAbility();
 };

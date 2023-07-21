@@ -20,7 +20,7 @@ bool is_in_iterable(T iterable, void* element)
     return false;
 }
 
-void FistMercenaryBasicAttackAbility::use_impl(UseContext use_context)
+void FistMercenaryBasicAttackAbility::use_impl(UseContext& use_context)
 {
     Entity* user = use_context.get_user();
 
