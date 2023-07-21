@@ -24,6 +24,7 @@ enum AbilityUseError
 
 class Ability : public Object
 {
+GDCLASS(Ability, Object);
 protected:
 
     ObjectPtr<Entity> owner;

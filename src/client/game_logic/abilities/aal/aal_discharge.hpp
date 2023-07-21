@@ -16,7 +16,7 @@ private:
     void set_owner_callback() override;
 protected:
 public:
-    void on_entity_take_damage(Entity* ent, Dictionary dictionary);
+    void on_entity_take_damage(Entity* ent, Ref<DamageObject> damage_object);
 };
 
 #endif // AAL_ABOVE_DECREE_HPP_INCLUDED

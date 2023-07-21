@@ -10,6 +10,7 @@ class NavigationAgent3D;
 */
 class MovingEntity : public Entity
 {
+GDCLASS(MovingEntity, Entity);
 protected:
     NavigationAgent3D* nav_agent = nullptr;
     //How big is entity for pathfinding purposes?
