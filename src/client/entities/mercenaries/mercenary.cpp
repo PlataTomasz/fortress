@@ -6,21 +6,22 @@
 Mercenary::Mercenary()
 {
     DISABLE_IN_EDITOR();
-
-    abilitySet[0] = new TestAbility();
-    abilitySet[1] = new TestAbility();
-    abilitySet[2] = new TestAbility();
-    abilitySet[3] = new TestAbility();
-    abilitySet[4] = new TestAbility();
-
+    
+    set_ability(ABILITY_PASSIVE, memnew(TestAbility));
+    set_ability(ABILITY_FIRST, memnew(TestAbility));
+    set_ability(ABILITY_SECOND, memnew(TestAbility));
+    set_ability(ABILITY_THIRD, memnew(TestAbility));
+    set_ability(ABILITY_ULTIMATE, memnew(TestAbility));
+    
     stats.movementSpeed.set_initial_value(2);
 
     connect("ready", callable_mp(this, &Mercenary::initialize));
     //connect("physics_frame", callable_mp(this, &Mercenary::physics_frame));
 }
 
-void Mercenary::use_ability(int ability_id, UseContext& use_context)
+void Mercenary::use_ability(AbilitySetIndex ability_id, UseContext use_context)
 {
+    print_line(abilitySet[ability_id]->get_instance_id());
     abilitySet[ability_id]->use(use_context);
 }
 

@@ -3,13 +3,10 @@
 #include <client/string_names/game_string_names.h>
 
 //FIXME: Compiler error because DamageObject doesn't extend Object class. Look for workaround, alternative storage or just extend Object class.
-void AalDischarge::on_entity_take_damage(Entity *ent, Dictionary damage_data)
+void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_object)
 {
-    DamageObject damage_object(damage_data);
-    ERR_FAIL_COND(!damage_object.is_valid());
-
     //Checking if we inflicted damage
-    if(owner == damage_object.inflictor)
+    if(owner == damage_object->inflictor)
     {
         StatusEffect* status_effect = ent->get_status_effect("aal_discharge");
 

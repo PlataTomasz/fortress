@@ -198,9 +198,10 @@ public:
         return bonus;
     }
 
-    Stat operator=(const double& value)
+    Stat& operator=(const double& value)
     {
         initial_value = value;
+        return *this;
     }
     
 

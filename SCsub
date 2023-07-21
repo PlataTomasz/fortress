@@ -13,8 +13,8 @@ sh_src_dir = src_dir+"shared/"
 env_zip = env_modules.Clone()
 env_zip.Append(CPPPATH=["src/"])
 
-if methods.get_cmdline_bool("werror_game", False):
-    env_zip.Append(CCFLAGS=["-Werror"])
+if methods.get_cmdline_bool("quality_game_code", True):
+    env_zip.Append(CCFLAGS=["-Werror=return-type"])
 
 if methods.get_cmdline_bool("debug_game", False):
     env_zip.Append(CCFLAGS=["-g"])

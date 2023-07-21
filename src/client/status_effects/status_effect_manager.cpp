@@ -151,6 +151,8 @@ StatusEffect *StatusEffectManager::apply_status_effect(String status_effect_name
     {
         return nullptr;
     }
+    //FIXME: Currently returns nullptr
+    return nullptr;
 }
 
 void StatusEffectManager::load_data_from_directory()

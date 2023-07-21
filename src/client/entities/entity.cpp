@@ -50,9 +50,9 @@ void Entity::_bind_methods()
     //ADD_SIGNAL(MethodInfo("health_change", PropertyInfo(Variant::FLOAT, "value")));
     ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_HEALTH_CHANGE, PropertyInfo(Variant::FLOAT, "new_health"), PropertyInfo(Variant::FLOAT, "old_health")));
     //Entity will die soon
-    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->PRE_DEATH, PropertyInfo(Variant::PACKED_BYTE_ARRAY, "death_cause")));
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->PRE_DEATH, PropertyInfo(Variant::OBJECT, "death_cause")));
     //Entity died
-    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DEATH, PropertyInfo(Variant::PACKED_BYTE_ARRAY, "death_cause")));
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DEATH, PropertyInfo(Variant::OBJECT, "death_cause")));
 
     ClassDB::bind_method(D_METHOD("_shared_ready"), &Entity::_shared_ready);
 

@@ -12,6 +12,16 @@
 class Mercenary : public MovingEntity
 {
 GDCLASS(Mercenary, MovingEntity);
+public:
+    enum AbilitySetIndex
+    {
+        ABILITY_PASSIVE = 0,
+        ABILITY_FIRST,
+        ABILITY_SECOND,
+        ABILITY_THIRD,
+        ABILITY_ULTIMATE,
+        ABILITY_MAX
+    };
 
 private:
     
@@ -22,23 +32,14 @@ protected:
      * [4] - Ultimate
     */
     Ability* basic_attack_ability;
-    Ability* abilitySet[5];
+    Ability* abilitySet[AbilitySetIndex::ABILITY_MAX];
 
     static void _bind_methods();
 public:
-    enum AbilitySetIndex
-    {
-        ABILITY_PASSIVE,
-        ABILITY_FIRST,
-        ABILITY_SECOND,
-        ABILITY_THIRD,
-        ABILITY_ULTIMATE,
-        ABILITY_MAX
-    };
 
     void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
 
-    void use_ability(int ability_id, UseContext& use_context);
+    void use_ability(AbilitySetIndex ability_id, UseContext use_context);
     void use_basic_attack(UseContext& use_context);
 
     void initialize();
