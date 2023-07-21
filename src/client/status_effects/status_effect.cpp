@@ -8,7 +8,7 @@ Entity *StatusEffect::get_target()
     return target;
 }
 
-void StatusEffect::set_target(Entity* target)
+void StatusEffect::set_target(Entity* new_target)
 {
     //Disallow change of owner if it was already set
     /*
@@ -17,7 +17,7 @@ void StatusEffect::set_target(Entity* target)
         this->target = target;
     }
     */
-   this->target = target;
+   this->target = new_target;
 }
 
 void StatusEffect::add_stacks(int stack_count)

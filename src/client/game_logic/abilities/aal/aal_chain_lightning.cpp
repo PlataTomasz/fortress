@@ -10,7 +10,7 @@ void AalChainLightning::use_impl(UseContext& use_context)
     - Targets near that target takes damage aswell
     */
    
-    Entity* ent = nullptr;
+    //Entity* ent = nullptr;
     //Vector<Entity*> entities = hitbox->get_colliding_entities();
     TypedArray<Area3D> entities = hitbox->get_overlapping_areas();
 

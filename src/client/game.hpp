@@ -36,7 +36,8 @@ public:
     void onChildExitTree(Node* node)
     {
         //Detecting if GameMap was removed for some reason(why?)
-        if(GameMap* ent = Object::cast_to<GameMap>(node))
+        //TODO: Involve ObjectPtr class instead
+        if(Object::cast_to<GameMap>(node))
         {
             gameMap = nullptr;
         }

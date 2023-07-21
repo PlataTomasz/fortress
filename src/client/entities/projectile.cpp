@@ -18,7 +18,7 @@ void Projectile::movementProcess()
     auto rotation = get_rotation();
 
     auto angleRad = rotation.y; //Alpha angle
-    auto invertedAngleRad = M_PI - rotation.y; //Beta angle
+    //auto invertedAngleRad = M_PI - rotation.y; //Beta angle
 
     /*
     // This block causes entities to simulate circular movement

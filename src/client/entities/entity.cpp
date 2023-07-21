@@ -242,10 +242,10 @@ void Entity::take_damage(DamageObject damage_object)
         kill(damage_object.inflictor);
     }
 }
-
+//TODO: Replace with ObjectPtr
 void Entity::add_child_notify(Node* node)
 {
-    if(Ability* ability = dynamic_cast<Ability*>(node))
+    if(dynamic_cast<Ability*>(node))
     {
     
     }

@@ -14,18 +14,20 @@ class Client;
 class Game;
 
 
-
+[[maybe_unused]]
 static SceneTree* get_scene_tree()
 {
     SceneTree* sceneTreeSingleton = (SceneTree*)SceneTree::get_singleton();
     return sceneTreeSingleton;
 }
 
+[[maybe_unused]]
 static Client* get_client()
 {
     return (Client*)get_scene_tree()->get_root()->get_node(NodePath("Client"));
 }
 
+[[maybe_unused]]
 static Game* get_game()
 {
     return (Game*)get_scene_tree()->get_root()->get_node(NodePath("Client/Game"));

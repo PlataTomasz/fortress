@@ -29,7 +29,7 @@ class ResourceCostAURCL : public AbilityUseRCL
 protected:
     AbilityUseError evaluate_impl(AbilityUseData data) override;
 public:
-    ResourceCostAURCL(String identifier)
+    ResourceCostAURCL()
     {
         
     }
@@ -42,7 +42,7 @@ protected:
 public:
     AbilityUseError evaluate(AbilityUseData data);
 
-    CooldownAURCL(String identifier)
+    CooldownAURCL()
     {
         
     }

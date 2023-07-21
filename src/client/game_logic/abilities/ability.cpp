@@ -3,9 +3,9 @@
 
 void Ability::setup_ability_use_chain()
 {
-    this->ability_use_chain = new CooldownAURCL("cooldown");
+    this->ability_use_chain = new CooldownAURCL();
     this->ability_use_chain
-        ->set_next(new ResourceCostAURCL("cost"));
+        ->set_next(new ResourceCostAURCL());
 }
 
 int Ability::get_current_cooldown()
@@ -28,9 +28,9 @@ int Ability::get_cost()
     return this->cost;
 }
 
-void Ability::set_cost(int cost)
+void Ability::set_cost(int new_cost)
 {
-    this->cost = cost;
+    this->cost = new_cost;
 }
 
 AbilityUseError Ability::use(UseContext& use_context)
@@ -49,10 +49,10 @@ Entity *Ability::get_owner()
     return owner.get();
 }
 
-void Ability::set_owner(Entity *owner)
+void Ability::set_owner(Entity *new_owner)
 {
     this->old_owner = this->owner;
-    this->owner.reset(owner);
+    this->owner.reset(new_owner);
     //set_owner_callback();
 }
 

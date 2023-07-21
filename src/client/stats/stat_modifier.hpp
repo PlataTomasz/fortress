@@ -59,9 +59,9 @@ public:
     }
 
     //Setters/Getters
-    void set_initial_value(double initial_value)
+    void set_initial_value(double new_initial_value)
     {
-        this->initial_value = initial_value;
+        this->initial_value = new_initial_value;
         recalculate();
     }
 
@@ -138,9 +138,9 @@ public:
         return final_value;
     }
 
-    Stat(double initial_value)
+    Stat(double new_initial_value)
     {
-        this->initial_value = initial_value;
+        this->initial_value = new_initial_value;
         this->recalculate();
     }
 

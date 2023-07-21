@@ -119,9 +119,9 @@ public:
 
     }
 
-    StatusEffect(String name)
+    StatusEffect(String new_name)
     {
-        this->name = name;
+        this->name = new_name;
     }
 
     friend class Entity;
