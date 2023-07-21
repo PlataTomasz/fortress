@@ -115,11 +115,9 @@ Vector3 Game::screenToWorld(const Vector2 &screenPos)
 void Game::unhandled_input(const Ref<InputEvent> &event)
 {
     //Casting to InputEventMouseButton - If succeeds: It is valid type
-    const InputEventMouseButton *event_ptr = Object::cast_to<InputEventMouseButton>(event.ptr());
-    //Check if we got MouseButton input event
-    if(event_ptr)
+    if(InputEventMouseButton *input_event_mouse_btn = Object::cast_to<InputEventMouseButton>(event.ptr()))
     {
-        Vector2 screenPos = event_ptr->get_position();
+        Vector2 screenPos = input_event_mouse_btn->get_position();
         Vector3 worldPos = screenToWorld(screenPos);
 
         UseContext use_context = {
@@ -132,20 +130,20 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         //Convert screen to world cordinates
         printf("{ %f, %f, %f}\n", worldPos.x, worldPos.y, worldPos.z);
 
-        if(event_ptr->is_action_pressed("basic_attack"))
+        if(input_event_mouse_btn->is_action_pressed("basic_attack"))
         {
             std::cout<<"ATTACK_ACTION"<<std::endl;
 
             player->controlledEntity->use_basic_attack(use_context);
         }
-        else if(event_ptr->is_action_pressed("movement"))
+        else if(input_event_mouse_btn->is_action_pressed("movement"))
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
             player->controlledEntity->set_movement_target_position(worldPos);
             //TODO: Send propper movement command - Check AStar Node
         }
     }
-    else if(const InputEventKey *event_ptr = Object::cast_to<InputEventKey>(event.ptr()))
+    else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))
     {
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
@@ -156,22 +154,22 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
             Vector<Entity*>()
         };
 
-        if(event_ptr->is_action_pressed("cast_ability_1"))
+        if(input_event_key->is_action_pressed("cast_ability_1"))
         {
             printf("Q press\n");
             player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, use_context);
         }
-        else if(event_ptr->is_action_pressed("cast_ability_2"))
+        else if(input_event_key->is_action_pressed("cast_ability_2"))
         {
             printf("W press\n");
             player->controlledEntity->use_ability(Mercenary::ABILITY_SECOND, use_context);
         }
-        else if(event_ptr->is_action_pressed("cast_ability_3"))
+        else if(input_event_key->is_action_pressed("cast_ability_3"))
         {
             printf("E press\n");
             player->controlledEntity->use_ability(Mercenary::ABILITY_THIRD, use_context);
         }
-        else if(event_ptr->is_action_pressed("cast_ability_4"))
+        else if(input_event_key->is_action_pressed("cast_ability_4"))
         {
             printf("R press\n");
             player->controlledEntity->use_ability(Mercenary::ABILITY_ULTIMATE, use_context);

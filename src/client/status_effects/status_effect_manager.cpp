@@ -181,7 +181,7 @@ void StatusEffectManager::load_data_from_directory()
         if(fileName.ends_with(".json"))
         {
             printf("%s\n", fileName.ascii().get_data());
-            Error readErr;
+            Error readErr = Error::OK;
 
             Ref<FileAccess> file = FileAccess::open(dir->get_current_dir()+"/"+fileName, FileAccess::READ);
 

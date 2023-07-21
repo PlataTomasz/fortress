@@ -9,9 +9,9 @@ TundraBall *TundraSpikyBallStatus::getBallInstance()
     return tundraBall;
 }
 
-void TundraSpikyBallStatus::setBallInstance(TundraBall *tundraBall)
+void TundraSpikyBallStatus::setBallInstance(TundraBall *new_tundra_ball)
 {
-    this->tundraBall = tundraBall;
+    this->tundraBall = new_tundra_ball;
 }
 
 void TundraSpikyBallStatus::onApply()
@@ -20,7 +20,7 @@ void TundraSpikyBallStatus::onApply()
     
     //TundraBall* instance = new TundraBall(this->getTarget());
     TundraBall* instance = memnew(TundraBall);
-    instance->setOwner(this->get_target());
+    instance->set_owner(this->get_target());
     instance->set_name("TundraBall");
     setBallInstance(instance);
     

@@ -18,9 +18,9 @@ public:
     void _physics_process(double delta);
     void ready();
     
-    void setOwner(Entity* owner)
+    void set_owner(Entity* new_owner)
     {
-        this->owner = owner;
+        this->owner = new_owner;
     }
 
     TundraBall()

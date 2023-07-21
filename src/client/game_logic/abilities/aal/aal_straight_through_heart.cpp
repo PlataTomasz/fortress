@@ -11,7 +11,7 @@ AalStraightThroughHeart::AalStraightThroughHeart()
     //Preload content
     lightning_mesh = ResourceLoader::load("res://vfx/aal_stth.tscn");
 
-    double hit_area_width = 2.0;
+    hit_area_width = 2.0;
 
     setup_hitboxes();
     setup_visuals();

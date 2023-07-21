@@ -47,8 +47,8 @@ public:
     ) :
         user{_user},
         use_position{_use_position},
-        target_entities{_target_entities},
-        target_positions{_target_positions}
+        target_positions{_target_positions},
+        target_entities{_target_entities}
     {
         
     }

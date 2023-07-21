@@ -22,10 +22,10 @@ void TundraChainLashAbility::use(UseContext& use_context)
     Entity* caster = use_context.get_user();
 
     //Maybe buff/debuff under the hood?
-    TundraBall* tundraBall;
+    //TundraBall* tundraBall;
 
     float hitboxWidth = 30.0f;
-    float hitboxLength = use_context.get_user()->get_position().distance_to(tundraBall->get_position());
+    float hitboxLength = 0;
 
     hitboxShape->set_size(Vector3(hitboxWidth, 0, hitboxLength));
 

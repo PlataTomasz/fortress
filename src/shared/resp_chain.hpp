@@ -146,14 +146,14 @@ public:
     /**
      * Finds responsibility chain link based on It's identifier.
     */
-    RCL<RetType, ArgType>* find_link(String identifier)
+    RCL<RetType, ArgType>* find_link(String _identifier)
     {
         RCL<RetType, ArgType>* first = this->get_first_link();
         RCL<RetType, ArgType>* link = this->next;
 
         while(link != nullptr)
         {
-            if(this->identifier == identifier)
+            if(this->identifier == _identifier)
             {
                 return link;
             }

@@ -24,7 +24,7 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext& use_context)
 {
     Entity* user = use_context.get_user();
 
-    Entity* target = nullptr;
+    //Entity* target = nullptr;
 
     //Looks non elegant - Probably the only solution? 
     TypedArray<Area3D> colliders = hitbox->get_overlapping_areas();
