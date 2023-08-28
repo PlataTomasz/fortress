@@ -139,7 +139,7 @@ public:
     void on_collision(Area3D *collider);
     Area3D* get_hitbox();
 
-    void take_damage(DamageObject damage_object);
+    void take_damage(Ref<DamageObject> damage_object);
 
     void add_child_notify(Node* node) override;
 

@@ -3,9 +3,13 @@
 
 #include <client/game_logic/abilities/active_ability.hpp>
 
+/**
+ * Active: Next basic attack causes lightning to chain from hit target to nearby enemies dealing damage to all nearby units.
+*/
 class AalChainLightning : public ActiveAbility
 {
 private:
+    //Effect radius
     Area3D* hitbox;
 protected:
 public:

@@ -86,6 +86,11 @@ public:
         return is_valid() && obj == other.obj;
     }
 
+    bool operator==(const void *ptr)
+    {
+        return obj == ptr;
+    }
+
     operator bool() const
     {
         return this->is_valid();

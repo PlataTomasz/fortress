@@ -11,6 +11,8 @@
 #include <scene/main/viewport.h>
 #include <core/config/engine.h>
 #include <client/status_effects/status_effect_manager.hpp>
+#include <core/object/object.h>
+#include <client/string_names/game_string_names.h>
 
 #include <core/input/input_event.h>
 
@@ -179,5 +181,6 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
 
 void Game::_bind_methods()
 {   
-
+    //Global signals
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
 }

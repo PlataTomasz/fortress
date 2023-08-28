@@ -54,6 +54,8 @@ void Entity::_bind_methods()
     //Entity died
     ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DEATH, PropertyInfo(Variant::OBJECT, "death_cause")));
 
+    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, PropertyInfo(Variant::OBJECT, "damage_object")));
+
     ClassDB::bind_method(D_METHOD("_shared_ready"), &Entity::_shared_ready);
 
     //ClassDB::bind_method(D_METHOD("onCollision"), &Entity::onCollision);
@@ -199,7 +201,7 @@ void Entity::kill(Entity* killer)
     emit_signal("post_death");
 }
 
-void Entity::take_damage(DamageObject damage_object)
+void Entity::take_damage(Ref<DamageObject> damage_object)
 {
     /*
     //Entity is dead, damage won't apply
@@ -211,23 +213,23 @@ void Entity::take_damage(DamageObject damage_object)
 
     double current_health = stats.health.get_current_value();
 
-    switch(damage_object.type)
+    switch(damage_object->type)
     {
         case DAMAGE_PHYSICAL:
         {
-            final_damage = damage_object.value * 100/(stats.physicalResistance+100);
+            final_damage = damage_object->value * 100/(stats.physicalResistance+100);
         }
         break;
 
         case DAMAGE_MAGICAL:
         {
-            final_damage = damage_object.value * 100/(stats.magicResistance+100);
+            final_damage = damage_object->value * 100/(stats.magicResistance+100);
         }
         break;
 
         default:
         {
-            final_damage = damage_object.value;
+            final_damage = damage_object->value;
         }
     }
 
@@ -236,10 +238,11 @@ void Entity::take_damage(DamageObject damage_object)
     stats.health.set_current_value(current_health);
 
     emit_signal("health_change");
+    emit_signal(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, this, damage_object);
 
     if(current_health <= 0)
     {
-        kill(damage_object.inflictor);
+        kill(damage_object->inflictor);
     }
 }
 //TODO: Replace with ObjectPtr

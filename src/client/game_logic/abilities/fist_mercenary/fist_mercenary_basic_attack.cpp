@@ -87,11 +87,14 @@ void FistMercenaryBasicAttackAbility::use_impl(UseContext& use_context)
         //NOTE: We assume that hitbox is direct child of Entity node
         Entity* ent = (Entity*)closest_collider->get_parent();
 
-        ent->take_damage({
-            DAMAGE_PHYSICAL,
-            50,
-            this->owner.get()
-        });
+        ent->take_damage(
+            Ref<DamageObject>(memnew(DamageObject(
+                    DamageType::DAMAGE_PHYSICAL,
+                    50,
+                    this->owner.get()
+                )
+            ))
+        );
     }
     else
     {

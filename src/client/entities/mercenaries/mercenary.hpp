@@ -34,16 +34,28 @@ protected:
     Ability* basic_attack_ability;
     Ability* abilitySet[AbilitySetIndex::ABILITY_MAX];
 
+    int xp = 0;
+    int level = 1;
+
     static void _bind_methods();
 public:
+    //Character level
+    void set_level(int new_level);
+    int get_level();
+
+    //Experience 
+    void set_xp(int new_xp);
+    int get_xp();
 
     void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
 
     void use_ability(AbilitySetIndex ability_id, UseContext use_context);
     void use_basic_attack(UseContext& use_context);
 
+    void _notification(int notification);
+
     void initialize();
-    void physics_frame();
+    void tick();
 
     Mercenary();
     ~Mercenary();

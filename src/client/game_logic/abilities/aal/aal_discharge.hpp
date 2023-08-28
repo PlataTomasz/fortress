@@ -13,6 +13,7 @@ private:
     float time_window = 2.5;
 
     void ready_impl() override;
+    //Owner changed callback
     void set_owner_callback() override;
 protected:
 public:
