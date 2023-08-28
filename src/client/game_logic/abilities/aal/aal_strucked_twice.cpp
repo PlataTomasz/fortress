@@ -43,11 +43,11 @@ void AalStruckedTwice::use_impl(UseContext& use_context)
                 // Check if node is entity
                 if(parent != use_context.get_user() && parent->is_in_group(GameStringNames::get_singleton()->ENTITIES_GROUP))
                 {
-                    parent->take_damage({
+                    parent->take_damage(memnew(DamageObject(
                         DamageType::DAMAGE_MAGICAL,
                         15,
                         use_context.get_user()
-                    });
+                    )));
                 }
             }
         }

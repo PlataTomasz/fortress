@@ -12,7 +12,6 @@ private:
 public:
     float get_base_damage() { return base_damage; };
     float get_damage_per_level() { return damage_per_level; };
-
 };
 
 #endif // DAMAGING_H_INCLUDED

@@ -19,13 +19,15 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
             }
             else
             {
-                ent->take_damage({
+                DamageObject *take_damage_object = memnew(DamageObject(
                     DamageType::DAMAGE_MAGICAL,
                     //TODO: Level and XP API
                     //get_base_damage() + get_damage_per_level()*owner->get_level(),
                     get_base_damage(),
                     this->owner.get()
-                });
+                ));
+
+                ent->take_damage(take_damage_object);
                 ent->remove_status_effect(status_effect);
             }
         }
@@ -40,7 +42,12 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
 
 void AalDischarge::set_owner_callback()
 {
-    //TODO: Entity class should extend INotificator
+    if(old_owner)
+    {
+        disconnect(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, callable_mp(this, &AalDischarge::on_entity_take_damage));
+    }
+
+    owner->connect(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, callable_mp(this, &AalDischarge::on_entity_take_damage));
 }
 
 void AalDischarge::ready_impl()

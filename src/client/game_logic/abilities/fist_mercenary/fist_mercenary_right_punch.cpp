@@ -11,11 +11,13 @@ void FistMercenaryRightPunchAbility::use_impl(UseContext& use_context)
     Entity* target = use_context.get_target_entity();
     Entity* user = use_context.get_user();
 
-    target->take_damage({
-        DAMAGE_PHYSICAL,
-        100,
-        user
-    });
+    target->take_damage(
+        Ref<DamageObject>(memnew(DamageObject(
+            DAMAGE_PHYSICAL,
+            100,
+            user
+        )))
+    );
 
     target->apply_status_effect("fist_mercenary.armor_shred_ult_debuff", 4, user);
 }

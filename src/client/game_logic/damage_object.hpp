@@ -15,13 +15,13 @@ enum DamageType
 
 VARIANT_ENUM_CAST(DamageType);
 
-class DamageObject : public Resource
+class DamageObject : public RefCounted
 {
-GDCLASS(DamageObject, Resource);
+GDCLASS(DamageObject, RefCounted);
 public:
     DamageType type;
     float value = 0;
-    Entity *inflictor = 0;
+    Entity *inflictor = nullptr;
     //TODO: Type of origin - What caused damage?
     //origin;
 public:
@@ -30,6 +30,13 @@ public:
     {
 
     };
+
+    DamageObject(DamageObject& other)
+    {
+        type = other.type;
+        value = other.value;
+        inflictor = other.inflictor;
+    }
 };
 
 #endif // DAMAGE_OBJECT_HPP_INCLUDED

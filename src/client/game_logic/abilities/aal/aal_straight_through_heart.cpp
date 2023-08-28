@@ -35,11 +35,11 @@ void AalStraightThroughHeart::use_impl(UseContext& use_context)
         if(parent->is_in_group(GameStringNames::get_singleton()->ENTITIES_GROUP))
         {
             //TODO: Currently passes through all units
-            parent->take_damage({
+            parent->take_damage(memnew(DamageObject(
                 DamageType::DAMAGE_MAGICAL,
                 50,
                 this->owner.get()
-            });
+            )));
         }
     }
 

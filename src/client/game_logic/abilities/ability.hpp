@@ -76,17 +76,11 @@ public:
      * Ability preparation - Here should go initialization code such as setting up helper nodes
     */
     virtual void onCast(){};
-    virtual void onTick(){};
+    virtual void tick_impl(){};
     virtual void onCooldownChange(){};
 
-    void xdd(Entity *ent)
-    {
-        this->old_owner = this->owner;
-        this->owner.reset(ent);
-    }
-
-    void _notification(int p_notification);
-
+    void tick();
+    
     //Owner changed - You might want to do some initialization/cleanup here
     virtual void set_owner_callback(){};
 
