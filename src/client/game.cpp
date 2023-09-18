@@ -7,6 +7,7 @@
 #include <iostream>
 #include "entities/entity.hpp"
 #include "entities/mercenaries/mercenary.hpp"
+#include <client/entities/mercenaries/test_mercenary.hpp>
 #include "game_logic/abilities/use_context.hpp"
 #include <scene/main/viewport.h>
 #include <core/config/engine.h>
@@ -69,7 +70,7 @@ void Game::ready()
     printf("Done!");
 
     //Tundra *ent = memnew(Tundra);
-    Mercenary* ent = memnew(Aal);
+    Mercenary* ent = memnew(TestMercenary);
     ent->set_name("ControlledEntity");
     this->add_child(ent);
     ent->set_position(Vector3( 2, 2, 2));
