@@ -20,6 +20,9 @@
 #include "entities/mercenaries/tundra/tundra.hpp"
 #include <client/entities/mercenaries/fist_mercenary/fist_mercenary.hpp>
 #include <client/entities/mercenaries/aal/aal.hpp>
+#include <shared/registries.h>
+#include <client/game_logic/abilities/test_ability.hpp>
+#include <client/game_logic/abilities/test_ability2.hpp>
 
 Game::Game()
 {
@@ -31,6 +34,8 @@ Game::Game()
         printf("%d\n", is_processing_unhandled_input());
 
         connect("ready", callable_mp(this, &Game::ready));
+
+        initialize_registries();
     }
 }
 
@@ -70,7 +75,11 @@ void Game::ready()
     printf("Done!");
 
     //Tundra *ent = memnew(Tundra);
-    Mercenary* ent = memnew(TestMercenary);
+
+    //Note: get_item() might return NULL
+    //TODO: Handle NULL case
+    Mercenary* ent = Registries::get_singleton()->MERCENARIES.get_item(GameStringNames::get_singleton()->SWORD_MERCENARY);
+
     ent->set_name("ControlledEntity");
     this->add_child(ent);
     ent->set_position(Vector3( 2, 2, 2));
@@ -95,6 +104,24 @@ void Game::ready()
     camera->startFollowingNode(ent);
 }
 
+void Game::initialize_registries()
+{
+    //Mercenaries
+    Ability *SWORD_MERCENARY_ABILITIES[Mercenary::ABILITY_MAX] = {new TestAbility2(), new TestAbility(), new TestAbility2(), new TestAbility2(), new TestAbility2()};
+    Registries::get_singleton()->MERCENARIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY, memnew(Mercenary(SWORD_MERCENARY_ABILITIES)));
+
+    //Basic attack providers
+
+
+    //Abilities
+    /*
+    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_PASSIVE_ABILITY, new SwordMercenaryPassiveAbility());
+    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_1, new SwordMercenaryActiveAbility1());
+    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_2, new SwordMercenaryActiveAbility2());
+    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_3, new SwordMercenaryActiveAbility3());
+    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_4, new SwordMercenaryActiveAbility4());
+    */
+}
 
 Vector3 Game::screenToWorld(const Vector2 &screenPos)
 {

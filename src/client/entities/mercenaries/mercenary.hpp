@@ -57,6 +57,8 @@ public:
     void initialize();
     void tick();
 
+    Mercenary(Ability *abilities[AbilitySetIndex::ABILITY_MAX]);
+
     Mercenary();
     ~Mercenary();
 };
