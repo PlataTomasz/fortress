@@ -27,6 +27,8 @@ private:
     */
     GameMap *gameMap = nullptr;
     GameCamera *camera = nullptr;
+
+    void initialize_registries();
 public:
     Player *player;
 

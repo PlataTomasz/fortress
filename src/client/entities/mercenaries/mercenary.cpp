@@ -19,6 +19,17 @@ Mercenary::Mercenary()
     //connect("physics_frame", callable_mp(this, &Mercenary::physics_frame));
 }
 
+Mercenary::Mercenary(Ability *abilities[ABILITY_MAX])
+{
+    set_ability(ABILITY_PASSIVE, abilities[ABILITY_PASSIVE]);
+    set_ability(ABILITY_FIRST, abilities[ABILITY_FIRST]);
+    set_ability(ABILITY_SECOND, abilities[ABILITY_SECOND]);
+    set_ability(ABILITY_THIRD, abilities[ABILITY_THIRD]);
+    set_ability(ABILITY_ULTIMATE, abilities[ABILITY_ULTIMATE]);
+
+    stats.movementSpeed.set_initial_value(2);
+}
+
 void Mercenary::_notification(int notification)
 {
     switch(notification)

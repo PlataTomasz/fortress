@@ -7,6 +7,8 @@ class GameStringNames
 {
 private:
     static GameStringNames* singleton;
+
+    GameStringNames();
 protected:
 public:
     static GameStringNames* get_singleton()
@@ -29,7 +31,8 @@ public:
     StringName ON_DEATH;
     StringName ON_HEALTH_CHANGE;
 
-    GameStringNames();
+    //Mercenaries
+    StringName SWORD_MERCENARY;
 };
 
 #endif // GAME_STRING_NAMES_H_INCLUDED
