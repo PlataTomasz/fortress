@@ -19,6 +19,9 @@ if methods.get_cmdline_bool("quality_game_code", True):
 if methods.get_cmdline_bool("debug_game", False):
     env_zip.Append(CCFLAGS=["-g"])
 
+# Non-elegant but without this project won't build with networking headers
+env_zip.Prepend(CPPPATH=["#thirdparty/enet/"])
+
 sources = Glob("*.cpp")
 
 sources += Glob("src/*.cpp")

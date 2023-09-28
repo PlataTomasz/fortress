@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5x2604j3junu"]
+
+[ext_resource type="Script" path="res://ConnectButton.gd" id="1_8vw2m"]
+
+[node name="App" type="Node"]
+
+[node name="Server" type="Server" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+editor_description = ""
+script = null
+
+[node name="Client" type="Client" parent="."]
+
+[node name="ConnectButton" type="Button" parent="Client"]
+offset_left = 64.0
+offset_top = 24.0
+offset_right = 136.0
+offset_bottom = 55.0
+text = "Connect"
+script = ExtResource("1_8vw2m")
+
+[node name="ServerAddress" type="Label" parent="Client"]
+offset_right = 200.0
+offset_bottom = 23.0
