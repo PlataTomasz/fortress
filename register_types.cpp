@@ -37,6 +37,8 @@
 #include "src/client/game_map.hpp"
 #include <client/ui/entity_status_bar.hpp>
 
+#include <server/server.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -50,6 +52,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<GameCamera>();
     ClassDB::register_class<GameMap>();
     ClassDB::register_class<EntityStatusBar3D>();
+
+    ClassDB::register_class<Server>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
