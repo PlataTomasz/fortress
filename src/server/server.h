@@ -14,8 +14,6 @@ class Server : public Node
 GDCLASS(Server, Node);
 private:
     Ref<ENetConnection> connection;
-    //Server peer
-    Ref<ENetMultiplayerPeer> multiplayer_peer;
 protected:
     void _notification(int notification)
     {
@@ -38,23 +36,26 @@ protected:
         }
     }
 public:
+    void send_packet_to_all()
+    {
+
+    }
+
+    void send_packet(Ref<ENetPacketPeer> target)
+    {
+
+    }
+
     void ready()
     {
         int server_port = 7654;
 
         //Setup networking
-        multiplayer_peer = Ref<ENetMultiplayerPeer>(memnew(ENetMultiplayerPeer));
-        Error err = multiplayer_peer->create_server(server_port, 32, 3);
-
-        multiplayer_peer->connect("peer_connected", callable_mp(this, &Server::on_peer_connect));
-        multiplayer_peer->connect("peer_disconnected", callable_mp(this, &Server::on_peer_disconnect));
+        connection = Ref<ENetConnection>(memnew(ENetConnection));
+        Error err = connection->create_host_bound((IPAddress)("*"), server_port, 32, 3);
 
         if(err == Error::OK)
         {
-            Ref<MultiplayerAPI> multiplayer_api = MultiplayerAPI::create_default_interface();
-            multiplayer_api->set_multiplayer_peer(multiplayer_peer);
-
-            this->get_tree()->set_multiplayer(multiplayer_api, NodePath("/Client/Server"));
             print_line("Server is listening on port", server_port);
         }
         else
@@ -63,15 +64,19 @@ public:
         }
     }
 
-    void on_peer_connect(int id)
+    void on_peer_connect(Ref<ENetPacketPeer> peer)
     {
-        print_line("Connected ", id);
-        multiplayer_peer->set_target_peer(MultiplayerPeer::TARGET_PEER_BROADCAST);
+        print_line("Connected ");
+        String str = "wololo!";
+        peer->put_packet(str.to_ascii_buffer().ptr(), str.to_ascii_buffer().size());
+        //connection->put_packet(str.to_ascii_buffer().ptr(), str.to_ascii_buffer().size());
+
     }
 
-    void on_peer_disconnect(int id)
+    void on_peer_disconnect(Ref<ENetPacketPeer> peer)
     {
-        print_line("Disconnected ", id);
+        print_line("Disconnected ");
+        
     }
 
     void process()
@@ -79,20 +84,29 @@ public:
         //Read incoming network data and schedule GameCmd to avoid blocking
         //multiplayer_peer->poll();
 
+        //Parse ENet event
+        ENetConnection::Event enet_event;
 
-
-        String str = "wololo!";
-        multiplayer_peer->put_packet(str.to_ascii_buffer().ptr(), str.to_ascii_buffer().size());
-
-        if(int packet_count = multiplayer_peer->get_available_packet_count() > 0)
+        switch (connection->service(0, enet_event))
         {
-            for(int i = 0;i<packet_count;i++)
+            case ENetConnection::EventType::EVENT_CONNECT:
             {
-                const uint8_t *buffer;
-                int buffer_size;
+                on_peer_connect(enet_event.peer);
+            }
+            break;
 
-                multiplayer_peer->get_packet(&buffer, buffer_size);
+            case ENetConnection::EventType::EVENT_DISCONNECT:
+            {
+                on_peer_disconnect(enet_event.peer);
+            }
+            break;
 
+            case ENetConnection::EventType::EVENT_RECEIVE:
+            {
+                const uint8_t *buffer = enet_event.packet->data;
+                int buffer_size = enet_event.packet->dataLength;
+
+                /*
                 String str("[");
                 for (int j = 0; j < buffer_size; j++) {
                     if (j > 0) {
@@ -102,10 +116,19 @@ public:
                     str += Variant(buffer[j]).operator String();
                 }
                 str += "]";
+                */
+                String str;
+                str.parse_utf8(reinterpret_cast<const char*>(buffer), buffer_size);
 
-                print_line("Received data: ", str);
-                //TODO: Add new game event to queue here
+                //print_line("Received data: ", str);
+                //TODO: Pass received data to game
+                SGameCommand(buffer, buffer_size);
+
             }
+            break;
+            
+            default:
+                break;
         }
     }
 

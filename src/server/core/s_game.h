@@ -12,8 +12,9 @@ class SGame : public Node
 private:
     //Array of all players in-game
     SPlayer *players;
+    List<SGameCommand> game_commands;
 protected:
-
+    
 public:
     /**
      * @return Pointer to current map or nullptr if map is not set
