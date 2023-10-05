@@ -23,6 +23,7 @@
 #include <shared/registries.h>
 #include <client/game_logic/abilities/test_ability.hpp>
 #include <client/game_logic/abilities/test_ability2.hpp>
+#include <client/networking/c_game_commands.h>
 
 Game::Game()
 {
@@ -31,6 +32,7 @@ Game::Game()
     {
         //Allow node to process inputs
         set_process_unhandled_input(true);
+        set_process(true);
         printf("%d\n", is_processing_unhandled_input());
 
         connect("ready", callable_mp(this, &Game::ready));
@@ -42,6 +44,30 @@ Game::Game()
 Game::~Game()
 {
     
+}
+
+void Game::_notification(int notification)
+{
+    switch (notification)
+    {
+    case NOTIFICATION_PROCESS:
+        {
+            //Dispatch GameCommands
+            for(C_GameCommand *cmd : game_commands)
+            {
+                cmd->execute(this);
+            }
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void Game::put_game_command(C_GameCommand *gamecmd)
+{
+    game_commands.push_back(gamecmd);
 }
 
 void Game::ready()

@@ -24,7 +24,16 @@ env_zip.Prepend(CPPPATH=["#thirdparty/enet/"])
 
 sources = Glob("*.cpp")
 
+sources += Glob(sh_src_dir+"helpers/*.cpp")
+sources += Glob(sh_src_dir+"/*.cpp")
+
 sources += Glob("src/*.cpp")
+
+sources += Glob(sv_src_dir+"*.cpp")
+sources += Glob(sv_src_dir+"core/*.cpp")
+sources += Glob(sv_src_dir+"core/game_commands/*.cpp")
+sources += Glob(sv_src_dir+"networking/*.cpp")
+sources += Glob(sv_src_dir+"entities/*.cpp")
 
 sources += Glob(cl_src_dir+"*.cpp")
 sources += Glob(cl_src_dir+"status_effects/*.cpp")
@@ -41,8 +50,6 @@ sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
 sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
 sources += Glob(cl_src_dir+"string_names/*.cpp")
 sources += Glob(cl_src_dir+"ui/*.cpp")
-
-sources += Glob(sh_src_dir+"helpers/*.cpp")
 
 #env.Append(CCFLAGS=["-Wl,-rpath,'\$ORIGIN'"])
 

@@ -6,7 +6,7 @@
 
 class Entity;
 
-class SPlayer
+class S_Player
 {
 private:
     Entity *controlled_entity = nullptr;
