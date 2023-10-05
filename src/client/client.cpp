@@ -1,18 +1,27 @@
 #include "client.hpp"
 #include <scene/main/multiplayer_api.h>
+#include <shared/io/byte_reader.h>
 
 Client::Client()
 {
-    
+    set_process(true);
 }
 
 Error Client::connect_to_game_server(const String &ip, int port)
 {
-    return multiplayer_peer->create_client(ip, port, 3);
+    peer = connection->connect_to_host(ip, port, 3);
+    print_line("Peer ptr: ", peer.ptr());
+
+    return Error::OK;
 }
 
 void Client::ready()
 {
+    connection.instantiate();
+    connection->create_host(1, 3);
+
+    connect_to_game_server("localhost", 7654);
+
     /*
     //Initialize networking
 
@@ -63,7 +72,9 @@ void Client::_notification(int notification)
 
 ObjectPtr<Server> Client::create_local_game_server()
 {
-    return new Server();
+    Server *server = memnew(Server);
+
+    return server;
 }
 
 void Client::enter_tree()
@@ -71,10 +82,54 @@ void Client::enter_tree()
 
 }
 
+void Client::on_connect()
+{
+    print_line("Connected!");
+}
+
+void Client::on_disconnect()
+{
+    print_line("Disconnected!");
+}
+
+void Client::on_receive(const uint8_t *packet_data, uint64_t size)
+{
+    print_line("Received data from server!");
+    //Handle data from server
+    //HACK: Enet defines data pointer as const, but marshals methods require non const pointer, even though no write occurs
+    ByteReader bytes(const_cast<uint8_t *>(packet_data), size);
+    print_line(bytes.operator String());
+}
+
 void Client::process()
 {
     //Receive data from server
+    //Parse ENet event
+        ENetConnection::Event enet_event;
 
+        switch (connection->service(0, enet_event))
+        {
+            case ENetConnection::EventType::EVENT_CONNECT:
+            {
+                on_connect();
+            }
+            break;
+
+            case ENetConnection::EventType::EVENT_DISCONNECT:
+            {
+                on_disconnect();
+            }
+            break;
+
+            case ENetConnection::EventType::EVENT_RECEIVE:
+            {
+                on_receive(enet_event.packet->data, enet_event.packet->dataLength);
+            }
+            break;
+            
+            default:
+                break;
+        }
 }
 
 void Client::_bind_methods()

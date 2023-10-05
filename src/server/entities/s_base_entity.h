@@ -6,19 +6,19 @@
 /**
  * Serverside entity class
 */
-class SBaseEntity : public Node2D
+class S_BaseEntity : public Node2D
 {
-
+GDCLASS(S_BaseEntity, Node2D);
 private:
 
 protected:
-
+    
 public:
     /**
      * Compares this and other entities.
      * @return True if both entities have the same: Position and rotation
     */
-    bool is_equal(SBaseEntity *other);
+    bool is_equal(S_BaseEntity *other);
 };
 
 #endif // SENTITY_INLCUDED

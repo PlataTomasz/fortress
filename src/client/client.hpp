@@ -16,7 +16,12 @@ class Client : public Node
 {
 GDCLASS(Client, Node);
 private:
-    Ref<ENetMultiplayerPeer> multiplayer_peer;
+    Ref<ENetConnection> connection;
+    Ref<ENetPacketPeer> peer;
+
+    void on_connect();
+    void on_disconnect();
+    void on_receive(const uint8_t *packet_data, uint64_t size);
 public:
     void process();
     void ready();

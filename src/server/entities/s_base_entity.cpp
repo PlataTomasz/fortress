@@ -1,6 +1,6 @@
 #include "s_base_entity.h"
 
-bool SBaseEntity::is_equal(SBaseEntity *other)
+bool S_BaseEntity::is_equal(S_BaseEntity *other)
 {
     return (
         this->get_position() == other->get_position()

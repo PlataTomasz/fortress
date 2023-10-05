@@ -38,6 +38,9 @@
 #include <client/ui/entity_status_bar.hpp>
 
 #include <server/server.h>
+#include <server/core/s_game.h>
+#include <server/core/s_game_level.h>
+#include <server/entities/s_base_entity.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -53,7 +56,12 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<GameMap>();
     ClassDB::register_class<EntityStatusBar3D>();
 
+    //Server classes - needed for build with locally hosted server
     ClassDB::register_class<Server>();
+    ClassDB::register_class<S_Game>();
+    ClassDB::register_class<S_GameLevel>();
+    ClassDB::register_class<S_BaseEntity>();
+    //ClassDB::register_class<>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)

@@ -2,6 +2,8 @@
 #include <scene/3d/navigation_agent_3d.h>
 #include <math.h>
 
+#include <client/networking/c_game_commands.h>
+
 MovingEntity::MovingEntity()
 {
     //Setup navigation agent
@@ -38,7 +40,8 @@ void MovingEntity::movement_process_frame()
 
 void MovingEntity::set_movement_target_position(Vector3 target_pos)
 {
-    nav_agent->set_target_position(target_pos);
+    //nav_agent->set_target_position(target_pos);
+    //C_GameCommandMovement(netid);
 }
 
 Vector3 MovingEntity::get_movement_target_position()

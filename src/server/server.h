@@ -6,6 +6,8 @@
 #include <scene/main/multiplayer_api.h>
 #include <modules/enet/enet_multiplayer_peer.h>
 
+#include <server/core/game_commands/s_game_command_factory.h>
+
 /**
  * Server is a node responsible for managing connections, sending and handling data over network.
 */
@@ -14,6 +16,7 @@ class Server : public Node
 GDCLASS(Server, Node);
 private:
     Ref<ENetConnection> connection;
+    S_Game *game = nullptr;
 protected:
     void _notification(int notification)
     {
@@ -31,27 +34,48 @@ protected:
                 break;
             }
 
+            /*
+            //BUG: Node is deleted anyways
+            case NOTIFICATION_PREDELETE:
+            {
+                cancel_free();
+                String err = "Node {} refuses to be deleted!";
+                err.format(this);
+                print_error(err);
+            }
+            break;
+            */
             default:
                 break;
         }
     }
 public:
-    void send_packet_to_all()
+    void send_data_to_all(const uint8_t *packet_data, uint64_t size)
     {
 
+        List<Ref<ENetPacketPeer>> peers;
+        connection->get_peers(peers);
+        for(Ref<ENetPacketPeer> peer : peers)
+        {
+            peer->put_packet(packet_data, size);
+        }
     }
 
-    void send_packet(Ref<ENetPacketPeer> target)
+    void send_data(Ref<ENetPacketPeer> target, const uint8_t *packet_data, uint64_t size)
     {
-
+        target->put_packet(packet_data, size);
     }
 
     void ready()
     {
+        game = reinterpret_cast<S_Game*>(get_node(NodePath("Game")));
+
         int server_port = 7654;
 
         //Setup networking
-        connection = Ref<ENetConnection>(memnew(ENetConnection));
+        connection = Ref<ENetConnection>();
+        connection.instantiate(); //Same as using memnew
+
         Error err = connection->create_host_bound((IPAddress)("*"), server_port, 32, 3);
 
         if(err == Error::OK)
@@ -68,16 +92,17 @@ public:
     {
         print_line("Connected ");
         String str = "wololo!";
-        peer->put_packet(str.to_ascii_buffer().ptr(), str.to_ascii_buffer().size());
-        //connection->put_packet(str.to_ascii_buffer().ptr(), str.to_ascii_buffer().size());
-
+        PackedByteArray ascii = str.to_ascii_buffer();
+        send_data_to_all(ascii.ptr(), ascii.size());
     }
 
     void on_peer_disconnect(Ref<ENetPacketPeer> peer)
     {
-        print_line("Disconnected ");
+        print_line("Disconnected");
         
     }
+
+    void on_receive(const uint8_t *packet_data, uint64_t size);
 
     void process()
     {
@@ -103,27 +128,7 @@ public:
 
             case ENetConnection::EventType::EVENT_RECEIVE:
             {
-                const uint8_t *buffer = enet_event.packet->data;
-                int buffer_size = enet_event.packet->dataLength;
-
-                /*
-                String str("[");
-                for (int j = 0; j < buffer_size; j++) {
-                    if (j > 0) {
-                        str += ", ";
-                    }
-
-                    str += Variant(buffer[j]).operator String();
-                }
-                str += "]";
-                */
-                String str;
-                str.parse_utf8(reinterpret_cast<const char*>(buffer), buffer_size);
-
-                //print_line("Received data: ", str);
-                //TODO: Pass received data to game
-                SGameCommand(buffer, buffer_size);
-
+                on_receive(enet_event.packet->data, enet_event.packet->dataLength);
             }
             break;
             
@@ -135,6 +140,7 @@ public:
 
     Server()
     {
+        //Required, so that Node can tick
         set_process(true);
     }
 };

@@ -12,6 +12,7 @@
 #include "map_loader.hpp"
 #include "game_map.hpp"
 
+class C_GameCommand;
 
 /**
  * Performs game related logic such as input handling and managing smaller components.
@@ -22,6 +23,8 @@ class Game : public Node
 GDCLASS(Game, Node);
 private:
 
+    List<C_GameCommand *> game_commands;
+
     /**
      * Current map.
     */
@@ -29,11 +32,16 @@ private:
     GameCamera *camera = nullptr;
 
     void initialize_registries();
+protected:
+    void _notification(int notification);
+
 public:
     Player *player;
 
     void ready();
     void unhandled_input(const Ref<InputEvent> &event) override;
+
+    void put_game_command(C_GameCommand *gamecmd);
 
     void onChildExitTree(Node* node)
     {
