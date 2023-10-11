@@ -12,7 +12,8 @@
 #include "map_loader.hpp"
 #include "game_map.hpp"
 
-class C_GameCommand;
+class Client;
+class C_SyncEvent;
 
 /**
  * Performs game related logic such as input handling and managing smaller components.
@@ -23,13 +24,14 @@ class Game : public Node
 GDCLASS(Game, Node);
 private:
 
-    List<C_GameCommand *> game_commands;
+    List<C_SyncEvent *> sync_events;
 
     /**
      * Current map.
     */
     GameMap *gameMap = nullptr;
     GameCamera *camera = nullptr;
+    Client *client = nullptr;
 
     void initialize_registries();
 protected:
@@ -41,7 +43,7 @@ public:
     void ready();
     void unhandled_input(const Ref<InputEvent> &event) override;
 
-    void put_game_command(C_GameCommand *gamecmd);
+    void put_sync_event(C_SyncEvent *sync_event);
 
     void onChildExitTree(Node* node)
     {

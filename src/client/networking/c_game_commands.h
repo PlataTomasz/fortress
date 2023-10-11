@@ -12,7 +12,6 @@ public:\
     void deserialize(const uint8_t *data, uint64_t size) override;\
     bool is_size_valid(uint64_t size);\
     classname(const uint8_t *data, uint64_t size) : C_GameCommand(data, size) {}\
-    classname(PackedByteArray bytearray) : C_GameCommand(bytearray) {}\
     ~classname(){}
 
 class C_GameCommand
@@ -29,11 +28,6 @@ public:
     virtual bool is_size_valid(uint64_t size) = 0;
     virtual void execute(Game *game) = 0;
     virtual void deserialize(const uint8_t *data, uint64_t size){};
-
-    C_GameCommand(PackedByteArray bytearray)
-    {
-        deserialize(bytearray.ptr(), bytearray.size());
-    }
 
     C_GameCommand(const uint8_t *data, uint64_t size)
     {

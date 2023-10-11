@@ -8,10 +8,13 @@
 
 #include "s_player.h"
 
+class Server;
+
 class S_Game : public Node
 {
 GDCLASS(S_Game, Node);
 private:
+    Server *server;
     //Array of all players in-game
     S_Player *players;
     //Game commands to be executed in the next frame
@@ -24,6 +27,8 @@ public:
     void put_game_command(S_GameCommand *gamecmd);
 
     Error serialize_gamestate(uint8_t *data, uint64_t size);
+
+    void sync_gamestate();
 
     /**
      * @return Pointer to current map or nullptr if map is not set
