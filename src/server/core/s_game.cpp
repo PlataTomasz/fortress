@@ -1,4 +1,5 @@
 #include "s_game.h"
+#include <server/server.h>
 
 S_Game::S_Game()
 {
@@ -11,13 +12,34 @@ void S_Game::_notification(int notification)
     {
     case NOTIFICATION_PHYSICS_PROCESS:
         {
+            //Process next server tick
             fixed_tick();
+
+
+
+            //Update clients
+            sync_gamestate();
+        }
+        break;
+
+    case NOTIFICATION_ENTER_TREE:
+        {
+            server = static_cast<Server *>(get_parent());
         }
         break;
     
     default:
         break;
     }
+}
+
+void S_Game::sync_gamestate()
+{
+    String sync_data = "Gamestate sync!";
+    PackedByteArray bytes = sync_data.to_utf8_buffer();
+    server->send_data_to_all(bytes.ptr(), bytes.size());
+
+    
 }
 
 void S_Game::fixed_tick()

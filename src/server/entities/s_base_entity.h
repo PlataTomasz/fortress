@@ -1,14 +1,14 @@
 #if !defined(SENTITY_INLCUDED)
 #define SENTITY_INLCUDED
 
-#include <scene/2d/node_2d.h>
+#include <scene/3d/node_3d.h>
 
 /**
  * Serverside entity class
 */
-class S_BaseEntity : public Node2D
+class S_BaseEntity : public Node3D
 {
-GDCLASS(S_BaseEntity, Node2D);
+GDCLASS(S_BaseEntity, Node3D);
 private:
 
 protected:

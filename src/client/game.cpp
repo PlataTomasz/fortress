@@ -23,7 +23,9 @@
 #include <shared/registries.h>
 #include <client/game_logic/abilities/test_ability.hpp>
 #include <client/game_logic/abilities/test_ability2.hpp>
-#include <client/networking/c_game_commands.h>
+#include <client/networking/requests/c_game_requests.h>
+#include <client/networking/c_sync_events.h>
+#include <client/client.hpp>
 
 Game::Game()
 {
@@ -53,21 +55,27 @@ void Game::_notification(int notification)
     case NOTIFICATION_PROCESS:
         {
             //Dispatch GameCommands
-            for(C_GameCommand *cmd : game_commands)
+            for(C_SyncEvent *sync_event : sync_events)
             {
-                cmd->execute(this);
+                sync_event->execute(this);
             }
         }
         break;
     
+    case NOTIFICATION_ENTER_TREE:
+    {
+        client = static_cast<Client *>(get_parent());
+    }
+    break;
+
     default:
         break;
     }
 }
 
-void Game::put_game_command(C_GameCommand *gamecmd)
+void Game::put_sync_event(C_SyncEvent *sync_event)
 {
-    game_commands.push_back(gamecmd);
+    sync_events.push_back(sync_event);
 }
 
 void Game::ready()
@@ -196,7 +204,10 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
             player->controlledEntity->set_movement_target_position(worldPos);
-            //TODO: Send propper movement command - Check AStar Node
+            
+            C_MovementGameRequest game_command = C_MovementGameRequest(0, Vector2(worldPos.x, worldPos.z));
+            PackedByteArray bytes = game_command.serialize();
+            client->send_data_to_server(bytes.ptr(), bytes.size());
         }
     }
     else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))

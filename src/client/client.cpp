@@ -99,6 +99,8 @@ void Client::on_receive(const uint8_t *packet_data, uint64_t size)
     //HACK: Enet defines data pointer as const, but marshals methods require non const pointer, even though no write occurs
     ByteReader bytes(const_cast<uint8_t *>(packet_data), size);
     print_line(bytes.operator String());
+
+    
 }
 
 void Client::process()
@@ -130,6 +132,14 @@ void Client::process()
             default:
                 break;
         }
+}
+
+void Client::send_data_to_server(const uint8_t *packet_data, uint64_t packet_size)
+{
+    //TODO: Check if client is connected to server
+    
+    //NOTE: put_packet always send reliable packets, which may not be desired
+    peer->put_packet(packet_data, packet_size);
 }
 
 void Client::_bind_methods()

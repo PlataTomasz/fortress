@@ -27,6 +27,7 @@ public:
     void ready();
     void enter_tree();
     Error connect_to_game_server(const String &ip, int port);
+    void send_data_to_server(const uint8_t *packet_data, uint64_t packet_size);
     /**
      * Creates game server embedded in client - Simillar to GMod and CSGO
      * If server is already working, It is shut down and recreated with passed arguments
