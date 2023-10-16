@@ -7,6 +7,8 @@
 #include <core/io/marshalls.h>
 
 class Player;
+class S_Entity;
+class S_LivingEntity;
 class S_Game;
 
 #define S_GAME_COMMAND_METHODS(classname) \
@@ -28,8 +30,6 @@ class S_GameCommand
 public:
     
 private:
-    //Player that sent GameCommand
-    Player *sender;
 protected:
 
 public:
@@ -49,14 +49,19 @@ public:
     {
         deserialize(data, size);
     }
+
+    S_GameCommand(){};
 };
 
 class S_GameCommandMovement : public S_GameCommand
 {
 private:
+    S_Entity *issuer = nullptr;
+    S_LivingEntity *ent = nullptr;
     Vector2 new_position;
 public:
     S_GAME_COMMAND_METHODS(S_GameCommandMovement);
+    S_GameCommandMovement(S_BaseEntity *p_issuer, S_LivingEntity *p_ent, Vector2 p_new_position);
 };
 
 #endif // GAME_COMMAND_INCLUDED

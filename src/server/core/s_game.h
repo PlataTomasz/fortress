@@ -20,10 +20,14 @@ private:
     //Game commands to be executed in the next frame
     List<S_GameCommand *> game_commands;
 
+    HashMap<uint64_t, S_BaseEntity *> networked_entities;
+
     void fixed_tick();
 protected:
     void _notification(int notification);
 public:
+    S_BaseEntity *get_entity_by_netid(uint64_t netid);
+
     void put_game_command(S_GameCommand *gamecmd);
 
     Error serialize_gamestate(uint8_t *data, uint64_t size);

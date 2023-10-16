@@ -74,3 +74,10 @@ Error S_Game::serialize_gamestate(uint8_t *data, uint64_t size)
 
     return Error::OK;
 }
+
+S_BaseEntity *S_Game::get_entity_by_netid(uint64_t netid)
+{
+    ERR_FAIL_COND_V(!networked_entities.has(netid), nullptr);
+    
+    return networked_entities.get(netid);
+}

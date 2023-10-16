@@ -5,6 +5,9 @@
 #include <modules/enet/enet_connection.h>
 #include <scene/main/multiplayer_api.h>
 #include <modules/enet/enet_multiplayer_peer.h>
+#include <core/templates/hash_map.h>
+#include <server/core/s_player.h>
+
 
 #include <server/core/game_commands/s_game_command_factory.h>
 
@@ -14,9 +17,16 @@
 class Server : public Node
 {
 GDCLASS(Server, Node);
+public:
+    
 private:
     Ref<ENetConnection> connection;
     S_Game *game = nullptr;
+
+    uint8_t player_count = 0;
+    S_Player players[16];
+    HashMap<Ref<ENetPacketPeer>, S_Player *> players_by_peer;
+
 protected:
     void _notification(int notification)
     {
@@ -50,6 +60,9 @@ protected:
         }
     }
 public:
+    S_Player *get_player_by_peer(Ref<ENetPacketPeer> peer);
+    Ref<ENetPacketPeer> get_peer_by_player_id(uint8_t p_player_id);
+
     void send_data_to_all(const uint8_t *packet_data, uint64_t size)
     {
 
@@ -90,19 +103,16 @@ public:
 
     void on_peer_connect(Ref<ENetPacketPeer> peer)
     {
-        print_line("Connected ");
-        String str = "wololo!";
-        PackedByteArray ascii = str.to_ascii_buffer();
-        send_data_to_all(ascii.ptr(), ascii.size());
+        print_line("Connection initialized with ", peer, "Awaiting client info.");
     }
 
     void on_peer_disconnect(Ref<ENetPacketPeer> peer)
     {
-        print_line("Disconnected");
-        
+        //NOTE: Might crash because use of get()?
+        print_line("Player", players_by_peer.get(peer), "disconnected");
     }
 
-    void on_receive(const uint8_t *packet_data, uint64_t size);
+    void on_receive(Ref<ENetPacketPeer> sender, const uint8_t *packet_data, uint64_t size);
 
     void process()
     {
@@ -128,7 +138,7 @@ public:
 
             case ENetConnection::EventType::EVENT_RECEIVE:
             {
-                on_receive(enet_event.packet->data, enet_event.packet->dataLength);
+                on_receive(enet_event.peer, enet_event.packet->data, enet_event.packet->dataLength);
             }
             break;
             
@@ -136,6 +146,8 @@ public:
                 break;
         }
     }
+
+    S_Game *get_game();
 
 
     Server()
