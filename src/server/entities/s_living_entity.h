@@ -19,7 +19,7 @@ protected:
 
     void _notification(int p_notification);
 public:
-    void set_movement_target_position(Vector3 target_pos);
+    void set_movement_target_position(Vector2 target_pos);
     Vector3 get_movement_target_position();
 };
 
