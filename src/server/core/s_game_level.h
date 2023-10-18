@@ -7,7 +7,7 @@ class S_GameLevel : public Node2D
 {
 GDCLASS(S_GameLevel, Node2D);
 private:
-
+    
 protected:
 
 public:
