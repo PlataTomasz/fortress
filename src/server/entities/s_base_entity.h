@@ -35,6 +35,8 @@ public:
         return get_rotation().y;
     }
 
+    
+
     /**
      * Compares this and other entities.
      * @return True if both entities have the same: Position and rotation
