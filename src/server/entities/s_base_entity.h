@@ -21,6 +21,11 @@ private:
         NET_FIELD_POSITION = 1,
         NET_FIELD_ROTATION,
     };
+
+	/**
+	 * Stores names of all properties that should be networked
+	*/
+	List<StringName> networked_properties;
 protected:
 
 public:
@@ -35,7 +40,23 @@ public:
         return get_rotation().y;
     }
 
-    
+	/**
+	 * Returns a list of all properties that should be networked
+	*/
+	HashMap<uint8_t, StringName> get_networked_properties()
+	{
+		HashMap<uint8_t, StringName> retval;
+
+		for()
+		{
+            retval.insert();
+		}
+
+		return retval;
+	}
+
+
+
 
     /**
      * Compares this and other entities.
