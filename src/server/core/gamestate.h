@@ -3,6 +3,7 @@
 
 #include <core/templates/hash_map.h>
 #include <core/variant/variant.h>
+#include <core/variant/typed_array.h>
 
 //TODO: Implement Gamestate
 
@@ -28,11 +29,13 @@ class GamestateDelta
 {
 private:
     //I'll just use Variant, saves a lot of trouble
-    HashMap<uint64_t, EntityFields> entities;
+    Dictionary entity_data;
 public:
+
+
     Vector<uint8_t> serialize()
     {
-        
+
         return Vector<uint8_t>();
     };
 
@@ -40,17 +43,20 @@ public:
 };
 
 /**
- * Gamestate snapshot is a class which object store FULL information about current state of game, such as entities, values of their fields, etc.
+ * Gamestate snapshot is a class which object store FULL information about state of game at given frame, such as entities, values of their fields, etc.
 */
 class GamestateSnapshot
 {
 private:
     //When gamestate was created?
     uint64_t frame;
-    //List of all entities and fields associated with them
-    HashMap<uint64_t, EntityFields> entities;
+    //All entities and fields associated with them
+	HashMap<uint64_t, Vector<Variant>> entity_data;
 public:
-    GamestateDelta diff(GamestateSnapshot& other);
+	/**
+	 * @return delta between two gamestates
+	*/
+    GamestateDelta get_delta(GamestateSnapshot& other);
 
     //game - for which game object, gamestate should be generated?
     GamestateSnapshot(S_Game *game);
