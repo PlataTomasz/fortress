@@ -17,10 +17,31 @@ Error Client::connect_to_game_server(const String &ip, int port)
 
 void Client::ready()
 {
+    /*
     connection.instantiate();
     connection->create_host(1, 3);
 
     connect_to_game_server("localhost", 7654);
+    */
+    Ref<ENetMultiplayerPeer> server_peer = Ref<ENetMultiplayerPeer>();
+    server_peer.instantiate(); //Same as using memnew
+
+    Error err = server_peer->create_client("localhost", 7654);
+
+    if (err)
+    {
+        print_error("Failed to connect to server! Error code: " + err);
+    }
+    else
+    {
+        on_connect();
+    }
+    
+    
+    SceneMultiplayer* scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
+        
+    scene_multiplayer->set_multiplayer_peer(server_peer);
+    scene_multiplayer->set_root_path(NodePath(String(get_path()) + "/Game"));
 
     /*
     //Initialize networking
@@ -105,8 +126,14 @@ void Client::on_receive(const uint8_t *packet_data, uint64_t size)
 
 void Client::process()
 {
+    //Error err = get_multiplayer()->poll();
+    //get_multiplayer()->get_multiplayer_peer()->poll();
+    //print_line("Connection status:", get_multiplayer()->get_multiplayer_peer()->get_connection_status());
+    //print_line("Poll error:", err );
+
     //Receive data from server
     //Parse ENet event
+    /*
         ENetConnection::Event enet_event;
 
         switch (connection->service(0, enet_event))
@@ -132,6 +159,7 @@ void Client::process()
             default:
                 break;
         }
+    */
 }
 
 void Client::send_data_to_server(const uint8_t *packet_data, uint64_t packet_size)

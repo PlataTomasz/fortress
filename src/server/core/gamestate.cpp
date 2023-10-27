@@ -4,6 +4,7 @@
 
 GamestateSnapshot::GamestateSnapshot(S_Game *game)
 {
+	/*
 	frame = Engine::get_singleton()->get_physics_frames();
 
     S_GameLevel *map = game->get_current_level();
@@ -23,17 +24,11 @@ GamestateSnapshot::GamestateSnapshot(S_Game *game)
 		ent->get_networked_properties();
 		for()
     }
+	*/
 }
 
 GamestateDelta GamestateSnapshot::get_delta(GamestateSnapshot& other)
 {
-	Dictionary dict1;
-	Dictionary dict2;
-
-	for(Variant ent_id : dict1.get_key_list())
-	{
-
-	}
-
+	GamestateDelta gamestate_delta;
 	return gamestate_delta;
 }

@@ -9,7 +9,7 @@
 #include <core/string/node_path.h>
 
 #define DISABLE_IN_EDITOR() if(Engine::get_singleton()->is_editor_hint()) return;
-
+/*
 class Client;
 static Client* get_client()
 {
@@ -17,15 +17,17 @@ static Client* get_client()
 }
 
 class Game;
+*/
 
 static SceneTree* get_scene_tree()
 {
     SceneTree* sceneTreeSingleton = (SceneTree*)SceneTree::get_singleton();
     return sceneTreeSingleton;
 }
-
+/*
 static Game* get_game()
 {
     return (Game*)get_scene_tree()->get_root()->get_node(NodePath("Client/Game"));
 }
+*/
 #endif // GDEXTENSION_HELPER_HPP_INCLUDED

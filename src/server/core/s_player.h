@@ -2,9 +2,7 @@
 #define SERVER_PLAYER_INCLUDED
 
 #include <core/string/ustring.h>
-#include <enet/enet.h>
 #include <core/object/ref_counted.h>
-#include <modules/enet/enet_packet_peer.h>
 
 class S_BaseEntity;
 
@@ -14,7 +12,7 @@ private:
     S_BaseEntity *controlled_entity = nullptr;
 
     uint8_t id = 0;
-    Ref<ENetPacketPeer> peer;
+    
     String nickname = "unset";
 protected:
 
@@ -26,9 +24,10 @@ public:
     String get_nickname();
 
     //Takes control of that player if he is not connected
+    /*
     void set_controlling_peer(Ref<ENetPacketPeer> peer);
     Ref<ENetPacketPeer> get_controlling_peer();
-
+    */
 
     S_Player(){};
 };

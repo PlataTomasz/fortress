@@ -1,9 +1,16 @@
-[gd_scene format=3 uid="uid://b5x2604j3junu"]
+[gd_scene load_steps=2 format=3 uid="uid://b5x2604j3junu"]
+
+[ext_resource type="PackedScene" uid="uid://mjs6y0bwvg8p" path="res://maps/map01.tscn" id="1_y1h01"]
 
 [node name="App" type="Node"]
 
 [node name="Client" type="Client" parent="."]
 
-[node name="Server" type="Server" parent="Client"]
+[node name="Game" type="Game" parent="Client"]
 
-[node name="S_Game" type="S_Game" parent="Client/Server"]
+[node name="Map" parent="Client/Game" instance=ExtResource("1_y1h01")]
+
+[node name="Camera" type="GameCamera" parent="Client/Game"]
+transform = Transform3D(1, 0, 0, 0, 0.737277, 0.67559, 0, -0.67559, 0.737277, 0, 2, 2)
+current = true
+fov = 45.0
