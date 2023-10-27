@@ -62,6 +62,8 @@ public:
         //Auto detect map change
     }
 
+    void movement_request(Vector2 target_pos);
+
     GameMap* getGameMap()
     {
         return this->gameMap;

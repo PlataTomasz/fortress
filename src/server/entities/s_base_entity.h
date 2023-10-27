@@ -16,12 +16,6 @@ class S_BaseEntity : public Node3D
 GDCLASS(S_BaseEntity, Node3D);
 
 private:
-    enum NetworkedFields
-    {
-        NET_FIELD_POSITION = 1,
-        NET_FIELD_ROTATION,
-    };
-
 	/**
 	 * Stores names of all properties that should be networked
 	*/
@@ -43,20 +37,26 @@ public:
 	/**
 	 * Returns a list of all properties that should be networked
 	*/
-	HashMap<uint8_t, StringName> get_networked_properties()
+	List<StringName> get_networked_properties()
 	{
-		HashMap<uint8_t, StringName> retval;
-
-		for()
-		{
-            retval.insert();
-		}
-
-		return retval;
+		return networked_properties;
 	}
 
+    void add_networked_property(StringName property_name)
+    {
+        if(get(property_name).get_type() != Variant::NIL)
+        {
+            //Property exists - add it
+            networked_properties.push_back(property_name);
+        }
+    }
 
-
+    S_BaseEntity()
+    {
+        //Networked properties
+        add_networked_property("position");
+        add_networked_property("rotation");
+    }
 
     /**
      * Compares this and other entities.

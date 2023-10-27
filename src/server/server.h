@@ -7,9 +7,11 @@
 #include <modules/enet/enet_multiplayer_peer.h>
 #include <core/templates/hash_map.h>
 #include <server/core/s_player.h>
+#include <server/networking/requests/request_handler.h>
 
+#include <modules/multiplayer/scene_multiplayer.h>
 
-#include <server/core/game_commands/s_game_command_factory.h>
+class S_Game;
 
 /**
  * Server is a node responsible for managing connections, sending and handling data over network.
@@ -20,7 +22,7 @@ GDCLASS(Server, Node);
 public:
     
 private:
-    Ref<ENetConnection> connection;
+    Ref<ENetMultiplayerPeer> server_peer;
     S_Game *game = nullptr;
 
     uint8_t player_count = 0;
@@ -67,11 +69,14 @@ public:
     {
 
         List<Ref<ENetPacketPeer>> peers;
-        connection->get_peers(peers);
+        //TODO: Replace with MultiplayerAPI
+        /*
+        server_peer->get_peers(peers);
         for(Ref<ENetPacketPeer> peer : peers)
         {
             peer->put_packet(packet_data, size);
         }
+        */
     }
 
     void send_data(Ref<ENetPacketPeer> target, const uint8_t *packet_data, uint64_t size)
@@ -81,15 +86,28 @@ public:
 
     void ready()
     {
+        RequestHandler* request_handler = memnew(RequestHandler);
+        add_child(request_handler);
+
         game = reinterpret_cast<S_Game*>(get_node(NodePath("Game")));
 
         int server_port = 7654;
 
         //Setup networking
-        connection = Ref<ENetConnection>();
-        connection.instantiate(); //Same as using memnew
+        server_peer.instantiate(); //Same as using memnew
 
-        Error err = connection->create_host_bound((IPAddress)("*"), server_port, 32, 3);
+        Error err = server_peer->create_server(7654, 32);
+        SceneMultiplayer* scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
+
+        ERR_FAIL_COND(!scene_multiplayer);
+        
+        scene_multiplayer->set_multiplayer_peer(server_peer);
+        scene_multiplayer->set_root_path(NodePath(String(get_path()) + "/S_Game"));
+
+        server_peer->connect("peer_connected", callable_mp(this, &Server::on_peer_connect));
+        server_peer->connect("peer_disconnected", callable_mp(this, &Server::on_peer_disconnect));
+
+        //Error err = server_peer->create_host_bound((IPAddress)("*"), server_port, 32, 3);
 
         if(err == Error::OK)
         {
@@ -101,50 +119,22 @@ public:
         }
     }
 
-    void on_peer_connect(Ref<ENetPacketPeer> peer)
+    void on_peer_connect(int peer_id)
     {
-        print_line("Connection initialized with ", peer, "Awaiting client info.");
+        print_line("Player", peer_id, "connected");
     }
 
-    void on_peer_disconnect(Ref<ENetPacketPeer> peer)
+    void on_peer_disconnect(int peer_id)
     {
-        //NOTE: Might crash because use of get()?
-        print_line("Player", players_by_peer.get(peer), "disconnected");
+        print_line("Player", peer_id, "disconnected");
     }
 
     void on_receive(Ref<ENetPacketPeer> sender, const uint8_t *packet_data, uint64_t size);
 
     void process()
     {
-        //Read incoming network data and schedule GameCmd to avoid blocking
-        //multiplayer_peer->poll();
-
-        //Parse ENet event
-        ENetConnection::Event enet_event;
-
-        switch (connection->service(0, enet_event))
-        {
-            case ENetConnection::EventType::EVENT_CONNECT:
-            {
-                on_peer_connect(enet_event.peer);
-            }
-            break;
-
-            case ENetConnection::EventType::EVENT_DISCONNECT:
-            {
-                on_peer_disconnect(enet_event.peer);
-            }
-            break;
-
-            case ENetConnection::EventType::EVENT_RECEIVE:
-            {
-                on_receive(enet_event.peer, enet_event.packet->data, enet_event.packet->dataLength);
-            }
-            break;
-            
-            default:
-                break;
-        }
+        //get_multiplayer()->get_multiplayer_peer()->poll();
+        //print_error("- _ -");
     }
 
     S_Game *get_game();

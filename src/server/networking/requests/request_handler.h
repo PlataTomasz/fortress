@@ -2,13 +2,18 @@
 #define REQUEST_HANDLER_INCLUDED
 
 #include <stdint.h>
+#include <scene/main/node.h>
 
-class RequestHandler
+class RequestHandler : public Node
 {
-private:
-    static const char *ERROR_MESSAGE_INVALID_SIZE;
+GDCLASS(RequestHandler, Node);
+protected:
+    static void _bind_methods();
 public:
-    static void handle_request(Ref<ENetPacketPeer> sender, const uint8_t *requst_data, uint64_t size);
+    //RPC methods
+    void movement_request(Vector2 target_position);
+
+    RequestHandler();
 };
 
 #endif // REQUEST_HANDLER_INCLUDED

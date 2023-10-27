@@ -26,6 +26,7 @@
 #include <client/networking/requests/c_game_requests.h>
 #include <client/networking/c_sync_events.h>
 #include <client/client.hpp>
+#include <core/variant/dictionary.h>
 
 Game::Game()
 {
@@ -38,6 +39,14 @@ Game::Game()
         printf("%d\n", is_processing_unhandled_input());
 
         connect("ready", callable_mp(this, &Game::ready));
+
+        //RPC config
+        Dictionary movement_request_rpc_cfg;
+        movement_request_rpc_cfg["rpc_mode"] = MultiplayerAPI::RPC_MODE_ANY_PEER;
+        movement_request_rpc_cfg["channel"] = 0;
+        movement_request_rpc_cfg["call_local"] = false;
+        movement_request_rpc_cfg["transfer_mode"] = MultiplayerPeer::TRANSFER_MODE_RELIABLE;
+        rpc_config("movement_request", movement_request_rpc_cfg);
 
         initialize_registries();
     }
@@ -100,8 +109,11 @@ void Game::ready()
     }
     else
     {
-        //TODO: Load map from file - currently left in undefined state
-        std::cout<<"Camera was not loaded!"<<std::endl;
+        GameCamera *game_camera = memnew(GameCamera);
+        add_child(game_camera);
+
+        this->camera = game_camera;
+        std::cout<<"Camera was not loaded! Creating one instead."<<std::endl;
     }  
 
     printf("Initializing StatusEffectManager...");
@@ -198,16 +210,18 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         {
             std::cout<<"ATTACK_ACTION"<<std::endl;
 
-            player->controlledEntity->use_basic_attack(use_context);
+            //player->controlledEntity->use_basic_attack(use_context);
+
+            auto cl_peer = static_cast<ENetMultiplayerPeer *>(get_parent()->get_multiplayer()->get_multiplayer_peer().ptr());
+            cl_peer->close();
+            cl_peer->create_client("localhost", 7654);
         }
         else if(input_event_mouse_btn->is_action_pressed("movement"))
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
-            player->controlledEntity->set_movement_target_position(worldPos);
             
-            C_MovementGameRequest game_command = C_MovementGameRequest(0, Vector2(worldPos.x, worldPos.z));
-            PackedByteArray bytes = game_command.serialize();
-            client->send_data_to_server(bytes.ptr(), bytes.size());
+            Error err = rpc("movement_request", Vector2(worldPos.x, worldPos.z));
+            print_line("Client RPC Error", err);
         }
     }
     else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))
@@ -244,8 +258,16 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
 }
 
+
+
 void Game::_bind_methods()
-{   
+{
     //Global signals
     ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
+    ClassDB::bind_method(D_METHOD("movement_request", "target_position"), &Game::movement_request);
+}
+
+void Game::movement_request(Vector2 target_pos)
+{
+    print_line("Movement request!", target_pos);
 }

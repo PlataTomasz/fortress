@@ -7,20 +7,9 @@
 #include <core/io/marshalls.h>
 
 class Player;
-class S_Entity;
 class S_LivingEntity;
+class S_BaseEntity;
 class S_Game;
-
-#define S_GAME_COMMAND_METHODS(classname) \
-public:\
-    void execute(S_Game *game) override; \
-    PackedByteArray serialize() override;\
-    void deserialize(const uint8_t *data, uint64_t size) override;\
-    bool is_size_valid(uint64_t size);\
-    classname(const uint8_t *data, uint64_t size) : S_GameCommand(data, size) {}\
-    classname(PackedByteArray bytearray) : S_GameCommand(bytearray) {}\
-    ~classname(){}
-    
 
 /**
  * Class responsible for holding data regarding different game events, serialization, deserialization and validation in preparation to be sent to/received from server
@@ -33,34 +22,21 @@ private:
 protected:
 
 public:
-
-    virtual PackedByteArray serialize() = 0;
-    //Checks if size of the data buffer matches expected size
-    virtual bool is_size_valid(uint64_t size) = 0;
-    virtual void execute(S_Game *game);
-    virtual void deserialize(const uint8_t *data, uint64_t size){};
-
-    S_GameCommand(PackedByteArray bytearray)
-    {
-        deserialize(bytearray.ptr(), bytearray.size());
-    }
-
-    S_GameCommand(const uint8_t *data, uint64_t size)
-    {
-        deserialize(data, size);
-    }
+    virtual void execute(S_Game *game) = 0;
 
     S_GameCommand(){};
+    virtual ~S_GameCommand(){};
 };
 
 class S_GameCommandMovement : public S_GameCommand
 {
 private:
-    S_Entity *issuer = nullptr;
+    S_BaseEntity *issuer = nullptr;
     S_LivingEntity *ent = nullptr;
     Vector2 new_position;
 public:
-    S_GAME_COMMAND_METHODS(S_GameCommandMovement);
+    virtual void execute(S_Game *game) override;
+
     S_GameCommandMovement(S_BaseEntity *p_issuer, S_LivingEntity *p_ent, Vector2 p_new_position);
 };
 

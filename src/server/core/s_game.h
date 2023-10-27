@@ -25,7 +25,13 @@ private:
     void fixed_tick();
 protected:
     void _notification(int notification);
+
+    static void _bind_methods();
 public:
+    //Request handling methods
+    void movement_request(Vector2 target_pos);
+
+
     S_BaseEntity *get_entity_by_netid(uint64_t netid);
 
     void put_game_command(S_GameCommand *gamecmd);

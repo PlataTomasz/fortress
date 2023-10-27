@@ -12,23 +12,7 @@ void Server::on_receive(Ref<ENetPacketPeer> sender, const uint8_t *packet_data, 
     
     //game->put_game_command(game_command);
 
-    RequestHandler::handle_request(sender, packet_data, size);
-}
-
-S_Player *Server::get_player_by_peer(Ref<ENetPacketPeer> peer)
-{
-    return players_by_peer.get(peer);
-}
-
-Ref<ENetPacketPeer> Server::get_peer_by_player_id(uint8_t p_player_id)
-{
-    if(p_player_id < player_count)
-    {
-        return players[p_player_id].get_controlling_peer();
-    }
-
-    //Empty reference on failure
-    return Ref<ENetPacketPeer>();
+//    RequestHandler::handle_request(sender, packet_data, size);
 }
 
 S_Game *Server::get_game()
