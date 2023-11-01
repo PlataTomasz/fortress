@@ -19,8 +19,7 @@ class S_Game;
 class Server : public Node
 {
 GDCLASS(Server, Node);
-public:
-    
+
 private:
     Ref<ENetMultiplayerPeer> server_peer;
     S_Game *game = nullptr;
@@ -86,8 +85,8 @@ public:
 
     void ready()
     {
-        RequestHandler* request_handler = memnew(RequestHandler);
-        add_child(request_handler);
+        //RequestHandler* request_handler = memnew(RequestHandler);
+        //add_child(request_handler);
 
         game = reinterpret_cast<S_Game*>(get_node(NodePath("Game")));
 
@@ -98,6 +97,7 @@ public:
 
         Error err = server_peer->create_server(7654, 32);
         SceneMultiplayer* scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
+        scene_multiplayer->set_root_path(get_path());
 
         ERR_FAIL_COND(!scene_multiplayer);
         

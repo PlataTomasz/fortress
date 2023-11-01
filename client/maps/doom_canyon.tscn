@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://ci3k12gitw0sm"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5125w"]
+size = Vector2(80, 80)
+
+[node name="Map" type="Node3D"]
+
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Terrain"]
+mesh = SubResource("PlaneMesh_5125w")
+skeleton = NodePath("../..")
+
+[node name="Spawnpoints" type="Node3D" parent="."]
+
+[node name="RedSpawn" type="Node3D" parent="Spawnpoints" groups=["RedSpawnpoints"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 29.621)
+
+[node name="RedSpawn2" type="Node3D" parent="Spawnpoints" groups=["RedSpawnpoints"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0, 18)
+
+[node name="RedSpawn3" type="Node3D" parent="Spawnpoints" groups=["RedSpawnpoints"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 26)
+
+[node name="BlueSpawn" type="Node3D" parent="Spawnpoints" groups=["BlueSpawnpoints"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, -25)
+
+[node name="BlueSpawn2" type="Node3D" parent="Spawnpoints" groups=["BlueSpawnpoints"]]
+transform = Transform3D(-0.366247, 0.913463, 0.177338, 0.895236, 0.397883, -0.200602, -0.253803, 0.0852898, -0.963488, 13, 0, -18)
+
+[node name="BlueSpawn3" type="Node3D" parent="Spawnpoints" groups=["BlueSpawnpoints"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.1564, 0, -24)

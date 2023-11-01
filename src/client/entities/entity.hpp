@@ -12,6 +12,8 @@
 
 #include <client/game_logic/damage_object.hpp>
 
+#include <core/string/string_name.h>
+
 
 class StatusEffect;
 class MeshInstance3D;
@@ -25,13 +27,22 @@ class Entity : public Node3D
 {
 GDCLASS(Entity, Node3D);
 
-enum FacingDirection
-{
-    FACING_DIRECTION_DOWN   =   0,
-    FACING_DIRECTION_UP     =   180,
-    FACING_DIRECTION_LEFT   =   -90,
-    FACING_DIRECTION_RIGHT  =   90
-};
+private:
+    List<StringName> networked_properties;
+public:
+    List<StringName> get_networked_properties()
+    {
+        return networked_properties;
+    }
+
+    void add_networked_property(StringName property_name)
+    {
+        if(get(property_name).get_type() != Variant::NIL)
+        {
+            //Property exists - add it
+            networked_properties.push_back(property_name);
+        }
+    }
 
 public:
 	struct Stats

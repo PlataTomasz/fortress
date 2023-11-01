@@ -37,6 +37,9 @@ Entity::Entity()
     stats.magicResistance.recalculate();
 
     add_to_group(GameStringNames::get_singleton()->ENTITIES_GROUP);
+
+    add_networked_property("position");
+    add_networked_property("rotation");
 }
 
 Entity::~Entity()
