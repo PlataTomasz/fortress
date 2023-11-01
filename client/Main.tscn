@@ -14,3 +14,5 @@
 transform = Transform3D(1, 0, 0, 0, 0.737277, 0.67559, 0, -0.67559, 0.737277, 0, 2, 2)
 current = true
 fov = 45.0
+
+[node name="Server" type="Server" parent="Client"]

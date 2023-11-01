@@ -38,6 +38,11 @@ public:
 protected:
     void _notification(int notification);
     static void _bind_methods();
+    void ready_signal()
+    {
+        print_line("Ready with signal!");
+    };
+
 public:
     Client();
     ~Client(){};

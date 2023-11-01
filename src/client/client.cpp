@@ -1,9 +1,12 @@
 #include "client.hpp"
 #include <scene/main/multiplayer_api.h>
 #include <shared/io/byte_reader.h>
+#include <scene/scene_string_names.h>
+#include <shared/helper_macros.h>
 
 Client::Client()
 {
+    DISABLE_IN_EDITOR();
     set_process(true);
 }
 
@@ -41,33 +44,7 @@ void Client::ready()
     SceneMultiplayer* scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
         
     scene_multiplayer->set_multiplayer_peer(server_peer);
-    scene_multiplayer->set_root_path(NodePath(String(get_path()) + "/Game"));
-
-    /*
-    //Initialize networking
-
-    multiplayer_peer = Ref<ENetMultiplayerPeer>(memnew(ENetMultiplayerPeer));
-    Error connection_err = connect_to_game_server("localhost", 7654);
-
-    print_line(multiplayer_peer->get_connection_status());
-
-    if(connection_err == Error::OK)
-    {
-        Ref<MultiplayerAPI> multiplayer_api = MultiplayerAPI::create_default_interface();
-        multiplayer_api->set_multiplayer_peer(multiplayer_peer);
-        this->get_tree()->set_multiplayer(multiplayer_api, NodePath("/Client"));
-
-        String str = "From client";
-        PackedByteArray packet_data = str.to_ascii_buffer();
-
-        multiplayer_peer->put_packet(packet_data.ptr(), packet_data.size());
-    }
-    else
-    {
-        print_error("Failed to connect to server! Error code: " + connection_err);
-    }
-    */
-    
+    scene_multiplayer->set_root_path(get_path());
 }
 
 void Client::_notification(int notification)
@@ -126,40 +103,7 @@ void Client::on_receive(const uint8_t *packet_data, uint64_t size)
 
 void Client::process()
 {
-    //Error err = get_multiplayer()->poll();
-    //get_multiplayer()->get_multiplayer_peer()->poll();
-    //print_line("Connection status:", get_multiplayer()->get_multiplayer_peer()->get_connection_status());
-    //print_line("Poll error:", err );
 
-    //Receive data from server
-    //Parse ENet event
-    /*
-        ENetConnection::Event enet_event;
-
-        switch (connection->service(0, enet_event))
-        {
-            case ENetConnection::EventType::EVENT_CONNECT:
-            {
-                on_connect();
-            }
-            break;
-
-            case ENetConnection::EventType::EVENT_DISCONNECT:
-            {
-                on_disconnect();
-            }
-            break;
-
-            case ENetConnection::EventType::EVENT_RECEIVE:
-            {
-                on_receive(enet_event.packet->data, enet_event.packet->dataLength);
-            }
-            break;
-            
-            default:
-                break;
-        }
-    */
 }
 
 void Client::send_data_to_server(const uint8_t *packet_data, uint64_t packet_size)
@@ -172,10 +116,5 @@ void Client::send_data_to_server(const uint8_t *packet_data, uint64_t packet_siz
 
 void Client::_bind_methods()
 {
-    //ClassDB::bind_method(D_METHOD("_process"), &Client::_process);
-    /*
-    ClassDB::bind_method(D_METHOD("get_class"), &Client::get_class);
-    ClassDB::bind_method(D_METHOD("_ready"), &Client::_ready);
-    ClassDB::bind_method(D_METHOD("_enter_tree"), &Client::_enter_tree);
-    */
+    
 }

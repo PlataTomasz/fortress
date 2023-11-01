@@ -51,7 +51,6 @@ void S_LivingEntity::movement_process_frame()
 void S_LivingEntity::set_movement_target_position(Vector2 target_pos)
 {
     nav_agent->set_target_position(Vector3(target_pos.x, 0, target_pos.y));
-    //C_GameCommandMovement(netid);
 }
 
 Vector3 S_LivingEntity::get_movement_target_position()

@@ -33,17 +33,20 @@ private:
     GameCamera *camera = nullptr;
     Client *client = nullptr;
 
-    void initialize_registries();
-protected:
-    void _notification(int notification);
+    MultiplayerSynchronizer *entity_synchronizer = nullptr;
+    MultiplayerSpawner *entity_spawner = nullptr;
 
+    void initialize_registries();
+
+    void setup_game();
+    void _on_entity_remote_spawn(Node *p_node);
+    
 public:
     Player *player;
 
-    void ready();
+    void _ready();
+    void _process();
     void unhandled_input(const Ref<InputEvent> &event) override;
-
-    void put_sync_event(C_SyncEvent *sync_event);
 
     void onChildExitTree(Node* node)
     {
@@ -62,7 +65,10 @@ public:
         //Auto detect map change
     }
 
-    void movement_request(Vector2 target_pos);
+    //Request RPC methods - Empty, exist only to match RPC signature on authority, to avoid checksum errors
+    void movement_request(Vector2 target_pos){};
+    void attack_request(Vector2 target_pos, uint64_t target_entity_id){};
+    void ability_use_request(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id){};
 
     GameMap* getGameMap()
     {

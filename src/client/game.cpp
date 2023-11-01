@@ -27,36 +27,69 @@
 #include <client/networking/c_sync_events.h>
 #include <client/client.hpp>
 #include <core/variant/dictionary.h>
+#include <shared/helper_macros.h>
 
 Game::Game()
 {
-    //Register signals
-    if(!Engine::get_singleton()->is_editor_hint())
+    DISABLE_IN_EDITOR();
+    //Allow node to process inputs
+    set_process_unhandled_input(true);
+    set_process(true);
+
+    connect(SceneStringNames::get_singleton()->ready, callable_mp(this, &Game::_ready));
+    connect(SceneStringNames::get_singleton()->_process, callable_mp(this, &Game::_process));
+
+    //RPC config
+    ADD_RPC_CONFIG(movement_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(attack_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(ability_use_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+}
+
+void Game::setup_game()
+{
+    entity_synchronizer = memnew(MultiplayerSynchronizer);
+    entity_spawner = memnew(MultiplayerSpawner);
+
+    add_child(entity_spawner);
+    add_child(entity_synchronizer);
+
+    NodePath entities_nodepath = NodePath("../Level/Entities");
+
+    entity_spawner->set_spawn_path(entities_nodepath);
+    entity_spawner->add_spawnable_scene("res://entities/Entity.tscn");
+
+    entity_synchronizer->set_root_path(entities_nodepath);
+
+    if(entity_synchronizer->get_replication_config().is_null())
+        entity_synchronizer->set_replication_config(memnew(SceneReplicationConfig));
+
+    entity_spawner->connect("spawned", callable_mp(this, Game::_on_entity_remote_spawn));
+}
+
+void Game::_on_entity_remote_spawn(Node *p_node)
+{
+    Entity *ent = Object::cast_to<Entity>(p_node);
+    ERR_FAIL_COND_MSG(!ent, "Remote spawned node, which is not entity! Properties may be desynchronized!");
+
+    Ref<SceneReplicationConfig> rep_cfg = entity_synchronizer->get_replication_config();
+    List<StringName> networked_properties_names = ent->get_networked_properties();
+
+    for(StringName property_name : networked_properties_names)
     {
-        //Allow node to process inputs
-        set_process_unhandled_input(true);
-        set_process(true);
-        printf("%d\n", is_processing_unhandled_input());
-
-        connect("ready", callable_mp(this, &Game::ready));
-
-        //RPC config
-        Dictionary movement_request_rpc_cfg;
-        movement_request_rpc_cfg["rpc_mode"] = MultiplayerAPI::RPC_MODE_ANY_PEER;
-        movement_request_rpc_cfg["channel"] = 0;
-        movement_request_rpc_cfg["call_local"] = false;
-        movement_request_rpc_cfg["transfer_mode"] = MultiplayerPeer::TRANSFER_MODE_RELIABLE;
-        rpc_config("movement_request", movement_request_rpc_cfg);
-
-        initialize_registries();
+        NodePath path = String(p_node->get_name()) + String(property_name);
+        
+        rep_cfg->add_property(path);
+        rep_cfg->property_set_sync(path, false);
+        rep_cfg->property_set_watch(path, true);
     }
 }
 
-Game::~Game()
+void Game::_process()
 {
     
 }
 
+/*
 void Game::_notification(int notification)
 {
     switch (notification)
@@ -81,14 +114,12 @@ void Game::_notification(int notification)
         break;
     }
 }
+*/
 
-void Game::put_sync_event(C_SyncEvent *sync_event)
+void Game::_ready()
 {
-    sync_events.push_back(sync_event);
-}
+    setup_game();
 
-void Game::ready()
-{
     GameMap *tmp_mapInstance = (GameMap*)get_node(NodePath("Map"));
     if(tmp_mapInstance)
     {
@@ -212,9 +243,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
 
             //player->controlledEntity->use_basic_attack(use_context);
 
-            auto cl_peer = static_cast<ENetMultiplayerPeer *>(get_parent()->get_multiplayer()->get_multiplayer_peer().ptr());
-            cl_peer->close();
-            cl_peer->create_client("localhost", 7654);
+            Error err = rpc("attack_request", Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_mouse_btn->is_action_pressed("movement"))
         {
@@ -235,25 +264,30 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
             Vector<Entity*>()
         };
 
+        //TODO: Ability use indicators
         if(input_event_key->is_action_pressed("cast_ability_1"))
         {
             printf("Q press\n");
-            player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, use_context);
+            rpc("ability_use_request", Mercenary::ABILITY_FIRST, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_2"))
         {
             printf("W press\n");
-            player->controlledEntity->use_ability(Mercenary::ABILITY_SECOND, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_SECOND, use_context);
+            rpc("ability_use_request", Mercenary::ABILITY_SECOND, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_3"))
         {
             printf("E press\n");
-            player->controlledEntity->use_ability(Mercenary::ABILITY_THIRD, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_THIRD, use_context);
+            rpc("ability_use_request", Mercenary::ABILITY_THIRD, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_4"))
         {
             printf("R press\n");
-            player->controlledEntity->use_ability(Mercenary::ABILITY_ULTIMATE, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_ULTIMATE, use_context);
+            rpc("ability_use_request", Mercenary::ABILITY_ULTIMATE, Vector2(worldPos.x, worldPos.z), 0);
         }
     }
 }
@@ -264,10 +298,14 @@ void Game::_bind_methods()
 {
     //Global signals
     ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
-    ClassDB::bind_method(D_METHOD("movement_request", "target_position"), &Game::movement_request);
+
+    //Methods
+    ClassDB::bind_method(D_METHOD("movement_request", "target_position", "target_entity_id"), &Game::movement_request);
+    ClassDB::bind_method(D_METHOD("attack_request", "target_position"), &Game::attack_request);
+    ClassDB::bind_method(D_METHOD("ability_use_request", "target_position"), &Game::ability_use_request);
 }
 
-void Game::movement_request(Vector2 target_pos)
+Game::~Game()
 {
-    print_line("Movement request!", target_pos);
+    
 }

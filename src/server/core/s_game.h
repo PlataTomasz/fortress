@@ -15,31 +15,39 @@ class S_Game : public Node
 GDCLASS(S_Game, Node);
 private:
     Server *server;
-    //Array of all players in-game
-    S_Player *players;
+    
+    HashMap<int, Ref<S_Player>> players_by_peerid;
+
     //Game commands to be executed in the next frame
     List<S_GameCommand *> game_commands;
 
     HashMap<uint64_t, S_BaseEntity *> networked_entities;
 
     void fixed_tick();
+
+    void _ready();
+
+    void setup_game();
+
+    MultiplayerSynchronizer *entity_synchronizer = nullptr;
+    MultiplayerSpawner *entity_spawner = nullptr;
 protected:
     void _notification(int notification);
 
     static void _bind_methods();
 public:
+    Ref<S_Player> get_player_by_peerid(int peerid);
+
     //Request handling methods
     void movement_request(Vector2 target_pos);
+    void attack_request(Vector2 target_pos, uint64_t target_entity_id);
+    void ability_use_request(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);
 
-
-    S_BaseEntity *get_entity_by_netid(uint64_t netid);
+    //Other networking methods
+    void send_game_info_to(int peer_id);
 
     void put_game_command(S_GameCommand *gamecmd);
-
-    Error serialize_gamestate(uint8_t *data, uint64_t size);
-
-    void sync_gamestate();
-
+    
     /**
      * @return Pointer to current map or nullptr if map is not set
     */
