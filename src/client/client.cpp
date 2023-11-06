@@ -20,15 +20,11 @@ Error Client::connect_to_game_server(const String &ip, int port)
 
 void Client::ready()
 {
-    /*
-    connection.instantiate();
-    connection->create_host(1, 3);
-
-    connect_to_game_server("localhost", 7654);
-    */
-    Ref<ENetMultiplayerPeer> server_peer = Ref<ENetMultiplayerPeer>();
+    server_peer = Ref<ENetMultiplayerPeer>();
     server_peer.instantiate(); //Same as using memnew
-
+    Ref<SceneMultiplayer> scene_multiplayer;
+    scene_multiplayer.instantiate();
+        
     Error err = server_peer->create_client("localhost", 7654);
 
     if (err)
@@ -39,12 +35,16 @@ void Client::ready()
     {
         on_connect();
     }
-    
-    
-    SceneMultiplayer* scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
-        
+
     scene_multiplayer->set_multiplayer_peer(server_peer);
     scene_multiplayer->set_root_path(get_path());
+    get_tree()->set_multiplayer(scene_multiplayer, get_path());
+    
+}
+
+void Client::_init()
+{
+
 }
 
 void Client::_notification(int notification)
@@ -62,17 +62,16 @@ void Client::_notification(int notification)
             ready();
         }
         break;
+
+        case NOTIFICATION_POSTINITIALIZE:
+        {
+            _init();
+        }
+        break;
     
         default:
             break;
     }
-}
-
-ObjectPtr<Server> Client::create_local_game_server()
-{
-    Server *server = memnew(Server);
-
-    return server;
 }
 
 void Client::enter_tree()

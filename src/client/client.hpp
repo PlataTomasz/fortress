@@ -5,8 +5,7 @@
 
 #include <modules/enet/enet_multiplayer_peer.h>
 #include <shared/helpers/object_ptr.h>
-#include <server/server.h>
-
+#include <modules/multiplayer/scene_multiplayer.h>
 
 /**
  * Client is a node responsible for connecting to server, disconnecting, receiving and sending data to server
@@ -19,9 +18,13 @@ private:
     Ref<ENetConnection> connection;
     Ref<ENetPacketPeer> peer;
 
+    Ref<ENetMultiplayerPeer> server_peer;
+
     void on_connect();
     void on_disconnect();
     void on_receive(const uint8_t *packet_data, uint64_t size);
+    void _init();
+    void _post_enter_tree();
 public:
     void process();
     void ready();
@@ -32,7 +35,6 @@ public:
      * Creates game server embedded in client - Simillar to GMod and CSGO
      * If server is already working, It is shut down and recreated with passed arguments
     */
-    ObjectPtr<Server> create_local_game_server();
     void send_data();
     //void send_game_cmd(const GameCommand& game_cmd);
 protected:

@@ -14,6 +14,8 @@ private:
     S_BaseEntity *controlled_entity = nullptr;
 
     uint8_t id = 0;
+
+    int owner_peer_id = 0;
     
     String nickname = "unset";
 protected:
@@ -24,6 +26,9 @@ public:
 
     void change_nickname(String nickname);
     String get_nickname();
+
+    int get_owner_peer_id(){return owner_peer_id;};
+    void set_owner_peer_id(int peer_id){owner_peer_id = peer_id;};
 
     String get_choosen_mercenary()
     {

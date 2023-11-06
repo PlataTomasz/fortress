@@ -43,6 +43,9 @@ Game::Game()
     ADD_RPC_CONFIG(movement_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(attack_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(ability_use_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(player_cfg_update_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+
+    initialize_registries();
 }
 
 void Game::setup_game()
@@ -119,7 +122,7 @@ void Game::_notification(int notification)
 void Game::_ready()
 {
     setup_game();
-
+    
     GameMap *tmp_mapInstance = (GameMap*)get_node(NodePath("Map"));
     if(tmp_mapInstance)
     {
@@ -179,6 +182,14 @@ void Game::_ready()
     player->controlledEntity->set_position(redSpawnPoint);
 
     camera->startFollowingNode(ent);
+
+    get_multiplayer()->connect("connected_to_server", callable_mp(this, &Game::_on_connect_to_remote_game));
+    //Workaround for a bug in raw version - We connect to server BEFORE the signal is connected!
+    if(get_multiplayer()->get_multiplayer_peer()->get_connection_status() == MultiplayerPeer::ConnectionStatus::CONNECTION_CONNECTED)
+    {
+        _on_connect_to_remote_game();
+    }
+    
 }
 
 void Game::initialize_registries()
@@ -255,6 +266,9 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
     else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))
     {
+        print_line(get_parent()->get_multiplayer()->get_multiplayer_peer()->get_connection_status());
+        print_line(get_parent()->get_multiplayer()->get_multiplayer_peer()->get_connection_status());
+
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
         UseContext use_context = {
@@ -292,6 +306,14 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
 }
 
+void Game::_on_connect_to_remote_game()
+{
+    Dictionary player_cfg;
+    player_cfg["nickname"] = "Boris";
+    //So apparently RPC won't be received by server unless rpc interface ticks at least once
+    Error err = rpc("player_cfg_update_request", player_cfg);
+    print_line("RPC err: ", err);
+}
 
 
 void Game::_bind_methods()
@@ -303,6 +325,7 @@ void Game::_bind_methods()
     ClassDB::bind_method(D_METHOD("movement_request", "target_position", "target_entity_id"), &Game::movement_request);
     ClassDB::bind_method(D_METHOD("attack_request", "target_position"), &Game::attack_request);
     ClassDB::bind_method(D_METHOD("ability_use_request", "target_position"), &Game::ability_use_request);
+    ClassDB::bind_method(D_METHOD("player_cfg_update_request", "target_position"), &Game::player_cfg_update_request);
 }
 
 Game::~Game()

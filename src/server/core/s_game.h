@@ -18,10 +18,16 @@ private:
     
     HashMap<int, Ref<S_Player>> players_by_peerid;
 
+    //Currently hardcoded at 10 players - unused ones are just inactive
+    List<Ref<S_Player>> players;
+
     //Game commands to be executed in the next frame
     List<S_GameCommand *> game_commands;
 
     HashMap<uint64_t, S_BaseEntity *> networked_entities;
+
+    void _on_player_connect(int peer_id, String nickname);
+    void _on_player_disconnect(int peer_id);
 
     void fixed_tick();
 
@@ -37,11 +43,16 @@ protected:
     static void _bind_methods();
 public:
     Ref<S_Player> get_player_by_peerid(int peerid);
+    void add_player(Ref<S_Player> player){players.push_back(player);};
 
     //Request handling methods
+    void player_cfg_update_request(Dictionary player_cfg);
+
     void movement_request(Vector2 target_pos);
     void attack_request(Vector2 target_pos, uint64_t target_entity_id);
     void ability_use_request(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);
+
+    
 
     //Other networking methods
     void send_game_info_to(int peer_id);
