@@ -30,17 +30,21 @@
 
 #include "register_types.h"
 
+#ifdef CLIENT
 #include "src/client/game.hpp"
 #include "src/client/client.hpp"
 #include "src/client/entities/entity.hpp"
 #include "src/client/game_camera.hpp"
 #include "src/client/game_map.hpp"
 #include <client/ui/entity_status_bar.hpp>
+#endif
 
+#ifdef SERVER
 #include <server/server.h>
 #include <server/core/s_game.h>
 #include <server/core/s_game_level.h>
 #include <server/entities/s_base_entity.h>
+#endif
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -49,6 +53,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
         return;
     }
 
+    #ifdef CLIENT
+
     ClassDB::register_class<Game>();
     ClassDB::register_class<Client>();
     ClassDB::register_class<Entity>();
@@ -56,12 +62,16 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<GameMap>();
     ClassDB::register_class<EntityStatusBar3D>();
 
+    #endif
+
+    #ifdef SERVER
     //Server classes - needed for build with locally hosted server
     ClassDB::register_class<Server>();
     ClassDB::register_class<S_Game>();
     ClassDB::register_class<S_GameLevel>();
     ClassDB::register_class<S_BaseEntity>();
     //ClassDB::register_class<>();
+    #endif
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)

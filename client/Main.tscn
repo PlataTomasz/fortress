@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://b5x2604j3junu"]
+[gd_scene load_steps=3 format=3 uid="uid://b5x2604j3junu"]
 
+[ext_resource type="PackedScene" uid="uid://daguq17nspl74" path="res://scenes/ui/main_menu.tscn" id="1_13b2i"]
 [ext_resource type="PackedScene" uid="uid://mjs6y0bwvg8p" path="res://maps/map01.tscn" id="1_y1h01"]
 
 [node name="App" type="Node"]
 
 [node name="Client" type="Client" parent="."]
+
+[node name="MainMenu" parent="Client" instance=ExtResource("1_13b2i")]
 
 [node name="Game" type="Game" parent="Client"]
 

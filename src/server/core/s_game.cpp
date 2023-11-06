@@ -13,8 +13,15 @@ S_Game::S_Game()
     ADD_RPC_CONFIG(movement_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(attack_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(ability_use_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(player_cfg_update_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     
+    S_Player *p1 = memnew(S_Player);
+    p1->change_nickname("Boris");
+    add_player(p1);
 
+    S_Player *p2 = memnew(S_Player);
+    p1->change_nickname("Jar'ro");
+    add_player(p2);
 }
 
 void S_Game::setup_game()
@@ -94,11 +101,13 @@ void S_Game::_bind_methods()
     ClassDB::bind_method(D_METHOD("movement_request", "target_position"), &S_Game::movement_request);
     ClassDB::bind_method(D_METHOD("attack_request", "target_position"), &S_Game::attack_request);
     ClassDB::bind_method(D_METHOD("ability_use_request", "target_position"), &S_Game::ability_use_request);
+    ClassDB::bind_method(D_METHOD("player_cfg_update_request", "player_cfg"), &S_Game::player_cfg_update_request);
 }
 
 void S_Game::send_game_info_to(int peer_id)
 {
     //FIXME: Dictionaries may store callable, which can result in RCE vulnerability?
+    /*
     Dictionary gameinfo;
     gameinfo["gamelevel"] = get_current_level()->get_scene_file_path();
 
@@ -115,6 +124,7 @@ void S_Game::send_game_info_to(int peer_id)
     gameinfo["players_info"] = players_info;
 
     rpc_id(peer_id, "parse_game_info", gameinfo);
+    */
 }
 
 void S_Game::movement_request(Vector2 target_pos)
@@ -124,7 +134,7 @@ void S_Game::movement_request(Vector2 target_pos)
     print_line("Movement request to", target_pos, "from", peer_id);
 
     Ref<S_Player> player = get_player_by_peerid(peer_id);
-    ERR_FAIL_COND_MSG(player.is_null(), "Sender peer has corresponding player");
+    ERR_FAIL_COND_MSG(player.is_null(), "Sender peer has no corresponding player");
 
     S_BaseEntity *issuer = player->get_controlled_entity();
     ERR_FAIL_COND_MSG(!issuer, "Player doesn't controll any entity!");
@@ -137,10 +147,57 @@ void S_Game::movement_request(Vector2 target_pos)
 
 Ref<S_Player> S_Game::get_player_by_peerid(int peerid)
 {
-    if(players_by_peerid.has(peerid))
-        return players_by_peerid.get(peerid);
-    else
-        return Ref<S_Player>();
+    for(Ref<S_Player> player : players)
+    {
+        if(player->get_owner_peer_id() == peerid)
+        {
+            return player;
+        }
+    }
+    return Ref<S_Player>();
+}
+
+void S_Game::_on_player_connect(int peer_id, String nickname)
+{
+    print_line("player nickname:", nickname, "peer", peer_id);
+
+    for( Ref<S_Player> player : players)
+    {
+        if(player->get_nickname() == nickname)
+        {
+            ERR_FAIL_COND_MSG(player->get_owner_peer_id() != 0, "Attempted to take control over player, which is already controlled!");
+            player->set_owner_peer_id(peer_id);
+        }
+        else
+        {
+            ERR_FAIL_MSG("No such player precreated on server!");
+        }
+    }
+}
+
+void S_Game::player_cfg_update_request(Dictionary player_cfg)
+{
+    ERR_FAIL_COND(player_cfg.has("nickname"));
+    ERR_FAIL_COND(player_cfg.has("mercenary"));
+
+    _on_player_connect(get_multiplayer()->get_remote_sender_id(), player_cfg.get("nickname", "unexpected"));
+}
+
+void S_Game::_on_player_disconnect(int peer_id)
+{
+    for( Ref<S_Player> player : players)
+    {
+        if(player->get_owner_peer_id() == peer_id)
+        {
+            //Open for new peer to take control over that player
+            player->set_owner_peer_id(0);
+        }
+    }
+}
+
+S_GameLevel *S_Game::get_current_level()
+{
+    return Object::cast_to<S_GameLevel>(get_node_or_null(NodePath("Level")));
 }
 
 void S_Game::attack_request(Vector2 target_pos, uint64_t entity_id)

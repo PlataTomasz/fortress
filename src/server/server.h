@@ -83,41 +83,7 @@ public:
         target->put_packet(packet_data, size);
     }
 
-    void ready()
-    {
-        //RequestHandler* request_handler = memnew(RequestHandler);
-        //add_child(request_handler);
-
-        game = reinterpret_cast<S_Game*>(get_node(NodePath("Game")));
-
-        int server_port = 7654;
-
-        //Setup networking
-        server_peer.instantiate(); //Same as using memnew
-
-        Error err = server_peer->create_server(7654, 32);
-        SceneMultiplayer* scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
-        scene_multiplayer->set_root_path(get_path());
-
-        ERR_FAIL_COND(!scene_multiplayer);
-        
-        scene_multiplayer->set_multiplayer_peer(server_peer);
-        scene_multiplayer->set_root_path(NodePath(String(get_path()) + "/S_Game"));
-
-        server_peer->connect("peer_connected", callable_mp(this, &Server::on_peer_connect));
-        server_peer->connect("peer_disconnected", callable_mp(this, &Server::on_peer_disconnect));
-
-        //Error err = server_peer->create_host_bound((IPAddress)("*"), server_port, 32, 3);
-
-        if(err == Error::OK)
-        {
-            print_line("Server is listening on port", server_port);
-        }
-        else
-        {
-            print_line("Failed to create server! Error code: " + err);
-        }
-    }
+    void ready();
 
     void on_peer_connect(int peer_id)
     {

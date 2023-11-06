@@ -15,6 +15,9 @@
 class Client;
 class C_SyncEvent;
 
+class MultiplayerSynchronizer;
+class MultiplayerSpawner;
+
 /**
  * Performs game related logic such as input handling and managing smaller components.
  * Game is supposed to be added to scene once connection to server was established.
@@ -40,6 +43,7 @@ private:
 
     void setup_game();
     void _on_entity_remote_spawn(Node *p_node);
+    void _on_tree_enter();
     
 public:
     Player *player;
@@ -65,10 +69,13 @@ public:
         //Auto detect map change
     }
 
+    void _on_connect_to_remote_game();
+
     //Request RPC methods - Empty, exist only to match RPC signature on authority, to avoid checksum errors
     void movement_request(Vector2 target_pos){};
     void attack_request(Vector2 target_pos, uint64_t target_entity_id){};
     void ability_use_request(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id){};
+    void player_cfg_update_request(Dictionary player_cfg){};
 
     GameMap* getGameMap()
     {
@@ -79,6 +86,8 @@ public:
     Vector3 screenToWorld(const Vector2 &screenPos);
 protected:
     static void _bind_methods();
+
+    //void _notification(int p_notification);
 public:
     Game();
     ~Game();
