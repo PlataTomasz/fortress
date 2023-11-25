@@ -1,16 +1,14 @@
 #if !defined(DAMAGE_OBJECT_HPP_INCLUDED)
 #define DAMAGE_OBJECT_HPP_INCLUDED
 
-#include <core/object/object.h>
-#include <shared/helpers/object_ptr.h>
-
-class Entity;
+#include <core/object/ref_counted.h>
+#include "damage_inflictor_component.h"
 
 enum DamageType
 {
-    DAMAGE_GENERIC,
-    DAMAGE_TRUE,
-    DAMAGE_INTERNAL
+    DAMAGE_PHYSICAL = 1,
+    DAMAGE_MAGICAL = 2,
+    DAMAGE_TRUE = 3,
 };
 
 VARIANT_ENUM_CAST(DamageType);
@@ -21,11 +19,11 @@ GDCLASS(DamageObject, RefCounted);
 public:
     DamageType type;
     float value = 0;
-    Entity *inflictor = nullptr;
-    //TODO: Type of origin - What caused damage?
-    //origin;
+    DamageInflictorComponent *inflictor = nullptr;
+    //TODO: Type of origin - What exactly caused damage? Ability, attack, enviroment?
+    DamagingInstance *origin;
 public:
-    DamageObject(DamageType _type, float _value, Entity *_inflictor)
+    DamageObject(DamageType _type, float _value, DamageInflictorComponent *_inflictor)
         : type(_type), value(_value), inflictor(_inflictor)
     {
 
