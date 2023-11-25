@@ -12,3 +12,7 @@
     rpc_config(#method_name, method_name ## _rpc_cfg); \
 
 #endif // HELPER_MACROS_INCLUDED
+
+#define IF_FALSE_RETURN(cond) if(unlikely(!cond)) return;
+
+#define IF_FALSE_RETURN_VAL(cond, retval) if(unlikely(!cond)) return retval;
