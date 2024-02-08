@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2p5n7vro274o"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lha4n"]
+size = Vector2(160, 160)
+
+[node name="TestLevel01" type="Node3D"]
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_lha4n")
+
+[node name="BaseEntity" type="BaseEntity" parent="Plane"]
+
+[node name="DebugCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 75, 135)

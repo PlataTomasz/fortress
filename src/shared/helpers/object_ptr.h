@@ -1,5 +1,5 @@
-#if !defined(ObjectPtr_HPP_INCLUDED)
-#define ObjectPtr_HPP_INCLUDED
+#if !defined(OBJECTPTR_H_INCLUDED)
+#define OBJECTPTR_H_INCLUDED
 
 #include <type_traits>
 
@@ -14,13 +14,13 @@ class NodePath;
 
 /**
  * ObjectPtr is a class designed to act as smart pointer for Objects, which are part of SceneTree.
- * @note That class does NOT do any cleanup! It leaves that responsibility to engine.
+ * @note That class does NOT do any cleanup! It leaves that responsibility to engine!(or programmer with Object type)
 */
 template<class T>
 class ObjectPtr
 {
 static_assert(std::is_base_of_v<Object, T> == true);
-
+//TODO: Code cleanup - There are some functionalities that are already fulfilled by engine API
 private:
     ObjectID objId;
     T *obj = nullptr;
@@ -52,17 +52,20 @@ public:
         return obj;
     }
 
+    T *get_ptr()
+    {
+        return obj;
+    }
+
     /**
      * @returns Object pointer stored by that object if valid
      */
     T *get_valid()
     {
-        if(is_valid())
-            return obj;
-        else
-            return nullptr;
+        return ObjectDB::get_instance(objId);
     }
 
+    //Sets a new value for this pointer
     void reset(T *new_ptr)
     {
         ERR_FAIL_COND_MSG(!new_ptr || !ObjectDB::get_instance(new_ptr->get_instance_id()), "ObjectPtr creation error - Passed Object is already invalid!");
@@ -91,6 +94,12 @@ public:
         return obj == ptr;
     }
 
+    ObjectPtr<T>& operator=(T *other)
+    {
+        reset(other);
+        return *this;
+    }
+
     operator bool() const
     {
         return this->is_valid();
@@ -98,7 +107,7 @@ public:
 
     ObjectPtr& operator=(ObjectPtr& other)
     {
-        this->reset(other.get());
+        reset(other.get());
         return *this;
     }
 
@@ -107,6 +116,11 @@ public:
     T* operator->()
     {
         return static_cast<T*>(this->obj);
+    }
+
+    operator T *()
+    {
+        return obj;
     }
 
     operator Variant()
@@ -147,7 +161,7 @@ public:
 
     //Copy
     //NOTE: Unused, might have issues with template reference argument
-    ObjectPtr(ObjectPtr& objectPtr)
+    ObjectPtr(ObjectPtr<T>& objectPtr)
     {
         reset(objectPtr.obj);
     }
@@ -158,4 +172,4 @@ public:
     }
 };
 
-#endif // ObjectPtr_HPP_INCLUDED
+#endif // OBJECTPTR_H_INCLUDED

@@ -6,12 +6,12 @@
 #include <scene/main/multiplayer_api.h>
 #include <modules/enet/enet_multiplayer_peer.h>
 #include <core/templates/hash_map.h>
-#include <server/core/s_player.h>
-#include <server/networking/requests/request_handler.h>
+#include <shared/core/player.h>
 
 #include <modules/multiplayer/scene_multiplayer.h>
+#include <shared/helpers/object_ptr.h>
 
-class S_Game;
+class Game;
 
 /**
  * Server is a node responsible for managing connections, sending and handling data over network.
@@ -22,11 +22,16 @@ GDCLASS(Server, Node);
 
 private:
     Ref<ENetMultiplayerPeer> server_peer;
-    S_Game *game = nullptr;
 
-    uint8_t player_count = 0;
-    S_Player players[16];
-    HashMap<Ref<ENetPacketPeer>, S_Player *> players_by_peer;
+    ObjectPtr<SceneMultiplayer> scene_multiplayer;
+
+    static ObjectPtr<Game> game;
+
+    uint8_t max_player_count = 10;
+    uint8_t current_player_count = 0;
+    Player players[16];
+    HashMap<Ref<ENetPacketPeer>, Player *> players_by_peer;
+    
 
 protected:
     void _notification(int notification)
@@ -41,7 +46,7 @@ protected:
 
             case NOTIFICATION_READY:
             {
-                ready();
+                _ready();
                 break;
             }
 
@@ -61,56 +66,29 @@ protected:
         }
     }
 public:
-    S_Player *get_player_by_peer(Ref<ENetPacketPeer> peer);
+    Player *get_player_by_peer(Ref<ENetPacketPeer> peer);
     Ref<ENetPacketPeer> get_peer_by_player_id(uint8_t p_player_id);
 
-    void send_data_to_all(const uint8_t *packet_data, uint64_t size)
-    {
-
-        List<Ref<ENetPacketPeer>> peers;
-        //TODO: Replace with MultiplayerAPI
-        /*
-        server_peer->get_peers(peers);
-        for(Ref<ENetPacketPeer> peer : peers)
-        {
-            peer->put_packet(packet_data, size);
-        }
-        */
-    }
-
-    void send_data(Ref<ENetPacketPeer> target, const uint8_t *packet_data, uint64_t size)
-    {
-        target->put_packet(packet_data, size);
-    }
-
-    void ready();
+    void _ready();
 
     void on_peer_connect(int peer_id)
     {
-        print_line("Player", peer_id, "connected");
+        print_line(peer_id, "connected");
     }
 
     void on_peer_disconnect(int peer_id)
     {
-        print_line("Player", peer_id, "disconnected");
+        print_line(peer_id, "disconnected");
     }
-
-    void on_receive(Ref<ENetPacketPeer> sender, const uint8_t *packet_data, uint64_t size);
 
     void process()
     {
-        //get_multiplayer()->get_multiplayer_peer()->poll();
-        //print_error("- _ -");
+
     }
 
-    S_Game *get_game();
+    static ObjectPtr<Game> get_game();
 
-
-    Server()
-    {
-        //Required, so that Node can tick
-        set_process(true);
-    }
+    Server();
 };
 
 

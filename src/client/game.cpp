@@ -6,9 +6,9 @@
 #include <core/input/input_event.h>
 #include <iostream>
 #include "entities/entity.hpp"
-#include "entities/mercenaries/mercenary.hpp"
-#include <client/entities/mercenaries/test_mercenary.hpp>
-#include "game_logic/abilities/use_context.hpp"
+#include <shared/entities/mercenaries/mercenary.hpp>
+#include <shared/entities/mercenaries/test_mercenary.hpp>
+#include <shared/abilities/use_context.hpp>
 #include <scene/main/viewport.h>
 #include <core/config/engine.h>
 #include <client/status_effects/status_effect_manager.hpp>
@@ -18,13 +18,13 @@
 #include <core/input/input_event.h>
 
 #include "entities/mercenaries/tundra/tundra.hpp"
-#include <client/entities/mercenaries/fist_mercenary/fist_mercenary.hpp>
-#include <client/entities/mercenaries/aal/aal.hpp>
+#include <shared/entities/mercenaries/fist_mercenary/fist_mercenary.hpp>
+#include <shared/entities/mercenaries/aal/aal.hpp>
 #include <shared/registries.h>
 #include <client/game_logic/abilities/test_ability.hpp>
 #include <client/game_logic/abilities/test_ability2.hpp>
-#include <client/networking/requests/c_game_requests.h>
-#include <client/networking/c_sync_events.h>
+#include <shared/networking/requests/c_game_requests.h>
+#include <shared/networking/c_sync_events.h>
 #include <client/client.hpp>
 #include <core/variant/dictionary.h>
 #include <shared/helper_macros.h>
