@@ -6,9 +6,9 @@
 #include <scene/3d/node_3d.h>
 #include <core/math/vector3.h>
 #include <core/input/input_event.h>
-#include "player.hpp"
-#include "game_camera.hpp"
 
+#include <shared/core/player.h>
+#include "game_camera.hpp"
 #include "map_loader.hpp"
 #include "game_map.hpp"
 

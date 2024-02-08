@@ -17,6 +17,7 @@ if methods.get_cmdline_bool("quality_game_code", True):
     env_zip.Append(CCFLAGS=["-Werror=return-type"])
 
 if methods.get_cmdline_bool("debug_game", False):
+    env_zip.Append(CPPDEFINES=["DEBUG_ARTSKR"])
     env_zip.Append(CCFLAGS=["-g"])
 
 # Non-elegant but without this project won't build with networking headers
@@ -53,11 +54,39 @@ elif(build_subtype == "server"): # Server build only code
     sources += Glob(sv_src_dir+"networking/*.cpp")
     sources += Glob(sv_src_dir+"entities/*.cpp")
     sources += Glob(sv_src_dir+"networking/requests/*.cpp")
+    sources += Glob(sv_src_dir+"entities/components/*.cpp")
+    sources += Glob(sv_src_dir+"entities/components/movement/*.cpp")
+    sources += Glob(sv_src_dir+"entities/components/entity_stats/*.cpp")
 else:
     print("\"game_target\" undefined!")
     Exit(255)
 
+# Both client and server
+sources += Glob(sh_src_dir+"*.cpp")
+sources += Glob(sh_src_dir+"abilities/*.cpp")
+sources += Glob(sh_src_dir+"abilities/aal/*.cpp")
+sources += Glob(sh_src_dir+"abilities/fist_mercenary/*.cpp")
+sources += Glob(sh_src_dir+"abilities/interfaces/*.cpp")
+sources += Glob(sh_src_dir+"abilities/sword_mercenary/*.cpp")
+sources += Glob(sh_src_dir+"abilities/tundra/*.cpp")
+
+sources += Glob(sh_src_dir+"core/*.cpp")
+sources += Glob(sh_src_dir+"data_holders/*.cpp")
+sources += Glob(sh_src_dir+"entities/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/abilities/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/ai/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/damage/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/entity_stats/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/levels/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/movement/*.cpp")
+
+sources += Glob(sh_src_dir+"entities/mercenaries/*.cpp")
+sources += Glob(sh_src_dir+"entities/mercenaries/aal/*.cpp")
+sources += Glob(sh_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
+sources += Glob(sh_src_dir+"entities/mercenaries/sword_mercenary/*.cpp")
+sources += Glob(sh_src_dir+"entities/mercenaries/tundra/*.cpp")
+
 sources += Glob(sh_src_dir+"helpers/*.cpp")
-sources += Glob(sh_src_dir+"/*.cpp")
     
 env_zip.add_source_files(env.modules_sources, sources)

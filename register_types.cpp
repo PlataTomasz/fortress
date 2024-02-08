@@ -41,9 +41,12 @@
 
 #ifdef SERVER
 #include <server/server.h>
-#include <server/core/s_game.h>
-#include <server/core/s_game_level.h>
-#include <server/entities/s_base_entity.h>
+#include <server/core/game.h>
+#include <shared/core/game_level.h>
+#include <shared/entities/entity.h>
+#include <shared/entities/components/component.h>
+#include <shared/entities/components/entity_stats/entity_stat_component.h>
+#include <shared/entities/components/movement/movement_component.h>
 #endif
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
@@ -67,9 +70,14 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     #ifdef SERVER
     //Server classes - needed for build with locally hosted server
     ClassDB::register_class<Server>();
-    ClassDB::register_class<S_Game>();
-    ClassDB::register_class<S_GameLevel>();
-    ClassDB::register_class<S_BaseEntity>();
+    ClassDB::register_class<Game>();
+    ClassDB::register_class<GameLevel>();
+    ClassDB::register_class<Entity>();
+    ClassDB::register_class<Component>();
+    ClassDB::register_class<EntityStatsComponent>();
+    ClassDB::register_class<MovementComponent>();
+
+    ClassDB::register_class<Stat>();
     //ClassDB::register_class<>();
     #endif
 }
