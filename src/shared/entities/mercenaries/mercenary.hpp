@@ -4,7 +4,6 @@
 #include <shared/entities/entity.h>
 #include <shared/abilities/ability.hpp>
 #include <shared/entities/components/abilities/ability_caster_component.h>
-#include <shared/entities/components/damage/damage_inflictor_component.h>
 
 /**
  * Mercenary is a class responsible for representing

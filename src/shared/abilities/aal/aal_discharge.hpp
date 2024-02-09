@@ -3,7 +3,6 @@
 
 #include <shared/data_holders/damage_object.hpp>
 #include <shared/abilities/passive_ability.hpp>
-#include <shared/abilities/interfaces/damaging.h>
 
 class AalDischarge : public PassiveAbility
 {

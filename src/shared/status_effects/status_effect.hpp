@@ -25,13 +25,11 @@ protected:
     StatusEffect::Type type = StatusEffect::Type::MISC;
     StringName instantiate_classname;
     //1 means that StatusEffect is unstackable
-    float max_stacks = 1;
-    float max_duration;
+    int max_stacks = 1;
+    float max_duration = 0;
 
     //Additional data - for instancing purposes
     Dictionary data;
-
-    int max_stacks;
 
     //Permament effects are those which max_duration is -1. That also includes effect that expire under certain conditions(like leaving slowing area)
     virtual bool is_permament()

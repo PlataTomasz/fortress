@@ -1,10 +1,11 @@
 #include <shared/abilities/aal/aal_straight_through_heart.h>
 #include <scene/3d/collision_shape_3d.h>
 #include <scene/resources/box_shape_3d.h>
-#include <shared/string_names/game_string_names.h>
 #include <scene/resources/packed_scene.h>
 #include <scene/3d/mesh_instance_3d.h>
 #include <scene/resources/primitive_meshes.h>
+
+
 
 AalStraightThroughHeart::AalStraightThroughHeart()
 {
@@ -32,18 +33,7 @@ void AalStraightThroughHeart::use_impl(UseContext& use_context)
         
         Entity* parent = static_cast<Entity*>(area->get_parent());
 
-        if(parent->is_in_group(GameStringNames::get_singleton()->ENTITIES_GROUP))
-        {
-            //FIXME: take_damage method no longer exists on Entity class - instead use DamageableComponent::take_damage.
-            //TODO: Currently passes through all units
-            /*
-            parent->take_damage(memnew(DamageObject(
-                DamageType::DAMAGE_MAGICAL,
-                50,
-                this->owner.get()
-            )));
-            */
-        }
+        //TODO: Dealing damage
     }
 
     owner->remove_child(hit_area);

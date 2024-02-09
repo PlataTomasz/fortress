@@ -2,7 +2,7 @@
 #include <shared/status_effects/status_effect_manager.hpp>
 
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
-#include <shared/entities/components/damageable_component.h>
+#include <shared/entities/components/damage/damageable_component.h>
 #include <shared/status_effects/status_effect_instance.h>
 
 #include <shared/string_names/component_stringnames.h>
@@ -29,7 +29,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
             else
             {
                 DamageObject *take_damage_object = memnew(DamageObject(
-                    DamageType::DAMAGE_MAGICAL,
+                    DamageObject::DamageType::DAMAGE_MAGICAL,
                     //TODO: Level and XP API
                     //get_base_damage() + get_damage_per_level()*owner->get_level(),
                     20,

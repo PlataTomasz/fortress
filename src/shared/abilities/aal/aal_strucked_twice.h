@@ -2,6 +2,7 @@
 #define AAL_STRUCKED_TWICE_H_INCLUDED
 
 #include <shared/abilities/active_ability.hpp>
+#include <scene/3d/area_3d.h>
 
 struct AbilityHitData
 {
@@ -18,7 +19,7 @@ private:
     int remembered_positions = 5;
 
     //How far points can be from user?
-    Area3D* effect_area = nullptr;
+    Area3D *effect_area = nullptr;
 
 
     void use_impl(UseContext& use_context) override;

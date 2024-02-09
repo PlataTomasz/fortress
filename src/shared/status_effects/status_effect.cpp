@@ -1,5 +1,5 @@
 #include "status_effect.hpp"
-#include "../entities/entity.hpp"
+#include <shared/entities/entity.h>
 
 StatusEffect::operator String() const
 {

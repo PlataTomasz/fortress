@@ -5,8 +5,6 @@
 
 #include <shared/status_effects/status_effect_instance.h>
 
-#include "./mercenaries/tundra/tundra_spiky_ball.hpp"
-
 StatusEffectManager::StatusEffectManager()
 {
     print_line("StatusEffectManager init...");
