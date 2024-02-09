@@ -4,6 +4,7 @@
 #include <scene/3d/node_3d.h>
 #include <scene/main/multiplayer_api.h>
 #include <server/server.h>
+#include <shared/entities/node_methods.h>
 
 /**
  * Base class for representing most of the in-game objects, such as projectiles, monsters, ticking entities
@@ -55,11 +56,9 @@ public:
     bool is_equal(Entity *other);
 
     template<class T>
-    ObjectPtr<T> get_component(StringName component_name)
+    T *get_component(StringName component_name)
     {
-        Variant var = get_meta(component_name);
-
-        return ObjectPtr<T>(static_cast<T *>(var.operator Object *()));
+        return EntityGlobals::get_component<T>(this, component_name);
     }
 };
 

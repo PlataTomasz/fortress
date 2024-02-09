@@ -1,7 +1,9 @@
-#include <client/game_logic/abilities/aal/aal_strucked_twice.h>
+#include <shared/abilities/aal/aal_strucked_twice.h>
 #include <scene/3d/collision_shape_3d.h>
 #include <scene/resources/sphere_shape_3d.h>
 #include <client/string_names/game_string_names.h>
+
+#include <scene/3d/area_3d.h>
 
 void AalStruckedTwice::use_impl(UseContext& use_context)
 {
@@ -41,13 +43,9 @@ void AalStruckedTwice::use_impl(UseContext& use_context)
                 Entity* parent = static_cast<Entity*>(area->get_parent());
                 //if(parent->get_parent() && parent->get_parent()->get_name() == "Entities")
                 // Check if node is entity
-                if(parent != use_context.get_user() && parent->is_in_group(GameStringNames::get_singleton()->ENTITIES_GROUP))
+                if(parent != use_context.get_user())
                 {
-                    parent->take_damage(memnew(DamageObject(
-                        DamageType::DAMAGE_MAGICAL,
-                        15,
-                        use_context.get_user()
-                    )));
+                    //TODO: Take damage is is DamageableComponent
                 }
             }
         }

@@ -1,10 +1,9 @@
-#if !defined(DAMAGE_OBJECT_HPP_INCLUDED)
-#define DAMAGE_OBJECT_HPP_INCLUDED
+#if !defined(DAMAGE_OBJECT_INCLUDED)
+#define DAMAGE_OBJECT_INCLUDED
 
 #include <core/object/ref_counted.h>
-#include <shared/entities/components/damage/damage_inflictor_component.h>
-
-VARIANT_ENUM_CAST(DamageObject::DamageType);
+#include <shared/helpers/object_ptr.h>
+#include <shared/entities/entity.h>
 
 class DamageObject : public RefCounted
 {
@@ -36,4 +35,6 @@ public:
     }
 };
 
-#endif // DAMAGE_OBJECT_HPP_INCLUDED
+VARIANT_ENUM_CAST(DamageObject::DamageType);
+
+#endif // DAMAGE_OBJECT_INCLUDED

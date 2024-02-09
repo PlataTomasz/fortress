@@ -20,6 +20,7 @@ public:
         return singleton;
     }
 
+    StringName ATTRIBUTES;
     StringName STATUS_EFFECT_VICTIM;
     StringName DAMAGEABLE;
 };
