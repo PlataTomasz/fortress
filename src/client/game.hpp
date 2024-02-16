@@ -9,85 +9,55 @@
 
 #include <shared/core/player.h>
 #include "game_camera.hpp"
-#include "map_loader.hpp"
-#include "game_map.hpp"
+#include <shared/core/game_level.h>
+#include <shared/core/sh_game.h>
 
 class Client;
-class C_SyncEvent;
-
-class MultiplayerSynchronizer;
-class MultiplayerSpawner;
 
 /**
  * Performs game related logic such as input handling and managing smaller components.
  * Game is supposed to be added to scene once connection to server was established.
 */
-class Game : public Node
+class Game : public SH_Game
 {
-GDCLASS(Game, Node);
+GDCLASS(Game, SH_Game);
 private:
-
-    List<C_SyncEvent *> sync_events;
-
-    /**
-     * Current map.
-    */
-    GameMap *gameMap = nullptr;
-    GameCamera *camera = nullptr;
+    GameCamera *game_camera = nullptr;
     Client *client = nullptr;
 
-    MultiplayerSynchronizer *entity_synchronizer = nullptr;
-    MultiplayerSpawner *entity_spawner = nullptr;
+    //void _on_entity_remote_spawn(Node *p_node);
 
-    void initialize_registries();
 
-    void setup_game();
-    void _on_entity_remote_spawn(Node *p_node);
-    void _on_tree_enter();
-    
+
 public:
+    //Player controlled by this game client
     Player *player;
 
+    void fetch_mercenary_classes(List<StringName> &names) {
+        ClassDB::get_inheriters_from_class("Mercenary", &names);
+    };
+
+    void _init();
     void _ready();
-    void _process();
+    void _tick();
     void unhandled_input(const Ref<InputEvent> &event) override;
-
-    void onChildExitTree(Node* node)
-    {
-        //Detecting if GameMap was removed for some reason(why?)
-        //TODO: Involve ObjectPtr class instead
-        if(Object::cast_to<GameMap>(node))
-        {
-            gameMap = nullptr;
-        }
-
-        //Otherwise do nothing
-    }
-
-    void onChildEnterTree(Node* node)
-    {
-        //Auto detect map change
-    }
 
     void _on_connect_to_remote_game();
 
     //Request RPC methods - Empty, exist only to match RPC signature on authority, to avoid checksum errors
-    void movement_request(Vector2 target_pos){};
-    void attack_request(Vector2 target_pos, uint64_t target_entity_id){};
-    void ability_use_request(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id){};
-    void player_cfg_update_request(Dictionary player_cfg){};
+    virtual void movement_request_impl(Vector2 target_pos);
+    virtual void attack_request_impl(Vector2 target_pos, uint64_t target_entity_id);
+    virtual void ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);
+    virtual void player_cfg_update_request_impl(Dictionary player_cfg);
 
-    GameMap* getGameMap()
-    {
-        return this->gameMap;
-    }
+    GameCamera *setup_game_camera();
 
     //Utilis
     Vector3 screenToWorld(const Vector2 &screenPos);
 protected:
     static void _bind_methods();
 
-    //void _notification(int p_notification);
+    void _notification(int p_notification);
 public:
     Game();
     ~Game();

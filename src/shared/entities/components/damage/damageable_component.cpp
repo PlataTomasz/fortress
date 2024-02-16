@@ -7,7 +7,10 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 {
     //Check if entity has component responsible for attributes
 
-    StatComponent *stat_component = EntityGlobals::get_component<StatComponent>(get_parent(), ComponentStringNames::get_singleton()->ATTRIBUTES);
+    Entity *ent = Object::cast_to<Entity>(get_parent());
+    ERR_FAIL_NULL(ent);
+    StatComponent *stat_component = ent->get_component<StatComponent>();
+    ERR_FAIL_NULL(stat_component);
 
     if(unlikely(!stat_component)) return;
     //Apply modifiers

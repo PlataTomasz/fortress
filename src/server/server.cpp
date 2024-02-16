@@ -1,6 +1,10 @@
 #include "server.h"
 #include <server/core/game.h>
 #include <shared/helper_macros.h>
+#include <core/variant/variant.h>
+#include <core/string/ustring.h>
+
+ObjectPtr<Game> Server::game;
 
 ObjectPtr<Game> Server::get_game()
 {
@@ -9,10 +13,7 @@ ObjectPtr<Game> Server::get_game()
 
 void Server::_ready()
 {
-    //Setup game object
-    game = memnew(Game);
-    add_child(game.get_ptr());
-
+    DISABLE_IN_EDITOR();
     int server_port = 7654;
 
     Error err = server_peer->create_server(7654, 32);
@@ -35,12 +36,32 @@ void Server::_ready()
     }
 }
 
-Server::Server()
-{
-    DISABLE_IN_EDITOR();
-    //Required, so that Node can tick
-    set_process(true);
+//Peer_id might conflict with ObjectID's
+void Server::on_peer_connect(int peer_id) {
+	print_line(peer_id, "connected");
+	Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
+	Entity *ent_instance = Object::cast_to<Entity>(ent_scene->instantiate());
+	ent_instance->set_name(itos(peer_id));
+	get_node(NodePath("/root/Server/Game/Level/Entities"))->add_child(ent_instance);
+}
 
+void Server::on_peer_disconnect(int peer_id) {
+	print_line(peer_id, "disconnected");
+	Entity *ent = static_cast<Entity *>(get_node_or_null(NodePath("/root/Server/Game/Level/Entities/" + itos(peer_id))));
+    ERR_FAIL_NULL("No such entity!");
+    ent->queue_free();
+}
+
+void Server::_init() {
     //Setup networking
     server_peer.instantiate(); //Same as using memnew
+
+    game = memnew(Game);
+    game->set_name("Game");
+    add_child(game.get_ptr());
+}
+
+Server::Server()
+{
+
 }

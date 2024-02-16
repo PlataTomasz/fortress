@@ -16,3 +16,21 @@ StatusEffect::operator String() const
 
     return str.format(format_data, "%");
 }
+
+Entity *StatusEffect::get_target() {
+    return static_cast<Entity *>(get_parent());
+}
+
+void StatusEffect::add_stacks(int stack_count = 1, bool refresh = true) {
+    if (current_stacks < max_stacks) {
+        current_stacks++;
+    }
+
+    if (refresh) {
+        current_duration = 0;
+    }
+}
+
+int StatusEffect::get_current_stacks() {
+    return current_stacks;
+}

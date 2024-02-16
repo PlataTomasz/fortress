@@ -1,0 +1,16 @@
+#if !defined(SHARED_DATA_INCLUDED)
+#define SHARED_DATA_INCLUDED
+
+class Node;
+
+class SharedData {
+private:
+    
+protected:
+    Node *_parent = nullptr;
+public:
+    SharedData() = delete;
+    SharedData(Node *parent);
+};
+
+#endif // SHARED_DATA_INCLUDED

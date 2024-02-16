@@ -5,76 +5,39 @@
 #include <scene/resources/primitive_meshes.h>
 #include <core/input/input_event.h>
 #include <iostream>
-#include "entities/entity.hpp"
+#include <shared/entities/entity.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
 #include <shared/entities/mercenaries/test_mercenary.hpp>
-#include <shared/abilities/use_context.hpp>
+#include <shared/data_holders/use_context.hpp>
 #include <scene/main/viewport.h>
 #include <core/config/engine.h>
-#include <client/status_effects/status_effect_manager.hpp>
 #include <core/object/object.h>
-#include <client/string_names/game_string_names.h>
 
 #include <core/input/input_event.h>
 
-#include "entities/mercenaries/tundra/tundra.hpp"
-#include <shared/entities/mercenaries/fist_mercenary/fist_mercenary.hpp>
 #include <shared/entities/mercenaries/aal/aal.hpp>
 #include <shared/registries.h>
-#include <client/game_logic/abilities/test_ability.hpp>
-#include <client/game_logic/abilities/test_ability2.hpp>
-#include <shared/networking/requests/c_game_requests.h>
-#include <shared/networking/c_sync_events.h>
 #include <client/client.hpp>
 #include <core/variant/dictionary.h>
 #include <shared/helper_macros.h>
 
-Game::Game()
-{
+Game::Game() {
+
+}
+
+void Game::_init() {
     DISABLE_IN_EDITOR();
     //Allow node to process inputs
     set_process_unhandled_input(true);
     set_process(true);
-
-    connect(SceneStringNames::get_singleton()->ready, callable_mp(this, &Game::_ready));
-    connect(SceneStringNames::get_singleton()->_process, callable_mp(this, &Game::_process));
-
-    //RPC config
-    ADD_RPC_CONFIG(movement_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-    ADD_RPC_CONFIG(attack_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-    ADD_RPC_CONFIG(ability_use_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-    ADD_RPC_CONFIG(player_cfg_update_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-
-    initialize_registries();
 }
-
-void Game::setup_game()
-{
-    entity_synchronizer = memnew(MultiplayerSynchronizer);
-    entity_spawner = memnew(MultiplayerSpawner);
-
-    add_child(entity_spawner);
-    add_child(entity_synchronizer);
-
-    NodePath entities_nodepath = NodePath("../Level/Entities");
-
-    entity_spawner->set_spawn_path(entities_nodepath);
-    entity_spawner->add_spawnable_scene("res://entities/Entity.tscn");
-
-    entity_synchronizer->set_root_path(entities_nodepath);
-
-    if(entity_synchronizer->get_replication_config().is_null())
-        entity_synchronizer->set_replication_config(memnew(SceneReplicationConfig));
-
-    entity_spawner->connect("spawned", callable_mp(this, Game::_on_entity_remote_spawn));
-}
-
+/*
 void Game::_on_entity_remote_spawn(Node *p_node)
 {
     Entity *ent = Object::cast_to<Entity>(p_node);
     ERR_FAIL_COND_MSG(!ent, "Remote spawned node, which is not entity! Properties may be desynchronized!");
 
-    Ref<SceneReplicationConfig> rep_cfg = entity_synchronizer->get_replication_config();
+    Ref<SceneReplicationConfig> rep_cfg = mp_synchronizer->get_replication_config();
     List<StringName> networked_properties_names = ent->get_networked_properties();
 
     for(StringName property_name : networked_properties_names)
@@ -86,83 +49,57 @@ void Game::_on_entity_remote_spawn(Node *p_node)
         rep_cfg->property_set_watch(path, true);
     }
 }
-
-void Game::_process()
+*/
+void Game::_tick()
 {
     
 }
 
-/*
+
 void Game::_notification(int notification)
 {
+    DISABLE_IN_EDITOR();
+    //Alternative implementation
+    /*
+    HashMap<int, Callable> map;
+    if(map.has(notification)) {
+        map.get(notification).call(this);
+    }
+    */
+
     switch (notification)
     {
-    case NOTIFICATION_PROCESS:
-        {
-            //Dispatch GameCommands
-            for(C_SyncEvent *sync_event : sync_events)
-            {
-                sync_event->execute(this);
-            }
-        }
+    case NOTIFICATION_POSTINITIALIZE:
+        _init();
         break;
-    
-    case NOTIFICATION_ENTER_TREE:
-    {
-        client = static_cast<Client *>(get_parent());
-    }
-    break;
-
+    case NOTIFICATION_READY:
+        _ready();
+        break;
     default:
         break;
     }
 }
-*/
+
+GameCamera *Game::setup_game_camera()
+{
+    game_camera = static_cast<GameCamera *>(get_node_or_null(NodePath("GameCamera")));
+    if(!game_camera)
+    {
+        game_camera = memnew(GameCamera);
+        game_camera->set_name("GameCamera");
+        add_child(game_camera);
+    }
+    return game_camera;
+}
 
 void Game::_ready()
 {
-    setup_game();
-    
-    GameMap *tmp_mapInstance = (GameMap*)get_node(NodePath("Map"));
-    if(tmp_mapInstance)
-    {
-        this->gameMap = tmp_mapInstance;
-        std::cout<<"Map detected!"<<std::endl;
-    }
-    else
-    {
-        //TODO: Load map from file - currently left in undefined state
-        std::cout<<"Map was not loaded!"<<std::endl;
-    }
+    DISABLE_IN_EDITOR();
+    setup_game_camera();
 
-    GameCamera *tmp_camera = (GameCamera*)get_node(NodePath("Camera"));
-    if(tmp_camera)
-    {
-        this->camera = tmp_camera;
-        std::cout<<"Game Camera detected!"<<std::endl;
-    }
-    else
-    {
-        GameCamera *game_camera = memnew(GameCamera);
-        add_child(game_camera);
-
-        this->camera = game_camera;
-        std::cout<<"Camera was not loaded! Creating one instead."<<std::endl;
-    }  
-
-    printf("Initializing StatusEffectManager...");
-    StatusEffectManager::get_singleton();
-    printf("Done!");
-
-    //Tundra *ent = memnew(Tundra);
-
-    //Note: get_item() might return NULL
-    //TODO: Handle NULL case
-    Mercenary* ent = Registries::get_singleton()->MERCENARIES.get_item(GameStringNames::get_singleton()->SWORD_MERCENARY);
-
-    ent->set_name("ControlledEntity");
-    this->add_child(ent);
+    Mercenary *ent = memnew(Mercenary);
     ent->set_position(Vector3( 2, 2, 2));
+    game_level->get_node(NodePath("Entities"))->add_child(ent);
     
     Vector3 redSpawnPoint = Vector3();
     Node3D *redSpawnNode = nullptr;
@@ -178,37 +115,12 @@ void Game::_ready()
     }
 
     player = new Player();
-    player->controlledEntity = ent;
-    player->controlledEntity->set_position(redSpawnPoint);
-
-    camera->startFollowingNode(ent);
+    ent->set_position(redSpawnPoint);
+    player->set_controlled_entity(ent);
+    game_camera->startFollowingNode(ent);
 
     get_multiplayer()->connect("connected_to_server", callable_mp(this, &Game::_on_connect_to_remote_game));
-    //Workaround for a bug in raw version - We connect to server BEFORE the signal is connected!
-    if(get_multiplayer()->get_multiplayer_peer()->get_connection_status() == MultiplayerPeer::ConnectionStatus::CONNECTION_CONNECTED)
-    {
-        _on_connect_to_remote_game();
-    }
     
-}
-
-void Game::initialize_registries()
-{
-    //Mercenaries
-    Ability *SWORD_MERCENARY_ABILITIES[Mercenary::ABILITY_MAX] = {new TestAbility2(), new TestAbility(), new TestAbility2(), new TestAbility2(), new TestAbility2()};
-    Registries::get_singleton()->MERCENARIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY, memnew(Mercenary(SWORD_MERCENARY_ABILITIES)));
-
-    //Basic attack providers
-
-
-    //Abilities
-    /*
-    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_PASSIVE_ABILITY, new SwordMercenaryPassiveAbility());
-    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_1, new SwordMercenaryActiveAbility1());
-    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_2, new SwordMercenaryActiveAbility2());
-    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_3, new SwordMercenaryActiveAbility3());
-    Registries::ABILITIES.register_item(GameStringNames::get_singleton()->SWORD_MERCENARY_ACTIVE_ABILITY_4, new SwordMercenaryActiveAbility4());
-    */
 }
 
 Vector3 Game::screenToWorld(const Vector2 &screenPos)
@@ -216,15 +128,15 @@ Vector3 Game::screenToWorld(const Vector2 &screenPos)
     
     //TODO: Project need to be used on camera node
 
-    Vector3 roughWorldPos = camera->project_position(screenPos, 1000);
-    Vector3 clickPos = camera->project_ray_origin(screenPos);
+    Vector3 rough_world_pos = game_camera->project_position(screenPos, 1000);
+    Vector3 click_pos = game_camera->project_ray_origin(screenPos);
 
-    double l = (roughWorldPos.x - clickPos.x);
-    double m = (roughWorldPos.y - clickPos.y);
-    double n = (roughWorldPos.z - clickPos.z);
+    double l = (rough_world_pos.x - click_pos.x);
+    double m = (rough_world_pos.y - click_pos.y);
+    double n = (rough_world_pos.z - click_pos.z);
 
-    double world_x = clickPos.x - (clickPos.y/m)*l;
-    double world_z = clickPos.z - (clickPos.y/m)*n;
+    double world_x = click_pos.x - (click_pos.y/m)*l;
+    double world_z = click_pos.z - (click_pos.y/m)*n;
 
     //y is zero because that doesn't matter
     return Vector3(world_x, 0, world_z);
@@ -238,9 +150,11 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         Vector2 screenPos = input_event_mouse_btn->get_position();
         Vector3 worldPos = screenToWorld(screenPos);
 
+        Entity *ent = player->get_controlled_entity();
+
         UseContext use_context = {
-            player->controlledEntity,
-            player->controlledEntity->get_position(),
+            ent,
+            ent->get_position(),
             Vector<Vector3>({worldPos}),
             Vector<Entity*>()
         };
@@ -266,14 +180,13 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
     else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))
     {
-        print_line(get_parent()->get_multiplayer()->get_multiplayer_peer()->get_connection_status());
-        print_line(get_parent()->get_multiplayer()->get_multiplayer_peer()->get_connection_status());
-
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
+        Entity *ent = player->get_controlled_entity();
+
         UseContext use_context = {
-            player->controlledEntity,
-            player->controlledEntity->get_position(),
+            ent,
+            ent->get_position(),
             Vector<Vector3>({worldPos}),
             Vector<Entity*>()
         };
@@ -283,25 +196,25 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         {
             printf("Q press\n");
             //player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, use_context);
-            rpc("ability_use_request", Mercenary::ABILITY_FIRST, Vector2(worldPos.x, worldPos.z), 0);
+            rpc("ability_use_request", AbilityCasterComponent::ABILITY_FIRST, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_2"))
         {
             printf("W press\n");
             //player->controlledEntity->use_ability(Mercenary::ABILITY_SECOND, use_context);
-            rpc("ability_use_request", Mercenary::ABILITY_SECOND, Vector2(worldPos.x, worldPos.z), 0);
+            rpc("ability_use_request", AbilityCasterComponent::ABILITY_SECOND, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_3"))
         {
             printf("E press\n");
             //player->controlledEntity->use_ability(Mercenary::ABILITY_THIRD, use_context);
-            rpc("ability_use_request", Mercenary::ABILITY_THIRD, Vector2(worldPos.x, worldPos.z), 0);
+            rpc("ability_use_request", AbilityCasterComponent::ABILITY_THIRD, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_4"))
         {
             printf("R press\n");
             //player->controlledEntity->use_ability(Mercenary::ABILITY_ULTIMATE, use_context);
-            rpc("ability_use_request", Mercenary::ABILITY_ULTIMATE, Vector2(worldPos.x, worldPos.z), 0);
+            rpc("ability_use_request", AbilityCasterComponent::ABILITY_ULTIMATE, Vector2(worldPos.x, worldPos.z), 0);
         }
     }
 }
@@ -319,16 +232,27 @@ void Game::_on_connect_to_remote_game()
 void Game::_bind_methods()
 {
     //Global signals
-    ADD_SIGNAL(MethodInfo(GameStringNames::get_singleton()->ON_DAMAGE_TAKEN, PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
-
-    //Methods
-    ClassDB::bind_method(D_METHOD("movement_request", "target_position", "target_entity_id"), &Game::movement_request);
-    ClassDB::bind_method(D_METHOD("attack_request", "target_position"), &Game::attack_request);
-    ClassDB::bind_method(D_METHOD("ability_use_request", "target_position"), &Game::ability_use_request);
-    ClassDB::bind_method(D_METHOD("player_cfg_update_request", "target_position"), &Game::player_cfg_update_request);
+    //ADD_SIGNAL(MethodInfo("on_damage_taken", PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
 }
 
 Game::~Game()
 {
     
+}
+
+//SH_Game definitions - Mostly empty on client-side
+void Game::movement_request_impl(Vector2 target_pos) {
+
+}
+
+void Game::attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) {
+
+}
+
+void Game::ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id) {
+
+}
+
+void Game::player_cfg_update_request_impl(Dictionary player_cfg) {
+
 }

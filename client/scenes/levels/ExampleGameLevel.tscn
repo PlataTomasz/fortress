@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxadmnim5wtlk"]
+
+[ext_resource type="PackedScene" uid="uid://blcynha0o73ll" path="res://resources/entities/Entity.tscn" id="1_dp34l"]
+
+[node name="ExampleGameLevel" type="GameLevel"]
+
+[node name="Entities" type="Node" parent="."]
+
+[node name="Entity" parent="Entities" instance=ExtResource("1_dp34l")]

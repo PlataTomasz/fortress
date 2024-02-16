@@ -1,7 +1,6 @@
 #include <shared/abilities/aal/aal_strucked_twice.h>
 #include <scene/3d/collision_shape_3d.h>
 #include <scene/resources/sphere_shape_3d.h>
-#include <client/string_names/game_string_names.h>
 
 #include <scene/3d/area_3d.h>
 

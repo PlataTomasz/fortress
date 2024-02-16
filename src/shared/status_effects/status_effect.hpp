@@ -5,12 +5,13 @@
 #include <core/variant/dictionary.h>
 #include <core/variant/variant.h>
 #include <cstdio>
+#include <scene/main/node.h>
 
 class Entity;
 
 //Class which acts as a template for instantiating new status effect instances
 //NOTE: Name is set by StatusEffectManager
-class StatusEffect : public Resource
+class StatusEffect : public Node
 {
 public:
     enum Type
@@ -23,13 +24,12 @@ public:
 protected:
     //Generic fields - every status event have them
     StatusEffect::Type type = StatusEffect::Type::MISC;
-    StringName instantiate_classname;
     //1 means that StatusEffect is unstackable
     int max_stacks = 1;
-    float max_duration = 0;
+    float max_duration = 3;
 
-    //Additional data - for instancing purposes
-    Dictionary data;
+    int current_stacks = 1;
+    float current_duration = 0;
 
     //Permament effects are those which max_duration is -1. That also includes effect that expire under certain conditions(like leaving slowing area)
     virtual bool is_permament()
@@ -37,15 +37,13 @@ protected:
         return false;
     }
 public:
-    //Getters/Setters
-    void set_target(Entity* owner);
-    Entity* get_target();
+    Entity *get_target();
 
     int get_current_stacks();
 
 
     //TODO: Maybe return value, informing that stack was not added and why?
-    void add_stacks(int stack_count = 1);
+    void add_stacks(int stack_count = 1, bool refresh = true);
 
     //Callbacks
     virtual void on_process_frame_impl() final;
@@ -65,19 +63,7 @@ public:
     /**
      * Called every process frame
     */
-    virtual void on_process_frame(){};
-
-    //Creates instance of status effect based on this status effect
-    StatusEffectInstance *create_instance()
-    {
-        //NOTE: Currently doesn't support external classes(ex. GDScript)
-        StatusEffectInstance *status_effect_instance = Object::cast_to<StatusEffectInstance>(ClassDB::instantiate(instantiate_classname));
-
-        if(!status_effect_instance)
-            print_error("No such class! Instantiation of" + instantiate_classname + "failed! Returning nullptr!");
-
-        return status_effect_instance;
-    }
+    virtual void _tick(){};
 
     operator String() const;
 
@@ -86,40 +72,6 @@ public:
     StatusEffect()
     {
         
-    }
-
-    void initialize_generic_fields(Dictionary data)
-    {
-        //FIXME: Dictionary currently stores duplicates of fields
-        //TODO: Validate data stored in Dictionary
-
-        Variant classname_var = data.get_valid("classname");
-        //SEI is acronym for StatusEffectInstance. SEI contains logic and variables for quick accesss for status effect instances
-        instantiate_classname = classname_var.get_type() == Variant::Type::STRING ? String(classname_var) : get_name().capitalize().replace(" ", "") + "SEI";
-
-        Variant type_var = data.get_valid("type");
-        if(type_var.get_type() == Variant::Type::INT)
-        {
-            int type_num = type_var.operator signed int();
-            if(type_num >= 0 && type_num < StatusEffect::Type::TYPE_MAX)
-            {
-                type = (StatusEffect::Type)type_num;
-            }
-            else
-            {
-                type = StatusEffect::Type::MISC;
-            }
-        }
-        else
-        {
-            type = StatusEffect::Type::MISC;
-        }
-
-    }
-
-    StatusEffect(String new_name)
-    {
-        set_name(new_name);
     }
 
     friend class Entity;

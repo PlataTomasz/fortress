@@ -26,7 +26,7 @@ protected:
     */
     Ability *basic_attack_ability;
     Ability *abilitySet[AbilitySetIndex::ABILITY_MAX];
-
+    int ability_count = 5;
     static void _bind_methods();
 public:
     void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
@@ -38,6 +38,8 @@ public:
 
     void initialize();
     void tick();
+
+    virtual ~AbilityCasterComponent();
 
     AbilityCasterComponent();
     AbilityCasterComponent(Ability *abilities[ABILITY_MAX]);

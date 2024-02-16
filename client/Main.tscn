@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b5x2604j3junu"]
+[gd_scene load_steps=2 format=3 uid="uid://b5x2604j3junu"]
 
 [ext_resource type="PackedScene" uid="uid://daguq17nspl74" path="res://scenes/ui/main_menu.tscn" id="1_13b2i"]
-[ext_resource type="PackedScene" uid="uid://mjs6y0bwvg8p" path="res://maps/map01.tscn" id="1_y1h01"]
 
 [node name="App" type="Node"]
 
@@ -9,13 +8,14 @@
 
 [node name="MainMenu" parent="Client" instance=ExtResource("1_13b2i")]
 
-[node name="Game" type="Game" parent="Client"]
-
-[node name="Map" parent="Client/Game" instance=ExtResource("1_y1h01")]
-
-[node name="Camera" type="GameCamera" parent="Client/Game"]
-transform = Transform3D(1, 0, 0, 0, 0.737277, 0.67559, 0, -0.67559, 0.737277, 0, 2, 2)
-current = true
-fov = 45.0
+[node name="Game2" type="Game" parent="Client"]
 
 [node name="Server" type="Server" parent="Client"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+editor_description = ""
+script = null

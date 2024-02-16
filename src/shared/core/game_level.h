@@ -13,71 +13,37 @@ class GameLevel : public Node3D
 {
 GDCLASS(GameLevel, Node3D);
 private:
-	Node *entities_node;
 
-	MultiplayerSynchronizer *mp_synchronizer;
-	MultiplayerSpawner *mp_spawner;
+
+	Node *entities_node = nullptr;
 protected:
-	void _notification(int p_notification)
-	{
-		switch (p_notification)
-		{
-		case NOTIFICATION_READY:
-		{
+	void _notification(int p_notification) {
+		DISABLE_IN_EDITOR();
+		switch (p_notification) {
+			case NOTIFICATION_READY: {
+				_ready();
+			} break;
+
+			default:
+				break;
+		}
+	}
+
+	void _ready() {
+		DISABLE_IN_EDITOR();
+		//Handling entities that are already in level
+		entities_node = get_node_or_null(NodePath("Entities"));
+		if (!entities_node) {
 			entities_node = memnew(Node);
 			entities_node->set_name("Entities");
 			add_child(entities_node);
-
-			//Setup Entity replication
-			mp_synchronizer = memnew(MultiplayerSynchronizer);
-			mp_synchronizer->set_name("EntitySynchronizer");
-			mp_synchronizer->set_root_path(NodePath("Entities"));
-			Ref<SceneReplicationConfig> mp_synchronizer_cfg = mp_synchronizer->get_replication_config();
-			add_child(mp_synchronizer);
-
-			mp_spawner = memnew(MultiplayerSpawner);
-			mp_spawner->set_name("EntitySpawner");
-			mp_spawner->set_spawn_path(NodePath("Entities"));
-			//Add spawnable scenes
-			mp_spawner->add_spawnable_scene("res://entities/entity.tscn");
-			mp_spawner->add_spawnable_scene("res://entities/mercenary.tscn");
-
-			add_child(mp_spawner);
-		}
-		break;
-
-		
-		
-		default:
-			break;
 		}
 	}
 
-	virtual void add_child_notify(Node *p_child) override
-	{
-		if(Entity* ent_node = Object::cast_to<Entity>(p_child))
-		{
-			//Add properties to sync
-			Ref<SceneReplicationConfig> mp_synchronizer_cfg = mp_synchronizer->get_replication_config();
-			
-			List<StringName> networked_properties = ent_node->get_networked_properties();
-
-			//Add all networked properties
-			for(int i = 0;i < networked_properties.size();i++)
-			{
-				//Don't know if there is better way
-				NodePath property_path = String(ent_node->get_name()) + ":" + networked_properties[i];
-				mp_synchronizer_cfg->add_property(property_path);
-				//sync is set to false on purpose - watch is used
-				mp_synchronizer_cfg->property_set_sync(property_path, false);
-			}
-				
-		}
-	}
 public:
 	GameLevel()
 	{
-		
+
 	}
 };
 
