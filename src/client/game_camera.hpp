@@ -18,9 +18,9 @@ static void _bind_methods(){};
 protected:
     static Vector3 CAMERA_OFFSET;
 
-    bool freeCam;
+    bool freeCam = false;
 
-    Node3D *followedNode;
+    Node3D *followedNode = nullptr;
 
     /**
      * Changes currecntly followed node and disables freecam

@@ -1,7 +1,7 @@
 #include "entity_status_bar.hpp"
 #include <gdextension_helper.hpp>
 
-#include <client/entities/entity.hpp>
+#include <shared/entities/entity.h>
 #include <scene/gui/progress_bar.h>
 #include <core/string/node_path.h>
 

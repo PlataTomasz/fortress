@@ -4,6 +4,7 @@
 #include <shared/entities/entity.h>
 #include <shared/abilities/ability.hpp>
 #include <shared/entities/components/abilities/ability_caster_component.h>
+#include <shared/helpers/object_ptr.h>
 
 /**
  * Mercenary is a class responsible for representing
@@ -15,11 +16,11 @@ class Mercenary : public Entity
 GDCLASS(Mercenary, Entity);
 protected:
     static void _bind_methods();
+    ObjectPtr<AbilityCasterComponent> ability_caster_component;
 public:
     void _notification(int notification);
-
     void initialize();
-    void tick();
+    void _tick();
 
     Mercenary();
 

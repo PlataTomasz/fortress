@@ -1,16 +1,16 @@
 #include "game_camera.hpp"
 #include <scene/3d/node_3d.h>
 #include <core/math/vector3.h>
-#include <gdextension_helper.hpp>
-
-
+#include <shared/helper_macros.h>
 
 Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 2, 2);
 
 GameCamera::GameCamera()
 {
+    DISABLE_IN_EDITOR();
     followedNode = nullptr;
     freeCam = true;
+    set_rotation_degrees(Vector3(-42.5,0,0));
 
     SceneTree::get_singleton()->connect("process_frame", callable_mp(this, &GameCamera::process_frame));
 }
@@ -21,6 +21,7 @@ void GameCamera::_ready()
 
 void GameCamera::_exit_tree()
 {
+    DISABLE_IN_EDITOR();
     followedNode = nullptr;
     enableFreeCam();
 }

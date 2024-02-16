@@ -1,7 +1,7 @@
 #include "ability_caster_component.h"
 #include <shared/abilities/test_ability.hpp>
 #include <shared/data_holders/use_context.hpp>
-#include <gdextension_helper.hpp>
+#include <shared/helper_macros.h>
 
 #include <memory.h>
 
@@ -41,9 +41,9 @@ void AbilityCasterComponent::_notification(int notification)
     }
 }
 
-void AbilityCasterComponent::use_ability(AbilitySetIndex ability_id, UseContext use_context)
-{
-    abilitySet[ability_id]->use(use_context);
+void AbilityCasterComponent::use_ability(AbilitySetIndex ability_id, UseContext use_context) {
+	ERR_FAIL_COND(!(ability_id > 0 && ability_id < ability_count));
+	abilitySet[ability_id]->use(use_context);
 }
 
 void AbilityCasterComponent::use_basic_attack(UseContext& use_context)

@@ -10,6 +10,7 @@
 
 #include <modules/multiplayer/scene_multiplayer.h>
 #include <shared/helpers/object_ptr.h>
+#include <shared/helper_macros.h>
 
 class Game;
 
@@ -32,12 +33,17 @@ private:
     Player players[16];
     HashMap<Ref<ENetPacketPeer>, Player *> players_by_peer;
     
-
 protected:
     void _notification(int notification)
     {
+        DISABLE_IN_EDITOR();
         switch (notification)
         {
+            case NOTIFICATION_POSTINITIALIZE:
+            {
+                _init();
+            }
+
             case NOTIFICATION_PROCESS:
             {
                 process();
@@ -65,21 +71,17 @@ protected:
                 break;
         }
     }
+
+    void _init();
 public:
     Player *get_player_by_peer(Ref<ENetPacketPeer> peer);
     Ref<ENetPacketPeer> get_peer_by_player_id(uint8_t p_player_id);
 
     void _ready();
 
-    void on_peer_connect(int peer_id)
-    {
-        print_line(peer_id, "connected");
-    }
-
-    void on_peer_disconnect(int peer_id)
-    {
-        print_line(peer_id, "disconnected");
-    }
+    void on_peer_connect(int peer_id);
+   
+    void on_peer_disconnect(int peer_id);
 
     void process()
     {

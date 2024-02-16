@@ -1,9 +1,8 @@
 #include <shared/abilities/aal/aal_discharge.hpp>
-#include <shared/status_effects/status_effect_manager.hpp>
 
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/entities/components/damage/damageable_component.h>
-#include <shared/status_effects/status_effect_instance.h>
+#include <shared/status_effects/status_effect.hpp>
 
 #include <shared/string_names/component_stringnames.h>
 #include <shared/string_names/signal_stringnames.h>
@@ -11,15 +10,15 @@
 void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_object)
 {
     //TODO: Use Object Metadata
-    ObjectPtr<StatusEffectVictimComponent> status_effect_victim = ent->get_component<StatusEffectVictimComponent>(ComponentStringNames::get_singleton()->STATUS_EFFECT_VICTIM);
-    ObjectPtr<DamageableComponent> damageable_target = ent->get_component<DamageableComponent>(ComponentStringNames::get_singleton()->DAMAGEABLE);
+    ObjectPtr<StatusEffectVictimComponent> status_effect_victim = ent->get_component<StatusEffectVictimComponent>();
+    ObjectPtr<DamageableComponent> damageable_target = ent->get_component<DamageableComponent>();
 
     //Checking if we inflicted damage
     if(owner == damage_object->inflictor)
     {
-        ObjectPtr<StatusEffectInstance> status_effect = status_effect_victim->get_status_effect_instance("aal_discharge");
+        StatusEffect *status_effect = status_effect_victim->get_status_effect("aal_discharge");
 
-        if(!status_effect.is_valid())
+        if(!status_effect)
         {
             //Deal damage if attempt to apply more than maximum stacks and purge them
             if(status_effect->get_current_stacks() < 3)
@@ -42,8 +41,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
         }
         else
         {
-            status_effect = StatusEffectManager::get_singleton()->create_status_effect_instance("aal_discharge");
-            status_effect_victim->apply_status_effect_instance(status_effect);
+            status_effect_victim->apply_status_effect("aal_discharge");
         }
     }
     
