@@ -1,6 +1,8 @@
 #if !defined(HELPER_MACROS_INCLUDED)
 #define HELPER_MACROS_INCLUDED
 
+#include <core/variant/dictionary.h>
+
 #define DISABLE_IN_EDITOR() if(unlikely(Engine::get_singleton()->is_editor_hint())) return;
 
 #define ADD_RPC_CONFIG(method_name, rpc_mode, transfer_mode, channel, call_local) \

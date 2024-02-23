@@ -23,7 +23,7 @@ Entity *Player::get_controlled_entity()
     return controlled_entity;
 }
 
-void Player::change_nickname(String p_nickname)
+void Player::change_nickname(const String p_nickname)
 {
     nickname = p_nickname;
 }

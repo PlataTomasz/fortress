@@ -11,15 +11,15 @@ class Component : public Node
 {
 GDCLASS(Component, Node);
 private:
-    
+
 protected:
     void _notification(int p_notification);
 
-    virtual void _on_sibling_added(Node *sibling);
-    virtual void _on_sibling_removed(Node *sibling);
-    virtual void _on_parent_changed();
-    virtual void _on_child_added(Node *child);
-    virtual void _on_child_removed(Node *child);
+    void _on_sibling_added(Node *sibling);
+    void _on_sibling_removed(Node *sibling);
+
+    virtual void _on_sibling_added_impl(Node *sibling);
+    virtual void _on_sibling_removed_impl(Node *sibling);
 public:
     Component();
 };

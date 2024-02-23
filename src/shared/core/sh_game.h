@@ -24,13 +24,15 @@ protected:
     void _ready();
     void _tick();
 
-    void setup_game();
     void _notification(int p_notification);
 
     static void _bind_methods();
 public:
+    void setup_game();
+
     //Network synchronization stuff
     void add_node_networked_property(Node *node, const StringName &property_name);
+    void remove_node_networked_property(Node *node, const StringName &property_name);
 
     //Request handling methods
     void player_cfg_update_request(Dictionary player_cfg);

@@ -5,7 +5,7 @@
 #include <scene/gui/texture_rect.h>
 
 #include <client/client.hpp>
-#include <client/game.hpp>
+#include <client/game.h>
 #include <client/ui/character_select_elem.h>
 
 void UserInterface::_notification(int p_notification) {
@@ -21,6 +21,7 @@ void UserInterface::_notification(int p_notification) {
 }
 
 void UserInterface::_init() {
+    set_mouse_filter(Control::MouseFilter::MOUSE_FILTER_PASS);
     set_anchors_preset(LayoutPreset::PRESET_FULL_RECT);
     //Currently User Interface has only character and nickname selection
     Ref<PackedScene> char_select_scene = ResourceLoader::load("res://scenes/ui/CharacterSelection.tscn");

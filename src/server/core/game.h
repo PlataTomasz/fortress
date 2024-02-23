@@ -17,23 +17,26 @@ class Game : public SH_Game
 GDCLASS(Game, SH_Game);
 private:
     Server *server = nullptr;
-    
-    HashMap<int, Ref<Player>> players_by_peerid;
 
-    //Currently hardcoded at 10 players - unused ones are just inactive
-    List<Ref<Player>> players;
+    // Seems messy - Reimplment one day
+    HashMap<int, Ref<SceneTreeTimer>> playerdata_timers;
 
-    void _on_player_connect(int peer_id, String nickname);
-    void _on_player_disconnect(int peer_id);
+    Dictionary gameinfo;
+
+    void _on_peer_connect(int peer_id);
+    void _on_peer_disconnect(int peer_id);
 
     void _ready();
+
+    void _on_receive_playerdata(Dictionary playerdata);
 protected:
     void _notification(int notification);
 
     static void _bind_methods();
 public:
-    Ref<Player> get_player_by_peerid(int peerid);
-    void add_player(Ref<Player> player){players.push_back(player);};
+    void disconnect_peer(int peer_id, const char *reason = "Disconnected");
+
+    void _on_playerdata_fail(int peer_id);
 
     //Request handling methods
     virtual void player_cfg_update_request_impl(Dictionary player_cfg);
@@ -41,6 +44,8 @@ public:
     virtual void attack_request_impl(Vector2 target_pos, uint64_t target_entity_id);
     virtual void ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);
     Game();
+
+    friend class Server;
 };
 
 #endif // SERVER_GAME_INCLUDED
