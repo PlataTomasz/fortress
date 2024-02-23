@@ -26,5 +26,7 @@ void Realm::_notification(int p_notification) {
 
 void Realm::_ready() {
     DISABLE_IN_EDITOR();
-    ADD_RPC_CONFIG(disconnected_by_server, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(server_rpc_disconnect, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(server_rpc_gameinfo, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+    ADD_RPC_CONFIG(client_rpc_playerdata, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
 }

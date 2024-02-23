@@ -52,6 +52,8 @@ public:
 	template <class T>
 	T *get_component();
 	Component *get_component(const StringName& name);
+
+	void set_component(const StringName &name, Component *component);
 };
 
 #endif // ENTITY_INCLUDED

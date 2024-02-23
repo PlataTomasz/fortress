@@ -28,7 +28,7 @@ private:
     //void _on_entity_remote_spawn(Node *p_node);
 
 
-
+    //Called when all steps of connection to server are completed and server gave us gameinfo
 public:
     //Player controlled by this game client
     Player *player;
@@ -43,6 +43,8 @@ public:
     void unhandled_input(const Ref<InputEvent> &event) override;
 
     void _on_connect_to_remote_game();
+
+    void _on_server_connect_finish();
 
     //Request RPC methods - Empty, exist only to match RPC signature on authority, to avoid checksum errors
     virtual void movement_request_impl(Vector2 target_pos);

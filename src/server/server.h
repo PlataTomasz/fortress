@@ -24,7 +24,7 @@ class Server : public Realm
 GDCLASS(Server, Realm);
 private:
     Ref<ENetMultiplayerPeer> server_peer;
-    ObjectPtr<SceneMultiplayer> scene_multiplayer;
+    SceneMultiplayer *scene_multiplayer;
 
     HashMap<int, Ref<Player>> connected_players;
 
@@ -87,10 +87,7 @@ public:
 
     void _ready();
 
-    void process()
-    {
-
-    }
+    void process();
 
     void disconnect_peer(int peer_id, const String reason = "Disconnected by server!");
 

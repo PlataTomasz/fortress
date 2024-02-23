@@ -20,6 +20,7 @@ private:
 
     void _tick();
     void _init();
+    void _parented();
 protected:
     void _notification(int p_notification);
     static void _bind_methods();

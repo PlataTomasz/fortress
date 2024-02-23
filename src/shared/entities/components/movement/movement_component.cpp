@@ -4,6 +4,8 @@
 #include <shared/entities/components/entity_stats/entity_stat_component.h>
 #include <shared/helper_macros.h>
 
+#include <shared/string_names/component_stringnames.h>
+
 #include <shared/entities/entity.h>
 
 void MovementComponent::_notification(int p_notification) {
@@ -13,10 +15,14 @@ void MovementComponent::_notification(int p_notification) {
 		case NOTIFICATION_PHYSICS_PROCESS:
 			_tick();
 			break;
+		case NOTIFICATION_READY:
+			break;
+		case NOTIFICATION_PARENTED:
+			_parented();
+			break;
 		case NOTIFICATION_POSTINITIALIZE:
 			_init();
 			break;
-
 		default:
 			break;
 	}
@@ -39,6 +45,11 @@ void MovementComponent::_tick() {
 	//FIXME: Rotation looks clunky - interpolation?
 	//NOTE: Facing direction (0,0,0) looking towards "-Z"
 	ent->look_at(nav_agent->get_next_path_position());
+}
+
+void MovementComponent::_parented() {
+	Entity *ent = static_cast<Entity *>(get_parent());
+	ent->set_component(ComponentStringNames::get_singleton()->movement_component, this);
 }
 
 void MovementComponent::_init() {

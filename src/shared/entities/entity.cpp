@@ -5,11 +5,17 @@
 
 //NOTE: That method requires Entity to be part of the SceneTree to work
 void Entity::add_networked_property(const StringName &property_name) {
-	Realm::get_game()->add_node_networked_property(this, property_name);
+	if(Realm::get_game() != nullptr)
+		Realm::get_game()->add_node_networked_property(this, property_name);
 }
 
 void Entity::remove_networked_property(const StringName &property_name) {
-	Realm::get_game()->remove_node_networked_property(this, property_name);
+	if(Realm::get_game() != nullptr)
+		Realm::get_game()->remove_node_networked_property(this, property_name);
+}
+
+void Entity::set_component(const StringName &name, Component *component) {
+	set_meta(name, component);
 }
 
 template<class T>

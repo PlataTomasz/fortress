@@ -5,12 +5,6 @@
 [node name="App" type="Node"]
 
 [node name="Client" type="Client" parent="."]
-
-[node name="MainMenu" parent="Client" instance=ExtResource("1_13b2i")]
-
-[node name="Game2" type="Game" parent="Client"]
-
-[node name="Server" type="Server" parent="Client"]
 _import_path = NodePath("")
 unique_name_in_owner = false
 process_mode = 0
@@ -19,3 +13,9 @@ process_physics_priority = 0
 process_thread_group = 0
 editor_description = ""
 script = null
+
+[node name="MainMenu" parent="Client" instance=ExtResource("1_13b2i")]
+
+[node name="Game2" type="Game" parent="Client"]
+
+[node name="Server" type="Server" parent="Client"]

@@ -3,14 +3,14 @@
 #include <core/math/vector3.h>
 #include <shared/helper_macros.h>
 
-Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 10, 2);
+Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 2, 3.5);
 
 GameCamera::GameCamera()
 {
     DISABLE_IN_EDITOR();
     followedNode = nullptr;
     freeCam = true;
-    set_rotation_degrees(Vector3(-90,0,0));
+    set_rotation_degrees(Vector3(-30,0,0));
 
     SceneTree::get_singleton()->connect("process_frame", callable_mp(this, &GameCamera::process_frame));
 }
@@ -61,8 +61,11 @@ void GameCamera::process_frame()
             //TODO: Apply offset, so camera POV won't change upon 
             Vector3 camPos = this->get_position();
             Vector3 nodePos = followedNode->get_position();
+            /*
             camPos.x = nodePos.x+GameCamera::CAMERA_OFFSET.x;
+            camPos.x = nodePos.y+GameCamera::CAMERA_OFFSET.y;
             camPos.z = nodePos.z+GameCamera::CAMERA_OFFSET.z;
+            */
             this->set_position(camPos);
         }
     }

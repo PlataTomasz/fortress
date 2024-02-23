@@ -20,9 +20,10 @@ public:
         return singleton;
     }
 
-    StringName ATTRIBUTES;
-    StringName STATUS_EFFECT_VICTIM;
-    StringName DAMAGEABLE;
+    StringName attribute_component;
+    StringName status_effect_component;
+    StringName damageable_component;
+    StringName movement_component;
 };
 
 #endif // COMPONENT_STRINGNAMES_INCLUDED

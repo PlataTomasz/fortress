@@ -56,7 +56,6 @@ void SH_Game::remove_node_networked_property(Node *node, const StringName &prope
 
 void SH_Game::setup_game()
 {
-    //Currently debug feature
     NodePath entities_nodepath = NodePath("../Level/Entities");
 
     mp_synchronizer = memnew(MultiplayerSynchronizer);
@@ -73,8 +72,7 @@ void SH_Game::setup_game()
     mp_synchronizer->set_replication_config(replication_config);
 
     //Add spawnable scenes
-    mp_spawner->add_spawnable_scene("res://entities/entity.tscn");
-    mp_spawner->add_spawnable_scene("res://entities/mercenary.tscn");
+    mp_spawner->add_spawnable_scene("res://resources/entities/Mercenary.tscn");
     mp_spawner->add_spawnable_scene("res://resources/entities/Entity.tscn");
 }
 

@@ -5,11 +5,13 @@
 #include <shared/helper_macros.h>
 #include <client/game.h>
 #include <client/ui/user_interface.h>
+#include <shared/entities/mercenaries/mercenary.hpp>
 
 Client::Client()
 {
     DISABLE_IN_EDITOR();
     set_process(true);
+    player.instantiate();
 }
 
 Ref<ENetMultiplayerPeer> Client::get_peer() {
@@ -104,7 +106,7 @@ void Client::_on_server_connect()
     //playerdata["mercenary"] = player->get_choosen_mercenary();
     playerdata["mercenary"] = "mercenary";
 
-    rpc_id(0, "client_rpc_playerdata", playerdata);
+    rpc_id(1, "client_rpc_playerdata", playerdata);
 }
 
 void Client::_on_server_disconnect()
@@ -149,6 +151,7 @@ void Client::server_rpc_gameinfo(Dictionary gameinfo) {
         
         game->load_game_level(String(level_name));
         game->setup_game();
+        game->_on_server_connect_finish();
 
         print_line("Player", player->get_nickname(), "joined the server!");
     } else {
@@ -170,4 +173,5 @@ void Client::_bind_methods()
     ClassDB::bind_method(D_METHOD("client_rpc_playerdata"), &Client::client_rpc_playerdata);
     ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Client::server_rpc_disconnect);
     ClassDB::bind_method(D_METHOD("server_rpc_gameinfo", "gameinfo"), &Client::server_rpc_gameinfo);
+
 }
