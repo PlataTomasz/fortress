@@ -13,21 +13,22 @@
 #include <shared/data_holders/use_context.hpp>
 #endif
 
+
+#include <scene/main/timer.h>
+#include <shared/entities/components/movement/movement_component.h>
+
 Game::Game()
 {
-
+    //Temporary
+    gameinfo["level"] = "ExampleGameLevel";
 }
 
 void Game::_ready()
 {
     DISABLE_IN_EDITOR();
-    Player *p1 = memnew(Player);
-    p1->change_nickname("Boris");
-    add_player(p1);
-
-    Player *p2 = memnew(Player);
-    p1->change_nickname("Jar'ro");
-    add_player(p2);
+    //No error checking!
+    load_game_level(String(gameinfo["level"]));
+    setup_game();
 }
 
 //Notifications are called cascade
@@ -52,46 +53,22 @@ void Game::_bind_methods()
 
 }
 
-Ref<Player> Game::get_player_by_peerid(int peerid)
-{
-    for(Ref<Player> player : players)
-    {
-        if(player->get_owner_peer_id() == peerid)
-        {
-            return player;
-        }
+// Player send invalid playerdata or didn't send it at all - kick him
+void Game::_on_playerdata_fail(int peer_id) {
+    // Cleanup disconnect timer - no longer needed
+    if (playerdata_timers.has(peer_id)) {
+        Ref<SceneTreeTimer> timer = playerdata_timers.get(peer_id);
     }
-    return Ref<Player>();
+
+    print_line("Peer ", peer_id, " disconnected. Reason: Invalid playerdata");
+    server->disconnect_peer(peer_id, "Invalid playerdata!");
 }
 
-void Game::_on_player_connect(int peer_id, String nickname)
-{
-    print_line("player nickname:", nickname, "peer", peer_id);
+// Expected to arrive shortly after player connects
+void Game::_on_receive_playerdata(Dictionary playerdata) {
+    int peer_id = get_multiplayer()->get_remote_sender_id();
+    Ref<Player> ply = server->get_player(peer_id);
 
-    for( Ref<Player> player : players)
-    {
-        if(player->get_nickname() == nickname)
-        {
-            ERR_FAIL_COND_MSG(player->get_owner_peer_id() != 0, "Attempted to take control over player, which is already controlled!");
-            player->set_owner_peer_id(peer_id);
-        }
-        else
-        {
-            ERR_FAIL_MSG("No such player precreated on server!");
-        }
-    }
-}
-
-void Game::_on_player_disconnect(int peer_id)
-{
-    for( Ref<Player> player : players)
-    {
-        if(player->get_owner_peer_id() == peer_id)
-        {
-            //Open for new peer to take control over that player
-            player->set_owner_peer_id(0);
-        }
-    }
 }
 
 void Game::attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) {
@@ -108,25 +85,16 @@ void Game::player_cfg_update_request_impl(Dictionary player_cfg) {
     ERR_FAIL_COND(player_cfg.has("nickname" ));
     ERR_FAIL_COND(player_cfg.has("mercenary"));
 
-    _on_player_connect(get_multiplayer()->get_remote_sender_id(), player_cfg.get("nickname", "unexpected"));
+    //_on_player_connect(get_multiplayer()->get_remote_sender_id(), player_cfg.get("nickname", "unexpected"));
 }
 
 void Game::movement_request_impl(Vector2 target_pos)
 {
     int peer_id = get_multiplayer()->get_remote_sender_id();
 
-    print_line("Movement request to", target_pos, "from", peer_id);
+    print_line("Movement request to", target_pos, "from peer", peer_id);
     
-
-    Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
-
-    Entity *ent = static_cast<Entity *>(ent_scene->instantiate());
-    ent->set_position(Vector3(21,3,7));
-    ent->set_name(itos(ent->get_instance_id()));
-    Node *level_entities = game_level->get_node(NodePath("Entities"));
-    level_entities->add_child(ent);
-    
-    Ref<Player> player = get_player_by_peerid(peer_id);
+    Ref<Player> player = server->get_player(peer_id);
     ERR_FAIL_COND_MSG(player.is_null(), "Sender peer has no corresponding player");
 
     Entity *issuer = player->get_controlled_entity();
@@ -134,6 +102,10 @@ void Game::movement_request_impl(Vector2 target_pos)
 
     LivingEntity *movement_target = Object::cast_to<LivingEntity>(player->get_controlled_entity());
     ERR_FAIL_COND_MSG(!movement_target, "Entity cannot take movement requests!");
+
+    MovementComponent *movement_component = static_cast<MovementComponent *>(issuer->get_component("MovementComponent"));
+    ERR_FAIL_NULL(movement_component);
+    movement_component->set_destination_position(Vector3(target_pos.x,0,target_pos.y));
 
     //TODO: Parse movement request here
 

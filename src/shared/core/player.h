@@ -7,33 +7,36 @@
 
 class Entity;
 
-class Player : public Resource
+class Player : public RefCounted
 {
-GDCLASS(Player, Resource);
+GDCLASS(Player, RefCounted);
 private:
     Entity *controlled_entity = nullptr;
 
-    uint8_t id = 0;
-
     int owner_peer_id = 0;
     
-    String nickname = "unset";
+    String nickname = String("unset");
+    // What mercenary was picked by this player? Initial one
+    String choosen_mercenary = String("none");
 protected:
 
 public:
     void set_controlled_entity(Entity *p_controlled_entity);
     Entity *get_controlled_entity();
 
-    void change_nickname(String nickname);
+    void change_nickname(const String nickname);
     String get_nickname();
 
     int get_owner_peer_id(){return owner_peer_id;};
     void set_owner_peer_id(int peer_id){owner_peer_id = peer_id;};
 
-    //TODO
     String get_choosen_mercenary()
     {
-        return "TODO";
+        return choosen_mercenary;
+    }
+
+    void set_choosen_mercenary(const String mercenary_name) {
+        choosen_mercenary = mercenary_name;
     }
 
     //Takes control of that player if he is not connected

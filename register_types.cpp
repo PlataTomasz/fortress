@@ -31,7 +31,7 @@
 #include "register_types.h"
 
 #ifdef CLIENT
-#include <client/game.hpp>
+#include <client/game.h>
 #include <client/client.hpp>
 #include <client/game_camera.hpp>
 #include <client/ui/entity_status_bar.hpp>

@@ -60,6 +60,7 @@ alignment = 1
 
 [node name="IpInput" type="LineEdit" parent="CharacterArea/CenterContainer/VBoxContainer"]
 layout_mode = 2
+placeholder_text = "Server address..."
 
 [node name="JoinBtn" type="Button" parent="CharacterArea/CenterContainer/VBoxContainer"]
 layout_mode = 2

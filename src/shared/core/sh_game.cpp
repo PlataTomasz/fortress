@@ -15,7 +15,6 @@ void SH_Game::_ready()
     ADD_RPC_CONFIG(attack_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(ability_use_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(player_cfg_update_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-    setup_game();
 }
 
 void SH_Game::_tick() {
@@ -44,17 +43,20 @@ void SH_Game::_init() {
 
 void SH_Game::add_node_networked_property(Node *node, const StringName &property_name)
 {
-    NodePath property_path = String(node->get_path()) + ":" + property_name;
+    NodePath property_path = String(node->get_name()) + ":" + property_name;
     replication_config->add_property(property_path);
     replication_config->property_set_sync(property_path, false);
     replication_config->property_set_watch(property_path, true);
 }
 
+void SH_Game::remove_node_networked_property(Node *node, const StringName &property_name) {
+    NodePath property_path = String(node->get_name()) + ":" + property_name;
+    replication_config->remove_property(property_path);
+}
+
 void SH_Game::setup_game()
 {
     //Currently debug feature
-    load_game_level("ExampleGameLevel");
-
     NodePath entities_nodepath = NodePath("../Level/Entities");
 
     mp_synchronizer = memnew(MultiplayerSynchronizer);

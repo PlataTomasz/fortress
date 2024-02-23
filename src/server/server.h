@@ -12,27 +12,22 @@
 #include <shared/helpers/object_ptr.h>
 #include <shared/helper_macros.h>
 
+#include <shared/core/realm.h>
+
 class Game;
 
 /**
  * Server is a node responsible for managing connections, sending and handling data over network.
 */
-class Server : public Node
+class Server : public Realm
 {
-GDCLASS(Server, Node);
-
+GDCLASS(Server, Realm);
 private:
     Ref<ENetMultiplayerPeer> server_peer;
-
     ObjectPtr<SceneMultiplayer> scene_multiplayer;
 
-    static ObjectPtr<Game> game;
+    HashMap<int, Ref<Player>> connected_players;
 
-    uint8_t max_player_count = 10;
-    uint8_t current_player_count = 0;
-    Player players[16];
-    HashMap<Ref<ENetPacketPeer>, Player *> players_by_peer;
-    
 protected:
     void _notification(int notification)
     {
@@ -73,22 +68,31 @@ protected:
     }
 
     void _init();
+    
+    void _on_peer_connect(int peer_id);
+    void _on_peer_disconnect(int peer_id);
+
+    static void _bind_methods();
+
+    //RPC
+    void server_rpc_disconnect(const String reason);
+    void server_rpc_gameinfo(Dictionary p_gameinfo);
+    void client_rpc_playerdata(Dictionary playerdata);
+
 public:
-    Player *get_player_by_peer(Ref<ENetPacketPeer> peer);
-    Ref<ENetPacketPeer> get_peer_by_player_id(uint8_t p_player_id);
+    //Returns player by peer_id, nullptr if no player has such peer
+    Ref<Player> get_player(int peer_id);
+
+    void add_player(int peer_id, Ref<Player> player);
 
     void _ready();
-
-    void on_peer_connect(int peer_id);
-   
-    void on_peer_disconnect(int peer_id);
 
     void process()
     {
 
     }
 
-    static ObjectPtr<Game> get_game();
+    void disconnect_peer(int peer_id, const String reason = "Disconnected by server!");
 
     Server();
 };

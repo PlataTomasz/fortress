@@ -6,6 +6,10 @@
 #include <modules/enet/enet_multiplayer_peer.h>
 #include <shared/helpers/object_ptr.h>
 #include <modules/multiplayer/scene_multiplayer.h>
+#include <shared/core/realm.h>
+
+#include <core/object/ref_counted.h>
+#include <shared/core/player.h>
 
 class Game;
 class UserInterface;
@@ -14,21 +18,30 @@ class UserInterface;
  * Client is a node responsible for connecting to server, disconnecting, receiving and sending data to server
  * Client may have Server node in It's node hierarchy
 */
-class Client : public Node
+class Client : public Realm
 {
-GDCLASS(Client, Node);
+GDCLASS(Client, Realm);
 private:
-    static Game *game;
-
     Ref<ENetConnection> connection;
     Ref<ENetMultiplayerPeer> client_peer;
-    Ref<ENetMultiplayerPeer> server_peer;
+    Ref<SceneMultiplayer> scene_multiplayer;
 
     UserInterface *user_interface = nullptr;
 
-    void on_connect();
-    void on_disconnect();
+    // Clientside player object
+    Ref<Player> player;
+
+    void _on_server_connect();
+    void _on_server_disconnect();
     void _init();
+    //RPC
+    void update_join_state(JoinState join_state);
+
+    void client_rpc_playerdata(Dictionary playerdata);
+
+    void server_rpc_disconnect(const String reason);
+    void server_rpc_gameinfo(Dictionary gameinfo);
+
 public:
     void process();
     void ready();
@@ -37,14 +50,9 @@ public:
 protected:
     void _notification(int notification);
     static void _bind_methods();
-    void ready_signal()
-    {
-        print_line("Ready with signal!");
-    };
 
+    Ref<ENetMultiplayerPeer> get_peer();
 public:
-    static Game *get_game();
-
     Client();
     ~Client(){};
 };

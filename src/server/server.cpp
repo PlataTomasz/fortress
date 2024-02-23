@@ -4,12 +4,7 @@
 #include <core/variant/variant.h>
 #include <core/string/ustring.h>
 
-ObjectPtr<Game> Server::game;
-
-ObjectPtr<Game> Server::get_game()
-{
-    return game;
-}
+#include <scene/main/timer.h>
 
 void Server::_ready()
 {
@@ -20,11 +15,11 @@ void Server::_ready()
     scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
 
     ERR_FAIL_COND(!scene_multiplayer);
-    scene_multiplayer->set_root_path(get_path());    
+    scene_multiplayer->set_root_path(get_path());
     scene_multiplayer->set_multiplayer_peer(server_peer);
 
-    server_peer->connect("peer_connected", callable_mp(this, &Server::on_peer_connect));
-    server_peer->connect("peer_disconnected", callable_mp(this, &Server::on_peer_disconnect));
+    server_peer->connect("peer_connected", callable_mp(this, &Server::_on_peer_connect));
+    server_peer->connect("peer_disconnected", callable_mp(this, &Server::_on_peer_disconnect));
 
     if(err == Error::OK)
     {
@@ -36,7 +31,13 @@ void Server::_ready()
     }
 }
 
+void Server::disconnect_peer(int peer_id, const String reason) {
+    rpc_id(peer_id, "disconnected_by_server", reason);
+    //scene_multiplayer->disconnect_peer(peer_id);
+}
+
 //Peer_id might conflict with ObjectID's
+/*
 void Server::on_peer_connect(int peer_id) {
 	print_line(peer_id, "connected");
 	Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
@@ -44,13 +45,42 @@ void Server::on_peer_connect(int peer_id) {
 	ent_instance->set_name(itos(peer_id));
 	get_node(NodePath("/root/Server/Game/Level/Entities"))->add_child(ent_instance);
 }
+*/
 
+void Server::_on_peer_disconnect(int peer_id)
+{
+    Timer *timer = static_cast<Timer *>(get_node_or_null("playerdata_timeout" + itos(peer_id)));
+    if (timer) {
+        timer->stop();
+        timer->queue_free();
+    }
+}
+
+void Server::_on_peer_connect(int peer_id)
+{
+    print_line("Peer", peer_id, "connected! Awaiting playerdata...");
+    //Connected peer MUST send playerdata within 5 seconds or be kicked
+    Timer *timer = memnew(Timer);
+    timer->set_autostart(true);
+    timer->set_wait_time(5);
+    timer->set_one_shot(true);
+    timer->set_name("playerdata_timeout" + itos(peer_id));
+
+    Callable callable = callable_mp(game, &Game::_on_playerdata_fail);
+    //TODO: See if it works
+    timer->connect("timeout", callable.bind(peer_id));
+
+    add_child(timer);
+}
+
+/*
 void Server::on_peer_disconnect(int peer_id) {
 	print_line(peer_id, "disconnected");
 	Entity *ent = static_cast<Entity *>(get_node_or_null(NodePath("/root/Server/Game/Level/Entities/" + itos(peer_id))));
     ERR_FAIL_NULL("No such entity!");
     ent->queue_free();
 }
+*/
 
 void Server::_init() {
     //Setup networking
@@ -58,7 +88,66 @@ void Server::_init() {
 
     game = memnew(Game);
     game->set_name("Game");
-    add_child(game.get_ptr());
+    add_child(game);
+}
+
+void Server::server_rpc_disconnect(const String reason) {
+
+}
+
+void Server::client_rpc_playerdata(Dictionary playerdata) {
+	int peer_id = get_multiplayer()->get_remote_sender_id();
+
+    if (!connected_players.has(peer_id)) {
+        Variant nickname = playerdata.get_valid("nickname");
+        Variant mercenary = playerdata.get_valid("mercenary");
+
+        // TODO: Introduce validator class to avoid long 'if' statements
+        if (
+            nickname.get_type() == Variant::STRING 
+            && mercenary.get_type() == Variant::STRING ) {
+            // All good
+            Player *ply = memnew(Player);
+            ply->change_nickname(String(nickname));
+            ply->set_choosen_mercenary(String(mercenary));
+
+            connected_players.insert(peer_id, ply);
+
+            // Send gameinfo
+            // NOTE: Currently friend, maybe use getter/setter later?
+            rpc_id(peer_id, "server_rpc_gameinfo", game->gameinfo);
+        } else {
+            // Something wrong - disconnect that peer
+            disconnect_peer(peer_id, "Invalid playerdata!");
+        }
+    } else {
+        disconnect_peer(peer_id, "Peer is already connected!");
+    }
+}
+
+void Server::add_player(int peer_id, Ref<Player> player) { 
+    if(!connected_players.has(peer_id)) {
+        connected_players.insert(peer_id, player);
+    }
+    //Peer already exists - don't add
+};
+
+Ref<Player> Server::get_player(int peer_id) {
+	if (connected_players.has(peer_id)) {
+		return connected_players.get(peer_id);
+	}
+	return Ref<Player>();
+}
+
+void Server::server_rpc_gameinfo(Dictionary p_gameinfo) {
+
+}
+
+void Server::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Server::server_rpc_disconnect);
+    ClassDB::bind_method(D_METHOD("client_rpc_playerdata"), &Server::client_rpc_playerdata);
+    ClassDB::bind_method(D_METHOD("server_rpc_gameinfo", "gameinfo"), &Server::server_rpc_gameinfo);
+
 }
 
 Server::Server()

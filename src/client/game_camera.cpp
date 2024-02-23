@@ -3,14 +3,14 @@
 #include <core/math/vector3.h>
 #include <shared/helper_macros.h>
 
-Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 2, 2);
+Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 10, 2);
 
 GameCamera::GameCamera()
 {
     DISABLE_IN_EDITOR();
     followedNode = nullptr;
     freeCam = true;
-    set_rotation_degrees(Vector3(-42.5,0,0));
+    set_rotation_degrees(Vector3(-90,0,0));
 
     SceneTree::get_singleton()->connect("process_frame", callable_mp(this, &GameCamera::process_frame));
 }

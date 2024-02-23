@@ -1,21 +1,15 @@
 #include "entity.h"
+#include <game.h>
 
-#ifdef SERVER
-	#include <server/core/game.h>
-	#include <server/server.h>
-#else
-	#include <client/game.hpp>
-	#include <client/client.hpp>
-#endif
+#include <shared/entities/components/component.h>
 
+//NOTE: That method requires Entity to be part of the SceneTree to work
 void Entity::add_networked_property(const StringName &property_name) {
-	//NOTE: That method will crash if there is not Game node!
-	//UGLY!
-	#ifdef SERVER
-		Server::get_game()->add_node_networked_property(this, property_name);
-	#else
-		Client::get_game()->add_node_networked_property(this, property_name);
-	#endif
+	Realm::get_game()->add_node_networked_property(this, property_name);
+}
+
+void Entity::remove_networked_property(const StringName &property_name) {
+	Realm::get_game()->remove_node_networked_property(this, property_name);
 }
 
 template<class T>
@@ -31,13 +25,25 @@ T *Entity::get_component() {
 	return nullptr;
 }
 
+Component *Entity::get_component(const StringName &name) {
+	return static_cast<Component *>(get_meta(name).operator Object *());
+}
+
 void Entity::_tick() {
 
 }
 
 void Entity::_ready() {
 	DISABLE_IN_EDITOR();
+	//TODO: Rather use list of all networked properties and iterate over it
 	add_networked_property(SNAME("position"));
+}
+
+//Cleanup
+void Entity::_exit_tree() {
+	DISABLE_IN_EDITOR();
+	//TODO: Rather use list of all networked properties and iterate over it
+	remove_networked_property(SNAME("position"));
 }
 
 void Entity::_notification(int p_notification) {
@@ -45,6 +51,9 @@ void Entity::_notification(int p_notification) {
 	switch (p_notification) {
 		case NOTIFICATION_READY:
 			_ready();
+			break;
+		case NOTIFICATION_EXIT_TREE:
+			_exit_tree();
 			break;
 		default:
 			break;

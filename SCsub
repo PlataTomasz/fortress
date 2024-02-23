@@ -11,7 +11,7 @@ sv_src_dir = src_dir+"server/"
 sh_src_dir = src_dir+"shared/"
 
 env_zip = env_modules.Clone()
-env_zip.Append(CPPPATH=["src/"])
+env_zip.Append(CPPPATH=["src/", sv_src_dir, cl_src_dir])
 
 if methods.get_cmdline_bool("quality_game_code", True):
     env_zip.Append(CCFLAGS=["-Werror=return-type"])

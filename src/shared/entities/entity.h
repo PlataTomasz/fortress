@@ -20,6 +20,8 @@ private:
 
 	void _ready();
 	void _tick();
+	
+	void _exit_tree();
 
 protected:
 	void _notification(int p_notification);
@@ -41,6 +43,7 @@ public:
 	}
 
 	void add_networked_property(const StringName &property_name);
+	void remove_networked_property(const StringName &property_name);
 
 	Entity() {
 
@@ -48,6 +51,7 @@ public:
 
 	template <class T>
 	T *get_component();
+	Component *get_component(const StringName& name);
 };
 
 #endif // ENTITY_INCLUDED

@@ -14,21 +14,15 @@ class MovementComponent : public Component
 {
 GDCLASS(MovementComponent, Component);
 private:
-    //Node cache - faster than get_node()
-    Node3D *parent_node3d = nullptr;
     NavigationAgent3D *nav_agent = nullptr;
-    EntityStatsComponent *stat_component = nullptr;
 
-    Vector<String> _get_configuration_warnings();
+    float movement_speed = 2.0;
 
-    void _physics_process();
+    void _tick();
+    void _init();
 protected:
     void _notification(int p_notification);
-    void _on_sibling_added(Node *sibling);
-    void _on_sibling_removed(Node *sibling);
-    void _on_parent_changed() override;
-    void _on_child_added(Node *node) override;
-    void _on_child_removed(Node *node) override;
+    static void _bind_methods();
 public:
     void set_pathfinding_radius(real_t pathfinding_radius);
     real_t get_pathfinding_radius();

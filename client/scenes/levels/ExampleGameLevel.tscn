@@ -1,9 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxadmnim5wtlk"]
+[gd_scene load_steps=5 format=3 uid="uid://bxadmnim5wtlk"]
 
 [ext_resource type="PackedScene" uid="uid://blcynha0o73ll" path="res://resources/entities/Entity.tscn" id="1_dp34l"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_61bdf"]
+albedo_color = Color(1, 0.521569, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qvge4"]
+material = SubResource("StandardMaterial3D_61bdf")
+size = Vector2(160, 160)
+
+[sub_resource type="Environment" id="Environment_12xw4"]
+background_mode = 2
 
 [node name="ExampleGameLevel" type="GameLevel"]
 
 [node name="Entities" type="Node" parent="."]
 
 [node name="Entity" parent="Entities" instance=ExtResource("1_dp34l")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_qvge4")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_12xw4")
