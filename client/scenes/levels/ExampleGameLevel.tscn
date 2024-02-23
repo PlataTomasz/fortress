@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxadmnim5wtlk"]
+[gd_scene load_steps=8 format=3 uid="uid://bxadmnim5wtlk"]
 
 [ext_resource type="PackedScene" uid="uid://blcynha0o73ll" path="res://resources/entities/Entity.tscn" id="1_dp34l"]
 
@@ -10,7 +10,20 @@ material = SubResource("StandardMaterial3D_61bdf")
 size = Vector2(160, 160)
 
 [sub_resource type="Environment" id="Environment_12xw4"]
-background_mode = 2
+ambient_light_sky_contribution = 0.0
+adjustment_brightness = 2.1
+adjustment_saturation = 0.01
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_y0jc4"]
+vertices = PackedVector3Array(-69.5, 0.5, -79.5, -79.5, 0.5, -79.5, -79.5, 0.5, -69.5, -59.5, 0.5, -79.5, -69.5, 0.5, -79.5, -79.5, 0.5, -69.5, -59.5, 0.5, -79.5, -79.5, 0.5, -69.5, -79.5, 0.5, -59.5, -49.5, 0.5, -79.5, -79.5, 0.5, 1, -1, 0.5, 1, -0.5, 0.5, 0.25, -79.5, 0.5, -9.25, -49.5, 0.5, -79.5, -79.5, 0.5, -59.5, -79.5, 0.5, -49.5, -39.5, 0.5, -79.5, -79.5, 0.5, -19.25, -79.5, 0.5, -9.25, -0.5, 0.5, 0.25, -39.5, 0.5, -79.5, -79.5, 0.5, -49.5, -79.5, 0.5, -39.25, -29.5, 0.5, -79.5, -0.5, 0.5, 0.25, 0.5, 0.5, 0.25, 0.5, 0.5, -79.5, -9.5, 0.5, -79.5, -29.5, 0.5, -79.5, -79.5, 0.5, -39.25, -79.5, 0.5, -29.25, -19.5, 0.5, -79.5, -0.5, 0.5, 0.25, -9.5, 0.5, -79.5, -19.5, 0.5, -79.5, -79.5, 0.5, -29.25, -79.5, 0.5, -19.25, 79.5, 0.5, -69.5, 79.5, 0.5, -79.5, 69.5, 0.5, -79.5, 79.5, 0.5, -69.5, 69.5, 0.5, -79.5, 59.75, 0.5, -79.5, 79.5, 0.5, -59.25, 79.5, 0.5, -69.5, 59.75, 0.5, -79.5, 49.75, 0.5, -79.5, 1.5, 0.5, 0.25, 2, 0.5, 1.5, 79.5, 0.5, 1.5, 79.5, 0.5, -8.75, 79.5, 0.5, -49.25, 79.5, 0.5, -59.25, 49.75, 0.5, -79.5, 40, 0.5, -79.5, 20.25, 0.5, -79.5, 10.25, 0.5, -79.5, 0.5, 0.5, 0.25, 79.5, 0.5, -18.75, 79.5, 0.5, -29, 79.5, 0.5, -39, 79.5, 0.5, -49.25, 40, 0.5, -79.5, 30, 0.5, -79.5, 0.5, 0.5, 0.25, 1.5, 0.5, 0.25, 79.5, 0.5, -8.75, 79.5, 0.5, -18.75, 79.5, 0.5, -29, 79.5, 0.5, -39, 30, 0.5, -79.5, 20.25, 0.5, -79.5, 10.25, 0.5, -79.5, 0.5, 0.5, -79.5, 0.5, 0.5, 0.25, -79.5, 0.5, 4, -1, 0.5, 4, -1, 0.5, 1, -79.5, 0.5, 1, 1.75, 0.5, 2.5, 0.75, 0.5, 2.5, 1, 0.5, 4.25, 69.5, 0.5, 79.5, 79.5, 0.5, 79.5, 79.5, 0.5, 69.75, 69.5, 0.5, 79.5, 79.5, 0.5, 69.75, 79.5, 0.5, 60, 59.5, 0.5, 79.5, 69.5, 0.5, 79.5, 79.5, 0.5, 60, 79.5, 0.5, 50.25, 79.5, 0.5, 21, 79.5, 0.5, 11.25, 1.75, 0.5, 2.5, 19.75, 0.5, 79.5, 29.75, 0.5, 79.5, 49.5, 0.5, 79.5, 59.5, 0.5, 79.5, 79.5, 0.5, 50.25, 79.5, 0.5, 40.5, 79.5, 0.5, 1.5, 2, 0.5, 1.5, 1.75, 0.5, 2.5, 79.5, 0.5, 11.25, 39.75, 0.5, 79.5, 49.5, 0.5, 79.5, 79.5, 0.5, 40.5, 79.5, 0.5, 30.75, 1.75, 0.5, 2.5, 1, 0.5, 4.25, 9.75, 0.5, 79.5, 19.75, 0.5, 79.5, 29.75, 0.5, 79.5, 39.75, 0.5, 79.5, 79.5, 0.5, 30.75, 79.5, 0.5, 21, 1, 0.5, 4.25, 0, 0.5, 4.5, 0, 0.5, 79.5, 9.75, 0.5, 79.5, -79.5, 0.5, 70, -79.5, 0.5, 79.5, -69.75, 0.5, 79.5, -79.5, 0.5, 60.5, -79.5, 0.5, 70, -69.75, 0.5, 79.5, -79.5, 0.5, 60.5, -69.75, 0.5, 79.5, -59.75, 0.5, 79.5, -79.5, 0.5, 51, 0, 0.5, 79.5, -0.75, 0.5, 4.5, -1, 0.5, 4, -10, 0.5, 79.5, -79.5, 0.5, 51, -59.75, 0.5, 79.5, -49.75, 0.5, 79.5, -79.5, 0.5, 41.75, -1, 0.5, 4, -79.5, 0.5, 13.25, -79.5, 0.5, 22.75, -30, 0.5, 79.5, -20, 0.5, 79.5, -79.5, 0.5, 41.75, -49.75, 0.5, 79.5, -39.75, 0.5, 79.5, -79.5, 0.5, 32.25, -20, 0.5, 79.5, -10, 0.5, 79.5, -1, 0.5, 4, -79.5, 0.5, 32.25, -39.75, 0.5, 79.5, -30, 0.5, 79.5, -79.5, 0.5, 22.75, 0, 0.5, 79.5, 0, 0.5, 4.5, -0.75, 0.5, 4.5, -1, 0.5, 4, -79.5, 0.5, 4, -79.5, 0.5, 13.25)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(11, 10, 12), PackedInt32Array(12, 10, 13), PackedInt32Array(15, 14, 16), PackedInt32Array(16, 14, 17), PackedInt32Array(20, 19, 18), PackedInt32Array(22, 21, 23), PackedInt32Array(23, 21, 24), PackedInt32Array(26, 25, 27), PackedInt32Array(27, 25, 28), PackedInt32Array(30, 29, 31), PackedInt32Array(31, 29, 32), PackedInt32Array(34, 33, 35), PackedInt32Array(35, 33, 36), PackedInt32Array(36, 33, 37), PackedInt32Array(40, 39, 38), PackedInt32Array(43, 42, 41), PackedInt32Array(45, 44, 46), PackedInt32Array(46, 44, 47), PackedInt32Array(49, 48, 50), PackedInt32Array(50, 48, 51), PackedInt32Array(53, 52, 54), PackedInt32Array(54, 52, 55), PackedInt32Array(57, 56, 58), PackedInt32Array(58, 56, 60), PackedInt32Array(58, 60, 59), PackedInt32Array(62, 61, 63), PackedInt32Array(63, 61, 64), PackedInt32Array(66, 65, 67), PackedInt32Array(67, 65, 68), PackedInt32Array(70, 69, 71), PackedInt32Array(71, 69, 72), PackedInt32Array(75, 74, 73), PackedInt32Array(79, 78, 76), PackedInt32Array(76, 78, 77), PackedInt32Array(82, 81, 80), PackedInt32Array(85, 84, 83), PackedInt32Array(87, 86, 88), PackedInt32Array(90, 89, 91), PackedInt32Array(91, 89, 92), PackedInt32Array(94, 93, 95), PackedInt32Array(95, 93, 97), PackedInt32Array(95, 97, 96), PackedInt32Array(99, 98, 100), PackedInt32Array(100, 98, 101), PackedInt32Array(103, 102, 104), PackedInt32Array(104, 102, 105), PackedInt32Array(107, 106, 108), PackedInt32Array(108, 106, 109), PackedInt32Array(111, 110, 112), PackedInt32Array(112, 110, 113), PackedInt32Array(115, 114, 116), PackedInt32Array(116, 114, 117), PackedInt32Array(119, 118, 120), PackedInt32Array(120, 118, 121), PackedInt32Array(124, 123, 122), PackedInt32Array(127, 126, 125), PackedInt32Array(129, 128, 130), PackedInt32Array(130, 128, 131), PackedInt32Array(133, 132, 134), PackedInt32Array(134, 132, 135), PackedInt32Array(137, 136, 138), PackedInt32Array(138, 136, 139), PackedInt32Array(142, 141, 143), PackedInt32Array(143, 141, 144), PackedInt32Array(144, 141, 140), PackedInt32Array(146, 145, 147), PackedInt32Array(147, 145, 148), PackedInt32Array(151, 150, 149), PackedInt32Array(153, 152, 154), PackedInt32Array(154, 152, 155), PackedInt32Array(158, 157, 156), PackedInt32Array(161, 160, 159)]
+geometry_source_geometry_mode = 1
+agent_max_climb = 0.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xrewj"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tdr6v"]
+size = Vector2(160, 160)
 
 [node name="ExampleGameLevel" type="GameLevel"]
 
@@ -23,3 +36,22 @@ mesh = SubResource("PlaneMesh_qvge4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_12xw4")
+
+[node name="NavigationRegion" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+navigation_mesh = SubResource("NavigationMesh_y0jc4")
+
+[node name="Obstacle01" type="MeshInstance3D" parent="NavigationRegion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4581)
+mesh = SubResource("CylinderMesh_xrewj")
+
+[node name="Obstacle02" type="MeshInstance3D" parent="NavigationRegion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.4581)
+mesh = SubResource("CylinderMesh_xrewj")
+
+[node name="Obstacle03" type="MeshInstance3D" parent="NavigationRegion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.4581)
+mesh = SubResource("CylinderMesh_xrewj")
+
+[node name="Plane" type="MeshInstance3D" parent="NavigationRegion"]
+mesh = SubResource("PlaneMesh_tdr6v")

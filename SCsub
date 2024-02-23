@@ -91,6 +91,8 @@ sources += Glob(sh_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"entities/mercenaries/sword_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"entities/mercenaries/tundra/*.cpp")
 
+sources += Glob(sh_src_dir+"string_names/*.cpp")
+
 sources += Glob(sh_src_dir+"helpers/*.cpp")
     
 env_zip.add_source_files(env.modules_sources, sources)

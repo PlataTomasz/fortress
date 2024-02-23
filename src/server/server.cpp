@@ -5,6 +5,7 @@
 #include <core/string/ustring.h>
 
 #include <scene/main/timer.h>
+#include <shared/entities/mercenaries/mercenary.hpp>
 
 void Server::_ready()
 {
@@ -31,9 +32,16 @@ void Server::_ready()
     }
 }
 
+void Server::process() {
+
+}
+
 void Server::disconnect_peer(int peer_id, const String reason) {
-    rpc_id(peer_id, "disconnected_by_server", reason);
-    //scene_multiplayer->disconnect_peer(peer_id);
+    rpc_id(peer_id, "server_rpc_disconnect", reason);
+    //Workaround, so rpc containing disconnect reason have chance to arrive to client, but... Real disconnect will occur in 1s and with high latency that time still might not be enough
+    Callable disconnect_callable = callable_mp(scene_multiplayer, &SceneMultiplayer::disconnect_peer);
+    Ref<SceneTreeTimer> timer = SceneTree::get_singleton()->create_timer(1.0f);
+    timer->connect("timeout", disconnect_callable.bind(peer_id));
 }
 
 //Peer_id might conflict with ObjectID's
@@ -89,6 +97,8 @@ void Server::_init() {
     game = memnew(Game);
     game->set_name("Game");
     add_child(game);
+
+    set_process(true);
 }
 
 void Server::server_rpc_disconnect(const String reason) {
@@ -110,6 +120,20 @@ void Server::client_rpc_playerdata(Dictionary playerdata) {
             Player *ply = memnew(Player);
             ply->change_nickname(String(nickname));
             ply->set_choosen_mercenary(String(mercenary));
+
+            Ref<PackedScene> merc_scene = ResourceLoader::load("res://resources/entities/Mercenary.tscn");
+
+            Mercenary *ent = static_cast<Mercenary *>(merc_scene->instantiate());
+            ent->set_name(itos(ent->get_instance_id()));
+            ply->set_controlled_entity(ent);
+            game->get_current_level()->add_entity(ent);
+
+            //Don't timeout player - we got what we wanted
+            Timer *timer = static_cast<Timer *>(get_node_or_null("playerdata_timeout" + itos(peer_id)));
+            if (timer) {
+                timer->stop();
+                timer->queue_free();
+            }
 
             connected_players.insert(peer_id, ply);
 

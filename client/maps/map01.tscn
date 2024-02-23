@@ -26,6 +26,14 @@ size = Vector2(160, 160)
 radius = 1.0
 
 [node name="Map" type="GameMap"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+editor_description = ""
+script = null
 
 [node name="Visual" type="Node3D" parent="."]
 

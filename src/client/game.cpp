@@ -22,7 +22,7 @@
 #include <shared/helper_macros.h>
 
 Game::Game() {
-
+    
 }
 
 void Game::_init() {
@@ -97,30 +97,21 @@ void Game::_ready()
     DISABLE_IN_EDITOR();
     setup_game_camera();
 
-    Mercenary *ent = memnew(Mercenary);
-    ent->set_position(Vector3( 2, 2, 2));
-    game_level->get_node(NodePath("Entities"))->add_child(ent);
     
-    Vector3 redSpawnPoint = Vector3();
-    Node3D *redSpawnNode = nullptr;
-    //(Node3D*)get_node(NodePath("Map/SpawnRed"));
-
-    if(!redSpawnNode)
-    {
-        printf("No spawn node defined! Defaulting to map center (0, 0)");
-    }
-    else
-    {
-        redSpawnPoint = redSpawnNode->get_position();
-    }
-
-    player = new Player();
-    ent->set_position(redSpawnPoint);
-    player->set_controlled_entity(ent);
-    game_camera->startFollowingNode(ent);
 
     get_multiplayer()->connect("connected_to_server", callable_mp(this, &Game::_on_connect_to_remote_game));
     
+}
+
+void Game::_on_server_connect_finish() {
+    Mercenary *ent = memnew(Mercenary);
+    ent->set_position(Vector3(2, 2, 2));
+    game_level->add_entity(ent);
+    
+
+    player = new Player();
+    player->set_controlled_entity(ent);
+    game_camera->startFollowingNode(ent);
 }
 
 Vector3 Game::screenToWorld(const Vector2 &screenPos)

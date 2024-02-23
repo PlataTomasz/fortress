@@ -4,6 +4,9 @@ ComponentStringNames* ComponentStringNames::singleton = nullptr;
 
 ComponentStringNames::ComponentStringNames()
 {
-    STATUS_EFFECT_VICTIM = StaticCString::create("status_effect_victim_component");
-    DAMAGEABLE = StaticCString::create("damageable_component");
+    attribute_component = StaticCString::create("attribute_component");
+    status_effect_component = StaticCString::create("status_effect_component");
+    damageable_component = StaticCString::create("damageable_component");
+    movement_component = StaticCString::create("movement_component");
+    damageable_component = StaticCString::create("damageable_component");
 }

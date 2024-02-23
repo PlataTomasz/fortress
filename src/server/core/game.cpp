@@ -1,7 +1,6 @@
 #include "game.h"
 #include <server/server.h>
 #include <shared/helper_macros.h>
-#include <shared/entities/living_entity.h>
 #include <core/io/json.h>
 #include <scene/scene_string_names.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
@@ -13,6 +12,7 @@
 #include <shared/data_holders/use_context.hpp>
 #endif
 
+#include <shared/string_names/component_stringnames.h>
 
 #include <scene/main/timer.h>
 #include <shared/entities/components/movement/movement_component.h>
@@ -29,6 +29,8 @@ void Game::_ready()
     //No error checking!
     load_game_level(String(gameinfo["level"]));
     setup_game();
+
+    server = static_cast<Server *>(get_parent());
 }
 
 //Notifications are called cascade
@@ -68,7 +70,6 @@ void Game::_on_playerdata_fail(int peer_id) {
 void Game::_on_receive_playerdata(Dictionary playerdata) {
     int peer_id = get_multiplayer()->get_remote_sender_id();
     Ref<Player> ply = server->get_player(peer_id);
-
 }
 
 void Game::attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) {
@@ -98,12 +99,9 @@ void Game::movement_request_impl(Vector2 target_pos)
     ERR_FAIL_COND_MSG(player.is_null(), "Sender peer has no corresponding player");
 
     Entity *issuer = player->get_controlled_entity();
-    ERR_FAIL_COND_MSG(!issuer, "Player doesn't controll any entity!");
+    ERR_FAIL_COND_MSG(!issuer, "Player doesn't control any entity!");
 
-    LivingEntity *movement_target = Object::cast_to<LivingEntity>(player->get_controlled_entity());
-    ERR_FAIL_COND_MSG(!movement_target, "Entity cannot take movement requests!");
-
-    MovementComponent *movement_component = static_cast<MovementComponent *>(issuer->get_component("MovementComponent"));
+    MovementComponent *movement_component = static_cast<MovementComponent *>(issuer->get_component(ComponentStringNames::get_singleton()->movement_component));
     ERR_FAIL_NULL(movement_component);
     movement_component->set_destination_position(Vector3(target_pos.x,0,target_pos.y));
 

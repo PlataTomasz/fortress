@@ -19,8 +19,9 @@ protected:
     ObjectPtr<AbilityCasterComponent> ability_caster_component;
 public:
     void _notification(int notification);
-    void initialize();
     void _tick();
+
+    void _init();
 
     Mercenary();
 

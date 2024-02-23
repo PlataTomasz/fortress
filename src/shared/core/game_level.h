@@ -39,8 +39,11 @@ protected:
 			add_child(entities_node);
 		}
 	}
-
 public:
+	void add_entity(Entity *ent) {
+		entities_node->add_child(ent);
+	}
+
 	GameLevel()
 	{
 
