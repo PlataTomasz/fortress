@@ -96,11 +96,6 @@ void Game::_ready()
 {
     DISABLE_IN_EDITOR();
     setup_game_camera();
-
-    
-
-    get_multiplayer()->connect("connected_to_server", callable_mp(this, &Game::_on_connect_to_remote_game));
-    
 }
 
 void Game::_on_server_connect_finish() {
@@ -210,16 +205,6 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
 }
 
-void Game::_on_connect_to_remote_game()
-{
-    Dictionary player_cfg;
-    player_cfg["nickname"] = "Boris";
-    //So apparently RPC won't be received by server unless rpc interface ticks at least once
-    Error err = rpc("player_cfg_update_request", player_cfg);
-    print_line("RPC err: ", err);
-}
-
-
 void Game::_bind_methods()
 {
     //Global signals
@@ -241,9 +226,5 @@ void Game::attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) {
 }
 
 void Game::ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id) {
-
-}
-
-void Game::player_cfg_update_request_impl(Dictionary player_cfg) {
 
 }

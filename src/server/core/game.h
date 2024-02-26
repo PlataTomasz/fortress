@@ -22,10 +22,6 @@ private:
     HashMap<int, Ref<SceneTreeTimer>> playerdata_timers;
 
     Dictionary gameinfo;
-
-    void _on_peer_connect(int peer_id);
-    void _on_peer_disconnect(int peer_id);
-
     void _ready();
 
     void _on_receive_playerdata(Dictionary playerdata);
@@ -34,12 +30,9 @@ protected:
 
     static void _bind_methods();
 public:
-    void disconnect_peer(int peer_id, const char *reason = "Disconnected");
-
     void _on_playerdata_fail(int peer_id);
 
     //Request handling methods
-    virtual void player_cfg_update_request_impl(Dictionary player_cfg);
     virtual void movement_request_impl(Vector2 target_pos);
     virtual void attack_request_impl(Vector2 target_pos, uint64_t target_entity_id);
     virtual void ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);

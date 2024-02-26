@@ -19,7 +19,7 @@ private:
     // What mercenary was picked by this player? Initial one
     String choosen_mercenary = String("none");
 protected:
-
+    static void _bind_methods();
 public:
     void set_controlled_entity(Entity *p_controlled_entity);
     Entity *get_controlled_entity();

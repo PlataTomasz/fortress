@@ -6,6 +6,7 @@
 
 #include <scene/main/timer.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
+#include <core/io/marshalls.h>
 
 void Server::_ready()
 {
@@ -14,13 +15,16 @@ void Server::_ready()
 
     Error err = server_peer->create_server(7654, 32);
     scene_multiplayer = Object::cast_to<SceneMultiplayer>(get_multiplayer().ptr());
+    scene_multiplayer->set_auth_callback(callable_mp(this, &Server::auth_callback));
+    scene_multiplayer->connect("peer_authenticating", callable_mp(this, &Server::_on_auth_start));
+    scene_multiplayer->connect("peer_authentication_failed", callable_mp(this, &Server::_on_auth_fail));
 
     ERR_FAIL_COND(!scene_multiplayer);
     scene_multiplayer->set_root_path(get_path());
     scene_multiplayer->set_multiplayer_peer(server_peer);
 
-    server_peer->connect("peer_connected", callable_mp(this, &Server::_on_peer_connect));
-    server_peer->connect("peer_disconnected", callable_mp(this, &Server::_on_peer_disconnect));
+    scene_multiplayer->connect("peer_connected", callable_mp(this, &Server::_on_peer_connect));
+    scene_multiplayer->connect("peer_disconnected", callable_mp(this, &Server::_on_peer_disconnect));
 
     if(err == Error::OK)
     {
@@ -66,19 +70,7 @@ void Server::_on_peer_disconnect(int peer_id)
 
 void Server::_on_peer_connect(int peer_id)
 {
-    print_line("Peer", peer_id, "connected! Awaiting playerdata...");
-    //Connected peer MUST send playerdata within 5 seconds or be kicked
-    Timer *timer = memnew(Timer);
-    timer->set_autostart(true);
-    timer->set_wait_time(5);
-    timer->set_one_shot(true);
-    timer->set_name("playerdata_timeout" + itos(peer_id));
-
-    Callable callable = callable_mp(game, &Game::_on_playerdata_fail);
-    //TODO: See if it works
-    timer->connect("timeout", callable.bind(peer_id));
-
-    add_child(timer);
+    print_line("Peer", peer_id, "connected!");
 }
 
 /*
@@ -105,47 +97,53 @@ void Server::server_rpc_disconnect(const String reason) {
 
 }
 
-void Server::client_rpc_playerdata(Dictionary playerdata) {
-	int peer_id = get_multiplayer()->get_remote_sender_id();
+Error Server::auth_callback(int peer_id, PackedByteArray data) {
+    Variant var;
+    Error data_err = decode_variant(var, data.ptr(), data.size());
+    ERR_FAIL_COND_V_MSG(data_err != OK, data_err, "Received invalid auth data from" + itos(peer_id));
+    ERR_FAIL_COND_V_MSG(var.get_type() != Variant::DICTIONARY, ERR_INVALID_DATA, "Received invalid auth data from" + itos(peer_id));
 
-    if (!connected_players.has(peer_id)) {
-        Variant nickname = playerdata.get_valid("nickname");
-        Variant mercenary = playerdata.get_valid("mercenary");
+    Dictionary playerdata = var.operator Dictionary();
+    Variant var_nickname = playerdata.get_valid("nickname");
+    ERR_FAIL_COND_V_MSG(var_nickname.get_type() != Variant::STRING, ERR_INVALID_DATA, "Nickname is malformed!" + itos(peer_id));
 
-        // TODO: Introduce validator class to avoid long 'if' statements
-        if (
-            nickname.get_type() == Variant::STRING 
-            && mercenary.get_type() == Variant::STRING ) {
-            // All good
-            Player *ply = memnew(Player);
-            ply->change_nickname(String(nickname));
-            ply->set_choosen_mercenary(String(mercenary));
+    Variant var_mercenary_name = playerdata.get_valid("mercenary");
+    ERR_FAIL_COND_V_MSG(var_mercenary_name.get_type() != Variant::STRING, ERR_INVALID_DATA, "Mercenary name is malformed!" + itos(peer_id));
+    
+    //TODO: Proper nickname and choosen mercenary name validation - Currently hardcoded here
+    ERR_FAIL_COND_V_MSG(!(String(var_mercenary_name).length() > 3 && String(var_mercenary_name).length() <= 16), ERR_INVALID_DATA, "Nickname of " + itos(peer_id) + " failed validation!");
 
-            Ref<PackedScene> merc_scene = ResourceLoader::load("res://resources/entities/Mercenary.tscn");
+    Player *ply = memnew(Player);
+    ply->change_nickname(var_nickname.operator String());
+    ply->set_choosen_mercenary(var_mercenary_name.operator String());
 
-            Mercenary *ent = static_cast<Mercenary *>(merc_scene->instantiate());
-            ent->set_name(itos(ent->get_instance_id()));
-            ply->set_controlled_entity(ent);
-            game->get_current_level()->add_entity(ent);
+    add_player(peer_id, ply);
+    print_line("Auth succeeded on server for peer ", peer_id);
+    scene_multiplayer->complete_auth(peer_id);
+    return OK;
+}
 
-            //Don't timeout player - we got what we wanted
-            Timer *timer = static_cast<Timer *>(get_node_or_null("playerdata_timeout" + itos(peer_id)));
-            if (timer) {
-                timer->stop();
-                timer->queue_free();
-            }
+void Server::_on_auth_start(int peer_id) {
+    int len = 0;
+    Error err = encode_variant(game->gameinfo, nullptr, len, false, 0);
+    ERR_FAIL_COND(err);
 
-            connected_players.insert(peer_id, ply);
+    PackedByteArray buffer;
+    buffer.resize(len);
 
-            // Send gameinfo
-            // NOTE: Currently friend, maybe use getter/setter later?
-            rpc_id(peer_id, "server_rpc_gameinfo", game->gameinfo);
-        } else {
-            // Something wrong - disconnect that peer
-            disconnect_peer(peer_id, "Invalid playerdata!");
-        }
-    } else {
-        disconnect_peer(peer_id, "Peer is already connected!");
+    encode_variant(game->gameinfo, buffer.ptrw(), len, false, 0);
+
+    scene_multiplayer->send_auth(peer_id, buffer);
+}
+
+void Server::_on_auth_fail(int peer_id) {
+    print_error("Authentication failed for " + itos(peer_id));
+    remove_player(peer_id);
+}
+
+void Server::remove_player(int peer_id) {
+    if(connected_players.has(peer_id)) {
+        connected_players.erase(peer_id);
     }
 }
 
@@ -163,15 +161,8 @@ Ref<Player> Server::get_player(int peer_id) {
 	return Ref<Player>();
 }
 
-void Server::server_rpc_gameinfo(Dictionary p_gameinfo) {
-
-}
-
 void Server::_bind_methods() {
     ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Server::server_rpc_disconnect);
-    ClassDB::bind_method(D_METHOD("client_rpc_playerdata"), &Server::client_rpc_playerdata);
-    ClassDB::bind_method(D_METHOD("server_rpc_gameinfo", "gameinfo"), &Server::server_rpc_gameinfo);
-
 }
 
 Server::Server()

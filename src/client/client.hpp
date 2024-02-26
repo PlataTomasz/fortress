@@ -35,18 +35,19 @@ private:
     void _on_server_disconnect();
     void _init();
     //RPC
-    void update_join_state(JoinState join_state);
-
-    void client_rpc_playerdata(Dictionary playerdata);
-
     void server_rpc_disconnect(const String reason);
-    void server_rpc_gameinfo(Dictionary gameinfo);
 
+    void _on_auth_start(int peer_id);
+    void _on_auth_fail(int peer_id);
+    Error auth_callback(int peer_id, PackedByteArray data);
 public:
     void process();
     void ready();
     void enter_tree();
     Error connect_to_game_server(const String &ip, int port);
+
+    void set_player(Ref<Player> p_player);
+    Ref<Player> get_player();
 protected:
     void _notification(int notification);
     static void _bind_methods();

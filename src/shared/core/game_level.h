@@ -13,7 +13,11 @@ class GameLevel : public Node3D
 {
 GDCLASS(GameLevel, Node3D);
 private:
+	//Replication of entities on level
+	MultiplayerSpawner *entity_spawner = nullptr;
+	MultiplayerSynchronizer *entity_synchronizer = nullptr;
 
+	Ref<SceneReplicationConfig> replication_config = memnew(SceneReplicationConfig);
 
 	Node *entities_node = nullptr;
 protected:
@@ -23,6 +27,10 @@ protected:
 			case NOTIFICATION_READY: {
 				_ready();
 			} break;
+
+			case NOTIFICATION_POSTINITIALIZE:
+				_init();
+				break;
 
 			default:
 				break;
@@ -39,6 +47,8 @@ protected:
 			add_child(entities_node);
 		}
 	}
+
+	void _init();
 public:
 	void add_entity(Entity *ent) {
 		entities_node->add_child(ent);

@@ -82,13 +82,6 @@ void Game::ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint
     print_line("Ability use request received from", peer_id);
 }
 
-void Game::player_cfg_update_request_impl(Dictionary player_cfg) {
-    ERR_FAIL_COND(player_cfg.has("nickname" ));
-    ERR_FAIL_COND(player_cfg.has("mercenary"));
-
-    //_on_player_connect(get_multiplayer()->get_remote_sender_id(), player_cfg.get("nickname", "unexpected"));
-}
-
 void Game::movement_request_impl(Vector2 target_pos)
 {
     int peer_id = get_multiplayer()->get_remote_sender_id();

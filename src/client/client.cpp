@@ -30,22 +30,32 @@ void Client::ready()
 {
     DISABLE_IN_EDITOR();
     
-    //client_peer->create_client("localhost", 7654);
-    
-    
     scene_multiplayer.instantiate();
     scene_multiplayer->set_root_path(get_path());
     get_tree()->set_multiplayer(scene_multiplayer, get_path());
-    /*
-    Ref<SceneMultiplayer> scene_multiplayer;
-    scene_multiplayer.instantiate();
-    scene_multiplayer->set_root_path(get_path());
-    scene_multiplayer->set_multiplayer_peer(client_peer);
-    get_tree()->set_multiplayer(scene_multiplayer, get_path());
-    */
+    scene_multiplayer->set_auth_callback(callable_mp(this, &Client::auth_callback));
+    scene_multiplayer->connect("peer_authenticating", callable_mp(this, &Client::_on_auth_start));
+    scene_multiplayer->connect("peer_authentication_failed", callable_mp(this, &Client::_on_auth_fail));
 
     scene_multiplayer->connect("connected_to_server", callable_mp(this, &Client::_on_server_connect));
     scene_multiplayer->connect("server_disconnected", callable_mp(this, &Client::_on_server_disconnect));
+}
+
+void Client::_on_auth_start(int peer_id) {
+    Dictionary playerdata;
+    playerdata["nickname"] = player->get_nickname();
+    playerdata["mercenary"] = player->get_choosen_mercenary();
+
+    int len = 0;
+    Error err = encode_variant(playerdata, nullptr, len, false, 0);
+    ERR_FAIL_COND(err);
+
+    PackedByteArray buffer;
+    buffer.resize(len);
+
+    encode_variant(playerdata, buffer.ptrw(), len, false, 0);
+
+    scene_multiplayer->send_auth(peer_id, buffer);
 }
 
 void Client::_init()
@@ -57,12 +67,6 @@ void Client::_init()
     user_interface = memnew(UserInterface);
     user_interface->set_name("UserInterface");
     add_child(user_interface);
-
-
-}
-
-void Client::update_join_state(JoinState join_state) {
-    
 }
 
 void Client::_notification(int notification)
@@ -99,14 +103,7 @@ void Client::enter_tree()
 
 void Client::_on_server_connect()
 {
-    print_line("Connected to server. Sending playerdata");
-    Dictionary playerdata;
-    //playerdata["nickname"] = player->get_nickname();
-    playerdata["nickname"] = "Nickname-01";
-    //playerdata["mercenary"] = player->get_choosen_mercenary();
-    playerdata["mercenary"] = "mercenary";
-
-    rpc_id(1, "client_rpc_playerdata", playerdata);
+    print_line("Player", player->get_nickname(), "joined the server!");
 }
 
 void Client::_on_server_disconnect()
@@ -126,38 +123,33 @@ void Client::process()
 
 }
 
-void Client::client_rpc_playerdata(Dictionary playerdata) {
-    
+Error Client::auth_callback(int peer_id, PackedByteArray data) {
+    Variant var;
+    Error data_err = decode_variant(var, data.ptr(), data.size());
+    ERR_FAIL_COND_V_MSG(data_err != OK, data_err, "Received invalid auth data from server");
+    ERR_FAIL_COND_V_MSG(var.get_type() != Variant::DICTIONARY, ERR_INVALID_DATA, "Received invalid auth data from server");
+
+    Dictionary gameinfo = var.operator Dictionary();
+    Variant var_level_name = gameinfo.get_valid("level");
+    ERR_FAIL_COND_V_MSG(var_level_name.get_type() != Variant::STRING, ERR_INVALID_DATA, "Level name is malformed!" + itos(peer_id));
+
+    //TODO: Proper level_name validation
+    ERR_FAIL_COND_V_MSG(String(var_level_name) != String("ExampleGameLevel"), ERR_INVALID_DATA, "Invalid level name!");
+    game = memnew(Game);
+    game->set_name("Game");
+    add_child(game);
+
+    game->load_game_level(var_level_name);
+    game->setup_game();
+
+    print_line("Auth succeeded on client");
+    scene_multiplayer->complete_auth(peer_id);
+    return OK;
 }
 
-void Client::server_rpc_gameinfo(Dictionary gameinfo) {
-    Variant level_name = gameinfo.get_valid("level");
-
-    // Validation
-    if (level_name.get_type() == Variant::STRING ) {
-        
-        // Clean-up previous game object
-        if (game) {
-            remove_child(game);
-            game->queue_free();
-            game = nullptr;
-        }
-        // Load level with that name
-        //FIXME: Loading file like this asks for exploit that allows opening any file on host
-        //Create new game object
-        game = memnew(Game);
-        game->set_name("Game");
-        add_child(game);
-        
-        game->load_game_level(String(level_name));
-        game->setup_game();
-        game->_on_server_connect_finish();
-
-        print_line("Player", player->get_nickname(), "joined the server!");
-    } else {
-		//Invalid gameinfo - What to do now?
-		print_error("Invalid gameinfo received from server!");
-    }
+void Client::_on_auth_fail(int peer_id) {
+    print_error("Authentication with server failed!");
+    // Display disconnect popup
 }
 
 void Client::server_rpc_disconnect(const String reason) {
@@ -165,13 +157,22 @@ void Client::server_rpc_disconnect(const String reason) {
     print_line("You have been disconnected from server. Reason: " + reason);
 }
 
+void Client::set_player(Ref<Player> p_player) {
+    player = p_player;
+}
+
+Ref<Player> Client::get_player() {
+    return player;
+}
+
 void Client::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("get_peer"), &Client::get_peer);
     ClassDB::bind_method(D_METHOD("connect_to_game_server", "ip", "port"), &Client::connect_to_game_server);
     // RPC
-    ClassDB::bind_method(D_METHOD("client_rpc_playerdata"), &Client::client_rpc_playerdata);
     ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Client::server_rpc_disconnect);
-    ClassDB::bind_method(D_METHOD("server_rpc_gameinfo", "gameinfo"), &Client::server_rpc_gameinfo);
 
+    ClassDB::bind_method(D_METHOD("get_player"), &Client::get_player);
+    ClassDB::bind_method(D_METHOD("set_player", "player"), &Client::set_player);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "player"), "set_player", "get_player");
 }

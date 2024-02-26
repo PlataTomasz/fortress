@@ -6,14 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://cv500ah8rakwh" path="res://resources/UI/Game/Ability.tscn" id="2_rn5un"]
 
 [node name="Client" type="Client"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-editor_description = ""
-script = null
 
 [node name="Networking" type="Node" parent="."]
 
@@ -129,17 +121,9 @@ offset_bottom = 77.5
 [node name="Map" parent="Game" instance=ExtResource("1_ohokr")]
 
 [node name="Camera" type="GameCamera" parent="Game"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 0.737277, 0.67559, 0, -0.67559, 0.737277, 0, 2, 2)
 current = true
 fov = 45.0
-script = null
 
 [node name="CameraHelper" type="Control" parent="."]
 visible = false
