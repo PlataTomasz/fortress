@@ -29,8 +29,10 @@ Error Client::connect_to_game_server(const String &ip, int port) {
 void Client::ready()
 {
     DISABLE_IN_EDITOR();
-    
-    scene_multiplayer.instantiate();
+}
+
+void Client::_on_enter_tree() {
+    DISABLE_IN_EDITOR();
     scene_multiplayer->set_root_path(get_path());
     get_tree()->set_multiplayer(scene_multiplayer, get_path());
     scene_multiplayer->set_auth_callback(callable_mp(this, &Client::auth_callback));
@@ -39,6 +41,12 @@ void Client::ready()
 
     scene_multiplayer->connect("connected_to_server", callable_mp(this, &Client::_on_server_connect));
     scene_multiplayer->connect("server_disconnected", callable_mp(this, &Client::_on_server_disconnect));
+}
+
+void Client::server_rpc_set_controlled_entity(String entity_name) {
+    Entity *ent = game->get_current_level()->get_entity(NodePath(entity_name));
+    player->set_controlled_entity(ent);
+    print_line("Player currently controls", entity_name);
 }
 
 void Client::_on_auth_start(int peer_id) {
@@ -60,8 +68,8 @@ void Client::_on_auth_start(int peer_id) {
 
 void Client::_init()
 {
-    client_peer = Ref<ENetMultiplayerPeer>();
     client_peer.instantiate(); //Same as using memnew
+    scene_multiplayer.instantiate();
 
     //Create UI
     user_interface = memnew(UserInterface);
@@ -71,6 +79,7 @@ void Client::_init()
 
 void Client::_notification(int notification)
 {
+    DISABLE_IN_EDITOR();
     switch (notification)
     {
         case NOTIFICATION_PROCESS:
@@ -90,6 +99,10 @@ void Client::_notification(int notification)
             _init();
         }
         break;
+
+        case NOTIFICATION_ENTER_TREE:
+            _on_enter_tree();
+            break;
     
         default:
             break;
@@ -171,6 +184,7 @@ void Client::_bind_methods()
     ClassDB::bind_method(D_METHOD("connect_to_game_server", "ip", "port"), &Client::connect_to_game_server);
     // RPC
     ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Client::server_rpc_disconnect);
+    ClassDB::bind_method(D_METHOD("server_rpc_set_controlled_entity", "entity_name"), &Client::server_rpc_set_controlled_entity);
 
     ClassDB::bind_method(D_METHOD("get_player"), &Client::get_player);
     ClassDB::bind_method(D_METHOD("set_player", "player"), &Client::set_player);

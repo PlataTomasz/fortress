@@ -18,6 +18,7 @@ private:
 	 */
 	List<StringName> networked_properties;
 
+	void _init();
 	void _ready();
 	void _tick();
 	
@@ -38,7 +39,7 @@ public:
 	/**
 	 * Returns a list of all properties that should be networked
 	 */
-	List<StringName> get_networked_properties() {
+	List<StringName> &get_networked_properties() {
 		return networked_properties;
 	}
 

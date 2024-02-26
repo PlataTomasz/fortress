@@ -96,17 +96,7 @@ void Game::_ready()
 {
     DISABLE_IN_EDITOR();
     setup_game_camera();
-}
-
-void Game::_on_server_connect_finish() {
-    Mercenary *ent = memnew(Mercenary);
-    ent->set_position(Vector3(2, 2, 2));
-    game_level->add_entity(ent);
-    
-
-    player = new Player();
-    player->set_controlled_entity(ent);
-    game_camera->startFollowingNode(ent);
+    client = static_cast<Client *>(get_parent());
 }
 
 Vector3 Game::screenToWorld(const Vector2 &screenPos)
@@ -133,10 +123,12 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     //Casting to InputEventMouseButton - If succeeds: It is valid type
     if(InputEventMouseButton *input_event_mouse_btn = Object::cast_to<InputEventMouseButton>(event.ptr()))
     {
+        Entity *ent = client->get_player()->get_controlled_entity();
+        if(!ent)
+            return;
+
         Vector2 screenPos = input_event_mouse_btn->get_position();
         Vector3 worldPos = screenToWorld(screenPos);
-
-        Entity *ent = player->get_controlled_entity();
 
         UseContext use_context = {
             ent,
@@ -166,9 +158,11 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     }
     else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))
     {
-        Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
+        Entity *ent = client->get_player()->get_controlled_entity();
+        if(!ent)
+            return;
 
-        Entity *ent = player->get_controlled_entity();
+        Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
         UseContext use_context = {
             ent,

@@ -20,6 +20,7 @@ void Player::set_controlled_entity(Entity *p_controlled_entity)
 
 Entity *Player::get_controlled_entity()
 {
+    print_line("herh");
     return controlled_entity;
 }
 

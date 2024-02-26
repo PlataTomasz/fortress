@@ -3,9 +3,8 @@ extends Button
 @onready var client: Client = get_node("/root/Client")
 
 func _ready():
-	var peer: ENetMultiplayerPeer = client.get_peer()
-	multiplayer.connect("peer_connected", _on_connect_to_server)
-	multiplayer.connect("peer_disconnected", _on_disconnect_from_server)
+	multiplayer.connect("connected_to_server", _on_connect_to_server)
+	multiplayer.connect("server_disconnected", _on_disconnect_from_server)
 
 func _on_pressed():
 	var ip_input: LineEdit = get_node("../IpInput")
@@ -25,10 +24,10 @@ func _on_pressed():
 	if err != OK:
 		printerr("Connection to server failed with error code:", err)
 
-func _on_connect_to_server(peer_id: int):
+func _on_connect_to_server():
 	var char_select: Control = get_node("/root/Client/UserInterface/CharacterSelection")
 	char_select.visible = false
 	
-func _on_disconnect_from_server(peer_id: int):
+func _on_disconnect_from_server():
 	var char_select: Control = get_node("/root/Client/UserInterface/CharacterSelection")
 	char_select.visible = true

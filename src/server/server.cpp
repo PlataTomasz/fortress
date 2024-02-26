@@ -48,17 +48,6 @@ void Server::disconnect_peer(int peer_id, const String reason) {
     timer->connect("timeout", disconnect_callable.bind(peer_id));
 }
 
-//Peer_id might conflict with ObjectID's
-/*
-void Server::on_peer_connect(int peer_id) {
-	print_line(peer_id, "connected");
-	Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
-	Entity *ent_instance = Object::cast_to<Entity>(ent_scene->instantiate());
-	ent_instance->set_name(itos(peer_id));
-	get_node(NodePath("/root/Server/Game/Level/Entities"))->add_child(ent_instance);
-}
-*/
-
 void Server::_on_peer_disconnect(int peer_id)
 {
     Timer *timer = static_cast<Timer *>(get_node_or_null("playerdata_timeout" + itos(peer_id)));
@@ -71,6 +60,12 @@ void Server::_on_peer_disconnect(int peer_id)
 void Server::_on_peer_connect(int peer_id)
 {
     print_line("Peer", peer_id, "connected!");
+	Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
+	Entity *ent_instance = Object::cast_to<Entity>(ent_scene->instantiate());
+	ent_instance->set_name("p_" + itos(peer_id));
+	game->get_current_level()->add_entity(ent_instance);
+    connected_players.get(peer_id)->set_controlled_entity(ent_instance);
+    rpc_id(peer_id, "server_rpc_set_controlled_entity", ent_instance->get_name());
 }
 
 /*
@@ -83,6 +78,7 @@ void Server::on_peer_disconnect(int peer_id) {
 */
 
 void Server::_init() {
+    DISABLE_IN_EDITOR();
     //Setup networking
     server_peer.instantiate(); //Same as using memnew
 
@@ -91,10 +87,14 @@ void Server::_init() {
     add_child(game);
 
     set_process(true);
+
+    players = memnew(Node);
+    players->set_name("Players");
+    add_child(players);
 }
 
 void Server::server_rpc_disconnect(const String reason) {
-
+    
 }
 
 Error Server::auth_callback(int peer_id, PackedByteArray data) {
@@ -116,6 +116,12 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
     Player *ply = memnew(Player);
     ply->change_nickname(var_nickname.operator String());
     ply->set_choosen_mercenary(var_mercenary_name.operator String());
+
+    Ref<PackedScene> scene = ResourceLoader::load("res://resources/entities/Mercenary.tscn");
+    Mercenary *mercenary = static_cast<Mercenary *>(scene->instantiate());
+    mercenary->set_name(itos(get_instance_id()));
+    
+    ply->set_controlled_entity(mercenary);
 
     add_player(peer_id, ply);
     print_line("Auth succeeded on server for peer ", peer_id);
@@ -161,8 +167,13 @@ Ref<Player> Server::get_player(int peer_id) {
 	return Ref<Player>();
 }
 
+void Server::server_rpc_set_controlled_entity(String entity_name) {
+
+}
+
 void Server::_bind_methods() {
     ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Server::server_rpc_disconnect);
+    ClassDB::bind_method(D_METHOD("server_rpc_set_controlled_entity", "entity_name"), &Server::server_rpc_set_controlled_entity);
 }
 
 Server::Server()
