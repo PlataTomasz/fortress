@@ -20,6 +20,9 @@ private:
 	Ref<SceneReplicationConfig> replication_config = memnew(SceneReplicationConfig);
 
 	Node *entities_node = nullptr;
+
+	void _on_entity_added(Node *node);
+	void _on_entity_removed(Node *node);
 protected:
 	void _notification(int p_notification) {
 		DISABLE_IN_EDITOR();
@@ -37,22 +40,15 @@ protected:
 		}
 	}
 
-	void _ready() {
-		DISABLE_IN_EDITOR();
-		//Handling entities that are already in level
-		entities_node = get_node_or_null(NodePath("Entities"));
-		if (!entities_node) {
-			entities_node = memnew(Node);
-			entities_node->set_name("Entities");
-			add_child(entities_node);
-		}
-	}
+	void _ready();
 
 	void _init();
 public:
 	void add_entity(Entity *ent) {
 		entities_node->add_child(ent);
 	}
+
+	Entity *get_entity(const NodePath &node_path);
 
 	GameLevel()
 	{

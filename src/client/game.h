@@ -30,9 +30,6 @@ private:
 
     //Called when all steps of connection to server are completed and server gave us gameinfo
 public:
-    //Player controlled by this game client
-    Player *player;
-
     void fetch_mercenary_classes(List<StringName> &names) {
         ClassDB::get_inheriters_from_class("Mercenary", &names);
     };
@@ -41,8 +38,6 @@ public:
     void _ready();
     void _tick();
     void unhandled_input(const Ref<InputEvent> &event) override;
-
-    void _on_server_connect_finish();
 
     //Request RPC methods - Empty, exist only to match RPC signature on authority, to avoid checksum errors
     virtual void movement_request_impl(Vector2 target_pos);

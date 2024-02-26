@@ -2,14 +2,22 @@
 #define REALM_INCLUDED
 
 #include <scene/main/node.h>
+#include <core/object/ref_counted.h>
+#include <modules/multiplayer/scene_replication_config.h>
 
 class Game;
+class MultiplayerSynchronizer;
 
 //Shared code for Client and Server class
 class Realm : public Node {
 GDCLASS(Realm, Node);
 private:
+    MultiplayerSynchronizer *realm_data_synchronizer = nullptr;
+
+    Ref<SceneReplicationConfig> replication_config;
+
     void _ready();
+    void _init();
 protected:
     static Game *game;
 

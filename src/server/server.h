@@ -28,6 +28,7 @@ private:
 
     HashMap<int, Ref<Player>> connected_players;
 
+    Node *players = nullptr;
 protected:
     void _notification(int notification)
     {
@@ -37,6 +38,7 @@ protected:
             case NOTIFICATION_POSTINITIALIZE:
             {
                 _init();
+                break;
             }
 
             case NOTIFICATION_PROCESS:
@@ -76,6 +78,7 @@ protected:
 
     //RPC
     void server_rpc_disconnect(const String reason);
+    void server_rpc_set_controlled_entity(String entity_name);
     
     Error auth_callback(int peer_id, PackedByteArray data);
     void _on_auth_start(int peer_id);
