@@ -76,14 +76,16 @@ protected:
 
     //RPC
     void server_rpc_disconnect(const String reason);
-    void server_rpc_gameinfo(Dictionary p_gameinfo);
-    void client_rpc_playerdata(Dictionary playerdata);
-
+    
+    Error auth_callback(int peer_id, PackedByteArray data);
+    void _on_auth_start(int peer_id);
+    void _on_auth_fail(int peer_id);
 public:
     //Returns player by peer_id, nullptr if no player has such peer
     Ref<Player> get_player(int peer_id);
 
     void add_player(int peer_id, Ref<Player> player);
+    void remove_player(int peer_id);
 
     void _ready();
 

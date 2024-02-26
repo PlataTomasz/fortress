@@ -88,6 +88,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
         ClassDB::register_class<Orange>();
         ClassDB::register_class<Lemon>();
 
+    ClassDB::register_class<Player>();
+
     //ClassDB::register_class<>();
 }
 

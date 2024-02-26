@@ -42,15 +42,12 @@ public:
     void _tick();
     void unhandled_input(const Ref<InputEvent> &event) override;
 
-    void _on_connect_to_remote_game();
-
     void _on_server_connect_finish();
 
     //Request RPC methods - Empty, exist only to match RPC signature on authority, to avoid checksum errors
     virtual void movement_request_impl(Vector2 target_pos);
     virtual void attack_request_impl(Vector2 target_pos, uint64_t target_entity_id);
     virtual void ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);
-    virtual void player_cfg_update_request_impl(Dictionary player_cfg);
 
     GameCamera *setup_game_camera();
 

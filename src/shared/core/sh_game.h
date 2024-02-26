@@ -35,12 +35,10 @@ public:
     void remove_node_networked_property(Node *node, const StringName &property_name);
 
     //Request handling methods
-    void player_cfg_update_request(Dictionary player_cfg);
     void movement_request(Vector2 target_pos);
     void attack_request(Vector2 target_pos, uint64_t target_entity_id);
     void ability_use_request(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id);
-
-    virtual void player_cfg_update_request_impl(Dictionary player_cfg) = 0;
+    
     virtual void movement_request_impl(Vector2 target_pos) = 0;
     virtual void attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) = 0;
     virtual void ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id) = 0;

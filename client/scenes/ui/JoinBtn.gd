@@ -4,8 +4,8 @@ extends Button
 
 func _ready():
 	var peer: ENetMultiplayerPeer = client.get_peer()
-	peer.connect("peer_connected", _on_connect_to_server)
-	peer.connect("peer_disconnected", _on_connect_to_server)
+	multiplayer.connect("peer_connected", _on_connect_to_server)
+	multiplayer.connect("peer_disconnected", _on_disconnect_from_server)
 
 func _on_pressed():
 	var ip_input: LineEdit = get_node("../IpInput")
@@ -18,6 +18,8 @@ func _on_pressed():
 	var port: int = 7654
 	if ip_port.size() > 1 and ip_port[1].length() > 0:
 		port = int(ip_port[1])
+		
+	client.player.nickname = nickname_input.text
 		
 	var err: Error = client.connect_to_game_server("localhost", 7654)
 	if err != OK:

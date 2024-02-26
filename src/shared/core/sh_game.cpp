@@ -14,7 +14,6 @@ void SH_Game::_ready()
     ADD_RPC_CONFIG(movement_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(attack_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
     ADD_RPC_CONFIG(ability_use_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-    ADD_RPC_CONFIG(player_cfg_update_request, MultiplayerAPI::RPC_MODE_ANY_PEER, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
 }
 
 void SH_Game::_tick() {
@@ -112,7 +111,6 @@ void SH_Game::_bind_methods()
     ClassDB::bind_method(D_METHOD("movement_request", "target_position"), &SH_Game::movement_request);
     ClassDB::bind_method(D_METHOD("attack_request", "target_position"), &SH_Game::attack_request);
     ClassDB::bind_method(D_METHOD("ability_use_request", "target_position"), &SH_Game::ability_use_request);
-    ClassDB::bind_method(D_METHOD("player_cfg_update_request", "player_cfg"), &SH_Game::player_cfg_update_request);
 
     /*
     ClassDB::bind_method(D_METHOD("set_example_property", "value"), &SH_Game::set_example_property);
@@ -156,9 +154,6 @@ GameLevel *SH_Game::get_current_level()
     return game_level;
 }
 
-void SH_Game::player_cfg_update_request(Dictionary player_cfg) {
-    player_cfg_update_request_impl(player_cfg);
-}
 void SH_Game::movement_request(Vector2 target_pos) {
     movement_request_impl(target_pos);
 }
