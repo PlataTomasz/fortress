@@ -42,6 +42,7 @@ private:
     void _on_auth_fail(int peer_id);
     Error auth_callback(int peer_id, PackedByteArray data);
     void _on_enter_tree();
+    void _on_player_spawn(Player *player);
 public:
     void process();
     void ready();

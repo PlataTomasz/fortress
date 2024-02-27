@@ -4,6 +4,7 @@
 #include <scene/main/multiplayer_api.h>
 #include <scene/main/multiplayer_peer.h>
 #include <modules/multiplayer/multiplayer_synchronizer.h>
+#include <modules/multiplayer/multiplayer_spawner.h>
 
 Game *Realm::game = nullptr;
 
@@ -44,4 +45,24 @@ void Realm::_ready() {
 
     realm_data_synchronizer->set_root_path(get_path());
     realm_data_synchronizer->set_replication_config(replication_config);
+
+    MultiplayerSpawner *player_spawner = nullptr;
+    player_spawner = memnew(MultiplayerSpawner);
+    player_spawner->set_name("PlayerSpawner");
+    
+    player_spawner->set_spawn_path(NodePath("../Players"));
+
+    player_spawner->spawn();
+}
+
+Node *Realm::_player_spawner(Variant &data) {
+    Dictionary data_dict;
+    if (data.get_type() == Variant::DICTIONARY) {
+        Variant var_peer_id = data_dict.get_valid("nickname");
+        Variant var_nickname = data_dict.get_valid("peer_id");
+
+        
+    }
+
+    return nullptr;
 }
