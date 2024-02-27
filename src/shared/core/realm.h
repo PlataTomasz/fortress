@@ -18,6 +18,8 @@ private:
 
     void _ready();
     void _init();
+
+    Node *_player_spawner(Variant &data);
 protected:
     static Game *game;
 

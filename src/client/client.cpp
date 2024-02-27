@@ -43,6 +43,12 @@ void Client::_on_enter_tree() {
     scene_multiplayer->connect("server_disconnected", callable_mp(this, &Client::_on_server_disconnect));
 }
 
+void Client::_on_player_spawn(Player *player) {
+    if (scene_multiplayer->get_unique_id() == player->get_owner_peer_id()) {
+        //pla
+    }
+}
+
 void Client::server_rpc_set_controlled_entity(String entity_name) {
     Entity *ent = game->get_current_level()->get_entity(NodePath(entity_name));
     player->set_controlled_entity(ent);

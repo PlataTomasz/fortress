@@ -59,7 +59,7 @@ void Server::_on_peer_disconnect(int peer_id)
 
 void Server::_on_peer_connect(int peer_id)
 {
-    print_line("Peer", peer_id, "connected!");
+    
 	Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
 	Entity *ent_instance = Object::cast_to<Entity>(ent_scene->instantiate());
 	ent_instance->set_name("p_" + itos(peer_id));
@@ -126,6 +126,7 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
     add_player(peer_id, ply);
     print_line("Auth succeeded on server for peer ", peer_id);
     scene_multiplayer->complete_auth(peer_id);
+    print_line("Player", ply->get_nickname(), "joined the game!");
     return OK;
 }
 

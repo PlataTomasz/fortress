@@ -123,19 +123,22 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
     //Casting to InputEventMouseButton - If succeeds: It is valid type
     if(InputEventMouseButton *input_event_mouse_btn = Object::cast_to<InputEventMouseButton>(event.ptr()))
     {
+        /*
         Entity *ent = client->get_player()->get_controlled_entity();
         if(!ent)
             return;
-
+        */
         Vector2 screenPos = input_event_mouse_btn->get_position();
         Vector3 worldPos = screenToWorld(screenPos);
 
+        /*
         UseContext use_context = {
             ent,
             ent->get_position(),
             Vector<Vector3>({worldPos}),
             Vector<Entity*>()
         };
+        */
 
         //Convert screen to world cordinates
         printf("{ %f, %f, %f}\n", worldPos.x, worldPos.y, worldPos.z);
