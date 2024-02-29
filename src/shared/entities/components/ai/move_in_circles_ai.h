@@ -5,8 +5,6 @@
 
 class MoveInCirclesAI : AIComponent 
 {
-    
-    
     void tick()
     {
 

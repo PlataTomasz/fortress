@@ -26,8 +26,9 @@ void Mercenary::_notification(int notification) {
 }
 
 void Mercenary::_init() {
-   MovementComponent *movement_component = memnew(MovementComponent);
-   add_child(movement_component);
+   //MovementComponent *movement_component = memnew(MovementComponent);
+   //add_child(movement_component);
+   
 }
 
 void Mercenary::_bind_methods()

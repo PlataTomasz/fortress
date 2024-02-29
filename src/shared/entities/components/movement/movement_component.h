@@ -1,7 +1,7 @@
 #if !defined(MOVEMENT_COMPONENT_INCLUDED)
 #define MOVEMENT_COMPONENT_INCLUDED
 
-#include "../component.h"
+#include "../component_3d.h"
 
 class Node3D;
 class NavigationAgent3D;
@@ -10,9 +10,9 @@ class EntityStatsComponent;
 /**
  * Node, which instantes control movement of an Entity
 */
-class MovementComponent : public Component
+class MovementComponent : public Component3D
 {
-GDCLASS(MovementComponent, Component);
+GDCLASS(MovementComponent, Component3D);
 private:
     NavigationAgent3D *nav_agent = nullptr;
 

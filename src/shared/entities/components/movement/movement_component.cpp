@@ -44,17 +44,26 @@ void MovementComponent::_tick() {
 	ent->set_position(current_position + new_velocity);
 	//FIXME: Rotation looks clunky - interpolation?
 	//NOTE: Facing direction (0,0,0) looking towards "-Z"
-	ent->look_at(nav_agent->get_next_path_position());
+	if(ent->get_position() != next_path_position)
+		ent->look_at(next_path_position, Vector3(0, 1, 0), true);
+		/*
+		Vector3 corrected_rotation = ent->get_rotation();
+		corrected_rotation.y = corrected_rotation.y + 180;
+		ent->set_rotation(corrected_rotation);
+		*/
 }
 
 void MovementComponent::_parented() {
 	Entity *ent = static_cast<Entity *>(get_parent());
-	ent->set_component(ComponentStringNames::get_singleton()->movement_component, this);
+	//ent->set_component(ComponentStringNames::get_singleton()->movement_component, this);
 }
 
 void MovementComponent::_init() {
 	nav_agent = memnew(NavigationAgent3D);
+	nav_agent->set_avoidance_enabled(true);
 	add_child(nav_agent);
+
+	set_physics_process(true);
 }
 
 void MovementComponent::set_destination_position(Vector3 target_position) {

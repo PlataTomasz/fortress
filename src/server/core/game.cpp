@@ -20,7 +20,7 @@
 Game::Game()
 {
     //Temporary
-    gameinfo["level"] = "ExampleGameLevel";
+    gameinfo["level"] = "Aram";
 }
 
 void Game::_ready()
@@ -94,7 +94,7 @@ void Game::movement_request_impl(Vector2 target_pos)
     Entity *issuer = player->get_controlled_entity();
     ERR_FAIL_COND_MSG(!issuer, "Player doesn't control any entity!");
 
-    MovementComponent *movement_component = static_cast<MovementComponent *>(issuer->get_component(ComponentStringNames::get_singleton()->movement_component));
+    MovementComponent *movement_component = static_cast<MovementComponent *>(issuer->get_node_or_null(NodePath("MovementComponent")));
     ERR_FAIL_NULL(movement_component);
     movement_component->set_destination_position(Vector3(target_pos.x,0,target_pos.y));
 

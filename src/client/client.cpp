@@ -153,7 +153,7 @@ Error Client::auth_callback(int peer_id, PackedByteArray data) {
     ERR_FAIL_COND_V_MSG(var_level_name.get_type() != Variant::STRING, ERR_INVALID_DATA, "Level name is malformed!" + itos(peer_id));
 
     //TODO: Proper level_name validation
-    ERR_FAIL_COND_V_MSG(String(var_level_name) != String("ExampleGameLevel"), ERR_INVALID_DATA, "Invalid level name!");
+    ERR_FAIL_COND_V_MSG(String(var_level_name) != String("Aram"), ERR_INVALID_DATA, "Invalid level name!");
     game = memnew(Game);
     game->set_name("Game");
     add_child(game);

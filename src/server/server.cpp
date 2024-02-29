@@ -60,12 +60,13 @@ void Server::_on_peer_disconnect(int peer_id)
 void Server::_on_peer_connect(int peer_id)
 {
     
-	Ref<PackedScene> ent_scene = ResourceLoader::load("res://resources/entities/Entity.tscn");
-	Entity *ent_instance = Object::cast_to<Entity>(ent_scene->instantiate());
-	ent_instance->set_name("p_" + itos(peer_id));
-	game->get_current_level()->add_entity(ent_instance);
-    connected_players.get(peer_id)->set_controlled_entity(ent_instance);
-    rpc_id(peer_id, "server_rpc_set_controlled_entity", ent_instance->get_name());
+    Ref<PackedScene> scene = ResourceLoader::load("res://entities/mercenaries/Barbarian.tscn");
+    Mercenary *mercenary = static_cast<Mercenary *>(scene->instantiate());
+
+	mercenary->set_name("p_" + itos(peer_id));
+	game->get_current_level()->add_entity(mercenary);
+    connected_players.get(peer_id)->set_controlled_entity(mercenary);
+    rpc_id(peer_id, "server_rpc_set_controlled_entity", mercenary->get_name());
 }
 
 /*
@@ -117,7 +118,7 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
     ply->change_nickname(var_nickname.operator String());
     ply->set_choosen_mercenary(var_mercenary_name.operator String());
 
-    Ref<PackedScene> scene = ResourceLoader::load("res://resources/entities/Mercenary.tscn");
+    Ref<PackedScene> scene = ResourceLoader::load("res://entities/mercenaries/Barbarian.tscn");
     Mercenary *mercenary = static_cast<Mercenary *>(scene->instantiate());
     mercenary->set_name(itos(get_instance_id()));
     
