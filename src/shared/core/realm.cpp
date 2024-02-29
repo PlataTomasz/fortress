@@ -52,7 +52,7 @@ void Realm::_ready() {
     
     player_spawner->set_spawn_path(NodePath("../Players"));
 
-    player_spawner->spawn();
+    //player_spawner->spawn();
 }
 
 Node *Realm::_player_spawner(Variant &data) {

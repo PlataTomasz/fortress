@@ -10,7 +10,8 @@ GameCamera::GameCamera()
     DISABLE_IN_EDITOR();
     followedNode = nullptr;
     freeCam = true;
-    set_rotation_degrees(Vector3(-30,0,0));
+    set_rotation_degrees(Vector3(-45,0,0));
+    set_position(Vector3(0, 10, 5));
 
     SceneTree::get_singleton()->connect("process_frame", callable_mp(this, &GameCamera::process_frame));
 }

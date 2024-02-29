@@ -1,7 +1,26 @@
 #include "game_level.h"
 
 void GameLevel::_init() {
+
+}
+
+void GameLevel::_on_enter_tree() {
     DISABLE_IN_EDITOR();
+
+}
+
+void GameLevel::_ready() {
+    DISABLE_IN_EDITOR();
+    //Handling entities that are already in level
+    entities_node = get_node_or_null(NodePath("Entities"));
+    if (!entities_node) {
+        entities_node = memnew(Node);
+        entities_node->set_name("Entities");
+        add_child(entities_node);
+    }
+    entities_node->connect("child_entered_tree", callable_mp(this, &GameLevel::_on_entity_added));
+    entities_node->connect("child_exiting_tree", callable_mp(this, &GameLevel::_on_entity_removed));
+
 
     NodePath entities_nodepath = NodePath("../Entities");
 
@@ -21,19 +40,10 @@ void GameLevel::_init() {
     //Add spawnable scenes
     entity_spawner->add_spawnable_scene("res://resources/entities/Mercenary.tscn");
     entity_spawner->add_spawnable_scene("res://resources/entities/Entity.tscn");
-}
+    entity_spawner->add_spawnable_scene("res://entities/mercenaries/Orc.tscn");
+    entity_spawner->add_spawnable_scene("res://entities/mercenaries/Barbarian.tscn");
 
-void GameLevel::_ready() {
-    DISABLE_IN_EDITOR();
-    //Handling entities that are already in level
-    entities_node = get_node_or_null(NodePath("Entities"));
-    if (!entities_node) {
-        entities_node = memnew(Node);
-        entities_node->set_name("Entities");
-        add_child(entities_node);
-    }
-    entities_node->connect("child_entered_tree", callable_mp(this, &GameLevel::_on_entity_added));
-    entities_node->connect("child_exiting_tree", callable_mp(this, &GameLevel::_on_entity_removed));
+    
 }
 
 // That code below might be extremly slow, but there is no other way I'm aware of

@@ -23,6 +23,7 @@ private:
 
 	void _on_entity_added(Node *node);
 	void _on_entity_removed(Node *node);
+	void _on_enter_tree();
 protected:
 	void _notification(int p_notification) {
 		DISABLE_IN_EDITOR();
@@ -30,6 +31,10 @@ protected:
 			case NOTIFICATION_READY: {
 				_ready();
 			} break;
+
+			case NOTIFICATION_ENTER_TREE:
+				_on_enter_tree();
+				break;
 
 			case NOTIFICATION_POSTINITIALIZE:
 				_init();

@@ -89,6 +89,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
         ClassDB::register_class<Lemon>();
 
     ClassDB::register_class<Player>();
+    ClassDB::register_class<MovementComponent>();
 
     //ClassDB::register_class<>();
 }

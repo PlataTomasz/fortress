@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://7453g6ydtekb"]
+
+[ext_resource type="ArrayMesh" uid="uid://djgsm5u1h4jy3" path="res://models/Turret_barrier_red.tres" id="1_0viik"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_akbwa"]
+radius = 4.5
+
+[node name="Turret" type="Node3D"]
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_0viik")
+skeleton = NodePath("")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="Mesh"]
+radius = 2.13
+avoidance_layers = 2
+
+[node name="DetectionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("SphereShape3D_akbwa")

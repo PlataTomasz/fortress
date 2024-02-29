@@ -24,7 +24,7 @@ GameLevel *SH_Game::load_game_level(const String& level_name)
 {
     //Let others know that level is changing
     emit_signal("pre_level_load");
-    Ref<PackedScene> game_level_scene = ResourceLoader::load("res://scenes/levels/" + level_name + ".tscn");
+    Ref<PackedScene> game_level_scene = ResourceLoader::load("res://levels/" + level_name + ".tscn");
     GameLevel *game_level_tmp = Object::cast_to<GameLevel>(game_level_scene->instantiate());
     ERR_FAIL_NULL_V(game_level_tmp, nullptr);
     game_level_tmp->set_name("Level");

@@ -22,9 +22,9 @@ enum AbilityUseError
     ABILITY_ON_COOLDOWN = 1<<3
 };
 
-class Ability : public Object
+class Ability : public Node
 {
-GDCLASS(Ability, Object);
+GDCLASS(Ability, Node);
 protected:
 
     ObjectPtr<Entity> owner;

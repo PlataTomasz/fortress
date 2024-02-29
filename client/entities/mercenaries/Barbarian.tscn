@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://brsu7fgraglpj"]
+
+[ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
+
+[node name="Barbarian" type="Entity"]
+
+[node name="MovementComponent" type="MovementComponent" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_sy8qm")

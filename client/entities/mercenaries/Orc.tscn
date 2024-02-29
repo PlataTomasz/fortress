@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmngc4eewvi3g"]
+
+[ext_resource type="ArrayMesh" uid="uid://cge81pd7xjrew" path="res://models/level/dungeon/obj/character-orc.obj" id="1_7ujyy"]
+
+[node name="Orc" type="Entity"]
+
+[node name="MovementComponent" type="MovementComponent" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_7ujyy")

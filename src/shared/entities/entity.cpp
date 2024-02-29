@@ -45,6 +45,7 @@ void Entity::_tick() {
 void Entity::_init() {
 	DISABLE_IN_EDITOR();
 	add_networked_property(SNAME("position"));
+	add_networked_property(SNAME("rotation"));
 }
 
 void Entity::_ready() {
