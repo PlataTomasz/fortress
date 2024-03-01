@@ -26,10 +26,6 @@ class Ability : public Node
 {
 GDCLASS(Ability, Node);
 protected:
-
-    ObjectPtr<Entity> owner;
-    ObjectPtr<Entity> old_owner;
-
     /**
      * Current cooldown of ability in ticks
     */
@@ -39,13 +35,7 @@ protected:
     */
     int max_cooldown = 1;
 
-    int cost = 0;
-
-    AbilityUseRCL* ability_use_chain;
-
     virtual void use_impl(UseContext& use_context){};
-
-    virtual void setup_ability_use_chain();
 
     virtual void ready_impl(){};
     void ready(){ready_impl();};
@@ -60,17 +50,7 @@ public:
     /**
      * Uses ability if possible. Returns AbilityCastError value depending on what happened.
     */
-    AbilityUseError use(UseContext& use_context);
-
-    /**
-     * Uses ability completly ignoring anything that would prevent it
-    */
-    void force_use(UseContext& use_context);
-
-    /**
-     * Checks if ability can be used. Returns 0 if yes, AbilityCastError value otherwise
-    */
-    AbilityUseError can_use(UseContext& use_context);
+    Error use(Dictionary use_context);
 
     /**
      * Ability preparation - Here should go initialization code such as setting up helper nodes
