@@ -6,6 +6,9 @@
 
 class Ability;
 
+/**
+ * Ability caster component is a component which allows using abilities that are child of this component
+*/
 class AbilityCasterComponent : public Component
 {
 public:
@@ -19,30 +22,15 @@ public:
         ABILITY_MAX
     };
 protected:
-    /**
-     * [0] - Passive
-     * [1, 2, 3] - Other abilities
-     * [4] - Ultimate
-    */
-    Ability *basic_attack_ability;
-    Ability *abilitySet[AbilitySetIndex::ABILITY_MAX];
-    int ability_count = 5;
     static void _bind_methods();
 public:
-    void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
-
-    void use_ability(AbilitySetIndex ability_id, UseContext use_context);
-    void use_basic_attack(UseContext& use_context);
-
     void _notification(int notification);
 
-    void initialize();
-    void tick();
+    Error use_ability(int index, Dictionary use_context);
 
     virtual ~AbilityCasterComponent();
 
     AbilityCasterComponent();
-    AbilityCasterComponent(Ability *abilities[ABILITY_MAX]);
 
 };
 
