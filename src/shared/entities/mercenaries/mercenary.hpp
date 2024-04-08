@@ -15,14 +15,8 @@ class Mercenary : public Entity
 {
 GDCLASS(Mercenary, Entity);
 protected:
-    static void _bind_methods();
-    ObjectPtr<AbilityCasterComponent> ability_caster_component;
+    static void _bind_methods(){};
 public:
-    void _notification(int notification);
-    void _tick();
-
-    void _init();
-
     Mercenary();
 
     ~Mercenary();

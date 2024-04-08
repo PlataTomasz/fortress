@@ -27,6 +27,21 @@ Error Ability::use(UseContext& use_context)
     return result;
 }
 
+Entity *Ability::get_owner()
+{
+    return static_cast<Entity *>(get_parent());
+}
+
+void Ability::force_use(UseContext& use_context)
+{
+    use_impl(use_context);
+}
+
+AbilityUseError Ability::can_use(UseContext& use_context)
+{
+    return ability_use_chain->evaluate({this, use_context});
+}
+
 void Ability::tick()
 {
     tick_impl();

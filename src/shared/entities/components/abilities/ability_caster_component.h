@@ -9,6 +9,7 @@ class Ability;
 /**
  * Ability caster component is a component which allows using abilities that are child of this component
 */
+// TODO: Make editable in editor
 class AbilityCasterComponent : public Component
 {
 public:
@@ -24,6 +25,10 @@ public:
 protected:
     static void _bind_methods();
 public:
+    void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
+    void use_ability(AbilitySetIndex ability_id, UseContext use_context);
+    void use_basic_attack(UseContext& use_context);
+
     void _notification(int notification);
 
     Error use_ability(int index, Dictionary use_context);

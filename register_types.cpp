@@ -50,7 +50,7 @@
 #include <shared/entities/mercenaries/lemon/lemon.h>
 #include <shared/entities/mercenaries/orange/orange.h>
 #include <shared/entities/components/component.h>
-#include <shared/entities/components/entity_stats/entity_stat_component.h>
+#include <shared/entities/components/entity_stats/entity_attributes_component.h>
 #include <shared/entities/components/movement/movement_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
 
@@ -80,9 +80,10 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<GameLevel>();
     ClassDB::register_class<Entity>();
     ClassDB::register_class<Component>();
-    ClassDB::register_class<EntityStatsComponent>();
+    ClassDB::register_class<EntityAttributesComponent>();
+    ClassDB::register_class<FloatAttribute>();
+    ClassDB::register_class<FloatValueModifier>();
     ClassDB::register_class<MovementComponent>();
-    ClassDB::register_class<Stat>();
     ClassDB::register_class<VisualComponent3D>();
     ClassDB::register_class<Mercenary>();
         ClassDB::register_class<Orange>();

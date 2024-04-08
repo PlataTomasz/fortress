@@ -6,14 +6,21 @@
 #include <core/variant/variant.h>
 #include <cstdio>
 #include <scene/main/node.h>
+#include <shared/core/systems/gameplay/gameplay_attributes.h>
+#include <shared/core/systems/gameplay/gameplay_tags.h>
 
 class Entity;
+class StatusEffectVictimComponent;
 
 //Class which acts as a template for instantiating new status effect instances
 //NOTE: Name is set by StatusEffectManager
 class StatusEffect : public Node
 {
 public:
+    //GameplayAttributes attributes;
+    PackedStringArray tags;
+
+    // Every StatusEffect have this data
     enum Type
     {
         MISC,
@@ -21,49 +28,58 @@ public:
         DEBUFF,
         TYPE_MAX
     };
-protected:
-    //Generic fields - every status event have them
-    StatusEffect::Type type = StatusEffect::Type::MISC;
-    //1 means that StatusEffect is unstackable
+private:
     int max_stacks = 1;
-    float max_duration = 3;
-
     int current_stacks = 1;
+
+    // How many stacks are lost when effect timer runs out?
+    int stacks_loss = 1;
+
+    float max_duration = 0;
     float current_duration = 0;
+    StatusEffect::Type type;
+
+    String tooltip = "default_status_effect_tooltip";
+    Ref<Texture2D> icon;
+
+    bool permament = true;
+
+protected:
+    // Script Overrideable methods
+    GDVIRTUAL0(_on_apply)
+    GDVIRTUAL0(_on_remove)
+    GDVIRTUAL0(_tick)
+    GDVIRTUAL0(_tick_internal)
+
+    void _notification(int p_notification);
+
+    static void _bind_methods();
+public:
+    StatusEffectVictimComponent *get_victim_component();
+    Node *get_victim_entity();
 
     //Permament effects are those which max_duration is -1. That also includes effect that expire under certain conditions(like leaving slowing area)
-    virtual bool is_permament()
-    {
-        return false;
-    }
-public:
-    Entity *get_target();
+    bool is_permament();
+    void set_permament(bool p_permament);
 
     int get_current_stacks();
+    void set_current_stacks(int stacks);
 
+    int get_max_stacks();
+    void set_max_stacks(int p_stacks);
 
     //TODO: Maybe return value, informing that stack was not added and why?
-    void add_stacks(int stack_count = 1, bool refresh = true);
+    void add_stacks(int stack_count, bool refresh = true);
 
-    //Callbacks
-    virtual void on_process_frame_impl() final;
+    void refresh();
 
-    /**
-     * Called when status wears off
-    */
-    virtual void on_expire(){};
+    void _on_remove();
+    void _on_apply();
+    void _tick();
+    void _tick_internal();
 
-    /**
-     * Called when status is applied to entity
-    */
-    virtual void on_apply()
-    {
-        printf("StatusEffect::onApply callled!\n");
-    };
-    /**
-     * Called every process frame
-    */
-    virtual void _tick(){};
+    // This status effect is queued for deletion
+    void expire();
 
     operator String() const;
 
@@ -77,6 +93,8 @@ public:
     friend class Entity;
     friend class StatusEffectManager;
 };
+
+VARIANT_ENUM_CAST(StatusEffect::Type);
 
 //TODO: Maybe implement It with Nodes(create StatusEffectInstance class?)
 #endif // STATUS_EFFECT_HPP

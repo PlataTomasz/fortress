@@ -22,9 +22,9 @@ AalStraightThroughHeart::AalStraightThroughHeart()
 //NOTE: That ability is prototype - should behave a bit differently
 void AalStraightThroughHeart::use_impl(UseContext& use_context)
 {
-    ERR_FAIL_NULL(owner);
+    ERR_FAIL_NULL(get_owner());
 
-    owner->add_child(hit_area);
+    get_owner()->add_child(hit_area);
 
     TypedArray<Area3D> hit_areas = hit_area->get_overlapping_areas();
     for(int i = 0;i<hit_areas.size();i++)
@@ -36,7 +36,7 @@ void AalStraightThroughHeart::use_impl(UseContext& use_context)
         //TODO: Dealing damage
     }
 
-    owner->remove_child(hit_area);
+    get_owner()->remove_child(hit_area);
 
 }
 
@@ -66,5 +66,5 @@ void AalStraightThroughHeart::setup_visuals()
     Ref<PlaneMesh> mesh = lightning_mesh_instance->get_mesh();
     mesh->set_size(Size2(2, 160));
 
-    owner->add_child(lightning_mesh_instance);
+    get_owner()->add_child(lightning_mesh_instance);
 }

@@ -2,6 +2,7 @@
 #include <game.h>
 
 #include <shared/entities/components/component.h>
+#include <shared/core/managers/component_manager.h>
 
 //NOTE: That method requires Entity to be part of the SceneTree to work
 void Entity::add_networked_property(const StringName &property_name) {
@@ -17,25 +18,9 @@ void Entity::remove_networked_property(const StringName &property_name) {
 	}
 }
 
-void Entity::set_component(const StringName &name, Component *component) {
-	set_meta(name, component);
-}
-
 template<class T>
 T *Entity::get_component() {
-	TypedArray<Node> components = get_children();
-
-	for (int i = 0; i < components.size(); i++) {
-		if (T *component = Object::cast_to<T>(components[i].operator Object* ())) {
-			return component;
-		}
-	}
-
-	return nullptr;
-}
-
-Component *Entity::get_component(const StringName &name) {
-	return static_cast<Component *>(get_meta(name).operator Object *());
+	return ComponentManager::get_component<T>(this);
 }
 
 void Entity::_tick() {
