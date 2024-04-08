@@ -4,7 +4,6 @@
 #include <scene/3d/node_3d.h>
 #include <scene/main/multiplayer_api.h>
 #include <server/server.h>
-#include <shared/entities/node_methods.h>
 
 /**
  * Base class for representing most of the in-game objects, such as projectiles, monsters, ticking entities
@@ -52,9 +51,6 @@ public:
 
 	template <class T>
 	T *get_component();
-	Component *get_component(const StringName& name);
-
-	void set_component(const StringName &name, Component *component);
 };
 
 #endif // ENTITY_INCLUDED

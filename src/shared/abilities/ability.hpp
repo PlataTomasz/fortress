@@ -4,11 +4,12 @@
 #include <shared/data_holders/use_context.hpp>
 #include <core/string/ustring.h>
 #include <shared/helpers/object_ptr.h>
+#include <shared/core/systems/gameplay/gameplay_attributes.h>
 
 class AbilityUseRCL;
 
 /**
- * ClassC responsible for logic and data behind Abilities of mercenaries, items, etc.
+ * Class responsible for logic and data behind Abilities of mercenaries, items, etc.
 */
 
 enum AbilityUseError
@@ -34,6 +35,14 @@ protected:
      * Base cooldown of this ability
     */
     int max_cooldown = 1;
+
+    int cost = 0;
+
+    GameplayAttributes ability_data;
+    
+    Ref<Texture2D> icon;
+
+    AbilityUseRCL* ability_use_chain;
 
     virtual void use_impl(UseContext& use_context){};
 
@@ -64,7 +73,6 @@ public:
     //Owner changed - You might want to do some initialization/cleanup here
     virtual void set_owner_callback(){};
 
-    void set_owner(ObjectPtr<Entity> owner);
     Entity* get_owner();
 
     Ability();

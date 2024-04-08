@@ -14,7 +14,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
     ObjectPtr<DamageableComponent> damageable_target = ent->get_component<DamageableComponent>();
 
     //Checking if we inflicted damage
-    if(owner == damage_object->inflictor)
+    if(get_owner() == damage_object->inflictor)
     {
         StatusEffect *status_effect = status_effect_victim->get_status_effect("aal_discharge");
 
@@ -27,15 +27,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
             }
             else
             {
-                DamageObject *take_damage_object = memnew(DamageObject(
-                    DamageObject::DamageType::DAMAGE_MAGICAL,
-                    //TODO: Level and XP API
-                    //get_base_damage() + get_damage_per_level()*owner->get_level(),
-                    20,
-                    this->owner
-                ));
-
-                damageable_target->take_damage(take_damage_object);
+                damageable_target->take_damage(20, this->get_owner(), this);
                 status_effect_victim->remove_status_effect("aal_discharge");
             }
         }
@@ -49,12 +41,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
 
 void AalDischarge::set_owner_callback()
 {
-    if(old_owner)
-    {
-        disconnect(SignalStringNames::get_singleton()->ON_DAMAGE_TAKEN, callable_mp(this, &AalDischarge::on_entity_take_damage));
-    }
-
-    owner->connect(SignalStringNames::get_singleton()->ON_DAMAGE_TAKEN, callable_mp(this, &AalDischarge::on_entity_take_damage));
+    get_owner()->connect(SignalStringNames::get_singleton()->ON_DAMAGE_TAKEN, callable_mp(this, &AalDischarge::on_entity_take_damage));
 }
 
 void AalDischarge::ready_impl()

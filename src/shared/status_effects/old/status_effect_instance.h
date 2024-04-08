@@ -12,9 +12,9 @@ protected:
     StatusEffect *created_from;
 
     //What has that status effect?
-    ObjectPtr<Entity> victim = nullptr;
+    Entity *victim = nullptr;
     //What inflicted this status effect?
-    ObjectPtr<Entity> inflictor = nullptr;
+    Entity *inflictor = nullptr;
 
     float max_duration = 3.0f;
     float elapsed_duration = 0.0f;
@@ -24,7 +24,7 @@ protected:
 
     virtual void _tick_impl()
     {
-
+        
     }
 
     void _tick()
@@ -82,7 +82,7 @@ public:
 
     void set_elapsed_duration(float p_elapsed_duration)
     {
-
+        
     }
 
     void set_max_duration(float p_max_duration)

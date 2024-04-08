@@ -19,7 +19,7 @@ bool StatusEffectVictimComponent::has_status_effect(StringName status_effect_nam
 	return get_node_or_null(NodePath(status_effect_name));
 }
 
-bool StatusEffectVictimComponent::apply_status_effect(StringName status_effect_name) {
+bool StatusEffectVictimComponent::apply_status_effect(const StringName &status_effect_name) {
 	Ref<PackedScene> status_effect_scene = ResourceLoader::load("res://status_effect/" + String(status_effect_name) + ".tscn");
 	Node *instance = status_effect_scene->instantiate();
 	add_child(instance);

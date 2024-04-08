@@ -1,7 +1,7 @@
 #include "movement_component.h"
 #include <scene/3d/navigation_agent_3d.h>
 #include <scene/3d/node_3d.h>
-#include <shared/entities/components/entity_stats/entity_stat_component.h>
+#include <shared/entities/components/entity_stats/entity_attributes_component.h>
 #include <shared/helper_macros.h>
 
 #include <shared/string_names/component_stringnames.h>

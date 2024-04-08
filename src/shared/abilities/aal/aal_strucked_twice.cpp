@@ -88,7 +88,7 @@ void AalStruckedTwice::ready_impl()
     effect_area_shape_node->set_shape(effect_area_shape);
     effect_area->add_child(effect_area_shape_node);
 
-    owner->add_child(effect_area);
+    get_owner()->add_child(effect_area);
 }
 
 AalStruckedTwice::AalStruckedTwice()

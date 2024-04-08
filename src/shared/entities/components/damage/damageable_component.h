@@ -6,16 +6,20 @@
 
 template<class T>
 class ObjectPtr;
-class StatComponent;
 
 class DamageableComponent : public Node
 {
-private:
-
 protected:
     void _notification(int notification);
 public:
     void take_damage(Ref<DamageObject> damage_object);
+
+    /**
+     * value - amount of damage to be inflictedg
+     * inflictor - who caused the damage? Monster, minion, mercenary, etc.
+     * caused_by - what was direct cause of inflicting damage? Basic attack, ability, enviroment, etc.
+    */
+    void take_damage(float value, Node *inflictor, Node *caused_by);
 };
 
 #endif // DAMAGEABLE_COMPONENT_INCLUDED

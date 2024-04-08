@@ -8,17 +8,15 @@ StatusEffect::operator String() const
     "   max_stacks : %\n"
     "   max_duration : %\n"
     "}";
-
     Array format_data;
     format_data.append(get_name());
     format_data.append(max_stacks);
     format_data.append(max_duration);
-
     return str.format(format_data, "%");
 }
 
-Entity *StatusEffect::get_target() {
-    return static_cast<Entity *>(get_parent());
+StatusEffectVictimComponent *StatusEffect::get_victim_component() {
+    return static_cast<StatusEffectVictimComponent *>(get_parent());
 }
 
 void StatusEffect::add_stacks(int stack_count = 1, bool refresh = true) {
@@ -33,4 +31,140 @@ void StatusEffect::add_stacks(int stack_count = 1, bool refresh = true) {
 
 int StatusEffect::get_current_stacks() {
     return current_stacks;
+}
+
+void StatusEffect::set_current_stacks(int stacks) {
+    current_stacks = stacks;
+}
+
+int StatusEffect::get_max_stacks() {
+    return max_stacks;
+}
+
+void StatusEffect::set_max_stacks(int p_stacks) {
+    max_stacks = p_stacks;
+}
+
+bool StatusEffect::is_permament() {
+    return is_permament;
+}
+
+void StatusEffect::set_permament(bool p_permament) {
+    permament = p_permament;
+}
+
+void StatusEffect::_notification(int p_notification) {
+	switch (p_notification) {
+        case NOTIFICATION_POSTINITIALIZE:
+            set_physics_process(true);
+            break;
+
+		case NOTIFICATION_ENTER_TREE:
+            if(GDVIRTUAL_IS_OVERRIDDEN(_on_apply)) {
+                GDVIRTUAL_CALL(_on_apply);
+            }
+			else { 
+                _on_apply();
+            }
+			break;
+
+		case NOTIFICATION_EXIT_TREE:
+            if(GDVIRTUAL_IS_OVERRIDDEN(_on_remove)) {
+                GDVIRTUAL_CALL(_on_remove);
+            }
+			else { 
+                _on_remove();
+            }
+
+			break;
+
+		case NOTIFICATION_PHYSICS_PROCESS:
+            if(GDVIRTUAL_IS_OVERRIDDEN(_tick_internal)) {
+                GDVIRTUAL_CALL(_tick_internal);
+            }
+			else { 
+                _tick_internal();
+            }
+
+            if(GDVIRTUAL_IS_OVERRIDDEN(_tick)) {
+                GDVIRTUAL_CALL(_tick);
+            }
+			else { 
+                _tick();
+            }
+            break;
+		default:
+			break;
+	}
+}
+
+void StatusEffect::_on_remove() {
+
+}
+
+void StatusEffect::_on_apply() {
+
+}
+
+void StatusEffect::_tick() {
+
+}
+
+void StatusEffect::_tick_internal() {
+    // Permament effect - should not expire itself
+    if(is_permament()) return;
+
+    float delta = get_physics_process_delta_time();
+
+    // Control effect expiration
+    if(current_duration > 0) {
+        // Keep it and reduce duration
+        current_duration = current_duration - delta;
+    }
+    else {
+        // Remove only x stacks if effect is stackable
+        // TODO: Implement in the future
+        /*
+        if(max_stacks > 1) {
+            current_stacks = current_stacks - stacks_loss;
+        }
+        
+
+        if (current_stacks <= 0) {
+            expire();
+        }
+        */
+       expire();
+    }
+}
+
+void StatusEffect::expire() {
+    // Disable ticking of this status effect
+    set_physics_process(false);
+    queue_free();
+}
+
+void StatusEffect::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("expire"), &StatusEffect::expire);
+    ClassDB::bind_method(D_METHOD("add_stacks", "p_stacks", "p_should_refresh"), &StatusEffect::add_stacks);
+    ClassDB::bind_method(D_METHOD("refresh"), &StatusEffect::refresh);
+
+    ClassDB::bind_method(D_METHOD("get_current_stacks"), &StatusEffect::get_current_stacks);
+    ClassDB::bind_method(D_METHOD("set_current_stacks", "p_stacks"), &StatusEffect::set_current_stacks);
+    ClassDB::bind_method(D_METHOD("get_max_stacks"), &StatusEffect::get_max_stacks);
+    ClassDB::bind_method(D_METHOD("set_max_stacks", "p_stacks"), &StatusEffect::set_max_stacks);
+    ClassDB::bind_method(D_METHOD("is_permament"), &StatusEffect::is_permament);
+    ClassDB::bind_method(D_METHOD("set_permament", "p_bool"), &StatusEffect::set_permament);
+
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "max_stacks"), "set_max_stacks", "get_max_stacks");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "max_stacks"), "set_max_stacks", "get_max_stacks");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "permament"), "set_permament", "is_permament");
+}
+
+void StatusEffect::refresh() {
+    current_duration = max_duration;
+}
+
+Node *StatusEffect::get_victim_entity() {
+    return get_node_or_null(NodePath("../.."));
 }
