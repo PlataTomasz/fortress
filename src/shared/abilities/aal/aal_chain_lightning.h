@@ -14,9 +14,9 @@ private:
     //Effect radius
     Area3D* hitbox;
 protected:
+    void _use(const Ref<UseContext>& use_context);
 public:
-    void use_impl(UseContext& use_context) override;
-    void ready_impl() override;
+    void _ready() override;
 };
 
 #endif // AAL_CHAIN_LIGHTNING_H_INCLUDED

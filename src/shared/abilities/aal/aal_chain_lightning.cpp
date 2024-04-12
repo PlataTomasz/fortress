@@ -1,7 +1,7 @@
 #include <shared/abilities/aal/aal_chain_lightning.h>
 #include <shared/collisions/hitbox.h>
 
-void AalChainLightning::use_impl(UseContext& use_context)
+void AalChainLightning::_use(const Ref<UseContext>& use_context)
 {
     print_line("Chain Lightning used!");
 
@@ -15,7 +15,7 @@ void AalChainLightning::use_impl(UseContext& use_context)
     print_line("Chain Lightning finished!");
 }
 
-void AalChainLightning::ready_impl()
+void AalChainLightning::_ready()
 {
-
+    
 }

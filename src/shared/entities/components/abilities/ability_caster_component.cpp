@@ -25,8 +25,8 @@ AbilityCasterComponent::~AbilityCasterComponent()
 
 }
 
-Error AbilityCasterComponent::use_ability(int index, Dictionary use_context) {
-    ERR_FAIL_COND(index >= get_child_count());
+Ability::AbilityUseError AbilityCasterComponent::use_ability(int index, const Ref<UseContext>& use_context) {
+    ERR_FAIL_COND_V(index >= get_child_count(), Ability::AbilityUseError::INTERNAL_ERROR);
     Ability *ability = static_cast<Ability *>(get_child(index, false));
-    ability->use(use_context);
+    return ability->use(use_context);
 }

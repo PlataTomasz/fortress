@@ -39,12 +39,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
     
 }
 
-void AalDischarge::set_owner_callback()
-{
-    get_owner()->connect(SignalStringNames::get_singleton()->ON_DAMAGE_TAKEN, callable_mp(this, &AalDischarge::on_entity_take_damage));
-}
-
-void AalDischarge::ready_impl()
+void AalDischarge::_ready()
 {
     
 }

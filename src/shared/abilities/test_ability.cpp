@@ -1,7 +1,7 @@
 #include <shared/abilities/test_ability.hpp>
 
 
-void TestAbility::use_impl(UseContext& use_context)
+void TestAbility::_use(const Ref<UseContext>& use_context)
 {
     print_line("Test ability effect used!");
 }

@@ -20,7 +20,7 @@ AalStraightThroughHeart::AalStraightThroughHeart()
 
 
 //NOTE: That ability is prototype - should behave a bit differently
-void AalStraightThroughHeart::use_impl(UseContext& use_context)
+void AalStraightThroughHeart::_use(const Ref<UseContext>& use_context)
 {
     ERR_FAIL_NULL(get_owner());
 
@@ -40,7 +40,7 @@ void AalStraightThroughHeart::use_impl(UseContext& use_context)
 
 }
 
-void AalStraightThroughHeart::ready_impl()
+void AalStraightThroughHeart::_ready()
 {
     
 }

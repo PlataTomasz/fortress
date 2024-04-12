@@ -5,12 +5,18 @@
 #include <scene/main/multiplayer_peer.h>
 #include <modules/multiplayer/multiplayer_synchronizer.h>
 #include <modules/multiplayer/multiplayer_spawner.h>
+#include <shared/core/sh_game.h>
+
 
 Game *Realm::game = nullptr;
 
 Game *Realm::get_game()
 {
     return game;
+}
+
+SH_Game *Realm::get_shared_game() {
+    return (SH_Game *)(game);
 }
 
 void Realm::_notification(int p_notification) {

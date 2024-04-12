@@ -4,7 +4,10 @@
 #include <shared/abilities/ability.hpp>
 
 class OrcWarhornAbility : public Ability {
-    virtual void use_impl();
+protected:
+    void _use(const Ref<UseContext>& use_context);
+
+    static void _bind_methods();
 };
 
 #endif // ORC_WARHORN_ABILITY
