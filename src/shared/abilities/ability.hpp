@@ -6,26 +6,24 @@
 #include <shared/helpers/object_ptr.h>
 #include <shared/core/systems/gameplay/gameplay_attributes.h>
 
-class AbilityUseRCL;
-
 /**
  * Class responsible for logic and data behind Abilities of mercenaries, items, etc.
 */
-
-enum AbilityUseError
-{
-    SUCCESS = 0,
-    //These two can never occur simulatenously
-    INVALID_TARGET = 1,
-    TARGET_OUT_OF_RANGE = 1<<1,
-
-    NOT_ENOUGH_RESOURCE = 1<<2,
-    ABILITY_ON_COOLDOWN = 1<<3
-};
-
 class Ability : public Node
 {
 GDCLASS(Ability, Node);
+public:
+    enum AbilityUseError
+    {
+        SUCCESS = 0,
+        //These two can never occur simulatenously
+        INVALID_TARGET = 1,
+        TARGET_OUT_OF_RANGE = 1<<1,
+
+        NOT_ENOUGH_RESOURCE = 1<<2,
+        ABILITY_ON_COOLDOWN = 1<<3,
+        INTERNAL_ERROR = 1<<31
+    };
 protected:
     /**
      * Current cooldown of ability in ticks
@@ -36,30 +34,28 @@ protected:
     */
     int max_cooldown = 1;
 
-    int cost = 0;
-
-    GameplayAttributes ability_data;
-    
     Ref<Texture2D> icon;
 
-    AbilityUseRCL* ability_use_chain;
+    // Internal use: Without most checks
+    void _use(const Ref<UseContext>& use_context){};
 
-    virtual void use_impl(UseContext& use_context){};
+    static void _bind_methods();
 
-    virtual void ready_impl(){};
-    void ready(){ready_impl();};
-
+    void _notification(int p_notification);
 public:
     int get_current_cooldown();
     int get_max_cooldown();
     bool is_on_cooldown();
-    int get_cost();
-    void set_cost(int cost);
+
+    virtual void _ready(){};
+
+    AbilityUseError use_check(const Ref<UseContext>& use_context);
+    void force_use(const Ref<UseContext>& use_context);
 
     /**
-     * Uses ability if possible. Returns AbilityCastError value depending on what happened.
+     * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
     */
-    Error use(Dictionary use_context);
+    AbilityUseError use(const Ref<UseContext>& use_context);
 
     /**
      * Ability preparation - Here should go initialization code such as setting up helper nodes
@@ -70,12 +66,11 @@ public:
 
     void tick();
 
-    //Owner changed - You might want to do some initialization/cleanup here
-    virtual void set_owner_callback(){};
-
     Entity* get_owner();
 
     Ability();
 };
+
+VARIANT_ENUM_CAST(Ability::AbilityUseError);
 
 #endif // ABILITY_HPP_INCLUDED

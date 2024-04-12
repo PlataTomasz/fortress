@@ -2,6 +2,8 @@
 #include <shared/string_names/component_stringnames.h>
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 #include <shared/core/managers/component_manager.h>
+#include <shared/core/realm.h>
+#include <shared/core/sh_game.h>
 
 // TODO: Deprecated - Remove
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)

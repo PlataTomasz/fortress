@@ -1,6 +1,13 @@
 #include "status_effect.hpp"
 #include <shared/entities/entity.h>
 
+#define GDVIRTUAL_CALL_MODULE(m_name, ...)    \
+    if (GDVIRTUAL_IS_OVERRIDDEN(m_name)) {      \
+        GDVIRTUAL_CALL(m_name, __VA_ARGS__);    \
+    } else {                                    \
+        m_name(__VA_ARGS__);                    \
+    }
+
 StatusEffect::operator String() const
 {
     String str = "{\n"
@@ -16,7 +23,7 @@ StatusEffect::operator String() const
 }
 
 StatusEffectVictimComponent *StatusEffect::get_victim_component() {
-    return static_cast<StatusEffectVictimComponent *>(get_parent());
+    return (StatusEffectVictimComponent *)(get_parent());
 }
 
 void StatusEffect::add_stacks(int stack_count = 1, bool refresh = true) {
@@ -60,38 +67,16 @@ void StatusEffect::_notification(int p_notification) {
             break;
 
 		case NOTIFICATION_ENTER_TREE:
-            if(GDVIRTUAL_IS_OVERRIDDEN(_on_apply)) {
-                GDVIRTUAL_CALL(_on_apply);
-            }
-			else { 
-                _on_apply();
-            }
+            GDVIRTUAL_CALL_MODULE(_on_apply);
 			break;
 
 		case NOTIFICATION_EXIT_TREE:
-            if(GDVIRTUAL_IS_OVERRIDDEN(_on_remove)) {
-                GDVIRTUAL_CALL(_on_remove);
-            }
-			else { 
-                _on_remove();
-            }
-
+            GDVIRTUAL_CALL_MODULE(_on_remove);
 			break;
 
 		case NOTIFICATION_PHYSICS_PROCESS:
-            if(GDVIRTUAL_IS_OVERRIDDEN(_tick_internal)) {
-                GDVIRTUAL_CALL(_tick_internal);
-            }
-			else { 
-                _tick_internal();
-            }
-
-            if(GDVIRTUAL_IS_OVERRIDDEN(_tick)) {
-                GDVIRTUAL_CALL(_tick);
-            }
-			else { 
-                _tick();
-            }
+            GDVIRTUAL_CALL_MODULE(_tick_internal);
+            GDVIRTUAL_CALL_MODULE(_tick);
             break;
 		default:
 			break;

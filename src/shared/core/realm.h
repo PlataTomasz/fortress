@@ -6,6 +6,7 @@
 #include <modules/multiplayer/scene_replication_config.h>
 
 class Game;
+class SH_Game;
 class MultiplayerSynchronizer;
 
 //Shared code for Client and Server class
@@ -31,6 +32,7 @@ public:
     };
 
     static Game *get_game();
+    static SH_Game *get_shared_game();
 };
 
 VARIANT_ENUM_CAST(Realm::JoinState);

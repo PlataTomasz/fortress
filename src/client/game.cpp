@@ -167,12 +167,12 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
 
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
-        UseContext use_context = {
+        Ref<UseContext> use_context = memnew(UseContext(
             ent,
             ent->get_position(),
-            Vector<Vector3>({worldPos}),
-            Vector<Entity*>()
-        };
+            worldPos,
+            (Entity *)nullptr
+        ));
 
         //TODO: Ability use indicators
         if(input_event_key->is_action_pressed("cast_ability_1"))

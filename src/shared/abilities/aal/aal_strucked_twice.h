@@ -22,11 +22,11 @@ private:
     Area3D *effect_area = nullptr;
 
 
-    void use_impl(UseContext& use_context) override;
+    void _use(const Ref<UseContext>& use_context);
     void on_ability_hit(const AbilityHitData& hit_data);
 protected:
 public:
-    void ready_impl() override;
+    virtual void _ready() override;
     AalStruckedTwice();
 };
 

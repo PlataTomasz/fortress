@@ -7,7 +7,7 @@ class TestAbility : public Ability
 {
 GDCLASS(TestAbility, Ability);
 public:
-    void use_impl(UseContext& use_context) override;
+    void _use(const Ref<UseContext>& use_context);
     TestAbility();
 };
 

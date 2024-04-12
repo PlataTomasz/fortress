@@ -2,15 +2,15 @@
 #define ABILITY_CASTER_COMPONENT_H_INCLUDED
 
 #include <shared/entities/components/component.h>
+#include <core/object/ref_counted.h>
 #include <shared/data_holders/use_context.hpp>
-
-class Ability;
+#include <shared/abilities/ability.hpp>
 
 /**
  * Ability caster component is a component which allows using abilities that are child of this component
 */
 // TODO: Make editable in editor
-class AbilityCasterComponent : public Component
+class AbilityCasterComponent : public Node3D
 {
 public:
     enum AbilitySetIndex
@@ -25,13 +25,11 @@ public:
 protected:
     static void _bind_methods();
 public:
-    void set_ability(AbilitySetIndex abilityIndex, Ability *ability);
-    void use_ability(AbilitySetIndex ability_id, UseContext use_context);
-    void use_basic_attack(UseContext& use_context);
+    void set_ability(AbilitySetIndex abilityIndex, Ability *ability){};
+    Ability::AbilityUseError use_ability(int index, const Ref<UseContext>& use_context);
+    void use_basic_attack(const Ref<UseContext>& use_context){};
 
     void _notification(int notification);
-
-    Error use_ability(int index, Dictionary use_context);
 
     virtual ~AbilityCasterComponent();
 

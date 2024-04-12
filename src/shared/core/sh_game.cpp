@@ -95,6 +95,9 @@ void SH_Game::_bind_methods()
     ClassDB::bind_method(D_METHOD("attack_request", "target_position"), &SH_Game::attack_request);
     ClassDB::bind_method(D_METHOD("ability_use_request", "target_position"), &SH_Game::ability_use_request);
 
+    // Global game events
+    ADD_SIGNAL(MethodInfo("on_basic_attack_hit", PropertyInfo(Variant::OBJECT, "target"), PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "caused_by")));
+
     /*
     ClassDB::bind_method(D_METHOD("set_example_property", "value"), &SH_Game::set_example_property);
     ClassDB::bind_method(D_METHOD("get_example_property"), &SH_Game::get_example_property);

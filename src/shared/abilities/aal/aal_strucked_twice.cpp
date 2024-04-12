@@ -2,16 +2,18 @@
 #include <scene/3d/collision_shape_3d.h>
 #include <scene/resources/sphere_shape_3d.h>
 
+#include <shared/entities/components/abilities/ability_caster_component.h>
+
 #include <scene/3d/area_3d.h>
 
-void AalStruckedTwice::use_impl(UseContext& use_context)
+void AalStruckedTwice::_use(const Ref<UseContext>& use_context)
 {
     const double radius_sq = 15*15;
 
     //Calls down lightning to hit every position in radius around it
     List<Node*> nodes;
     SceneTree::get_singleton()->get_nodes_in_group("aal_struck_twice_markers", &nodes);
-    Vector3 user_position = use_context.get_user()->get_global_position();
+    Vector3 user_position = use_context->get_user()->get_global_position();
 
     for(Node* element : nodes)
     {
@@ -42,10 +44,9 @@ void AalStruckedTwice::use_impl(UseContext& use_context)
                 Entity* parent = static_cast<Entity*>(area->get_parent());
                 //if(parent->get_parent() && parent->get_parent()->get_name() == "Entities")
                 // Check if node is entity
-                if(parent != use_context.get_user())
-                {
-                    //TODO: Take damage is is DamageableComponent
-                }
+
+                //TODO: Take damage if target has damageable component
+                
             }
         }
         else
@@ -78,7 +79,7 @@ void AalStruckedTwice::on_ability_hit(const AbilityHitData& hit_data)
     position_marker->add_child(hit_area);
 }
 
-void AalStruckedTwice::ready_impl()
+void AalStruckedTwice::_ready()
 {
     //Setting up collisions
     effect_area = memnew(Area3D);

@@ -1,5 +1,4 @@
 #include "ability.hpp"
-#include "ability_use_chain.hpp"
 
 int Ability::get_current_cooldown()
 {
@@ -16,30 +15,41 @@ bool Ability::is_on_cooldown()
     return this->curr_cooldown > 0;
 }
 
-Error Ability::use(UseContext& use_context)
+Ability::AbilityUseError Ability::use(const Ref<UseContext>& use_context)
 {
-    Error result = this->can_use(use_context);
-    if(result == AbilityUseError::SUCCESS)
+    Ability::AbilityUseError result = VariantCaster<AbilityUseError>::cast(call("use_check", use_context));
+    if(result == Ability::AbilityUseError::SUCCESS)
     {
         //Ability cast 
-        this->use_impl(use_context);
+        call("_use", use_context);
     }
     return result;
 }
+
+void Ability::_notification(int p_notification) {
+	switch (p_notification) {
+		case NOTIFICATION_READY:
+			_ready();
+			break;
+
+		default:
+			break;
+	}
+};
 
 Entity *Ability::get_owner()
 {
     return static_cast<Entity *>(get_parent());
 }
 
-void Ability::force_use(UseContext& use_context)
+void Ability::force_use(const Ref<UseContext>& use_context)
 {
-    use_impl(use_context);
+    
 }
 
-AbilityUseError Ability::can_use(UseContext& use_context)
+Ability::AbilityUseError Ability::use_check(const Ref<UseContext>& use_context)
 {
-    return ability_use_chain->evaluate({this, use_context});
+    return Ability::AbilityUseError::SUCCESS;
 }
 
 void Ability::tick()
@@ -49,5 +59,11 @@ void Ability::tick()
 
 Ability::Ability()
 {
-    setup_ability_use_chain();
+    
+}
+
+void Ability::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("_use", "use_context"), &Ability::_use);
+    ClassDB::bind_method(D_METHOD("use", "use_context"), &Ability::use);
+    ClassDB::bind_method(D_METHOD("use_check", "use_context"), &Ability::use_check);
 }
