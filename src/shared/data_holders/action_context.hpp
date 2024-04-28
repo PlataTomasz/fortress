@@ -1,27 +1,27 @@
-#if !defined(USE_CONTEXT_HPP_INCLUDED)
-#define USE_CONTEXT_HPP_INCLUDED
+#if !defined(action_context_HPP_INCLUDED)
+#define action_context_HPP_INCLUDED
 
 #include <core/math/vector3.h>
 #include <shared/entities/entity.h>
 
-class AbilityCasterComponent;
+class Entity;
 
 /**
  * Class that stores all necessary variables that would be needed to determine things like where projectile needs to go or who is the target of ability and many more.
 */
-class UseContext : public RefCounted
+class ActionContext : public RefCounted
 {
-GDCLASS(UseContext, RefCounted);
+GDCLASS(ActionContext, RefCounted);
 private:
     //TODO: Add sane default
-    AbilityCasterComponent *user = nullptr;
+    Entity *user = nullptr;
     Vector3 use_position;
 
     Vector3 target_position;
     Entity *target_entity = nullptr;
 
 public:
-    AbilityCasterComponent* get_user()
+    Entity* get_user()
     {
         return user;
     }
@@ -36,8 +36,8 @@ public:
         return target_entity;
     }
     
-    UseContext(
-        AbilityCasterComponent* _user,
+    ActionContext(
+        Entity* _user,
         Vector3 _use_position,
         Vector3 _target_position,
         Entity* _target_entity 
@@ -50,13 +50,13 @@ public:
         
     }
 
-    UseContext(UseContext& use_context)
+    ActionContext(ActionContext& action_context)
     {
-        this->user = use_context.user;
-        this->use_position = use_context.use_position;
-        this->target_position = use_context.target_position;
-        this->target_entity = use_context.target_entity;
+        this->user = action_context.user;
+        this->use_position = action_context.use_position;
+        this->target_position = action_context.target_position;
+        this->target_entity = action_context.target_entity;
     }
 };
 
-#endif // USE_CONTEXT_HPP_INCLUDED
+#endif // action_context_HPP_INCLUDED

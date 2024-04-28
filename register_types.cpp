@@ -76,6 +76,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 #endif
 
 	// Shared
+    ClassDB::register_class<Ability>();
     ClassDB::register_class<Game>();
     ClassDB::register_class<GameLevel>();
     ClassDB::register_class<Entity>();

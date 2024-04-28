@@ -3,7 +3,7 @@
 
 #include <shared/entities/components/component.h>
 #include <core/object/ref_counted.h>
-#include <shared/data_holders/use_context.hpp>
+#include <shared/data_holders/action_context.hpp>
 #include <shared/abilities/ability.hpp>
 
 /**
@@ -26,8 +26,8 @@ protected:
     static void _bind_methods();
 public:
     void set_ability(AbilitySetIndex abilityIndex, Ability *ability){};
-    Ability::AbilityUseError use_ability(int index, const Ref<UseContext>& use_context);
-    void use_basic_attack(const Ref<UseContext>& use_context){};
+    Ability::AbilityUseError use_ability(int index, const Ref<ActionContext>& action_context);
+    void use_basic_attack(const Ref<ActionContext>& action_context){};
 
     void _notification(int notification);
 

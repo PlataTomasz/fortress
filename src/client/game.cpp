@@ -8,7 +8,7 @@
 #include <shared/entities/entity.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
 #include <shared/entities/mercenaries/test_mercenary.hpp>
-#include <shared/data_holders/use_context.hpp>
+#include <shared/data_holders/action_context.hpp>
 #include <scene/main/viewport.h>
 #include <core/config/engine.h>
 #include <core/object/object.h>
@@ -132,7 +132,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         Vector3 worldPos = screenToWorld(screenPos);
 
         /*
-        UseContext use_context = {
+        ActionContext action_context = {
             ent,
             ent->get_position(),
             Vector<Vector3>({worldPos}),
@@ -147,7 +147,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         {
             std::cout<<"ATTACK_ACTION"<<std::endl;
 
-            //player->controlledEntity->use_basic_attack(use_context);
+            //player->controlledEntity->use_basic_attack(action_context);
 
             Error err = rpc("attack_request", Vector2(worldPos.x, worldPos.z), 0);
         }
@@ -167,7 +167,7 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
 
         Vector3 worldPos = screenToWorld(get_viewport()->get_mouse_position());
 
-        Ref<UseContext> use_context = memnew(UseContext(
+        Ref<ActionContext> action_context = memnew(ActionContext(
             ent,
             ent->get_position(),
             worldPos,
@@ -178,25 +178,25 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
         if(input_event_key->is_action_pressed("cast_ability_1"))
         {
             printf("Q press\n");
-            //player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_FIRST, action_context);
             rpc("ability_use_request", AbilityCasterComponent::ABILITY_FIRST, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_2"))
         {
             printf("W press\n");
-            //player->controlledEntity->use_ability(Mercenary::ABILITY_SECOND, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_SECOND, action_context);
             rpc("ability_use_request", AbilityCasterComponent::ABILITY_SECOND, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_3"))
         {
             printf("E press\n");
-            //player->controlledEntity->use_ability(Mercenary::ABILITY_THIRD, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_THIRD, action_context);
             rpc("ability_use_request", AbilityCasterComponent::ABILITY_THIRD, Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_key->is_action_pressed("cast_ability_4"))
         {
             printf("R press\n");
-            //player->controlledEntity->use_ability(Mercenary::ABILITY_ULTIMATE, use_context);
+            //player->controlledEntity->use_ability(Mercenary::ABILITY_ULTIMATE, action_context);
             rpc("ability_use_request", AbilityCasterComponent::ABILITY_ULTIMATE, Vector2(worldPos.x, worldPos.z), 0);
         }
     }
