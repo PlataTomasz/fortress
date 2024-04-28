@@ -20,7 +20,7 @@ AalStraightThroughHeart::AalStraightThroughHeart()
 
 
 //NOTE: That ability is prototype - should behave a bit differently
-void AalStraightThroughHeart::_use(const Ref<UseContext>& use_context)
+void AalStraightThroughHeart::_use(const Ref<ActionContext>& action_context)
 {
     ERR_FAIL_NULL(get_owner());
 

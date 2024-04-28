@@ -1,10 +1,14 @@
 #if !defined(ABILITY_HPP_INCLUDED)
 #define ABILITY_HPP_INCLUDED
 
-#include <shared/data_holders/use_context.hpp>
+#include <shared/data_holders/action_context.hpp>
 #include <core/string/ustring.h>
 #include <shared/helpers/object_ptr.h>
 #include <shared/core/systems/gameplay/gameplay_attributes.h>
+
+#include <core/string/node_path.h>
+
+class Timer;
 
 /**
  * Class responsible for logic and data behind Abilities of mercenaries, items, etc.
@@ -12,7 +16,12 @@
 class Ability : public Node
 {
 GDCLASS(Ability, Node);
+private:
+    void _ready();
 public:
+    NodePath cooldown_timer_path;
+    Timer *cooldown_timer = nullptr;
+
     enum AbilityUseError
     {
         SUCCESS = 0,
@@ -36,35 +45,41 @@ protected:
 
     Ref<Texture2D> icon;
 
+    String displayed_name;
+    String displayed_description;
+
     // Internal use: Without most checks
-    void _use(const Ref<UseContext>& use_context){};
+    virtual void _use(const Ref<ActionContext>& action_context){};
 
     static void _bind_methods();
 
     void _notification(int p_notification);
+
+    NodePath get_cooldown_timer_path();
+    void set_cooldown_timer_path(const NodePath& p_cooldown_timer_path);
+
+    Timer *get_cooldown_timer();
 public:
-    int get_current_cooldown();
-    int get_max_cooldown();
+    float get_current_cooldown();
+    float get_max_cooldown();
     bool is_on_cooldown();
 
-    virtual void _ready(){};
+    Ref<Texture2D> get_icon();
+    void set_icon(const Ref<Texture2D> &new_icon);
 
-    AbilityUseError use_check(const Ref<UseContext>& use_context);
-    void force_use(const Ref<UseContext>& use_context);
+    String get_displayed_description();
+    void set_displayed_description(const String &new_description);
+
+    String get_displayed_name();
+    void set_displayed_name(const String &new_name);
+
+    AbilityUseError use_check(const Ref<ActionContext>& action_context);
+    void force_use(const Ref<ActionContext>& action_context);
 
     /**
      * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
     */
-    AbilityUseError use(const Ref<UseContext>& use_context);
-
-    /**
-     * Ability preparation - Here should go initialization code such as setting up helper nodes
-    */
-    virtual void onCast(){};
-    virtual void tick_impl(){};
-    virtual void onCooldownChange(){};
-
-    void tick();
+    AbilityUseError use(const Ref<ActionContext>& action_context);
 
     Entity* get_owner();
 

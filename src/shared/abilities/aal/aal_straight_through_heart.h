@@ -17,7 +17,7 @@ private:
     //TODO: From API - 160 is map max size
     float hit_area_length = 160;
 
-    void _use(const Ref<UseContext>& use_context);
+    void _use(const Ref<ActionContext>& action_context);
     void _ready();
 public:
     //Collisions

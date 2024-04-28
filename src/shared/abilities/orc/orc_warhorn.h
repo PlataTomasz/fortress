@@ -5,7 +5,7 @@
 
 class OrcWarhornAbility : public Ability {
 protected:
-    void _use(const Ref<UseContext>& use_context);
+    void _use(const Ref<ActionContext>& action_context);
 
     static void _bind_methods();
 };

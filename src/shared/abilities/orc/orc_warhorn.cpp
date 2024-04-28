@@ -7,7 +7,7 @@
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/status_effects/status_effect_factory.h>
 
-void OrcWarhornAbility::_use(const Ref<UseContext>& use_context) {
+void OrcWarhornAbility::_use(const Ref<ActionContext>& action_context) {
 	Vector3 use_position;
 
 	Area3D *buff_hitarea = nullptr;
@@ -26,5 +26,5 @@ void OrcWarhornAbility::_use(const Ref<UseContext>& use_context) {
 };
 
 void OrcWarhornAbility::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("_use", "use_context"), &OrcWarhornAbility::_use);
+	ClassDB::bind_method(D_METHOD("_use", "action_context"), &OrcWarhornAbility::_use);
 }

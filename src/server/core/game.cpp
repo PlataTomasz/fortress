@@ -9,7 +9,7 @@
 #ifdef DEBUG_ARTSKR
 #include <scene/3d/camera_3d.h>
 #include <scene/main/viewport.h>
-#include <shared/data_holders/use_context.hpp>
+#include <shared/data_holders/action_context.hpp>
 #endif
 
 #include <shared/string_names/component_stringnames.h>

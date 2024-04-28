@@ -7,7 +7,7 @@ class TestAbility : public Ability
 {
 GDCLASS(TestAbility, Ability);
 public:
-    void _use(const Ref<UseContext>& use_context);
+    void _use(const Ref<ActionContext>& action_context);
     TestAbility();
 };
 

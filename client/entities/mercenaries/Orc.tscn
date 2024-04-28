@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmngc4eewvi3g"]
+[gd_scene load_steps=3 format=3 uid="uid://cmngc4eewvi3g"]
 
 [ext_resource type="ArrayMesh" uid="uid://cge81pd7xjrew" path="res://models/level/dungeon/obj/character-orc.obj" id="1_7ujyy"]
+[ext_resource type="PackedScene" uid="uid://bvmg3g54iwu08" path="res://models/level/dungeon/character-orc.glb" id="1_vyvch"]
 
 [node name="Orc" type="Entity"]
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
+
+[node name="character-orc2" parent="." instance=ExtResource("1_vyvch")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_7ujyy")

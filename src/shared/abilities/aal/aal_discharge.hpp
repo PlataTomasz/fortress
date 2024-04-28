@@ -11,7 +11,7 @@ private:
 
     float time_window = 2.5;
 
-    void _ready() override;
+    void _ready();
 protected:
 public:
     void on_entity_take_damage(Entity* ent, Ref<DamageObject> damage_object);

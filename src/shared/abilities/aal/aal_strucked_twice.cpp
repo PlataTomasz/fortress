@@ -6,14 +6,14 @@
 
 #include <scene/3d/area_3d.h>
 
-void AalStruckedTwice::_use(const Ref<UseContext>& use_context)
+void AalStruckedTwice::_use(const Ref<ActionContext>& action_context)
 {
     const double radius_sq = 15*15;
 
     //Calls down lightning to hit every position in radius around it
     List<Node*> nodes;
     SceneTree::get_singleton()->get_nodes_in_group("aal_struck_twice_markers", &nodes);
-    Vector3 user_position = use_context->get_user()->get_global_position();
+    Vector3 user_position = action_context->get_user()->get_global_position();
 
     for(Node* element : nodes)
     {
