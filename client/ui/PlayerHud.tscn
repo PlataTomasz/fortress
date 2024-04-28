@@ -1,0 +1,225 @@
+[gd_scene load_steps=11 format=3 uid="uid://r74sdo7qqa4i"]
+
+[ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="1_50r8y"]
+[ext_resource type="StyleBox" uid="uid://db3ejfwdx7hyb" path="res://ui/health_bars/DefaultMercenaryHealthBarFill.tres" id="2_kpe8t"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ebsd8"]
+width = 48
+height = 48
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_c8tc8"]
+width = 96
+height = 96
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_445b3"]
+bg_color = Color(0.423529, 0.423529, 0.423529, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ty7ir"]
+bg_color = Color(0.917647, 0.823529, 0, 1)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wksc4"]
+width = 36
+height = 36
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ajgqd"]
+width = 48
+height = 48
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p1ya1"]
+load_path = "res://.godot/imported/box.png-2eee6b074402d7651281382bc00988cc.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_mqrtc"]
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="PlayerHud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -302.0
+offset_top = -283.0
+offset_right = 302.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="FlowContainer" type="HSplitContainer" parent="VSplitContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+dragger_visibility = 2
+
+[node name="TextureRect" type="TextureRect" parent="VSplitContainer/PanelContainer/VBoxContainer/FlowContainer"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_ebsd8")
+
+[node name="AbilityName" type="Label" parent="VSplitContainer/PanelContainer/VBoxContainer/FlowContainer"]
+layout_mode = 2
+text = "Ability name here"
+
+[node name="AbilityText" type="Label" parent="VSplitContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Basic attacks apply bleeding to hit target dealing {x} damage, every 0.5s for 4s.
+
+Total damage: {x*8}"
+
+[node name="PanelContainer2" type="PanelContainer" parent="VSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Container" type="HSplitContainer" parent="VSplitContainer/PanelContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+dragger_visibility = 2
+
+[node name="PanelContainer" type="MarginContainer" parent="VSplitContainer/PanelContainer2/Container"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="CharacterPortaitArea" type="VSplitContainer" parent="VSplitContainer/PanelContainer2/Container/PanelContainer"]
+layout_mode = 2
+dragger_visibility = 2
+
+[node name="CharacterPortrait" type="TextureRect" parent="VSplitContainer/PanelContainer2/Container/PanelContainer/CharacterPortaitArea"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_c8tc8")
+stretch_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VSplitContainer/PanelContainer2/Container/PanelContainer/CharacterPortaitArea"]
+layout_mode = 2
+dragger_visibility = 2
+
+[node name="Label" type="Label" parent="VSplitContainer/PanelContainer2/Container/PanelContainer/CharacterPortaitArea/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "21"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XPBar" type="ProgressBar" parent="VSplitContainer/PanelContainer2/Container/PanelContainer/CharacterPortaitArea/HSplitContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_445b3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ty7ir")
+value = 28.28
+show_percentage = false
+
+[node name="CenterArea" type="VSplitContainer" parent="VSplitContainer/PanelContainer2/Container"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+dragger_visibility = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VSplitContainer/PanelContainer2/Container/CenterArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 12
+
+[node name="AbilitiesContainer" type="HBoxContainer" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="TextureRect" type="TextureRect" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("NoiseTexture2D_wksc4")
+
+[node name="TextureRect2" type="TextureProgressBar" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+layout_mode = 2
+value = 28.0
+fill_mode = 4
+nine_patch_stretch = true
+stretch_margin_left = 48
+stretch_margin_top = 48
+texture_under = SubResource("NoiseTexture2D_ajgqd")
+texture_progress = SubResource("CompressedTexture2D_p1ya1")
+tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
+
+[node name="CooldownValue" type="Label" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/TextureRect2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "4.08"
+label_settings = SubResource("LabelSettings_mqrtc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect3" type="TextureProgressBar" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+layout_mode = 2
+value = 28.0
+fill_mode = 4
+nine_patch_stretch = true
+stretch_margin_left = 48
+stretch_margin_top = 48
+texture_under = SubResource("NoiseTexture2D_ajgqd")
+texture_progress = SubResource("CompressedTexture2D_p1ya1")
+tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
+
+[node name="TextureRect4" type="TextureProgressBar" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+layout_mode = 2
+value = 28.0
+fill_mode = 4
+nine_patch_stretch = true
+stretch_margin_left = 48
+stretch_margin_top = 48
+texture_under = SubResource("NoiseTexture2D_ajgqd")
+texture_progress = SubResource("CompressedTexture2D_p1ya1")
+tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
+
+[node name="TextureRect5" type="TextureProgressBar" parent="VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+layout_mode = 2
+value = 28.0
+fill_mode = 4
+nine_patch_stretch = true
+stretch_margin_left = 48
+stretch_margin_top = 48
+texture_under = SubResource("NoiseTexture2D_ajgqd")
+texture_progress = SubResource("CompressedTexture2D_p1ya1")
+tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
+
+[node name="LifeBar" type="ProgressBar" parent="VSplitContainer/PanelContainer2/Container/CenterArea"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_styles/background = ExtResource("1_50r8y")
+theme_override_styles/fill = ExtResource("2_kpe8t")
+value = 100.0
+show_percentage = false
