@@ -1,0 +1,95 @@
+[gd_scene load_steps=6 format=3 uid="uid://bweoxfsmna4hx"]
+
+[ext_resource type="Texture2D" uid="uid://24lee6753f28" path="res://textures/ui/circle.png" id="1_e8l4r"]
+[ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="2_cfa2p"]
+[ext_resource type="StyleBox" uid="uid://db3ejfwdx7hyb" path="res://ui/health_bars/DefaultMercenaryHealthBarFill.tres" id="3_3vhif"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jgpnq"]
+load_path = "res://.godot/imported/circle.png-9fb3e651f7cd9d4b877724770759b26f.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_02uvk"]
+font_size = 18
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="DefaultMercenaryHealthBar" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+dragger_visibility = 2
+
+[node name="LevelBar" type="TextureProgressBar" parent="HSplitContainer"]
+layout_mode = 2
+value = 29.0
+fill_mode = 4
+texture_progress = ExtResource("1_e8l4r")
+tint_progress = Color(0.917647, 0.823529, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/LevelBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_jgpnq")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="HSplitContainer/LevelBar/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "546"
+label_settings = SubResource("LabelSettings_02uvk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LifeBar" type="ProgressBar" parent="HSplitContainer"]
+custom_minimum_size = Vector2(168, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/background = ExtResource("2_cfa2p")
+theme_override_styles/fill = ExtResource("3_3vhif")
+value = 41.07
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
