@@ -20,6 +20,7 @@ public:
      * caused_by - what was direct cause of inflicting damage? Basic attack, ability, enviroment, etc.
     */
     void take_damage(float value, Node *inflictor, Node *caused_by);
+    void heal(float value);
 };
 
 #endif // DAMAGEABLE_COMPONENT_INCLUDED

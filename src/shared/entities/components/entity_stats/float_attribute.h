@@ -88,6 +88,9 @@ public:
 		//modifier->connect("expire", callable_mp(this, &FloatAttribute::_on_modifier_expire));
 	}
 
+	void set_base_value(float new_base_value);
+	float get_base_value();
+
     FloatAttribute();
 };
 

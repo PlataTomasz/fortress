@@ -1,7 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmngc4eewvi3g"]
+[gd_scene load_steps=4 format=3 uid="uid://cmngc4eewvi3g"]
 
 [ext_resource type="ArrayMesh" uid="uid://cge81pd7xjrew" path="res://models/level/dungeon/obj/character-orc.obj" id="1_7ujyy"]
 [ext_resource type="PackedScene" uid="uid://bvmg3g54iwu08" path="res://models/level/dungeon/character-orc.glb" id="1_vyvch"]
+
+[sub_resource type="GDScript" id="GDScript_02d0h"]
+script/source = "extends AbilityCasterComponent
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var node_ref: Ability = abilities[1]
+	print(\"Desc :\", node_ref.displayed_name)
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
 
 [node name="Orc" type="Entity"]
 
@@ -11,3 +27,18 @@
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_7ujyy")
+
+[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="."]
+abilities = [Object(OrcWarhornAbility,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"","displayed_description":"","icon":null,"script":null)
+, Object(OrcLeapSlam,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"354643643","displayed_description":"","icon":null,"script":null)
+, Object(OrcWarhornAbility,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"","displayed_description":"","icon":null,"script":null)
+, Object(OrcWarhornAbility,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"","displayed_description":"","icon":null,"script":null)
+, null]
+script = SubResource("GDScript_02d0h")
+
+[node name="OrcResolve" type="OrcResolve" parent="AbilityCasterComponent"]
+
+[node name="OrcLeapSlam" type="OrcLeapSlam" parent="AbilityCasterComponent"]
+displayed_name = "354643643"
+
+[node name="OrcWarhornAbility" type="OrcWarhornAbility" parent="AbilityCasterComponent"]
