@@ -16,10 +16,20 @@ class Timer;
 class Ability : public Node
 {
 GDCLASS(Ability, Node);
+#ifdef SERVER
+protected:
+    void _notification(int p_notification);
+
+    // Internal use: Without most checks
+    virtual void _use(const Ref<ActionContext>& action_context){};
+#endif
+
+#ifdef CLIENT
+
+#endif
 private:
-    void _ready();
+    void _init();
 public:
-    NodePath cooldown_timer_path;
     Timer *cooldown_timer = nullptr;
 
     enum AbilityUseError
@@ -48,20 +58,15 @@ protected:
     String displayed_name;
     String displayed_description;
 
-    // Internal use: Without most checks
-    virtual void _use(const Ref<ActionContext>& action_context){};
-
     static void _bind_methods();
-
-    void _notification(int p_notification);
-
-    NodePath get_cooldown_timer_path();
-    void set_cooldown_timer_path(const NodePath& p_cooldown_timer_path);
 
     Timer *get_cooldown_timer();
 public:
     float get_current_cooldown();
+
     float get_max_cooldown();
+    void set_max_cooldown(float new_cooldown);
+
     bool is_on_cooldown();
 
     Ref<Texture2D> get_icon();
@@ -74,14 +79,11 @@ public:
     void set_displayed_name(const String &new_name);
 
     AbilityUseError use_check(const Ref<ActionContext>& action_context);
-    void force_use(const Ref<ActionContext>& action_context);
 
     /**
      * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
     */
     AbilityUseError use(const Ref<ActionContext>& action_context);
-
-    Entity* get_owner();
 
     Ability();
 };

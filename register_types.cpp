@@ -54,6 +54,10 @@
 #include <shared/entities/components/movement/movement_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
 
+#include <shared/abilities/orc/orc_resolve.h>
+#include <shared/abilities/orc/orc_leap_slam.h>
+#include <shared/abilities/orc/orc_warhorn.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -92,6 +96,13 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 
     ClassDB::register_class<Player>();
     ClassDB::register_class<MovementComponent>();
+
+    ClassDB::register_class<AbilityCasterComponent>();
+    
+    // Orc abilities
+    ClassDB::register_class<OrcResolve>();
+    ClassDB::register_class<OrcLeapSlam>();
+    ClassDB::register_class<OrcWarhornAbility>();
 
     //ClassDB::register_class<>();
 }

@@ -49,3 +49,16 @@ void DamageableComponent::take_damage(float damage_value, Node *inflictor, Node 
 		emit_signal("death", inflictor, caused_by);
 	}
 }
+
+void DamageableComponent::heal(float value) {
+    EntityAttributesComponent *attributes_component = ComponentManager::get_component<EntityAttributesComponent>(get_parent());
+    Ref<FloatAttribute> max_health_attribute = attributes_component->get_max_health();
+    Ref<FloatAttribute> current_health_attribute = attributes_component->get_current_health();
+
+    float max_health = max_health_attribute->get_total();
+    float current_health = current_health_attribute->get_total();
+    
+    float new_health = (value + current_health) > max_health ? max_health - current_health : value;
+
+    
+}

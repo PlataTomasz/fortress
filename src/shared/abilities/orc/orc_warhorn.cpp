@@ -7,6 +7,7 @@
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/status_effects/status_effect_factory.h>
 
+#ifdef SERVER
 void OrcWarhornAbility::_use(const Ref<ActionContext>& action_context) {
 	Vector3 use_position;
 
@@ -28,3 +29,4 @@ void OrcWarhornAbility::_use(const Ref<ActionContext>& action_context) {
 void OrcWarhornAbility::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_use", "action_context"), &OrcWarhornAbility::_use);
 }
+#endif

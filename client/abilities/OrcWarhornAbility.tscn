@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://68ew2rctpxd7"]
+
+[ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="1_6788q"]
+
+[node name="OrcWarhornAbility" type="Ability"]
+displayed_name = "Warhorn"
+displayed_description = "Use: Orc blows his warhorn, granting him and nearby allies increased movement and attack speed."
+icon = ExtResource("1_6788q")
