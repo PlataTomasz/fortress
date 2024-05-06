@@ -14,7 +14,7 @@
  * specialization of entity which is primarily supposed
  * to be controlled by Player.
 */
-class Mercenary : public Entity, public ExampleTrait, public TUsesAbilities
+class Mercenary : public Entity, public TUsesAbilities
 {
 GDCLASS(Mercenary, Entity);
 protected:
