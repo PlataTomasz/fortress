@@ -11,8 +11,9 @@ public:
     void exampleTraitMethod(){};
 
     template<class T>
-    static void _bind_t_uses_abilities() {
+    static void _bind_trait() {
         ::ClassDB::bind_method(D_METHOD("exampleTraitMethod"), method_pointer_fix<T>(&T::exampleTraitMethod));
+        
     }
 };
 
