@@ -6,16 +6,18 @@
 #include <shared/entities/components/abilities/ability_caster_component.h>
 #include <shared/helpers/object_ptr.h>
 
+#include <shared/entities/traits/traits.h>
+
 /**
  * Mercenary is a class responsible for representing
  * specialization of entity which is primarily supposed
  * to be controlled by Player.
 */
-class Mercenary : public Entity
+class Mercenary : public Entity, public ExampleTrait
 {
 GDCLASS(Mercenary, Entity);
 protected:
-    static void _bind_methods(){};
+    static void _bind_methods();
 public:
     Mercenary();
 
