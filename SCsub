@@ -91,6 +91,8 @@ sources += Glob(sh_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"entities/mercenaries/sword_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"entities/mercenaries/tundra/*.cpp")
 
+sources += Glob(sh_src_dir+"entities/traits/*.cpp")
+
 sources += Glob(sh_src_dir+"string_names/*.cpp")
 
 sources += Glob(sh_src_dir+"helpers/*.cpp")
