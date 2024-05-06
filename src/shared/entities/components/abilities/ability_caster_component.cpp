@@ -38,7 +38,7 @@ void AbilityCasterComponent::set_ability_paths(const Array &new_abilities) {
 
 
 Ability::AbilityUseError AbilityCasterComponent::use_ability(int index, const Ref<ActionContext>& action_context) {
-    ERR_FAIL_COND_V((index <= abilities.size() || index < 0), Ability::AbilityUseError::INTERNAL_ERROR);
-    Ability *ability = static_cast<Ability *>(abilities.get(index).operator Object *());
+    ERR_FAIL_COND_V((index <= ability_paths.size() || index < 0), Ability::AbilityUseError::INTERNAL_ERROR);
+    Ability *ability = static_cast<Ability *>(ability_paths.get(index).operator Object *());
     return ability->use(action_context);
 }
