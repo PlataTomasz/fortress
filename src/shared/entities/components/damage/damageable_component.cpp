@@ -12,8 +12,8 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 
     Entity *ent = Object::cast_to<Entity>(get_parent());
     ERR_FAIL_NULL(ent);
-    EntityAttributesComponent *attributes_component = ent->get_component<EntityAttributesComponent>();
-    ERR_FAIL_NULL(attributes_component);
+    //EntityAttributesComponent *attributes_component = ent->get_component<EntityAttributesComponent>();
+    //ERR_FAIL_NULL(attributes_component);
 
     //Apply modifiers
     emit_signal("pre_take_damage", damage_object);

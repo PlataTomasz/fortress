@@ -68,6 +68,7 @@ else:
 sources += Glob(sh_src_dir+"*.cpp")
 sources += Glob(sh_src_dir+"abilities/*.cpp")
 sources += Glob(sh_src_dir+"abilities/aal/*.cpp")
+sources += Glob(sh_src_dir+"abilities/orc/*.cpp")
 sources += Glob(sh_src_dir+"abilities/fist_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"abilities/interfaces/*.cpp")
 sources += Glob(sh_src_dir+"abilities/sword_mercenary/*.cpp")
