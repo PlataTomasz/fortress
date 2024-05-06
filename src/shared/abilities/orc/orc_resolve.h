@@ -8,6 +8,8 @@ class OrcResolve : public Ability {
 GDCLASS(OrcResolve, Ability);
 private:
     Entity *target = nullptr;
+protected:
+    void _notification(int p_notification);
 public:
     void _tick();
 };

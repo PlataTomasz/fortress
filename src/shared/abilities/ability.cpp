@@ -32,6 +32,7 @@ Ability::AbilityUseError Ability::use(const Ref<ActionContext>& action_context) 
     //TODO: Show indicator first if needed
     // Call RPC to server on client builds
     rpc("ability_use_request", action_context);
+    print_line("Display name: ", displayed_name);
     return Ability::AbilityUseError::SUCCESS;
 }
 #endif

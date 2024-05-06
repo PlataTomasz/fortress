@@ -17,10 +17,11 @@ class AbilityCasterComponent : public Node3D
 GDCLASS(AbilityCasterComponent, Node3D);
 private:
     Ability *passive_ability;
-    Array ability_paths;
+    TypedArray<NodePath> ability_paths;
+    Vector<Ability *> abilities;
 public:
-    Array get_ability_paths();
-    void set_ability_paths(const Array &new_ability_paths);
+    TypedArray<NodePath> get_ability_paths();
+    void set_ability_paths(const TypedArray<NodePath> &new_ability_paths);
     
     enum AbilitySetIndex
     {
