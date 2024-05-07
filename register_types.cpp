@@ -58,6 +58,8 @@
 #include <shared/abilities/orc/orc_leap_slam.h>
 #include <shared/abilities/orc/orc_warhorn.h>
 
+#include <shared/registries/status_effect_registry.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -98,6 +100,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<MovementComponent>();
 
     ClassDB::register_class<AbilityCasterComponent>();
+
+    ClassDB::register_class<StatusEffectRegistry>();
     
     // Orc abilities
     ClassDB::register_class<OrcResolve>();
