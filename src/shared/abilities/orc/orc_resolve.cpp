@@ -2,10 +2,11 @@
 
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/traits/t_damageable.h>
+#include <scene/main/timer.h>
 
 void OrcResolve::_tick() {
     print_line("Heal tick!");
-    float heal_value = 1 * get_process_delta_time();
+    float heal_value = 1;
 
     Node *owner = get_node_or_null(NodePath("../.."));
     ERR_FAIL_NULL(owner);
@@ -21,13 +22,15 @@ void OrcResolve::_notification(int p_notification) {
     switch (p_notification)
     {
     case NOTIFICATION_POSTINITIALIZE:
-        set_physics_process(true);
-        break;
+        {
+            Timer *timer = memnew(Timer);
+            timer->set_wait_time(1.0);
+            timer->set_autostart(true);
+            add_child(timer);
 
-    case NOTIFICATION_PHYSICS_PROCESS:
-        _tick();
+            timer->connect("timeout", callable_mp(this, &OrcResolve::_tick));
+        }
         break;
-    
     default:
         break;
     }
