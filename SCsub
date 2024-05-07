@@ -66,6 +66,9 @@ else:
 
 # Both client and server
 sources += Glob(sh_src_dir+"*.cpp")
+
+sources += Glob(sh_src_dir+"registries/*.cpp")
+
 sources += Glob(sh_src_dir+"abilities/*.cpp")
 sources += Glob(sh_src_dir+"abilities/aal/*.cpp")
 sources += Glob(sh_src_dir+"abilities/orc/*.cpp")

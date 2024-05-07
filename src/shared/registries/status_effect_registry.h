@@ -4,19 +4,14 @@
 #include <core/object/object.h>
 #include <scene/resources/packed_scene.h>
 
-class StatusEffect;
+#include <shared/status_effects/status_effect.hpp>
+#include "registry.h"
 
-class StatusEffectRegistry : public Object {
-private:
-    static StatusEffectRegistry *singleton;
-    HashMap<String, Ref<PackedScene>> registered_objects;
-
-    void load_from_directory(const String& path);
-public:
-    static StatusEffectRegistry *get_singleton();
-
-    StatusEffect *create_instance(const String& name);
-    PackedStringArray get_registered_names();
+//Declared like this to workaround GDCLASS macro in template class, so It can be exposed to Engine/GDScript
+class StatusEffectRegistry : public Registry<StatusEffect> {
+GDCLASS(StatusEffectRegistry, Object);
+protected:
+    static void _bind_methods();
 };
 
 #endif // STATUS_EFFECT_REGISTRY_INCLUDED
