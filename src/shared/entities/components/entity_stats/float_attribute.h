@@ -134,5 +134,8 @@ protected:
 	static void _bind_methods();
 	void _notification(int p_notification);
 public:
+	void set_current(float p_current) {
+		current = p_current;
+	};
 };
 #endif // FLOAT_ATTRIBUTE_INCLUDED
