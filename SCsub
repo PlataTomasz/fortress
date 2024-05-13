@@ -48,6 +48,7 @@ if(build_subtype == "client"): # Client build only code
     # Single files
     sources += Glob(cl_src_dir+"ui/character_select_elem.cpp")
     sources += Glob(cl_src_dir+"ui/user_interface.cpp")
+    sources += Glob(cl_src_dir+"ui/player_hud.cpp")
     sources += Glob(cl_src_dir+"networking/requests/*.cpp")
 elif(build_subtype == "server"): # Server build only code
     env_zip.Append(CPPDEFINES=["SERVER"])
