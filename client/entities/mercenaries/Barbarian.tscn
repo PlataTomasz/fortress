@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=12 format=3 uid="uid://brsu7fgraglpj"]
 
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
 [ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
@@ -20,6 +20,31 @@ base = 1.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_vigl8"]
 base = 300.0
+
+[sub_resource type="GDScript" id="GDScript_c28x0"]
+script/source = "extends EntityAttributesComponent
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var timer = Timer.new()
+	timer.wait_time = 1
+	timer.autostart = true
+	timer.one_shot = false
+	timer.timeout.connect(_on_timer_timeout)
+	add_child(timer)
+
+func _on_timer_timeout():
+	if multiplayer.is_server():
+		print(\"SERVER\")
+		health.current = randi_range(0, 100)
+	print(health.current)
+"
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_58crc"]
+properties/0/path = NodePath("EntityAttributesComponent:health:current")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component")]
 attributes_component = NodePath("EntityAttributesComponent")
@@ -44,3 +69,7 @@ attack_speed = SubResource("FloatAttribute_wt63x")
 magic_power = SubResource("FloatAttribute_baeyf")
 cooldown_reduction = SubResource("FloatAttribute_xtxvd")
 movement_speed = SubResource("FloatAttribute_vigl8")
+script = SubResource("GDScript_c28x0")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_58crc")

@@ -8,7 +8,7 @@ class EntityAttributesComponent : public Node
 {
 GDCLASS(EntityAttributesComponent, Node);
 private:
-    
+
 protected:
     static void _bind_methods();
 public:
