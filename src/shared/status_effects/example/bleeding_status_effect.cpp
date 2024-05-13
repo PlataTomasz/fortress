@@ -5,7 +5,7 @@
 
 
 void BleedingStatusEffect::_on_apply() { 
-    damageable_component = ComponentManager::get_component<DamageableComponent>(get_victim_component());
+    //damageable_component = ComponentManager::get_component<DamageableComponent>(get_victim_component());
     /*
         value - how much damage is dealt?
         type - what type of damage is this?

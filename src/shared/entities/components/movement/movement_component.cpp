@@ -8,6 +8,8 @@
 
 #include <shared/entities/entity.h>
 
+#include <shared/entities/traits/t_has_attributes.h>
+
 void MovementComponent::_notification(int p_notification) {
 	DISABLE_IN_EDITOR();
 
@@ -35,6 +37,15 @@ void MovementComponent::_tick() {
 
 	Entity *ent = static_cast<Entity *>(get_parent());
 	double delta = SceneTree::get_singleton()->get_physics_process_time();
+
+	THasAttributes *t_has_attributes = dynamic_cast<THasAttributes *>(get_parent());
+	ERR_FAIL_NULL(t_has_attributes);
+
+	EntityAttributesComponent *attributes = t_has_attributes->get_attributes_component();
+	ERR_FAIL_NULL(attributes);
+
+	// Normalize to somewhat match previous hardcoded value
+	float movement_speed = attributes->get_movement_speed()->get_current() / 150;
 
 	//NOTE: Currently fixed movement speed value is used
 	float movement_delta = movement_speed * delta;

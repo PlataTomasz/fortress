@@ -1,6 +1,8 @@
 #include "status_effect.hpp"
 #include <shared/entities/entity.h>
 
+#include <shared/entities/components/status_effects/status_effect_victim_component.h>
+
 #define GDVIRTUAL_CALL_MODULE(m_name, ...)    \
     if (GDVIRTUAL_IS_OVERRIDDEN(m_name)) {      \
         GDVIRTUAL_CALL(m_name, __VA_ARGS__);    \
@@ -26,7 +28,8 @@ StatusEffectVictimComponent *StatusEffect::get_victim_component() {
     return (StatusEffectVictimComponent *)(get_parent());
 }
 
-void StatusEffect::add_stacks(int stack_count = 1, bool refresh = true) {
+void StatusEffect::add_stacks() {
+    bool refresh = false;
     if (current_stacks < max_stacks) {
         current_stacks++;
     }
@@ -53,7 +56,7 @@ void StatusEffect::set_max_stacks(int p_stacks) {
 }
 
 bool StatusEffect::is_permament() {
-    return is_permament;
+    return permament;
 }
 
 void StatusEffect::set_permament(bool p_permament) {
@@ -61,6 +64,7 @@ void StatusEffect::set_permament(bool p_permament) {
 }
 
 void StatusEffect::_notification(int p_notification) {
+    DISABLE_IN_EDITOR();
 	switch (p_notification) {
         case NOTIFICATION_POSTINITIALIZE:
             set_physics_process(true);
@@ -107,19 +111,7 @@ void StatusEffect::_tick_internal() {
         current_duration = current_duration - delta;
     }
     else {
-        // Remove only x stacks if effect is stackable
-        // TODO: Implement in the future
-        /*
-        if(max_stacks > 1) {
-            current_stacks = current_stacks - stacks_loss;
-        }
-        
-
-        if (current_stacks <= 0) {
-            expire();
-        }
-        */
-       expire();
+        expire();
     }
 }
 

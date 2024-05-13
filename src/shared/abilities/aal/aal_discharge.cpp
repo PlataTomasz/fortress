@@ -23,7 +23,8 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
             //Deal damage if attempt to apply more than maximum stacks and purge them
             if(status_effect->get_current_stacks() < 3)
             {
-                status_effect->add_stacks(1, true);
+                //status_effect->add_stacks(1, true);
+                status_effect->add_stacks();
             }
             else
             {

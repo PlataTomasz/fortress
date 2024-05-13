@@ -68,3 +68,6 @@ CappedFloatAttribute::CappedFloatAttribute(float p_current, float p_min, float p
     max = p_max;
 }
 
+void FloatValueModifier::_bind_methods() {
+    ADD_SIGNAL(MethodInfo("on_expire", PropertyInfo(Variant::OBJECT, "", PROPERTY_HINT_RESOURCE_TYPE, "FloatValueModifier")));
+}
