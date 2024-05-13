@@ -8,13 +8,14 @@
 
 #include <shared/entities/traits/traits.h>
 #include <shared/entities/traits/t_uses_abilities.h>
+#include <shared/entities/traits/t_has_attributes.h>
 
 /**
  * Mercenary is a class responsible for representing
  * specialization of entity which is primarily supposed
  * to be controlled by Player.
 */
-class Mercenary : public Entity, public TUsesAbilities
+class Mercenary : public Entity, public TUsesAbilities, public THasAttributes
 {
 GDCLASS(Mercenary, Entity);
 protected:

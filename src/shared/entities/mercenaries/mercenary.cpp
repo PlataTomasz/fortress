@@ -19,4 +19,5 @@ void Mercenary::_bind_methods() {
     //ClassDB::bind_method(D_METHOD("exampleTraitMethod"), method_pointer_fix<Mercenary>(&Mercenary::exampleTraitMethod));
 
     TUsesAbilities::_bind_trait<Mercenary>();
+    THasAttributes::_bind_trait<Mercenary>();
 }
