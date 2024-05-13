@@ -1,7 +1,7 @@
 #if !defined(BLEEDING_STATUS_EFFECT_INCLUDED)
 #define BLEEDING_STATUS_EFFECT_INCLUDED
 
-#include "status_effect_instance.h"
+#include <shared/status_effects/status_effect.hpp>
 
 class DamageableComponent;
 

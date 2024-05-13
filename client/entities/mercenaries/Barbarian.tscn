@@ -1,9 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=10 format=3 uid="uid://brsu7fgraglpj"]
 
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
 [ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
 
-[node name="Barbarian" type="Entity"]
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_nvabn"]
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_lh4fg"]
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_xobwn"]
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_wt63x"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_baeyf"]
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_xtxvd"]
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_vigl8"]
+base = 300.0
+
+[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component")]
+attributes_component = NodePath("EntityAttributesComponent")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
 
@@ -11,3 +30,17 @@
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_sy8qm")
+
+[node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
+
+[node name="SlowStatusEffect" type="SlowStatusEffect" parent="StatusEffectVictimComponent"]
+permament = false
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
+health = SubResource("CappedResourceAttribute_nvabn")
+global_defense = SubResource("FloatAttribute_lh4fg")
+attack_damage = SubResource("FloatAttribute_xobwn")
+attack_speed = SubResource("FloatAttribute_wt63x")
+magic_power = SubResource("FloatAttribute_baeyf")
+cooldown_reduction = SubResource("FloatAttribute_xtxvd")
+movement_speed = SubResource("FloatAttribute_vigl8")

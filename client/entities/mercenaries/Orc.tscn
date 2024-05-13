@@ -14,10 +14,6 @@ ability_caster_component = NodePath("AbilityCasterComponent")
 mesh = ExtResource("1_7ujyy")
 
 [node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="."]
-abilities = [NodePath("OrcLeapSlam"), Object(OrcLeapSlam,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"354643643","displayed_description":"","icon":null,"script":null)
-, Object(OrcResolve,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"","displayed_description":"","icon":null,"script":null)
-, Object(OrcWarhornAbility,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","displayed_name":"","displayed_description":"","icon":null,"script":null)
-]
 
 [node name="OrcResolve" type="OrcResolve" parent="AbilityCasterComponent"]
 

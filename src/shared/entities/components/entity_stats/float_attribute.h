@@ -10,10 +10,13 @@ public:
 		FLAT_ADD = 0,
 		MULTI_ADD = 1,
 		MULTI_MUL = 2,
+		ATTR_MOD_TYPE_MAX
 	};
 private:
 	float value = 0;
 	Type type = FLAT_ADD;
+protected:
+	static void _bind_methods();
 public:
 	void set_value(float p_value) { value = p_value; };
 		float get_value() { return value; };
@@ -27,8 +30,10 @@ public:
 	}
 
 	void expire() {
-		emit_signal("expired", this);
+		emit_signal("on_expire", this);
 	};
+
+	FloatValueModifier(){};
 };
 
 // Numerical attribute

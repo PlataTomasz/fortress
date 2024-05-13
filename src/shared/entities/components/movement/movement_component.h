@@ -16,8 +16,6 @@ GDCLASS(MovementComponent, Component3D);
 private:
     NavigationAgent3D *nav_agent = nullptr;
 
-    float movement_speed = 2.0;
-
     void _tick();
     void _init();
     void _parented();

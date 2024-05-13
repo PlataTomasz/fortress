@@ -16,6 +16,7 @@ class StatusEffectVictimComponent;
 //NOTE: Name is set by StatusEffectManager
 class StatusEffect : public Node
 {
+GDCLASS(StatusEffect, Node);
 public:
     //GameplayAttributes attributes;
     PackedStringArray tags;
@@ -35,8 +36,8 @@ private:
     // How many stacks are lost when effect timer runs out?
     int stacks_loss = 1;
 
-    float max_duration = 0;
-    float current_duration = 0;
+    float max_duration = 10;
+    float current_duration = 10;
     StatusEffect::Type type;
 
     String tooltip = "default_status_effect_tooltip";
@@ -50,6 +51,9 @@ protected:
     GDVIRTUAL0(_on_remove)
     GDVIRTUAL0(_tick)
     GDVIRTUAL0(_tick_internal)
+
+    virtual void _on_remove();
+    virtual void _on_apply();
 
     void _notification(int p_notification);
 
@@ -69,12 +73,10 @@ public:
     void set_max_stacks(int p_stacks);
 
     //TODO: Maybe return value, informing that stack was not added and why?
-    void add_stacks(int stack_count, bool refresh = true);
+    void add_stacks();
 
     void refresh();
 
-    void _on_remove();
-    void _on_apply();
     void _tick();
     void _tick_internal();
 

@@ -59,6 +59,8 @@
 #include <shared/abilities/orc/orc_warhorn.h>
 
 #include <shared/registries/status_effect_registry.h>
+#include <shared/entities/components/status_effects/status_effect_victim_component.h>
+#include <shared/status_effects/example/slow_status_effect.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -100,6 +102,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<MovementComponent>();
 
     ClassDB::register_class<AbilityCasterComponent>();
+    ClassDB::register_class<StatusEffectVictimComponent>();
 
     ClassDB::register_class<StatusEffectRegistry>();
     
@@ -117,6 +120,10 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<CappedResourceAttribute>();
 
     ClassDB::register_class<FloatValueModifier>();
+
+    // Status Effects
+    ClassDB::register_class<StatusEffect>();
+    ClassDB::register_class<SlowStatusEffect>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
