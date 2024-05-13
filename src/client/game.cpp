@@ -149,14 +149,13 @@ void Game::unhandled_input(const Ref<InputEvent> &event)
 
             //player->controlledEntity->use_basic_attack(action_context);
 
-            Error err = rpc("attack_request", Vector2(worldPos.x, worldPos.z), 0);
+            rpc("attack_request", Vector2(worldPos.x, worldPos.z), 0);
         }
         else if(input_event_mouse_btn->is_action_pressed("movement"))
         {
             std::cout<<"MOVEMENT_ACTION"<<std::endl;
             
-            Error err = rpc("movement_request", Vector2(worldPos.x, worldPos.z));
-            print_line("Client RPC Error", err);
+            rpc("movement_request", Vector2(worldPos.x, worldPos.z));
         }
     }
     else if(const InputEventKey *input_event_key = Object::cast_to<InputEventKey>(event.ptr()))
