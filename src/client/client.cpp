@@ -43,8 +43,8 @@ void Client::_on_enter_tree() {
     scene_multiplayer->connect("server_disconnected", callable_mp(this, &Client::_on_server_disconnect));
 }
 
-void Client::_on_player_spawn(Player *player) {
-    if (scene_multiplayer->get_unique_id() == player->get_owner_peer_id()) {
+void Client::_on_player_spawn(Player *p_player) {
+    if (scene_multiplayer->get_unique_id() == p_player->get_owner_peer_id()) {
         //pla
     }
 }
@@ -142,9 +142,9 @@ void Client::process()
 
 }
 
-Error Client::auth_callback(int peer_id, PackedByteArray data) {
+Error Client::auth_callback(int peer_id, PackedByteArray p_data) {
     Variant var;
-    Error data_err = decode_variant(var, data.ptr(), data.size());
+    Error data_err = decode_variant(var, p_data.ptr(), p_data.size());
     ERR_FAIL_COND_V_MSG(data_err != OK, data_err, "Received invalid auth data from server");
     ERR_FAIL_COND_V_MSG(var.get_type() != Variant::DICTIONARY, ERR_INVALID_DATA, "Received invalid auth data from server");
 
