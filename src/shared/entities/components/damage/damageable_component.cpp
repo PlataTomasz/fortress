@@ -30,9 +30,9 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 
 void DamageableComponent::take_damage(float damage_value, Node *inflictor, Node *caused_by) {
     EntityAttributesComponent *attributes_component = ComponentManager::get_component<EntityAttributesComponent>(get_parent());
-	float global_defense_val = attributes_component->get_global_defense()->get_total();
+	float global_defense_val = attributes_component->get_global_defense()->get_current();
 
-	float health_value = attributes_component->get_current_health()->get_total();
+	float health_value = attributes_component->get_current_health()->get_current();
 
 	//Reduce incoming damage with global defense - Damage reduction equation
 	float damage_multiplier = global_defense_val / (100 + global_defense_val);
@@ -41,7 +41,7 @@ void DamageableComponent::take_damage(float damage_value, Node *inflictor, Node 
 	health_modifier->set_type(FloatValueModifier::Type::FLAT_ADD);
 	health_modifier->set_value(-health_modifier->get_value());
 
-	bool was_lethal = attributes_component->get_current_health()->get_total() <= 0;
+	bool was_lethal = attributes_component->get_current_health()->get_current() <= 0;
 
 	emit_signal("damage_taken", damage_value, inflictor, caused_by, was_lethal);
 
@@ -51,12 +51,12 @@ void DamageableComponent::take_damage(float damage_value, Node *inflictor, Node 
 }
 
 void DamageableComponent::heal(float value) {
+    // FIXME: Change this, to get component from entity itself
     EntityAttributesComponent *attributes_component = ComponentManager::get_component<EntityAttributesComponent>(get_parent());
-    Ref<FloatAttribute> max_health_attribute = attributes_component->get_max_health();
-    Ref<FloatAttribute> current_health_attribute = attributes_component->get_current_health();
+    Ref<CappedResourceAttribute> health_attribute = attributes_component->get_max_health();
 
-    float max_health = max_health_attribute->get_total();
-    float current_health = current_health_attribute->get_total();
+    float max_health = health_attribute->get_current();
+    float current_health = health_attribute->get_current();
     
     float new_health = (value + current_health) > max_health ? max_health - current_health : value;
 
