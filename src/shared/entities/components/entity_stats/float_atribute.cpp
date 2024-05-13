@@ -56,3 +56,15 @@ void CappedFloatAttribute::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("set_max", "p_max"), &CappedFloatAttribute::set_max);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max"), "set_max", "get_max");
 }
+
+FloatAttribute::FloatAttribute(float p_base) {
+    base = p_base;
+    _recalculate();
+}
+
+CappedFloatAttribute::CappedFloatAttribute(float p_current, float p_min, float p_max) {
+    current = p_current;
+    min = p_min;
+    max = p_max;
+}
+

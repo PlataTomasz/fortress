@@ -104,6 +104,7 @@ public:
 	float get_base();
 
     FloatAttribute();
+	FloatAttribute(float p_base);
 };
 
 /**
@@ -126,6 +127,9 @@ public:
 	*/
 	float get_current() override;
 	float get_current_uncapped();
+
+	CappedFloatAttribute(){};
+	CappedFloatAttribute(float p_current, float p_min, float p_max);
 };
 
 class CappedResourceAttribute : public CappedFloatAttribute {
@@ -137,5 +141,8 @@ public:
 	void set_current(float p_current) {
 		current = p_current;
 	};
+
+	CappedResourceAttribute(){};
+	CappedResourceAttribute(float p_current, float p_min, float p_max) : CappedFloatAttribute(p_current, p_min, p_max){}
 };
 #endif // FLOAT_ATTRIBUTE_INCLUDED
