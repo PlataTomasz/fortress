@@ -62,6 +62,8 @@
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/status_effects/example/slow_status_effect.h>
 
+#include <client/ui/player_hud.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -76,6 +78,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<CharacterSelectElem>();
     //Currently broken - temporarily disabled
 	//ClassDB::register_class<EntityStatusBar3D>();
+
+    ClassDB::register_class<PlayerHUD>();
 #endif
 
 #ifdef SERVER
