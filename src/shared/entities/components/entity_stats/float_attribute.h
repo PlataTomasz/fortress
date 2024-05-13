@@ -34,64 +34,105 @@ public:
 // Numerical attribute
 class FloatAttribute : public Attribute {
 GDCLASS(FloatAttribute, Attribute);
-private:
+protected:
 	float base = 0;
 	List<Ref<FloatValueModifier>> modifiers;
-	float total = 0;
+	float current = 0;
+
+	static void _bind_methods();
 public:
 
-	// Recalculates total value - Mostly called when a modifier has expired
+	// Recalculates current value - Mostly called when a modifier has expired
 	void _recalculate() {
-		// Recalculate total - might be different now
+		// Recalculate current - might be different now
 		float flat_modifier = 0;
 		float additive_multiplier = 1;
 		float multiplicative_multiplier = 1;
 
-		for(Ref<FloatValueModifier> modifier : modifiers) {
-			switch (modifier->get_type())
-			{
-			case FloatValueModifier::Type::FLAT_ADD:
-				flat_modifier+=modifier->get_value();
-				break;
-			
-			case FloatValueModifier::Type::MULTI_ADD:
-				additive_multiplier+=modifier->get_value();
-				break;
+		for (Ref<FloatValueModifier> modifier : modifiers) {
+			switch (modifier->get_type()) {
+				case FloatValueModifier::Type::FLAT_ADD:
+					flat_modifier += modifier->get_value();
+					break;
 
-			case FloatValueModifier::Type::MULTI_MUL:
-				multiplicative_multiplier*=(1+modifier->get_value());
-				break;
+				case FloatValueModifier::Type::MULTI_ADD:
+					additive_multiplier += modifier->get_value();
+					break;
 
-			default:
-				break;
+				case FloatValueModifier::Type::MULTI_MUL:
+					multiplicative_multiplier *= (1 + modifier->get_value());
+					break;
+
+				default:
+					break;
 			};
 		}
 
-		// Total formula
-		total = (base + flat_modifier) * additive_multiplier * multiplicative_multiplier;
+		// current formula
+		current = (base + flat_modifier) * additive_multiplier * multiplicative_multiplier;
 	}
 
-	void _on_modifier_expire(Ref<FloatValueModifier>& modifier) {
+	void _on_modifier_expire(const Ref<FloatValueModifier>& modifier) {
 		List<Ref<FloatValueModifier>>::Element *e = modifiers.find(modifier);
 		if (e) {
+			Ref<FloatValueModifier> mod = e->get();
+			mod->disconnect("on_expire", callable_mp(this, &FloatAttribute::_on_modifier_expire));
 			e->erase();
 			_recalculate();
 		}
 	}
 
-	// Total cannot be set - is recalculated whenever attribute is changed
-	float get_total() {
-		return total;
+	void remove_modifier(Ref<FloatValueModifier> modifier) {
+		_on_modifier_expire(modifier);
 	}
 
+	// current cannot be set - is recalculated whenever attribute is changed
+	virtual float get_current() {
+		return current;
+	}
+
+	/**
+	 * Applies modifier causing modification to 
+	*/
 	void add_modifier(Ref<FloatValueModifier> modifier) {
-		//modifier->connect("expire", callable_mp(this, &FloatAttribute::_on_modifier_expire));
+		modifiers.push_back(modifier);
+		modifier->connect("on_expire", callable_mp(this, &FloatAttribute::_on_modifier_expire));
+		_recalculate();
 	}
 
-	void set_base_value(float new_base_value);
-	float get_base_value();
+	void set_base(float new_base);
+	float get_base();
 
     FloatAttribute();
 };
 
+/**
+ * FloatAttribute, which current value is clamped between min and max
+*/
+class CappedFloatAttribute : public FloatAttribute {
+GDCLASS(CappedFloatAttribute, FloatAttribute);
+protected:
+	float min = 0.0f;
+	float max = 100.0f;
+
+	static void _bind_methods();
+public:
+	void set_min(float p_min);
+	float get_min();
+	void set_max(float p_max);
+	float get_max();
+	/**
+	 * @return current attribute value, clamped between min and max
+	*/
+	float get_current() override;
+	float get_current_uncapped();
+};
+
+class CappedResourceAttribute : public CappedFloatAttribute {
+GDCLASS(CappedResourceAttribute, CappedFloatAttribute);
+protected:
+	static void _bind_methods();
+	void _notification(int p_notification);
+public:
+};
 #endif // FLOAT_ATTRIBUTE_INCLUDED

@@ -109,6 +109,14 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<OrcWarhornAbility>();
 
     //ClassDB::register_class<>();
+
+    // Attributes
+    ClassDB::register_class<Attribute>();
+    ClassDB::register_class<FloatAttribute>();
+    ClassDB::register_class<CappedFloatAttribute>();
+    ClassDB::register_class<CappedResourceAttribute>();
+
+    ClassDB::register_class<FloatValueModifier>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
