@@ -4,7 +4,6 @@
 #include <shared/data_holders/action_context.hpp>
 #include <core/string/ustring.h>
 #include <shared/helpers/object_ptr.h>
-#include <shared/core/systems/gameplay/gameplay_attributes.h>
 
 #include <core/string/node_path.h>
 

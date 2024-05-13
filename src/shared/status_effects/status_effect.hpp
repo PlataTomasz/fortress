@@ -6,8 +6,6 @@
 #include <core/variant/variant.h>
 #include <cstdio>
 #include <scene/main/node.h>
-#include <shared/core/systems/gameplay/gameplay_attributes.h>
-#include <shared/core/systems/gameplay/gameplay_tags.h>
 
 class Entity;
 class StatusEffectVictimComponent;
