@@ -49,11 +49,15 @@ protected:
 
 	void _init();
 public:
+	MultiplayerSpawner *get_entity_spawner() {
+		return entity_spawner;
+	};
+
 	void add_entity(Entity *ent) {
 		entities_node->add_child(ent);
 	}
 
-	Entity *get_entity(const NodePath &node_path);
+	Entity *get_entity(const String &entity_name);
 
 	GameLevel()
 	{

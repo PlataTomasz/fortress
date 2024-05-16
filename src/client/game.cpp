@@ -21,6 +21,8 @@
 #include <core/variant/dictionary.h>
 #include <shared/helper_macros.h>
 
+#include <client/ui/player_hud.h>
+
 Game::Game() {
     
 }
@@ -30,6 +32,11 @@ void Game::_init() {
     //Allow node to process inputs
     set_process_unhandled_input(true);
     set_process(true);
+
+    Ref<PackedScene> playerhud_scene = ResourceLoader::load("res://ui/PlayerHud.tscn");
+    PlayerHUD *player_hud = static_cast<PlayerHUD *>(playerhud_scene->instantiate());
+    add_child(player_hud);
+    
 }
 /*
 void Game::_on_entity_remote_spawn(Node *p_node)

@@ -71,7 +71,7 @@ void GameLevel::_on_entity_removed(Node *node) {
     }
 }
 
-Entity *GameLevel::get_entity(const NodePath &node_path) {
-    Entity *ent = static_cast<Entity *>(get_node_or_null(node_path));
+Entity *GameLevel::get_entity(const String &entity_name) {
+    Entity *ent = static_cast<Entity *>(entities_node->get_node_or_null(NodePath(entity_name)));
     return ent;
 }

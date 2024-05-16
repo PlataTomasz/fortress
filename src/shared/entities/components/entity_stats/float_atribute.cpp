@@ -42,6 +42,8 @@ void FloatAttribute::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_base"), &FloatAttribute::get_base);
     ::ClassDB::bind_method(D_METHOD("set_base"), &FloatAttribute::set_base);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "base"), "set_base", "get_base");
+
+    ADD_SIGNAL(MethodInfo("current_value_changed", PropertyInfo(Variant::FLOAT, "old_value"), PropertyInfo(Variant::FLOAT, "new_value")));
 }
 
 void CappedFloatAttribute::_bind_methods() {
