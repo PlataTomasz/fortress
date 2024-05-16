@@ -43,6 +43,8 @@ private:
     Error auth_callback(int peer_id, PackedByteArray data);
     void _on_enter_tree();
     void _on_player_spawn(Player *player);
+
+    void _on_controlled_entity_spawn(Entity *ent, const String& entity_name);
 public:
     void process();
     void ready();

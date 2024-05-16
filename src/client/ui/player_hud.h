@@ -5,6 +5,7 @@
 
 class TextureRect;
 class ProgressBar;
+class Entity;
 
 class PlayerHUD : public Control {
 GDCLASS(PlayerHUD, Control);
@@ -17,7 +18,14 @@ private:
     ProgressBar *xp_bar = nullptr;
     ProgressBar *health_bar = nullptr;
     TextureRect *character_portrait = nullptr;
+
+    void _ready();
+    void _on_current_health_changed(float old_health, float new_health);
+
+    void _on_controlled_entity_changed(Entity *old_entity, Entity *new_entity);
 protected:
+    void _notification(int p_notification);
+
     static void _bind_methods();
 public:
     // Controlled entity received a new StatusEffect

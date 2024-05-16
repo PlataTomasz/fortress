@@ -50,9 +50,29 @@ void Client::_on_player_spawn(Player *p_player) {
 }
 
 void Client::server_rpc_set_controlled_entity(String entity_name) {
-    Entity *ent = game->get_current_level()->get_entity(NodePath(entity_name));
-    player->set_controlled_entity(ent);
+    // Entity is not YET spawned on client - We need to await the spawn somehow
+
     print_line("Player currently controls", entity_name);
+
+    Entity *ent = game->get_current_level()->get_entity(entity_name);
+    if (!ent) {
+        // Controlled entity might not yet spawned on client - Await spawn
+        MultiplayerSpawner *spawner = get_game()->get_current_level()->get_entity_spawner();
+        Callable callable = callable_mp(this, &Client::_on_controlled_entity_spawn).bind(entity_name);
+
+        spawner->connect("spawned", callable);
+    } else {
+        player->set_controlled_entity(ent);
+    }
+}
+
+void Client::_on_controlled_entity_spawn(Entity *ent, const String& entity_name) {
+    Entity *test_ent = game->get_current_level()->get_entity(NodePath(entity_name));
+    print_line(test_ent == nullptr);
+    
+    if(ent->get_name() == entity_name) {
+        player->set_controlled_entity(ent);
+    }
 }
 
 void Client::_on_auth_start(int peer_id) {
