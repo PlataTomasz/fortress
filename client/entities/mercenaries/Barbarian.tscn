@@ -21,7 +21,7 @@ base = 1.0
 [sub_resource type="FloatAttribute" id="FloatAttribute_vigl8"]
 base = 300.0
 
-[sub_resource type="GDScript" id="GDScript_c28x0"]
+[sub_resource type="GDScript" id="GDScript_pj8c6"]
 script/source = "extends EntityAttributesComponent
 
 
@@ -43,7 +43,7 @@ func _on_timer_timeout():
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_58crc"]
 properties/0/path = NodePath("EntityAttributesComponent:health:current")
-properties/0/spawn = true
+properties/0/spawn = false
 properties/0/replication_mode = 1
 
 [node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component")]
@@ -69,7 +69,8 @@ attack_speed = SubResource("FloatAttribute_wt63x")
 magic_power = SubResource("FloatAttribute_baeyf")
 cooldown_reduction = SubResource("FloatAttribute_xtxvd")
 movement_speed = SubResource("FloatAttribute_vigl8")
-script = SubResource("GDScript_c28x0")
+script = SubResource("GDScript_pj8c6")
 
-[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="EntityAttributesComponent"]
+root_path = NodePath("../..")
 replication_config = SubResource("SceneReplicationConfig_58crc")
