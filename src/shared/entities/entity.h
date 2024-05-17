@@ -20,11 +20,14 @@ private:
 	void _init();
 	void _ready();
 	void _tick();
-	
+
 	void _exit_tree();
 
 protected:
+	virtual Node *_get_component(const String& component_typename);
+
 	void _notification(int p_notification);
+
 public:
 	Vector2 get_position_2d() {
 		Vector3 pos = get_position();
@@ -46,7 +49,6 @@ public:
 	void remove_networked_property(const StringName &property_name);
 
 	Entity() {
-
 	}
 
 	template <class T>

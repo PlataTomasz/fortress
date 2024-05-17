@@ -20,6 +20,8 @@ class Mercenary : public Entity, public TUsesAbilities, public THasAttributes
 GDCLASS(Mercenary, Entity);
 protected:
     static void _bind_methods();
+
+    virtual Node *_get_component(const String& component_typename) override;
 public:
     Mercenary();
 
