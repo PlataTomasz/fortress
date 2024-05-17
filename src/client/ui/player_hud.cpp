@@ -6,6 +6,8 @@
 
 #include <shared/entities/traits/t_has_attributes.h>
 
+#include <shared/entities/components/status_effects/status_effect_victim_component.h>
+
 void PlayerHUD::_ready() {
     // Setup signals
     Client *client = static_cast<Client *>(get_node(NodePath("/root/Client")));
@@ -32,6 +34,14 @@ void PlayerHUD::_on_controlled_entity_changed(Entity *old_entity, Entity *new_en
 
     // Setup signals
     attributes->get_health()->connect("current_value_changed", callable_mp(this, &PlayerHUD::_on_current_health_changed));
+
+    // Status Effects
+    TStatusEffectVictim *status_effect_victim = dynamic_cast<TStatusEffectVictim *>(new_entity);
+    ERR_FAIL_NULL(status_effect_victim);
+
+    StatusEffectVictimComponent *status_effect_component = status_effect_victim->get_status_effect_victim_component();
+    ERR_FAIL_NULL(status_effect_component);
+
 
     // TODO: Disconnect signals from old entity if old_entity is valid
 }
