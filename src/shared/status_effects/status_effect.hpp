@@ -28,6 +28,10 @@ public:
         TYPE_MAX
     };
 private:
+    String displayed_name;
+    String displayed_description;
+    Entity *inflictor = nullptr;
+
     int max_stacks = 1;
     int current_stacks = 1;
 
