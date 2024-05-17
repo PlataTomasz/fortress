@@ -18,9 +18,13 @@ void Entity::remove_networked_property(const StringName &property_name) {
 	}
 }
 
+Node *Entity::_get_component(const String& component_typename) {
+	return nullptr;
+}
+
 template<class T>
 T *Entity::get_component() {
-	return ComponentManager::get_component<T>(this);
+	return Object::cast_to<T>(_get_component(T::get_class_static()));
 }
 
 void Entity::_tick() {

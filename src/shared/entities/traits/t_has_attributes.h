@@ -10,7 +10,7 @@
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
 class THasAttributes {
-private:
+protected:
     EntityAttributesComponent *attributes_component = nullptr;
 public:
     EntityAttributesComponent *get_attributes_component() {

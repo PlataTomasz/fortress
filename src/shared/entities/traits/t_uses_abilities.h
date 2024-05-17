@@ -11,7 +11,7 @@
 class AbilityCasterComponent;
 
 class TUsesAbilities {
-private:
+protected:
     AbilityCasterComponent *ability_caster_component = nullptr;
 public:
     AbilityCasterComponent *get_ability_caster_component() {
