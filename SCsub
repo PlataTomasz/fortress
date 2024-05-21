@@ -104,5 +104,10 @@ sources += Glob(sh_src_dir+"status_effects/example/*.cpp")
 sources += Glob(sh_src_dir+"string_names/*.cpp")
 
 sources += Glob(sh_src_dir+"helpers/*.cpp")
+
+exp_src_dir = src_dir+"experimental/"
+
+sources += Glob(exp_src_dir+"/*.cpp")
+sources += Glob(exp_src_dir+"/interface/*.cpp")
     
 env_zip.add_source_files(env.modules_sources, sources)

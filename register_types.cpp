@@ -64,6 +64,9 @@
 
 #include <client/ui/player_hud.h>
 
+#include <experimental/example_implementor.h>
+#include <experimental/example_interface_user.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -128,6 +131,9 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     // Status Effects
     ClassDB::register_class<StatusEffect>();
     ClassDB::register_class<SlowStatusEffect>();
+
+    ClassDB::register_class<ExampleImplementor>();
+    ClassDB::register_class<ExampleInterfaceUser>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
