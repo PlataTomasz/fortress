@@ -6,6 +6,7 @@
 class TextureRect;
 class ProgressBar;
 class Entity;
+class Mercenary;
 
 class PlayerHUD : public Control {
 GDCLASS(PlayerHUD, Control);
@@ -22,7 +23,7 @@ private:
     void _ready();
     void _on_current_health_changed(float old_health, float new_health);
 
-    void _on_controlled_entity_changed(Entity *old_entity, Entity *new_entity);
+    void _on_controlled_mercenary_changed(Mercenary *old_mercenary, Mercenary *new_mercenary);
 protected:
     void _notification(int p_notification);
 

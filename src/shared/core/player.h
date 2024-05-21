@@ -5,13 +5,13 @@
 #include <core/object/ref_counted.h>
 #include <core/io/resource.h>
 
-class Entity;
+class Mercenary;
 
 class Player : public RefCounted
 {
 GDCLASS(Player, RefCounted);
 private:
-    Entity *controlled_entity = nullptr;
+    Mercenary *controlled_entity = nullptr;
 
     int owner_peer_id = 0;
     
@@ -21,8 +21,8 @@ private:
 protected:
     static void _bind_methods();
 public:
-    void set_controlled_entity(Entity *p_controlled_entity);
-    Entity *get_controlled_entity();
+    void set_controlled_entity(Mercenary *p_controlled_entity);
+    Mercenary *get_controlled_entity();
 
     void change_nickname(const String nickname);
     String get_nickname();
@@ -35,7 +35,7 @@ public:
         return choosen_mercenary;
     }
 
-    void set_choosen_mercenary(const String mercenary_name) {
+    void set_choosen_mercenary(const String& mercenary_name) {
         choosen_mercenary = mercenary_name;
     }
 

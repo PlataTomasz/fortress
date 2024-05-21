@@ -7,6 +7,8 @@
 #include <client/ui/user_interface.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
 
+#include <shared/entities/entity.h>
+
 Client::Client()
 {
     DISABLE_IN_EDITOR();
@@ -54,7 +56,7 @@ void Client::server_rpc_set_controlled_entity(String entity_name) {
 
     print_line("Player currently controls", entity_name);
 
-    Entity *ent = game->get_current_level()->get_entity(entity_name);
+    Mercenary *ent = Object::cast_to<Mercenary>(game->get_current_level()->get_entity(entity_name));
     if (!ent) {
         // Controlled entity might not yet spawned on client - Await spawn
         MultiplayerSpawner *spawner = get_game()->get_current_level()->get_entity_spawner();
@@ -67,11 +69,10 @@ void Client::server_rpc_set_controlled_entity(String entity_name) {
 }
 
 void Client::_on_controlled_entity_spawn(Entity *ent, const String& entity_name) {
-    Entity *test_ent = game->get_current_level()->get_entity(NodePath(entity_name));
-    print_line(test_ent == nullptr);
-    
-    if(ent->get_name() == entity_name) {
-        player->set_controlled_entity(ent);
+    Mercenary *mercenary = Object::cast_to<Mercenary>(ent);
+
+    if(mercenary && mercenary->get_name() == entity_name) {
+        player->set_controlled_entity(mercenary);
     }
 }
 

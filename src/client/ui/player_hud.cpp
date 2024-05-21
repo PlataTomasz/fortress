@@ -8,6 +8,8 @@
 
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 
+#include <shared/entities/mercenaries/mercenary.hpp>
+
 void PlayerHUD::_ready() {
     // Setup signals
     Client *client = static_cast<Client *>(get_node(NodePath("/root/Client")));
@@ -16,31 +18,27 @@ void PlayerHUD::_ready() {
     Ref<Player> ply = client->get_player();
     ERR_FAIL_NULL(ply);
 
-    ply->connect("on_controlled_entity_changed", callable_mp(this, &PlayerHUD::_on_controlled_entity_changed));
+    ply->connect("on_controlled_entity_changed", callable_mp(this, &PlayerHUD::_on_controlled_mercenary_changed));
 
-    Entity *controlled_entity = ply->get_controlled_entity();
+    Mercenary *controlled_entity = ply->get_controlled_entity();
     ERR_FAIL_NULL(controlled_entity);
 
     // Initial
-    _on_controlled_entity_changed(nullptr, controlled_entity);
+    _on_controlled_mercenary_changed(nullptr, controlled_entity);
 }
 
-void PlayerHUD::_on_controlled_entity_changed(Entity *old_entity, Entity *new_entity) {
-    THasAttributes *t_has_attributes = dynamic_cast<THasAttributes *>(new_entity);
-    ERR_FAIL_NULL(t_has_attributes);
-
-    EntityAttributesComponent *attributes = t_has_attributes->get_attributes_component();
+// Player's controlled entity changed - Make UI read from new controlled entity
+void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Mercenary *new_mercenary) {
+    // Need to update values 
+    EntityAttributesComponent *attributes = new_mercenary->get_attributes_component();
     ERR_FAIL_NULL(attributes);
 
-    // Setup signals
-    attributes->get_health()->connect("current_value_changed", callable_mp(this, &PlayerHUD::_on_current_health_changed));
-
-    // Status Effects
-    TStatusEffectVictim *status_effect_victim = dynamic_cast<TStatusEffectVictim *>(new_entity);
-    ERR_FAIL_NULL(status_effect_victim);
-
-    StatusEffectVictimComponent *status_effect_component = status_effect_victim->get_status_effect_victim_component();
+    StatusEffectVictimComponent *status_effect_component = new_mercenary->get_status_effect_victim_component();
     ERR_FAIL_NULL(status_effect_component);
+
+    // Setup signals
+    _on_current_health_changed(health_bar->get_value(), attributes->get_health()->get_current());
+    attributes->get_health()->connect("current_value_changed", callable_mp(this, &PlayerHUD::_on_current_health_changed));
 
 
     // TODO: Disconnect signals from old entity if old_entity is valid
