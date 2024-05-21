@@ -13,6 +13,7 @@
 
 class Game;
 class UserInterface;
+class Entity;
 
 /**
  * Client is a node responsible for connecting to server, disconnecting, receiving and sending data to server
