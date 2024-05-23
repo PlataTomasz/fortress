@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include <shared/entities/entity.h>
+#include <shared/entities/mercenaries/mercenary.hpp>
 
 /*
 void Player::set_controlling_peer(Ref<ENetPacketPeer> p_peer)
@@ -21,7 +22,7 @@ void Player::set_controlled_entity(Mercenary *p_controlled_entity)
     Mercenary *old = controlled_entity;
     controlled_entity = p_controlled_entity;
 
-    emit_signal("on_controlled_entity_changed", old, p_controlled_entity);
+    emit_signal("on_controlled_entity_changed", old, controlled_entity);
 }
 
 Mercenary *Player::get_controlled_entity()
@@ -48,5 +49,5 @@ void Player::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_choosen_mercenary", "mercenary_name"), &Player::set_choosen_mercenary);
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "mercenary_name"), "set_choosen_mercenary", "get_choosen_mercenary");
 
-    ADD_SIGNAL(MethodInfo("on_controlled_entity_changed", PropertyInfo(Variant::OBJECT, "old_entity", PROPERTY_HINT_NODE_TYPE, "Mercenary"), PropertyInfo(Variant::OBJECT, "new_entity", PROPERTY_HINT_NODE_TYPE, "Mercenary")));
+    ADD_SIGNAL(MethodInfo("on_controlled_entity_changed", PropertyInfo(Variant::OBJECT, "old_entity"), PropertyInfo(Variant::OBJECT, "new_entity")));
 }

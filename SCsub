@@ -19,6 +19,8 @@ if methods.get_cmdline_bool("quality_game_code", True):
 if methods.get_cmdline_bool("debug_game", False):
     env_zip.Append(CPPDEFINES=["DEBUG_ARTSKR"])
     env_zip.Append(CCFLAGS=["-g"])
+    # Disable optimization to make debugging easier
+    env_zip.Append(CCFLAGS=["-O0"])
 
 # Non-elegant but without this project won't build with networking headers
 env_zip.Prepend(CPPPATH=["#thirdparty/enet/"])
@@ -45,10 +47,15 @@ if(build_subtype == "client"): # Client build only code
     sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
     sources += Glob(cl_src_dir+"string_names/*.cpp")
     # sources += Glob(cl_src_dir+"ui/*.cpp")
-    # Single files
+    # Single files - Legacy, to be refactored
     sources += Glob(cl_src_dir+"ui/character_select_elem.cpp")
     sources += Glob(cl_src_dir+"ui/user_interface.cpp")
     sources += Glob(cl_src_dir+"ui/player_hud.cpp")
+
+    sources += Glob(cl_src_dir+"ui/game/*.cpp")
+    sources += Glob(cl_src_dir+"ui/ui.cpp")
+    sources += Glob(cl_src_dir+"ui/status_effect_indicator.cpp")
+
     sources += Glob(cl_src_dir+"networking/requests/*.cpp")
 elif(build_subtype == "server"): # Server build only code
     env_zip.Append(CPPDEFINES=["SERVER"])
@@ -60,6 +67,7 @@ elif(build_subtype == "server"): # Server build only code
     sources += Glob(sv_src_dir+"networking/requests/*.cpp")
     sources += Glob(sv_src_dir+"entities/components/*.cpp")
     sources += Glob(sv_src_dir+"entities/components/movement/*.cpp")
+    sources += Glob(sv_src_dir+"entities/components/status_effects/*.cpp")
     sources += Glob(sv_src_dir+"entities/components/entity_stats/*.cpp")
 else:
     print("\"game_target\" undefined!")
@@ -86,6 +94,7 @@ sources += Glob(sh_src_dir+"entities/components/abilities/*.cpp")
 sources += Glob(sh_src_dir+"entities/components/ai/*.cpp")
 sources += Glob(sh_src_dir+"entities/components/damage/*.cpp")
 sources += Glob(sh_src_dir+"entities/components/entity_stats/*.cpp")
+sources += Glob(sh_src_dir+"entities/components/status_effects/*.cpp")
 sources += Glob(sh_src_dir+"entities/components/levels/*.cpp")
 sources += Glob(sh_src_dir+"entities/components/movement/*.cpp")
 sources += Glob(sh_src_dir+"entities/components/visual/*.cpp")

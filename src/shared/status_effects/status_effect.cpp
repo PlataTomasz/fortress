@@ -121,6 +121,31 @@ void StatusEffect::expire() {
     queue_free();
 }
 
+String StatusEffect::get_displayed_name() {
+    return displayed_name;
+}
+
+void StatusEffect::set_displayed_name(const String& p_name) {
+    displayed_name = p_name;
+}
+
+String StatusEffect::get_displayed_description() {
+    return displayed_description;
+}
+
+void StatusEffect::set_displayed_description(const String& p_description) {
+    displayed_description = p_description;
+}
+
+Ref<Texture2D> StatusEffect::get_displayed_icon() {
+    return icon;
+}
+
+void StatusEffect::set_displayed_icon(const Ref<Texture2D>& p_icon) {
+    icon = p_icon;
+}
+
+
 void StatusEffect::_bind_methods() {
     ClassDB::bind_method(D_METHOD("expire"), &StatusEffect::expire);
     ClassDB::bind_method(D_METHOD("add_stacks", "p_stacks", "p_should_refresh"), &StatusEffect::add_stacks);

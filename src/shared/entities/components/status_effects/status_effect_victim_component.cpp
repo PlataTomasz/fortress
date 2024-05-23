@@ -1,10 +1,7 @@
 #include "status_effect_victim_component.h"
-#include <object/ref_counted.h>
+#include <core/object/object.h>
 #include <scene/resources/packed_scene.h>
-#include <shared/status_effects/status_effect_instance.h>
 
-StatusEffectVictimComponent::StatusEffectVictimComponent() {
-}
 bool StatusEffectVictimComponent::remove_status_effect(StringName status_effect_name) {
 	Node *status_effect = get_node_or_null(NodePath(status_effect_name));
 	if (status_effect) {
@@ -13,6 +10,10 @@ bool StatusEffectVictimComponent::remove_status_effect(StringName status_effect_
 	} else {
 		return false;
 	}
+}
+
+void StatusEffectVictimComponent::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("new_status_gained", PropertyInfo(Variant::OBJECT, "p_status_effect")));
 }
 
 bool StatusEffectVictimComponent::has_status_effect(StringName status_effect_name) {

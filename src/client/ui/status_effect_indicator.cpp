@@ -5,17 +5,35 @@
 
 #include <shared/status_effects/status_effect.hpp>
 
-Control *StatusEffectIndicator::make_custom_tooltip(const String &p_text) const {
-    Ref<PackedScene> custom_tooltip_scene = ResourceLoader::load("", PackedScene::get_class_static());
-    ERR_FAIL_NULL_V(custom_tooltip_scene, nullptr);
-    StatusEffectTooltip *custom_tooltip = Object::cast_to<StatusEffectTooltip>(custom_tooltip_scene->instantiate());
-    ERR_FAIL_NULL_V(custom_tooltip, nullptr);
-    
-    custom_tooltip->set_displayed_name(status_effect->);
-    custom_tooltip->set_displayed_description();
-    custom_tooltip->set_displayed_source();
+void StatusEffectIndicator::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("get_tooltip_object"), &StatusEffectIndicator::get_tooltip_object);
+    ClassDB::bind_method(D_METHOD("set_tooltip_object"), &StatusEffectIndicator::set_tooltip_object);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "tooltip_object", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_tooltip_object", "get_tooltip_object");
+}
 
-    return custom_tooltip;
+void StatusEffectIndicator::_notification(int p_notification) {
+    switch (p_notification)
+    {
+    case NOTIFICATION_POSTINITIALIZE:
+        _init();
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void StatusEffectIndicator::_init() {
+	connect("mouse_entered", callable_mp(this, &StatusEffectIndicator::set_tooltip_visible).bind(true));
+	connect("mouse_exited", callable_mp(this, &StatusEffectIndicator::set_tooltip_visible).bind(false));
+}
+
+void StatusEffectIndicator::set_tooltip_visible(bool p_visible) {
+    tooltip_object->set_visible(p_visible);
+}
+
+bool StatusEffectIndicator::is_tooltip_visible() {
+    return tooltip_object->is_visible();
 }
 
 StatusEffect *StatusEffectIndicator::get_status_effect() const {
