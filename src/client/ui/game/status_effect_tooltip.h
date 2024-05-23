@@ -6,8 +6,8 @@
 class Label;
 class TextureRect;
 
-class StatusEffectIndicator : public Control {
-GDCLASS(StatusEffectIndicator, Control);
+class StatusEffectTooltip : public Control {
+GDCLASS(StatusEffectTooltip, Control);
 private:
     Label *name_label = nullptr;
     Label *description_label = nullptr;

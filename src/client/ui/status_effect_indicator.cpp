@@ -9,6 +9,8 @@ void StatusEffectIndicator::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_tooltip_object"), &StatusEffectIndicator::get_tooltip_object);
     ClassDB::bind_method(D_METHOD("set_tooltip_object"), &StatusEffectIndicator::set_tooltip_object);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "tooltip_object", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_tooltip_object", "get_tooltip_object");
+
+
 }
 
 void StatusEffectIndicator::_notification(int p_notification) {
@@ -24,8 +26,8 @@ void StatusEffectIndicator::_notification(int p_notification) {
 }
 
 void StatusEffectIndicator::_init() {
-	connect("mouse_entered", callable_mp(this, &StatusEffectIndicator::set_tooltip_visible).bind(true));
-	connect("mouse_exited", callable_mp(this, &StatusEffectIndicator::set_tooltip_visible).bind(false));
+	connect("mouse_entered", callable_mp(tooltip_object, &Control::set_visible).bind(true));
+	connect("mouse_exited", callable_mp(tooltip_object, &Control::set_visible).bind(false));
 }
 
 void StatusEffectIndicator::set_tooltip_visible(bool p_visible) {
@@ -43,3 +45,4 @@ StatusEffect *StatusEffectIndicator::get_status_effect() const {
 void StatusEffectIndicator::set_status_effect(StatusEffect *status_effect_) {
 	status_effect = status_effect_;
 }
+

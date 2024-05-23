@@ -1,4 +1,18 @@
-[gd_scene format=3 uid="uid://duuxpc71fsp26"]
+[gd_scene load_steps=3 format=3 uid="uid://duuxpc71fsp26"]
+
+[ext_resource type="PackedScene" uid="uid://7k3ukhyty5nu" path="res://scenes/ui/status_effects/Tooltip.tscn" id="1_f3anl"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qehv1"]
+width = 32
+height = 32
 
 [node name="Indicator" type="StatusEffectIndicator"]
 custom_minimum_size = Vector2(32, 32)
+
+[node name="Tooltip" parent="." instance=ExtResource("1_f3anl")]
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("NoiseTexture2D_qehv1")

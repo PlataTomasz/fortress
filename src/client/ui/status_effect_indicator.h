@@ -10,6 +10,8 @@ private:
     StatusEffect *status_effect = nullptr;
     Control *tooltip_object = nullptr;
 
+    TextureRect *icon_display = nullptr;
+
     void _init();
 protected:
     void _notification(int p_notification);
@@ -24,6 +26,9 @@ public:
 
     StatusEffect *get_status_effect() const;
     void set_status_effect(StatusEffect *status_effect_);
+
+    TextureRect *get_icon_display();
+    void set_icon_display(TextureRect *p_icon_display);
 };
 
 #endif // STATUS_EFFECT_INDICATOR_INCLUDED
