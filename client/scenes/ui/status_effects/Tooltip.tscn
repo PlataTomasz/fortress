@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://7k3ukhyty5nu"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qmfnj"]
+[gd_scene format=3 uid="uid://7k3ukhyty5nu"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -21,11 +19,9 @@ layout_mode = 2
 [node name="HSplitContainer2" type="HSplitContainer" parent="Tooltip/VBoxContainer"]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="Tooltip/VBoxContainer/HSplitContainer2"]
+[node name="IconCutout" type="Control" parent="Tooltip/VBoxContainer/HSplitContainer2"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = SubResource("NoiseTexture2D_qmfnj")
-expand_mode = 4
 
 [node name="Name" type="Label" parent="Tooltip/VBoxContainer/HSplitContainer2"]
 layout_mode = 2
