@@ -2,43 +2,50 @@
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qmfnj"]
 
-[node name="Tooltip" type="PanelContainer"]
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 138.0
+
+[node name="Tooltip" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_right = 381.0
 offset_bottom = 77.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="Tooltip"]
 layout_mode = 2
 
-[node name="HSplitContainer2" type="HSplitContainer" parent="VBoxContainer"]
+[node name="HSplitContainer2" type="HSplitContainer" parent="Tooltip/VBoxContainer"]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="VBoxContainer/HSplitContainer2"]
+[node name="Icon" type="TextureRect" parent="Tooltip/VBoxContainer/HSplitContainer2"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = SubResource("NoiseTexture2D_qmfnj")
 expand_mode = 4
 
-[node name="Name" type="Label" parent="VBoxContainer/HSplitContainer2"]
+[node name="Name" type="Label" parent="Tooltip/VBoxContainer/HSplitContainer2"]
 layout_mode = 2
 text = "StatusEffectName"
 
-[node name="Description" type="Label" parent="VBoxContainer"]
+[node name="Description" type="Label" parent="Tooltip/VBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "You are taking damage over time6549679gv9374576gv7n9346n78vn743n7bv7n79463670n9bv7n43n767n9n79"
 autowrap_mode = 3
 
-[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="Tooltip/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 dragger_visibility = 1
 
-[node name="SourceLabel" type="Label" parent="VBoxContainer/HSplitContainer"]
+[node name="SourceLabel" type="Label" parent="Tooltip/VBoxContainer/HSplitContainer"]
 layout_mode = 2
 text = "Source:"
 
-[node name="SourceName" type="Label" parent="VBoxContainer/HSplitContainer"]
+[node name="SourceName" type="Label" parent="Tooltip/VBoxContainer/HSplitContainer"]
 layout_mode = 2
 text = "453543[Barbarian]"

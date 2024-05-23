@@ -64,6 +64,13 @@ public:
     StatusEffectVictimComponent *get_victim_component();
     Node *get_victim_entity();
 
+    String get_displayed_name();
+    void set_displayed_name(const String& p_name);
+    String get_displayed_description();
+    void set_displayed_description(const String& p_description);
+    Ref<Texture2D> get_displayed_icon();
+    void set_displayed_icon(const Ref<Texture2D>& p_icon);
+
     //Permament effects are those which max_duration is -1. That also includes effect that expire under certain conditions(like leaving slowing area)
     bool is_permament();
     void set_permament(bool p_permament);

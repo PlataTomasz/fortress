@@ -63,6 +63,7 @@
 #include <shared/status_effects/example/slow_status_effect.h>
 
 #include <client/ui/player_hud.h>
+#include <client/ui/status_effect_indicator.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -80,6 +81,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 	//ClassDB::register_class<EntityStatusBar3D>();
 
     ClassDB::register_class<PlayerHUD>();
+    ClassDB::register_class<StatusEffectIndicator>();
 #endif
 
 #ifdef SERVER

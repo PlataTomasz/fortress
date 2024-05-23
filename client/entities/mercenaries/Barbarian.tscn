@@ -46,8 +46,9 @@ properties/0/path = NodePath("EntityAttributesComponent:health:current")
 properties/0/spawn = false
 properties/0/replication_mode = 1
 
-[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component")]
+[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component", "status_effect_victim_component")]
 attributes_component = NodePath("EntityAttributesComponent")
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
 

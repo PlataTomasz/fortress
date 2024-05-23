@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://duuxpc71fsp26"]
+
+[node name="Indicator" type="StatusEffectIndicator"]
+custom_minimum_size = Vector2(32, 32)
