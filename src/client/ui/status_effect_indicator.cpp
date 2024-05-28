@@ -1,23 +1,64 @@
 #include "status_effect_indicator.h"
 
 #include <scene/resources/packed_scene.h>
-#include "status_effect_tooltip.h"
+#include <client/ui/game/status_effect_tooltip.h>
 
 #include <shared/status_effects/status_effect.hpp>
+
+#include <shared/helper_macros.h>
+#include <shared/entities/traits/traits.h>
+#include <scene/gui/texture_rect.h>
 
 void StatusEffectIndicator::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_tooltip_object"), &StatusEffectIndicator::get_tooltip_object);
     ClassDB::bind_method(D_METHOD("set_tooltip_object"), &StatusEffectIndicator::set_tooltip_object);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "tooltip_object", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_tooltip_object", "get_tooltip_object");
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "tooltip_object", PROPERTY_HINT_NODE_TYPE, StatusEffectTooltip::get_class_static()), "set_tooltip_object", "get_tooltip_object");
 
+    ClassDB::bind_method(D_METHOD("get_icon_display"), &StatusEffectIndicator::get_icon_display);
+    ClassDB::bind_method(D_METHOD("set_icon_display"), &StatusEffectIndicator::set_icon_display);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "icon_display", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_icon_display", "get_icon_display");
+}
 
+void StatusEffectIndicator::initialize(StatusEffect *p_status_effect) {
+    set_status_effect(p_status_effect);
+    tooltip_object->set_displayed_name(p_status_effect->get_displayed_name());
+    tooltip_object->set_displayed_description(p_status_effect->get_displayed_description());
+    set_icon(p_status_effect->get_icon());
+}
+
+void StatusEffectIndicator::set_icon(const Ref<Texture2D>& p_icon) {
+    icon_display->set_texture(p_icon);
+}
+
+TextureRect *StatusEffectIndicator::get_icon_display() {
+    return icon_display;
+}
+
+void StatusEffectIndicator::set_icon_display(TextureRect *p_icon_display) {
+    icon_display = p_icon_display;
+}
+
+StatusEffectTooltip *StatusEffectIndicator::get_tooltip_object() {
+    return tooltip_object;
+}
+
+void StatusEffectIndicator::set_tooltip_object(StatusEffectTooltip *p_tooltip) {
+    tooltip_object = p_tooltip;
 }
 
 void StatusEffectIndicator::_notification(int p_notification) {
+    DISABLE_IN_EDITOR();
     switch (p_notification)
     {
     case NOTIFICATION_POSTINITIALIZE:
         _init();
+        break;
+    case NOTIFICATION_READY:
+    {
+        // Toggle visibility when mouse enters and leaves
+        connect("mouse_entered", callable_mp(tooltip_object, method_pointer_fix<StatusEffectTooltip>(&StatusEffectTooltip::set_visible)).bind(true));
+	    connect("mouse_exited", callable_mp(tooltip_object, method_pointer_fix<StatusEffectTooltip>(&StatusEffectTooltip::set_visible)).bind(false));
+    }
         break;
     
     default:
@@ -26,16 +67,7 @@ void StatusEffectIndicator::_notification(int p_notification) {
 }
 
 void StatusEffectIndicator::_init() {
-	connect("mouse_entered", callable_mp(tooltip_object, &Control::set_visible).bind(true));
-	connect("mouse_exited", callable_mp(tooltip_object, &Control::set_visible).bind(false));
-}
 
-void StatusEffectIndicator::set_tooltip_visible(bool p_visible) {
-    tooltip_object->set_visible(p_visible);
-}
-
-bool StatusEffectIndicator::is_tooltip_visible() {
-    return tooltip_object->is_visible();
 }
 
 StatusEffect *StatusEffectIndicator::get_status_effect() const {

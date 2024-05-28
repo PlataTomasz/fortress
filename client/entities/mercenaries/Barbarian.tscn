@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=13 format=3 uid="uid://brsu7fgraglpj"]
 
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
 [ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
+[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="3_yvmko"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_nvabn"]
 
@@ -36,9 +37,7 @@ func _ready():
 
 func _on_timer_timeout():
 	if multiplayer.is_server():
-		print(\"SERVER\")
 		health.current = randi_range(0, 100)
-	print(health.current)
 "
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_58crc"]
@@ -61,6 +60,9 @@ mesh = ExtResource("1_sy8qm")
 
 [node name="SlowStatusEffect" type="SlowStatusEffect" parent="StatusEffectVictimComponent"]
 permament = false
+displayed_name = "Slow"
+displayed_description = "You are slowed"
+icon = ExtResource("3_yvmko")
 
 [node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
 health = SubResource("CappedResourceAttribute_nvabn")

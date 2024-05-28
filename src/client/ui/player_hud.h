@@ -31,6 +31,7 @@ private:
 
     // Controlled entity received a new StatusEffect
     void _on_self_status_effect_gain(StatusEffect *status_effect);
+    void _on_self_status_effect_removed(StatusEffect *status_effect);
 protected:
     void _notification(int p_notification);
 

@@ -64,6 +64,7 @@
 
 #include <client/ui/player_hud.h>
 #include <client/ui/status_effect_indicator.h>
+#include <client/ui/game/status_effect_tooltip.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -82,6 +83,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 
     ClassDB::register_class<PlayerHUD>();
     ClassDB::register_class<StatusEffectIndicator>();
+    ClassDB::register_class<StatusEffectTooltip>();
 #endif
 
 #ifdef SERVER

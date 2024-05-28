@@ -30,6 +30,7 @@ public:
 private:
     String displayed_name;
     String displayed_description;
+    Ref<Texture2D> icon;
     Entity *inflictor = nullptr;
 
     int max_stacks = 1;
@@ -41,9 +42,6 @@ private:
     float max_duration = 10;
     float current_duration = 10;
     StatusEffect::Type type;
-
-    String tooltip = "default_status_effect_tooltip";
-    Ref<Texture2D> icon;
 
     bool permament = true;
 
@@ -68,8 +66,8 @@ public:
     void set_displayed_name(const String& p_name);
     String get_displayed_description();
     void set_displayed_description(const String& p_description);
-    Ref<Texture2D> get_displayed_icon();
-    void set_displayed_icon(const Ref<Texture2D>& p_icon);
+    Ref<Texture2D> get_icon();
+    void set_icon(const Ref<Texture2D>& p_icon);
 
     //Permament effects are those which max_duration is -1. That also includes effect that expire under certain conditions(like leaving slowing area)
     bool is_permament();

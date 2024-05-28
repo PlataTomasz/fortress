@@ -9,6 +9,7 @@ class StatusEffect;
 class UI : public Control {
 GDCLASS(UI, Control);
 public:
+    // Feels wrong, but don't know better approach
     static StatusEffectIndicator *create_status_effect_indicator(StatusEffect *for_status_effect);
 };
 

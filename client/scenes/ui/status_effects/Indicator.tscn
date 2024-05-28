@@ -1,18 +1,27 @@
 [gd_scene load_steps=3 format=3 uid="uid://duuxpc71fsp26"]
 
 [ext_resource type="PackedScene" uid="uid://7k3ukhyty5nu" path="res://scenes/ui/status_effects/Tooltip.tscn" id="1_f3anl"]
+[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="2_lopc4"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qehv1"]
-width = 32
-height = 32
-
-[node name="Indicator" type="StatusEffectIndicator"]
-custom_minimum_size = Vector2(32, 32)
-
-[node name="Tooltip" parent="." instance=ExtResource("1_f3anl")]
+[node name="Indicator" type="StatusEffectIndicator" node_paths=PackedStringArray("tooltip_object", "icon_display")]
+custom_minimum_size = Vector2(24, 24)
+offset_right = 0.959999
+offset_bottom = 0.239998
+size_flags_horizontal = 0
+size_flags_vertical = 2
+tooltip_object = NodePath("Tooltip")
+icon_display = NodePath("Icon")
 
 [node name="Icon" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = SubResource("NoiseTexture2D_qehv1")
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("2_lopc4")
+expand_mode = 4
+
+[node name="Tooltip" parent="." instance=ExtResource("1_f3anl")]
+visible = false
+layout_mode = 0
+offset_top = -77.0
+offset_bottom = 0.0
+mouse_filter = 1

@@ -137,11 +137,11 @@ void StatusEffect::set_displayed_description(const String& p_description) {
     displayed_description = p_description;
 }
 
-Ref<Texture2D> StatusEffect::get_displayed_icon() {
+Ref<Texture2D> StatusEffect::get_icon() {
     return icon;
 }
 
-void StatusEffect::set_displayed_icon(const Ref<Texture2D>& p_icon) {
+void StatusEffect::set_icon(const Ref<Texture2D>& p_icon) {
     icon = p_icon;
 }
 
@@ -161,6 +161,18 @@ void StatusEffect::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::INT, "max_stacks"), "set_max_stacks", "get_max_stacks");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "max_stacks"), "set_max_stacks", "get_max_stacks");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "permament"), "set_permament", "is_permament");
+
+    ClassDB::bind_method(D_METHOD("get_displayed_name"), &StatusEffect::get_displayed_name);
+    ClassDB::bind_method(D_METHOD("set_displayed_name"), &StatusEffect::set_displayed_name);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "displayed_name"), "set_displayed_name", "get_displayed_name");
+    
+    ClassDB::bind_method(D_METHOD("get_displayed_description"), &StatusEffect::get_displayed_description);
+    ClassDB::bind_method(D_METHOD("set_displayed_description"), &StatusEffect::set_displayed_description);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "displayed_description"), "set_displayed_description", "get_displayed_description");
+
+    ClassDB::bind_method(D_METHOD("get_icon"), &StatusEffect::get_icon);
+    ClassDB::bind_method(D_METHOD("set_icon"), &StatusEffect::set_icon);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "icon", PROPERTY_HINT_RESOURCE_TYPE, Texture::get_class_static()), "set_icon", "get_icon");
 }
 
 void StatusEffect::refresh() {

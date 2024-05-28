@@ -11,9 +11,7 @@ StatusEffectIndicator *UI::create_status_effect_indicator(StatusEffect *for_stat
     }
     else {
         StatusEffectIndicator *instance = Object::cast_to<StatusEffectIndicator>(scene->instantiate());
-        instance->set_displayed_name(for_status_effect->get_displayed_name());
-        instance->set_displayed_description(for_status_effect->get_displayed_description());
-        instance->set_displayed_icon(for_status_effect->get_displayed_icon());
+        instance->initialize(for_status_effect);
         return instance;
     }
 }

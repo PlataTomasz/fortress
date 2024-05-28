@@ -1,10 +1,13 @@
-[gd_scene format=3 uid="uid://7k3ukhyty5nu"]
+[gd_scene load_steps=2 format=3 uid="uid://7k3ukhyty5nu"]
 
-[node name="Control" type="Control"]
-layout_mode = 3
-anchors_preset = 0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3dwke"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="Control" type="StatusEffectTooltip" node_paths=PackedStringArray("description_label", "name_label")]
 offset_right = 400.0
 offset_bottom = 138.0
+description_label = NodePath("Tooltip/VBoxContainer/Description")
+name_label = NodePath("Tooltip/VBoxContainer/HSplitContainer2/Name")
 
 [node name="Tooltip" type="PanelContainer" parent="."]
 layout_mode = 0
@@ -12,30 +15,36 @@ offset_right = 381.0
 offset_bottom = 77.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_3dwke")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Tooltip"]
 layout_mode = 2
 
 [node name="HSplitContainer2" type="HSplitContainer" parent="Tooltip/VBoxContainer"]
 layout_mode = 2
+collapsed = true
+dragger_visibility = 1
 
 [node name="IconCutout" type="Control" parent="Tooltip/VBoxContainer/HSplitContainer2"]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Name" type="Label" parent="Tooltip/VBoxContainer/HSplitContainer2"]
 layout_mode = 2
-text = "StatusEffectName"
+text = "Name"
 
 [node name="Description" type="Label" parent="Tooltip/VBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-text = "You are taking damage over time6549679gv9374576gv7n9346n78vn743n7bv7n79463670n9bv7n43n767n9n79"
+text = "Tooltip"
 autowrap_mode = 3
 
 [node name="HSplitContainer" type="HSplitContainer" parent="Tooltip/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
+collapsed = true
 dragger_visibility = 1
 
 [node name="SourceLabel" type="Label" parent="Tooltip/VBoxContainer/HSplitContainer"]

@@ -1,7 +1,9 @@
-#if !defined(STATUS_EFFECT_INDICATOR_INCLUDED)
-#define STATUS_EFFECT_INDICATOR_INCLUDED
+#if !defined(STATUS_EFFECT_TOOLTIP_INCLUDED)
+#define STATUS_EFFECT_TOOLTIP_INCLUDED
 
 #include <scene/gui/control.h>
+#include <core/object/ref_counted.h>
+#include <scene/resources/texture.h>
 
 class Label;
 class TextureRect;
@@ -27,4 +29,4 @@ public:
     void set_icon_display(TextureRect *p_icon_display);
 };
 
-#endif // STATUS_EFFECT_INDICATOR_INCLUDED
+#endif // STATUS_EFFECT_TOOLTIP_INCLUDED

@@ -13,6 +13,11 @@ void StatusEffectTooltip::set_displayed_description(const String& description) {
     description_label->set_text(description);
 }
 
+void StatusEffectTooltip::set_displayed_icon(const Ref<Texture2D>& icon) {
+    ERR_FAIL_NULL(icon_display);
+    icon_display->set_texture(icon);
+}
+
 Label *StatusEffectTooltip::get_name_label() {
     return name_label;
 }

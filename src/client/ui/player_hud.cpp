@@ -41,6 +41,7 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Merce
     StatusEffectVictimComponent *status_effect_component = new_mercenary->get_status_effect_victim_component();
     if (status_effect_component) {
         status_effect_component->connect("child_entered_tree", callable_mp(this, &PlayerHUD::_on_self_status_effect_gain));
+        status_effect_component->connect("child_exiting_tree", callable_mp(this, &PlayerHUD::_on_self_status_effect_removed));
 
         //Add current StatusEffects to be rendered on UI
         TypedArray<Node> status_effects = status_effect_component->get_children();
@@ -83,6 +84,22 @@ void PlayerHUD::_on_self_status_effect_gain(StatusEffect *status_effect) {
     StatusEffectIndicator *status_effect_indicator = UI::create_status_effect_indicator(status_effect);
     ERR_FAIL_NULL_MSG(status_effect_indicator, "Creating UI representation for status effect failed!");
     status_effect_area->add_child(status_effect_indicator);
+}
+
+void PlayerHUD::_on_self_status_effect_removed(StatusEffect *status_effect) {
+    // Naive implementation - iterate over all exisiting status effect indicators and remove matching one
+    TypedArray<Node> status_effect_indicator_children = status_effect_area->get_children();
+    for(int i = 0;i < status_effect_indicator_children.size();i++) {
+        StatusEffectIndicator *indicator = static_cast<StatusEffectIndicator *>(
+            status_effect_indicator_children[i].operator Object*()
+        );
+
+        if (indicator->get_status_effect() == status_effect) {
+            // Found it, break the loop
+            indicator->queue_free();
+            return;
+        }
+    }
 }
 
 void PlayerHUD::_on_self_health_changed(float p_health) {
