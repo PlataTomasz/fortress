@@ -12,6 +12,7 @@
 
 #include <client/ui/ui.h>
 #include <client/ui/status_effect_indicator.h>
+#include <scene/gui/texture_rect.h>
 
 void PlayerHUD::_ready() {
     // Setup signals
@@ -59,6 +60,8 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Merce
     _on_current_health_changed(health_bar->get_value(), attributes->get_health()->get_current());
     attributes->get_health()->connect("current_value_changed", callable_mp(this, &PlayerHUD::_on_current_health_changed));
 
+    // Change displayed character portrait
+    character_portrait->set_texture(new_mercenary->get_portrait_icon());
 
     // TODO: Disconnect signals from old entity if old_entity is valid
 }
@@ -122,13 +125,24 @@ Control *PlayerHUD::get_status_effect_area() {
     return status_effect_area;
 }
 
+void PlayerHUD::set_character_portrait(TextureRect *p_character_portrait) {
+    character_portrait = p_character_portrait;
+}
+
+TextureRect *PlayerHUD::get_character_portrait() {
+    return character_portrait;
+}
 
 void PlayerHUD::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_health_bar"), &PlayerHUD::get_health_bar);
     ::ClassDB::bind_method(D_METHOD("set_health_bar"), &PlayerHUD::set_health_bar);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "health_bar", PROPERTY_HINT_NODE_TYPE, "ProgressBar"), "set_health_bar", "get_health_bar");
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "health_bar", PROPERTY_HINT_NODE_TYPE, ProgressBar::get_class_static()), "set_health_bar", "get_health_bar");
 
     ::ClassDB::bind_method(D_METHOD("get_status_effect_area"), &PlayerHUD::get_status_effect_area);
     ::ClassDB::bind_method(D_METHOD("set_status_effect_area"), &PlayerHUD::set_status_effect_area);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "status_effect_area", PROPERTY_HINT_NODE_TYPE, "Control"), "set_status_effect_area", "get_status_effect_area");
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "status_effect_area", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_status_effect_area", "get_status_effect_area");
+
+    ::ClassDB::bind_method(D_METHOD("get_character_portrait"), &PlayerHUD::get_character_portrait);
+    ::ClassDB::bind_method(D_METHOD("set_character_portrait"), &PlayerHUD::set_character_portrait);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "character_portrait", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_character_portrait", "get_character_portrait");
 }

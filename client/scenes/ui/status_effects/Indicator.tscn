@@ -9,6 +9,7 @@ offset_right = 0.959999
 offset_bottom = 0.239998
 size_flags_horizontal = 0
 size_flags_vertical = 2
+mouse_filter = 1
 tooltip_object = NodePath("Tooltip")
 icon_display = NodePath("Icon")
 

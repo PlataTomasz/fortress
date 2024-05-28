@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=14 format=3 uid="uid://brsu7fgraglpj"]
 
+[ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_f2r1n"]
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
 [ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
 [ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="3_yvmko"]
@@ -48,6 +49,7 @@ properties/0/replication_mode = 1
 [node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component", "status_effect_victim_component")]
 attributes_component = NodePath("EntityAttributesComponent")
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+portrait_icon = ExtResource("1_f2r1n")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
 

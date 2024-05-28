@@ -47,6 +47,9 @@ public:
     void set_status_effect_area(Control *p_status_effect_area);
     Control *get_status_effect_area();
 
+    void set_character_portrait(TextureRect *p_status_effect_area);
+    TextureRect *get_character_portrait();
+
 };
 
 #endif // PLAYER_HUD_INCLUDED
