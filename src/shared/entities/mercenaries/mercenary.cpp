@@ -25,6 +25,10 @@ void Mercenary::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_status_effect_victim_component"), &Mercenary::get_status_effect_victim_component);
     ::ClassDB::bind_method(D_METHOD("set_status_effect_victim_component"), &Mercenary::set_status_effect_victim_component);
     ::ClassDB::add_property(get_class_static(), PropertyInfo(Variant::OBJECT, "status_effect_victim_component", PROPERTY_HINT_NODE_TYPE, "StatusEffectVictimComponent"), "set_status_effect_victim_component", "get_status_effect_victim_component");
+
+    ::ClassDB::bind_method(D_METHOD("get_portrait_icon"), &Mercenary::get_portrait_icon);
+    ::ClassDB::bind_method(D_METHOD("set_portrait_icon"), &Mercenary::set_portrait_icon);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "portrait_icon", PROPERTY_HINT_RESOURCE_TYPE, "Texture2D"), "set_portrait_icon", "get_portrait_icon");
 }
 
 Node *Mercenary::_get_component(const String& component_typename) {
@@ -43,4 +47,12 @@ StatusEffectVictimComponent *Mercenary::get_status_effect_victim_component() {
 
 void Mercenary::set_status_effect_victim_component(StatusEffectVictimComponent *p_status_effect_vicitm_component) {
     status_effect_victim_component = p_status_effect_vicitm_component;
+}
+
+Ref<Texture2D> Mercenary::get_portrait_icon() {
+    return portrait_icon;
+}
+
+void Mercenary::set_portrait_icon(const Ref<Texture2D>& p_icon) {
+    portrait_icon = p_icon;
 }
