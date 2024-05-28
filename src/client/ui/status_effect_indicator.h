@@ -2,13 +2,16 @@
 #define STATUS_EFFECT_INDICATOR_INCLUDED
 
 #include <scene/gui/control.h>
+
 class StatusEffect;
+class StatusEffectTooltip;
+class TextureRect;
 
 class StatusEffectIndicator : public Control {
 GDCLASS(StatusEffectIndicator, Control);
 private:
     StatusEffect *status_effect = nullptr;
-    Control *tooltip_object = nullptr;
+    StatusEffectTooltip *tooltip_object = nullptr;
 
     TextureRect *icon_display = nullptr;
 
@@ -17,12 +20,13 @@ protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
-    void set_displayed_name(const String& name);
-    void set_displayed_description(const String& description);
-    void set_displayed_icon(const Ref<Texture2D>& icon);
+    // Initializes indicator data from status effect
+    void initialize(StatusEffect *p_status_effect);
 
-    void set_tooltip_visible(bool p_visible);
-    bool is_tooltip_visible();
+    void set_icon(const Ref<Texture2D>& p_icon);
+
+    StatusEffectTooltip *get_tooltip_object();
+    void set_tooltip_object(StatusEffectTooltip *p_tooltip);
 
     StatusEffect *get_status_effect() const;
     void set_status_effect(StatusEffect *status_effect_);
