@@ -46,15 +46,9 @@ if(build_subtype == "client"): # Client build only code
     sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
     sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
     sources += Glob(cl_src_dir+"string_names/*.cpp")
-    # sources += Glob(cl_src_dir+"ui/*.cpp")
-    # Single files - Legacy, to be refactored
-    sources += Glob(cl_src_dir+"ui/character_select_elem.cpp")
-    sources += Glob(cl_src_dir+"ui/user_interface.cpp")
-    sources += Glob(cl_src_dir+"ui/player_hud.cpp")
 
+    sources += Glob(cl_src_dir+"ui/*.cpp")
     sources += Glob(cl_src_dir+"ui/game/*.cpp")
-    sources += Glob(cl_src_dir+"ui/ui.cpp")
-    sources += Glob(cl_src_dir+"ui/status_effect_indicator.cpp")
 
     sources += Glob(cl_src_dir+"networking/requests/*.cpp")
 elif(build_subtype == "server"): # Server build only code

@@ -1,16 +1,33 @@
-[gd_scene load_steps=2 format=3 uid="uid://x3b3wxhlpsi2"]
+[gd_scene load_steps=4 format=3 uid="uid://x3b3wxhlpsi2"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_oh1i1"]
+[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="1_vvbah"]
+[ext_resource type="Texture2D" uid="uid://dck0q3eo45ojt" path="res://icon.svg" id="2_iu1ts"]
 
-[node name="Element" type="VSplitContainer"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_ii7vh"]
+resource_local_to_scene = false
+allow_unpress = true
+
+[node name="CharacterSelectElem" type="CharacterSelectElem" node_paths=PackedStringArray("name_label", "texture_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+name_label = NodePath("Element/Name")
+texture_button = NodePath("Element/IconBtn")
+
+[node name="Element" type="VSplitContainer" parent="."]
+layout_mode = 2
 dragger_visibility = 2
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="IconBtn" type="TextureButton" parent="Element"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_oh1i1")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_ii7vh")
+texture_normal = ExtResource("1_vvbah")
+texture_pressed = ExtResource("2_iu1ts")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="Name" type="Label" parent="."]
+[node name="Name" type="Label" parent="Element"]
 layout_mode = 2
 text = "null"
 horizontal_alignment = 1
