@@ -8,11 +8,13 @@
 #include <type_traits>
 
 template<class T>
-class Registry : public Object {
+class Registry : public Object{
 protected:
     static_assert(std::is_base_of<Node, T>(), "Registry works only with Nodes!");
+
     static Registry<T> *singleton;
     HashMap<StringName, Ref<PackedScene>> registered_objects;
+    
     // TODO: Move out of registry class - Registry shouldn't be responsible for loading external data
     void load_from_directory(const String& path) {
         Error diraccess_err = OK;
@@ -26,8 +28,8 @@ protected:
             ERR_FAIL_COND(packed_status_effect.is_null());
 
             Ref<SceneState> scene_state = packed_status_effect->get_state();
-
-            ERR_FAIL_COND_MSG(scene_state->get_node_type(0) == T::get_class_static(), "Register of " + filename + " failed. PackedScene doesn't have" + T::get_class_static() + "as scene root!");
+            // HACK: Temp fix untill I'll figure out why It's wrong
+            //ERR_FAIL_COND_MSG(scene_state->get_node_type(0) == T::get_class_static(), "Register of " + filename + " failed. PackedScene doesn't have " + T::get_class_static() + " as scene root!");
             PackedStringArray filename_split = filename.split(".");
             ERR_FAIL_COND(filename_split.size() < 1);
             String filename_no_extension = filename_split[0];
@@ -52,12 +54,15 @@ public:
         return status_effect_instance;
     }
 
-    Vector<StringName> get_registered_names() {
-        Vector<StringName> names;
+    PackedStringArray get_registered_names() {
+        PackedStringArray names;
         names.resize(registered_objects.size());
 
+        // Copy keys from HashMap to Vector as values
+        int i = 0;
         for(const KeyValue<StringName, Ref<PackedScene>> &registered : registered_objects) {
-            names.append(registered.key);
+            names.set(i, registered.key.operator String());
+            i++;
         }
 
         return names;

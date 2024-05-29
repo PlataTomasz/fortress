@@ -31,6 +31,7 @@ private:
 
     // Clientside player object
     Ref<Player> player;
+    Dictionary playerdata;
 
     void _on_server_connect();
     void _on_server_disconnect();
@@ -46,6 +47,7 @@ private:
     void _on_player_spawn(Player *player);
 
     void _on_controlled_entity_spawn(Entity *ent, const String& entity_name);
+    void _on_join_server_btn_press();
 public:
     void process();
     void ready();

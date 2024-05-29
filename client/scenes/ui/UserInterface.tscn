@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwr1mgxijjv32"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_6a5qc"]
+font_size = 66
+
+[node name="UserInterface" type="UserInterface" node_paths=PackedStringArray("main_menu")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+main_menu = NodePath("CenterContainer")
+
+[node name="CenterContainer" type="MainMenu" parent="." node_paths=PackedStringArray("ip_input", "nickname_input", "join_button", "character_select_area")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+ip_input = NodePath("CharacterArea/CenterContainer/VBoxContainer/IpInput")
+nickname_input = NodePath("CharacterArea/CenterContainer/VBoxContainer/NicknameInput")
+join_button = NodePath("CharacterArea/CenterContainer/VBoxContainer/JoinBtn")
+character_select_area = NodePath("CharacterArea/MarginContainer/ScrollContainer/GridContainer")
+
+[node name="CharacterArea" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(1280, 0)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Header" type="Label" parent="CenterContainer/CharacterArea"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+text = "Pick your character!"
+label_settings = SubResource("LabelSettings_6a5qc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/CharacterArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/CharacterArea/MarginContainer"]
+custom_minimum_size = Vector2(0, 800)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/CharacterArea/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 8
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/CharacterArea"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/CharacterArea/CenterContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+
+[node name="NicknameInput" type="LineEdit" parent="CenterContainer/CharacterArea/CenterContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Nickname..."
+alignment = 1
+
+[node name="IpInput" type="LineEdit" parent="CenterContainer/CharacterArea/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "127.0.0.1"
+placeholder_text = "Server address..."
+
+[node name="JoinBtn" type="Button" parent="CenterContainer/CharacterArea/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join game"
+
+[connection signal="pressed" from="CenterContainer/CharacterArea/CenterContainer/VBoxContainer/JoinBtn" to="CenterContainer/CharacterArea/CenterContainer/VBoxContainer/JoinBtn" method="_on_pressed"]

@@ -8,6 +8,7 @@
 #include <shared/helper_macros.h>
 #include <shared/entities/traits/traits.h>
 #include <scene/gui/texture_rect.h>
+#include <shared/registries/mercenary_registry.h>
 
 void StatusEffectIndicator::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_tooltip_object"), &StatusEffectIndicator::get_tooltip_object);
@@ -58,6 +59,7 @@ void StatusEffectIndicator::_notification(int p_notification) {
         // Toggle visibility when mouse enters and leaves
         connect("mouse_entered", callable_mp(tooltip_object, method_pointer_fix<StatusEffectTooltip>(&StatusEffectTooltip::set_visible)).bind(true));
 	    connect("mouse_exited", callable_mp(tooltip_object, method_pointer_fix<StatusEffectTooltip>(&StatusEffectTooltip::set_visible)).bind(false));
+        print_line(Registry<Mercenary>::get_singleton()->get_registered_names());
     }
         break;
     

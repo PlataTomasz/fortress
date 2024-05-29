@@ -9,6 +9,8 @@
 
 #include <shared/entities/entity.h>
 
+#include <client/ui/main_menu.h>
+
 Client::Client()
 {
     DISABLE_IN_EDITOR();
@@ -77,10 +79,6 @@ void Client::_on_controlled_entity_spawn(Entity *ent, const String& entity_name)
 }
 
 void Client::_on_auth_start(int peer_id) {
-    Dictionary playerdata;
-    playerdata["nickname"] = player->get_nickname();
-    playerdata["mercenary"] = player->get_choosen_mercenary();
-
     int len = 0;
     Error err = encode_variant(playerdata, nullptr, len, false, 0);
     ERR_FAIL_COND(err);
@@ -93,13 +91,32 @@ void Client::_on_auth_start(int peer_id) {
     scene_multiplayer->send_auth(peer_id, buffer);
 }
 
+void Client::_on_join_server_btn_press() {
+    MainMenu *main_menu = user_interface->get_main_menu();
+    String ip = main_menu->get_server_adress();
+    int port = main_menu->get_server_port();
+
+    playerdata["nickname"] = main_menu->get_choosen_nickname();
+    playerdata["mercenary"] = main_menu->get_selected_mercenary();
+
+    Error err = connect_to_game_server(ip, port);
+    if(err == OK) {
+        main_menu->set_visible(false);
+    }
+}
+
 void Client::_init()
 {
     client_peer.instantiate(); //Same as using memnew
     scene_multiplayer.instantiate();
 
     //Create UI
-    user_interface = memnew(UserInterface);
+    Ref<PackedScene> scene = ResourceLoader::load("res://scenes/ui/UserInterface.tscn");
+    user_interface = static_cast<UserInterface *>(scene->instantiate());
+    MainMenu *menu = user_interface->get_main_menu();
+    if(menu) {
+        menu->get_join_button()->connect("pressed", callable_mp(this, &Client::_on_join_server_btn_press));
+    }
     user_interface->set_name("UserInterface");
     add_child(user_interface);
 }

@@ -1,11 +1,53 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmngc4eewvi3g"]
+[gd_scene load_steps=13 format=3 uid="uid://cmngc4eewvi3g"]
 
 [ext_resource type="ArrayMesh" uid="uid://cge81pd7xjrew" path="res://models/level/dungeon/obj/character-orc.obj" id="1_7ujyy"]
 [ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="1_a2772"]
 [ext_resource type="PackedScene" uid="uid://bvmg3g54iwu08" path="res://models/level/dungeon/character-orc.glb" id="1_vyvch"]
 
-[node name="Orc" type="Mercenary" node_paths=PackedStringArray("ability_caster_component")]
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_s3a21"]
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_scodl"]
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_34pqy"]
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_y0v5j"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_8axib"]
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_ydf5m"]
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_x1pbg"]
+base = 300.0
+
+[sub_resource type="GDScript" id="GDScript_4467d"]
+script/source = "extends EntityAttributesComponent
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var timer = Timer.new()
+	timer.wait_time = 5
+	timer.autostart = true
+	timer.one_shot = false
+	timer.timeout.connect(_on_timer_timeout)
+	add_child(timer)
+
+func _on_timer_timeout():
+	if multiplayer.is_server():
+		health.current = randi_range(0, 100)
+"
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_74c2m"]
+properties/0/path = NodePath("EntityAttributesComponent:health:current")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+
+[node name="Orc" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component")]
 ability_caster_component = NodePath("AbilityCasterComponent")
+attributes_component = NodePath("EntityAttributesComponent")
 portrait_icon = ExtResource("1_a2772")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
@@ -23,3 +65,17 @@ mesh = ExtResource("1_7ujyy")
 displayed_name = "354643643"
 
 [node name="OrcWarhornAbility" type="OrcWarhornAbility" parent="AbilityCasterComponent"]
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
+health = SubResource("CappedResourceAttribute_s3a21")
+global_defense = SubResource("FloatAttribute_scodl")
+attack_damage = SubResource("FloatAttribute_34pqy")
+attack_speed = SubResource("FloatAttribute_y0v5j")
+magic_power = SubResource("FloatAttribute_8axib")
+cooldown_reduction = SubResource("FloatAttribute_ydf5m")
+movement_speed = SubResource("FloatAttribute_x1pbg")
+script = SubResource("GDScript_4467d")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_74c2m")

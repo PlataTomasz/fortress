@@ -8,6 +8,8 @@
 #include <shared/entities/mercenaries/mercenary.hpp>
 #include <core/io/marshalls.h>
 
+#include <shared/registries/mercenary_registry.h>
+
 void Server::_ready()
 {
     DISABLE_IN_EDITOR();
@@ -59,9 +61,12 @@ void Server::_on_peer_disconnect(int peer_id)
 
 void Server::_on_peer_connect(int peer_id)
 {
-    
-    Ref<PackedScene> scene = ResourceLoader::load("res://entities/mercenaries/Barbarian.tscn");
-    Mercenary *mercenary = static_cast<Mercenary *>(scene->instantiate());
+    Mercenary *mercenary = nullptr;
+    if(connected_players.has(peer_id)) {
+        Ref<Player> ply = connected_players.get(peer_id);
+        String mercenary_name = ply->get_choosen_mercenary();
+        mercenary = MercenaryRegistry::get_singleton()->create_instance(mercenary_name);
+    }
 
 	mercenary->set_name("p_" + itos(peer_id));
 	game->get_current_level()->add_entity(mercenary);
@@ -112,7 +117,9 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
     ERR_FAIL_COND_V_MSG(var_mercenary_name.get_type() != Variant::STRING, ERR_INVALID_DATA, "Mercenary name is malformed!" + itos(peer_id));
     
     //TODO: Proper nickname and choosen mercenary name validation - Currently hardcoded here
-    ERR_FAIL_COND_V_MSG(!(String(var_mercenary_name).length() > 3 && String(var_mercenary_name).length() <= 16), ERR_INVALID_DATA, "Nickname of " + itos(peer_id) + " failed validation!");
+    //ERR_FAIL_COND_V_MSG(!(String(var_mercenary_name).length() > 3 && String(var_mercenary_name).length() <= 16), ERR_INVALID_DATA, "Nickname of " + itos(peer_id) + " failed validation!");
+
+    print_line("Peer", itos(peer_id), "wants to play character named", var_mercenary_name);
 
     Player *ply = memnew(Player);
     ply->change_nickname(var_nickname.operator String());

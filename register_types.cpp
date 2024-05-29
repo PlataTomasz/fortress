@@ -34,9 +34,9 @@
 #include <client/game.h>
 #include <client/client.hpp>
 #include <client/game_camera.hpp>
-#include <client/ui/entity_status_bar.hpp>
 #include <client/ui/user_interface.h>
 #include <client/ui/character_select_elem.h>
+#include <client/ui/main_menu.h>
 #endif
 
 #ifdef SERVER
@@ -66,6 +66,8 @@
 #include <client/ui/status_effect_indicator.h>
 #include <client/ui/game/status_effect_tooltip.h>
 
+#include <shared/registries/mercenary_registry.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -84,6 +86,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<PlayerHUD>();
     ClassDB::register_class<StatusEffectIndicator>();
     ClassDB::register_class<StatusEffectTooltip>();
+    ClassDB::register_class<MainMenu>();
 #endif
 
 #ifdef SERVER
@@ -112,7 +115,9 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<AbilityCasterComponent>();
     ClassDB::register_class<StatusEffectVictimComponent>();
 
-    ClassDB::register_class<StatusEffectRegistry>();
+    // Registries
+    //ClassDB::register_class<StatusEffectRegistry>();
+    ClassDB::register_class<MercenaryRegistry>();
     
     // Orc abilities
     ClassDB::register_class<OrcResolve>();
@@ -132,6 +137,9 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     // Status Effects
     ClassDB::register_class<StatusEffect>();
     ClassDB::register_class<SlowStatusEffect>();
+
+    // Singletons
+    //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)
