@@ -15,45 +15,18 @@ GDCLASS(GameLevel, Node3D);
 private:
 	//Replication of entities on level
 	MultiplayerSpawner *entity_spawner = nullptr;
-	MultiplayerSynchronizer *entity_synchronizer = nullptr;
-
-	Ref<SceneReplicationConfig> replication_config = memnew(SceneReplicationConfig);
 
 	Node *entities_node = nullptr;
-
-	void _on_entity_added(Node *node);
-	void _on_entity_removed(Node *node);
-	void _on_enter_tree();
 protected:
 	static void _bind_methods();
-
-	void _notification(int p_notification) {
-		DISABLE_IN_EDITOR();
-		switch (p_notification) {
-			case NOTIFICATION_READY: {
-				_ready();
-			} break;
-
-			case NOTIFICATION_ENTER_TREE:
-				_on_enter_tree();
-				break;
-
-			case NOTIFICATION_POSTINITIALIZE:
-				_init();
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	void _ready();
-
-	void _init();
 public:
 	MultiplayerSpawner *get_entity_spawner() {
 		return entity_spawner;
-	};
+	}
+
+	void set_entity_spawner(MultiplayerSpawner *p_entity_spawner) {
+		entity_spawner = p_entity_spawner;
+	}
 
 	void add_entity(Entity *ent) {
 		entities_node->add_child(ent);
