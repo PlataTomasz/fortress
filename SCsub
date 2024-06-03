@@ -79,6 +79,7 @@ sources += Glob(sh_src_dir+"abilities/fist_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"abilities/interfaces/*.cpp")
 sources += Glob(sh_src_dir+"abilities/sword_mercenary/*.cpp")
 sources += Glob(sh_src_dir+"abilities/tundra/*.cpp")
+sources += Glob(sh_src_dir+"abilities/experimental/*.cpp")
 
 sources += Glob(sh_src_dir+"core/*.cpp")
 sources += Glob(sh_src_dir+"data_holders/*.cpp")

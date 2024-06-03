@@ -1,5 +1,8 @@
 #include "entity_registry.h"
 
+template<>
+Registry<Entity> *Registry<Entity>::singleton = nullptr; 
+
 // Define data registry path
 template<>
 String Registry<Entity>::get_initial_data_path() {

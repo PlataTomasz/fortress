@@ -68,6 +68,8 @@
 
 #include <shared/registries/mercenary_registry.h>
 
+#include <shared/abilities/experimental/example_ability_01.h>
+
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
     if(p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -93,9 +95,12 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 	//Server classes - needed for build with locally hosted server
 	ClassDB::register_class<Server>();
 #endif
-
-	// Shared
+    // Abilities
     ClassDB::register_class<Ability>();
+        // Examples
+        ClassDB::register_class<ExampleAbility01>();
+	// Shared
+    
     ClassDB::register_class<Game>();
     ClassDB::register_class<GameLevel>();
     ClassDB::register_class<Entity>();
