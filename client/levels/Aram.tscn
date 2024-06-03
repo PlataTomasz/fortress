@@ -104,7 +104,8 @@ polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 cell_size = 0.01
 cell_height = 0.01
 
-[node name="Aram" type="GameLevel"]
+[node name="Aram" type="GameLevel" node_paths=PackedStringArray("entities_node")]
+entities_node = NodePath("Entities")
 
 [node name="Background" type="MeshInstance3D" parent="."]
 
@@ -242,3 +243,5 @@ navigation_layers = 2
 [node name="MeshInstance3D" type="MeshInstance3D" parent="BlueOnly"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 0)
 mesh = SubResource("PlaneMesh_prna8")
+
+[node name="Entities" type="Node" parent="."]

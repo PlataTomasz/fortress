@@ -25,6 +25,8 @@ private:
 	void _on_entity_removed(Node *node);
 	void _on_enter_tree();
 protected:
+	static void _bind_methods();
+
 	void _notification(int p_notification) {
 		DISABLE_IN_EDITOR();
 		switch (p_notification) {
@@ -56,6 +58,9 @@ public:
 	void add_entity(Entity *ent) {
 		entities_node->add_child(ent);
 	}
+
+	Node *get_entities_node();
+	void set_entities_node(Node *p_node);
 
 	Entity *get_entity(const String &entity_name);
 

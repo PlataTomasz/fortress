@@ -80,6 +80,18 @@ void Game::attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) {
 void Game::ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id) {
     int peer_id = get_multiplayer()->get_remote_sender_id();
     print_line("Ability use request received from", peer_id);
+    // Get Player that used an ability
+    // FIXME: Will break if game is not direct child of server
+    Server *sv = Object::cast_to<Server>(get_parent());
+    ERR_FAIL_NULL(sv);
+    Ref<Player> ply = sv->get_player(peer_id);
+    ERR_FAIL_COND(ply.is_null());
+    Mercenary *mercenary = ply->get_controlled_entity();
+    ERR_FAIL_NULL(mercenary);
+    AbilityCasterComponent *ability_caster_component = mercenary->get_ability_caster_component();
+    ERR_FAIL_NULL(ability_caster_component);
+    Ref<ActionContext> ctx = memnew(ActionContext(mercenary, mercenary->get_position(), Vector3(target_pos.x, 0, target_pos.y), nullptr));
+    ability_caster_component->use_ability(ability_id, ctx);
 }
 
 void Game::movement_request_impl(Vector2 target_pos)

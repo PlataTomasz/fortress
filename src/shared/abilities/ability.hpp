@@ -2,6 +2,7 @@
 #define ABILITY_HPP_INCLUDED
 
 #include <shared/data_holders/action_context.hpp>
+#include <core/object/ref_counted.h>
 #include <core/string/ustring.h>
 #include <shared/helpers/object_ptr.h>
 
@@ -82,8 +83,7 @@ public:
     /**
      * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
     */
-    AbilityUseError use(const Ref<ActionContext>& action_context);
-
+    virtual Ability::AbilityUseError use(const Ref<ActionContext>& action_context);
     Ability();
 };
 

@@ -11,7 +11,7 @@ class Entity;
 #include <shared/helpers/object_ptr.h>
 
 /**
- * Interface 
+ * Hitbox class is an Extension of Area3D class, which implements a better way of obtaining other Area3D object, that overlap with that object.
 */
 class Hitbox
 {
@@ -28,34 +28,15 @@ class Hitbox
         //Godot stores collision mask in uint32_t - Check CollisionObject3D
         EVERYTHING = UINT32_MAX
     };
-
-    //Area which is managed by that Hitbox instance
-    ObjectPtr<Area3D> area = ObjectPtr(memnew(Area3D));
-
-    //Offset of hitbox
-    Vector3 offset;
-
 private:
     /**
      * Area3D objects that should be ignored for collision checks
     */
     Vector<Area3D*> blacklist;
 
-    void set_collision_mask(CollisionMask collision_mask);
-    uint32_t get_collision_mask();
-
     bool is_in_blacklist(Area3D* area);
 protected:
 public:
-    void add_collision_shape(CollisionShape3D* collision_shape);
-    void remove_collision_shape(CollisionShape3D* collision_shape);
-    Vector<Entity*> get_colliding_entities();
-    virtual Entity* get_closest_colliding_entity();
-
-    //Hitbox object offset
-    void set_offset(const Vector3& offset);
-    const Vector3& get_offset();
-
     Hitbox();
 };
 

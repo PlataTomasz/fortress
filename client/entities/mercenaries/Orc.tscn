@@ -43,7 +43,7 @@ func _on_timer_timeout():
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_74c2m"]
 properties/0/path = NodePath("EntityAttributesComponent:health:current")
 properties/0/spawn = false
-properties/0/replication_mode = 1
+properties/0/replication_mode = 0
 
 [node name="Orc" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component")]
 ability_caster_component = NodePath("AbilityCasterComponent")
@@ -57,7 +57,8 @@ portrait_icon = ExtResource("1_a2772")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_7ujyy")
 
-[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="."]
+[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="." node_paths=PackedStringArray("first_ability")]
+first_ability = NodePath("ExampleAbility01")
 
 [node name="OrcResolve" type="OrcResolve" parent="AbilityCasterComponent"]
 
@@ -65,6 +66,10 @@ mesh = ExtResource("1_7ujyy")
 displayed_name = "354643643"
 
 [node name="OrcWarhornAbility" type="OrcWarhornAbility" parent="AbilityCasterComponent"]
+
+[node name="ExampleAbility01" type="ExampleAbility01" parent="AbilityCasterComponent"]
+displayed_name = "example_01"
+displayed_description = "example_01"
 
 [node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
 health = SubResource("CappedResourceAttribute_s3a21")
