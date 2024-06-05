@@ -8,6 +8,8 @@
 #include <core/templates/vector.h>
 #include <core/string/node_path.h>
 
+class BasicAttack;
+
 /**
  * Ability caster component is a component which allows using abilities that are child of this component
 */
@@ -16,8 +18,9 @@ class AbilityCasterComponent : public Node3D
 {
 GDCLASS(AbilityCasterComponent, Node3D);
 private:
-    Ability *passive_ability;
-    
+    BasicAttack *attack = nullptr;
+
+    Ability *passive_ability = nullptr;    
     Ability *first_ability = nullptr;
     Ability *second_ability = nullptr;
     Ability *third_ability = nullptr;

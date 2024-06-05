@@ -34,11 +34,14 @@ void Mercenary::_bind_methods() {
 Node *Mercenary::_get_component(const String& component_typename) {
     if (component_typename == ability_caster_component->get_class()) {
         return ability_caster_component;
-    } else if (component_typename == attributes_component->get_class()) {
-        return attributes_component;
-    } else {
-        return nullptr;
     }
+    if (component_typename == attributes_component->get_class()) {
+        return attributes_component;
+    }
+    if (component_typename == status_effect_victim_component->get_class()) {
+        return status_effect_victim_component;
+    }
+    return nullptr;
 }
 
 StatusEffectVictimComponent *Mercenary::get_status_effect_victim_component() {

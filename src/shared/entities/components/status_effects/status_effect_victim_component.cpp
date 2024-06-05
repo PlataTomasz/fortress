@@ -26,3 +26,8 @@ bool StatusEffectVictimComponent::apply_status_effect(const StringName &status_e
 	add_child(instance);
 	return true;
 }
+
+bool StatusEffectVictimComponent::apply_status_effect(StatusEffect *status_effect) {
+	add_child(status_effect);
+	return true;
+}
