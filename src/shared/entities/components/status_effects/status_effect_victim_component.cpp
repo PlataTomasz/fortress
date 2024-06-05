@@ -2,6 +2,8 @@
 #include <core/object/object.h>
 #include <scene/resources/packed_scene.h>
 
+#include <shared/entities/entity.h>
+
 bool StatusEffectVictimComponent::remove_status_effect(StringName status_effect_name) {
 	Node *status_effect = get_node_or_null(NodePath(status_effect_name));
 	if (status_effect) {
@@ -18,6 +20,10 @@ void StatusEffectVictimComponent::_bind_methods() {
 
 bool StatusEffectVictimComponent::has_status_effect(StringName status_effect_name) {
 	return get_node_or_null(NodePath(status_effect_name));
+}
+
+Entity *StatusEffectVictimComponent::get_owning_entity() {
+	return Object::cast_to<Entity>(get_parent());
 }
 
 bool StatusEffectVictimComponent::apply_status_effect(const StringName &status_effect_name) {

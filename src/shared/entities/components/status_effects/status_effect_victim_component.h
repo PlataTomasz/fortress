@@ -23,6 +23,8 @@ public:
     bool apply_status_effect(const StringName &status_effect_name);
     bool apply_status_effect(StatusEffect *status_effect);
 
+    Entity *get_owning_entity();
+
     //TODO: Implement a way to get all the status effects, so UI can iterate over it
 };
 

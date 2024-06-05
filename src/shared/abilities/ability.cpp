@@ -128,6 +128,8 @@ void Ability::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "cooldown_timer_path"), "set_cooldown_timer_path", "get_cooldown_timer_path");
 }
 
+/*
 bool Ability::is_valid_target(const Ref<ActionContext>& action_context) {
     return true;
 }
+*/

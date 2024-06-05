@@ -5,7 +5,7 @@
 #include <shared/status_effects/status_effect.hpp>
 #include <shared/core/managers/component_manager.h>
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
-#include <shared/status_effects/status_effect_factory.h>
+#include <shared/registries/status_effect_registry.h>
 
 #ifdef SERVER
 void OrcWarhornAbility::_use(const Ref<ActionContext>& action_context) {
@@ -20,7 +20,7 @@ void OrcWarhornAbility::_use(const Ref<ActionContext>& action_context) {
 		StatusEffectVictimComponent *status_effect_component = ComponentManager::get_component<StatusEffectVictimComponent>(colliding_area->get_parent());
 
 		if (status_effect_component) {
-			StatusEffect *status_effect = StatusEffectFactory::create_status_effect("orc_warhorn_buff");
+			StatusEffect *status_effect = Registry<StatusEffect>::get_singleton()->create_instance("orc_warhorn_buff");
 			status_effect_component->apply_status_effect(status_effect);
 		}
 	}

@@ -2,7 +2,6 @@
 #define DAMAGE_OBJECT_INCLUDED
 
 #include <core/object/ref_counted.h>
-#include <shared/helpers/object_ptr.h>
 #include <shared/entities/entity.h>
 
 class DamageObject : public RefCounted
@@ -17,7 +16,7 @@ public:
     };
     DamageType type;
     float value = 0;
-    ObjectPtr<Entity> inflictor = nullptr;
+    Entity *inflictor = nullptr;
     //TODO: Type of origin - What exactly caused damage? Ability, attack, enviroment?
     //DamagingInstance *origin;
 public:
