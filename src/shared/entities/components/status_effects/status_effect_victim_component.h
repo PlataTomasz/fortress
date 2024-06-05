@@ -21,7 +21,7 @@ public:
     bool has_status_effect(StringName status_effect_name);
 
     bool apply_status_effect(const StringName &status_effect_name);
-    bool apply_status_effect(StatusEffect *status_effect){return false;};
+    bool apply_status_effect(StatusEffect *status_effect);
 
     //TODO: Implement a way to get all the status effects, so UI can iterate over it
 };

@@ -28,6 +28,8 @@ protected:
     virtual Node *_get_component(const String& component_typename) override;
 
     Ref<Texture2D> portrait_icon;
+
+    virtual Node *_get_component(const String& component_typename) override;
 public:
     StatusEffectVictimComponent *get_status_effect_victim_component();
     void set_status_effect_victim_component(StatusEffectVictimComponent *p_status_effect_vicitm_component);

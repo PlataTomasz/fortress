@@ -79,7 +79,7 @@ public:
     void set_displayed_name(const String &new_name);
 
     AbilityUseError use_check(const Ref<ActionContext>& action_context);
-
+    
     /**
      * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
     */
