@@ -29,7 +29,7 @@ void MovementComponent::_notification(int p_notification) {
 			break;
 	}
 }
-
+#ifdef SERVER
 void MovementComponent::_tick() {
 	if (nav_agent->is_target_reached()) {
 		return;
@@ -63,6 +63,13 @@ void MovementComponent::_tick() {
 		ent->set_rotation(corrected_rotation);
 		*/
 }
+#endif
+
+#ifdef CLIENT
+void MovementComponent::_tick() {
+	
+}
+#endif
 
 void MovementComponent::_parented() {
 	Entity *ent = static_cast<Entity *>(get_parent());
