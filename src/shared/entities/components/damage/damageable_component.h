@@ -9,8 +9,8 @@ class ObjectPtr;
 
 class DamageableComponent : public Node
 {
+GDCLASS(DamageableComponent, Node);
 protected:
-    void _notification(int notification);
 public:
     void take_damage(Ref<DamageObject> damage_object);
 

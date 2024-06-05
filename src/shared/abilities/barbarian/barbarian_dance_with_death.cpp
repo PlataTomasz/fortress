@@ -12,4 +12,6 @@ Ability::AbilityUseError BarbarianDanceWithDeath::use(const Ref<ActionContext>& 
     StatusEffect *status_effect = Registry<StatusEffect>::get_singleton()->create_instance("dance_with_death");
     ERR_FAIL_NULL_V(status_effect, Ability::AbilityUseError::INTERNAL_ERROR);
     status_effect_component->apply_status_effect(status_effect);
+
+    return Ability::AbilityUseError::SUCCESS;
 }

@@ -51,8 +51,11 @@ public:
 	Entity() {
 	}
 
-	template <class T>
-	T *get_component();
+	
+	template<class T>
+	T *get_component() {
+		return Object::cast_to<T>(_get_component(T::get_class_static()));
+	}
 };
 
 #endif // ENTITY_INCLUDED

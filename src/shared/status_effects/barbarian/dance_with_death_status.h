@@ -5,6 +5,9 @@
 
 class DanceWithDeathStatus : public StatusEffect {
 GDCLASS(DanceWithDeathStatus, StatusEffect);
+private:
+    void _on_self_damage_tick();
+    void _on_basic_attack_hit(Entity *hit_entity);
 protected:
     void _on_apply() override;
     void _on_remove() override;

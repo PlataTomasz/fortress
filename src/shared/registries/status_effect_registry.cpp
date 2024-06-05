@@ -2,6 +2,7 @@
 
 #include <shared/entities/traits/traits.h>
 
+template<>
 Registry<StatusEffect> *Registry<StatusEffect>::singleton = nullptr;
 
 // Define data registry path

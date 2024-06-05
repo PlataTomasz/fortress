@@ -2,8 +2,9 @@
 #define BARBARIAN_BLEEDING_PASSIVE_INCLUDED
 
 #include <scene/main/node.h>
+#include <shared/entities/components/abilities/ability_caster_component.h>
 
-class AbilityCasterComponent;
+
 class Entity;
 
 class BarbarianBleedingPassive : public Node {
