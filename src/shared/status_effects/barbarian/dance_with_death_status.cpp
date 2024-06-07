@@ -6,6 +6,7 @@
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/entities/entity.h>
+#include <shared/core/game_level.h>
 
 void DanceWithDeathStatus::_on_apply() {
 	// Take damage every second
@@ -25,19 +26,28 @@ void DanceWithDeathStatus::_on_apply() {
 	- Level: on_entity_hit(entity, with, by) - Something has been hit!
 	- Game: on_level_entity_hit(entity, with, by, on_level) - Something has been hit on certain GameLevel
 	*/
+
+	Entity *ent = get_victim_component()->get_owning_entity();
+	GameLevel *level = ent->get_gamelevel();
+	level->connect("entity_hit_by_attack", callable_mp(this, &DanceWithDeathStatus::_on_basic_attack_hit));
 }
 
 void DanceWithDeathStatus::_on_self_damage_tick() {
 	Entity *ent = get_victim_component()->get_owning_entity();
 	DamageableComponent *damageable = ent->get_component<DamageableComponent>();
 	if (damageable) {
-		damageable->take_damage(5, this, this);
+		damageable->take_damage(5, this, this); 
 	}
 }
 
 // Heal when owner's attack hits
-void DanceWithDeathStatus::_on_basic_attack_hit(Entity *hit_entity) {
+void DanceWithDeathStatus::_on_basic_attack_hit(Entity *hit_entity, const Ref<HitData>& hit_data , Entity *attacker) { // TODO: Figure out how should with be passed(Wrapper object or interface?)
+	// Only heal on basic attack hit
+	if(hit_data->get_hit_type() != HitData::BASIC_ATTACK_HITTYPE) return;
+
 	Entity *ent = get_victim_component()->get_owning_entity();
+	if (attacker != ent) return;
+
 	DamageableComponent *damageable = ent->get_component<DamageableComponent>();
 	if (damageable) {
 		damageable->heal(8);

@@ -17,6 +17,8 @@ private:
 	MultiplayerSpawner *entity_spawner = nullptr;
 
 	Node *entities_node = nullptr;
+
+	void _on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent);
 protected:
 	static void _bind_methods();
 public:
@@ -28,9 +30,7 @@ public:
 		entity_spawner = p_entity_spawner;
 	}
 
-	void add_entity(Entity *ent) {
-		entities_node->add_child(ent);
-	}
+	void add_entity(Entity *ent);
 
 	Node *get_entities_node();
 	void set_entities_node(Node *p_node);
