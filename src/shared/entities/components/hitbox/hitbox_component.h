@@ -2,20 +2,27 @@
 #define HITBOX_COMPONENT_INCLUDED
 
 #include <shared/entities/components/component_3d.h>
+#include <scene/3d/area_3d.h>
 
-class Area3D;
-class CollisionShape3D;
+class Entity;
 
-class HitboxComponent : public Component3D {
-public:
-    Area3D *area = nullptr;
-    CollisionShape3D *collision_shape = nullptr;
+class HitboxComponent : public Area3D {
 private:
-    void _init();
+    // Internal
+    void _on_hitbox_entered(Area3D *p_area);
+    void _on_hitbox_exited(Area3D *p_area);
 
-    void _hitbox_entered(Area3D *p_area);
-    void _hitbox_leave(Area3D *p_area);
+    void _ready();
 protected:
+    void _notification(int p_notification);
+    static void _bind_methods();
+public:
+    Entity *get_owning_entity();
+    List<HitboxComponent *> get_overlapping_hitboxes();
+
+    HitboxComponent() {
+        
+    }
 };
 
 #endif // HITBOX_COMPONENT_INCLUDED
