@@ -1,6 +1,8 @@
 #include "ability.hpp"
 #include <scene/main/timer.h>
 
+#include <shared/entities/components/abilities/ability_caster_component.h>
+
 #ifdef SERVER
 Ability::AbilityUseError Ability::use(const Ref<ActionContext>& action_context)
 {
@@ -126,6 +128,10 @@ void Ability::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "icon", PROPERTY_HINT_RESOURCE_TYPE, "Texture2D"), "set_icon", "get_icon");
 
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "cooldown_timer_path"), "set_cooldown_timer_path", "get_cooldown_timer_path");
+}
+
+AbilityCasterComponent *Ability::get_ability_caster() {
+    return Object::cast_to<AbilityCasterComponent>(get_parent());
 }
 
 /*
