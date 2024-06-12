@@ -6,6 +6,7 @@
 
 #include <shared/string_names/component_stringnames.h>
 #include <shared/string_names/signal_stringnames.h>
+#include <shared/entities/components/abilities/ability_caster_component.h>
 
 void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_object)
 {
@@ -14,7 +15,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
     ObjectPtr<DamageableComponent> damageable_target = ent->get_component<DamageableComponent>();
 
     //Checking if we inflicted damage
-    if(get_owner() == damage_object->inflictor)
+    if(get_owner() == damage_object->attacker)
     {
         StatusEffect *status_effect = status_effect_victim->get_status_effect("aal_discharge");
 
@@ -28,7 +29,7 @@ void AalDischarge::on_entity_take_damage(Entity *ent, Ref<DamageObject> damage_o
             }
             else
             {
-                damageable_target->take_damage(20, this->get_owner(), this);
+                damageable_target->take_damage(memnew(DamageObject(DamageObject::DAMAGE_MAGICAL, DamageObject::ABILITY_DAMAGE & DamageObject::AREA_DAMAGE, 15, get_ability_caster()->get_owning_entity())));
                 status_effect_victim->remove_status_effect("aal_discharge");
             }
         }

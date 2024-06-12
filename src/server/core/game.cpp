@@ -75,6 +75,16 @@ void Game::_on_receive_playerdata(Dictionary playerdata) {
 void Game::attack_request_impl(Vector2 target_pos, uint64_t target_entity_id) {
     int peer_id = get_multiplayer()->get_remote_sender_id();
     print_line("Attack request received from", peer_id);
+    Server *sv = Object::cast_to<Server>(get_parent());
+    ERR_FAIL_NULL(sv);
+    Ref<Player> ply = sv->get_player(peer_id);
+    ERR_FAIL_COND(ply.is_null());
+    Mercenary *mercenary = ply->get_controlled_entity();
+    ERR_FAIL_NULL(mercenary);
+    AbilityCasterComponent *ability_caster_component = mercenary->get_ability_caster_component();
+    ERR_FAIL_NULL(ability_caster_component);
+    Ref<ActionContext> ctx = memnew(ActionContext(mercenary, mercenary->get_position(), Vector3(target_pos.x, 0, target_pos.y), nullptr));
+    ability_caster_component->use_basic_attack(ctx);
 }
 
 void Game::ability_use_request_impl(uint8_t ability_id, Vector2 target_pos, uint64_t target_entity_id) {

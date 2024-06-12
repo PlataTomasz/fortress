@@ -14,24 +14,43 @@ public:
         DAMAGE_MAGICAL = 2,
         DAMAGE_TRUE = 3,
     };
+    enum DamageSubtype {
+        NONE = 0,
+        BASIC_ATTACK_DAMAGE = 1,
+        ABILITY_DAMAGE = 1 << 1,
+        OVER_TIME_DAMAGE = 1 << 2,
+        AREA_DAMAGE = 1 << 3
+    };
+
     DamageType type;
+    int subtype;
+
     float value = 0;
-    Entity *inflictor = nullptr;
+    Entity *attacker = nullptr;
     //TODO: Type of origin - What exactly caused damage? Ability, attack, enviroment?
     //DamagingInstance *origin;
 public:
-    DamageObject(DamageType _type, float _value, ObjectPtr<Entity> _inflictor)
-        : type(_type), value(_value), inflictor(_inflictor)
+    DamageType get_type() {
+        return type;
+    }
+
+    int get_subtype() {
+        return subtype;
+    }
+
+    float get_value() {
+        return value;
+    }
+
+    Entity *get_attacker() {
+        return attacker;
+    }
+
+    DamageObject(DamageType _type, int _subtype, float _value, ObjectPtr<Entity> _attacker)
+        : type(_type), subtype(_subtype), value(_value), attacker(_attacker)
     {
 
     };
-
-    DamageObject(DamageObject& other)
-    {
-        type = other.type;
-        value = other.value;
-        inflictor = other.inflictor;
-    }
 };
 
 VARIANT_ENUM_CAST(DamageObject::DamageType);

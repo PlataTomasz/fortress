@@ -29,24 +29,24 @@ void DanceWithDeathStatus::_on_apply() {
 
 	Entity *ent = get_victim_component()->get_owning_entity();
 	GameLevel *level = ent->get_gamelevel();
-	level->connect("entity_hit_by_attack", callable_mp(this, &DanceWithDeathStatus::_on_basic_attack_hit));
+	level->connect("entity_damage_taken", callable_mp(this, &DanceWithDeathStatus::_on_basic_attack_damage_dealt));
 }
 
 void DanceWithDeathStatus::_on_self_damage_tick() {
 	Entity *ent = get_victim_component()->get_owning_entity();
 	DamageableComponent *damageable = ent->get_component<DamageableComponent>();
 	if (damageable) {
-		damageable->take_damage(5, this, this); 
+		damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::OVER_TIME_DAMAGE), 5, ent))); 
 	}
 }
 
 // Heal when owner's attack hits
-void DanceWithDeathStatus::_on_basic_attack_hit(Entity *hit_entity, const Ref<HitData>& hit_data , Entity *attacker) { // TODO: Figure out how should with be passed(Wrapper object or interface?)
+void DanceWithDeathStatus::_on_basic_attack_damage_dealt(const Ref<DamageObject> damage_object, Entity *target) { // TODO: Figure out how should with be passed(Wrapper object or interface?)
 	// Only heal on basic attack hit
-	if(hit_data->get_hit_type() != HitData::BASIC_ATTACK_HITTYPE) return;
+	if(!(damage_object->get_subtype() & DamageObject::BASIC_ATTACK_DAMAGE)) return;
 
 	Entity *ent = get_victim_component()->get_owning_entity();
-	if (attacker != ent) return;
+	if (damage_object->get_attacker() != ent) return;
 
 	DamageableComponent *damageable = ent->get_component<DamageableComponent>();
 	if (damageable) {

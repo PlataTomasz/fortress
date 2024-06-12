@@ -11,15 +11,10 @@ class DamageableComponent : public Node
 {
 GDCLASS(DamageableComponent, Node);
 protected:
+    static void _bind_methods();
 public:
+    Entity *get_owning_entity();
     void take_damage(Ref<DamageObject> damage_object);
-
-    /**
-     * value - amount of damage to be inflictedg
-     * inflictor - who caused the damage? Monster, minion, mercenary, etc.
-     * caused_by - what was direct cause of inflicting damage? Basic attack, ability, enviroment, etc.
-    */
-    void take_damage(float value, Node *inflictor, Node *caused_by);
     void heal(float value);
 };
 

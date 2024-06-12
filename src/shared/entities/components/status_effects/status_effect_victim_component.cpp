@@ -34,6 +34,6 @@ bool StatusEffectVictimComponent::apply_status_effect(const StringName &status_e
 }
 
 bool StatusEffectVictimComponent::apply_status_effect(StatusEffect *status_effect) {
-	add_child(status_effect);
+	add_child(status_effect, true);
 	return true;
 }

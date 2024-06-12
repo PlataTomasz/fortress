@@ -38,6 +38,11 @@ public:
 protected:
     static void _bind_methods();
 public:
+    Entity *get_owning_entity();
+
+    void set_basic_attack(BasicAttack *p_basic_attack);
+    BasicAttack *get_basic_attack();
+
     void set_first_ability(Ability *p_ability);
     Ability *get_first_ability();
 
@@ -53,7 +58,7 @@ public:
     Ability *get_passive_ability();
 
     Ability::AbilityUseError use_ability(int index, const Ref<ActionContext>& action_context);
-    void use_basic_attack(const Ref<ActionContext>& action_context){};
+    void use_basic_attack(const Ref<ActionContext>& action_context);
 
     void _notification(int notification);
 

@@ -1,6 +1,7 @@
 #include "game_level.h"
 
 #include <shared/entities/components/hitbox/hitbox_component.h>
+#include <shared/entities/components/damage/damageable_component.h>
 
 Node *GameLevel::get_entities_node() {
     return entities_node;
@@ -21,6 +22,8 @@ void GameLevel::_bind_methods() {
 
     // "what" hit "affected_entity" because of "by" - Some entity was struck by something because of some other entity
     ADD_SIGNAL(MethodInfo("entity_hit", PropertyInfo(Variant::OBJECT, "affected_entity"), PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "attacker_entity")));
+
+    ADD_SIGNAL(MethodInfo("entity_damage_taken", PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
 }
 
 // Order is weird to correctly bind callable arguments
@@ -29,11 +32,18 @@ void GameLevel::_on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent)
     emit_signal("entity_hit", ent, inflictor, attacker);
 }
 
+void GameLevel::_on_entity_damage_taken(const Ref<DamageObject>& damage_object, Entity *ent) {
+    // Emit level wide signal
+    emit_signal("entity_damage_taken", damage_object, ent);
+}
+
 void GameLevel::add_entity(Entity *ent) {
     // Hook into events
     HitboxComponent *hitbox = ent->get_component<HitboxComponent>();
     if(hitbox) hitbox->connect("hit", callable_mp(this, &GameLevel::_on_entity_hit).bind(ent));
 
+    DamageableComponent *damageable = ent->get_component<DamageableComponent>();
+    if(damageable) damageable->connect("damage_taken", callable_mp(this, &GameLevel::_on_entity_damage_taken).bind(ent));
 
 	entities_node->add_child(ent);
 }

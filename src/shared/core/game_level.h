@@ -6,6 +6,7 @@
 #include <modules/multiplayer/multiplayer_spawner.h>
 #include <modules/multiplayer/multiplayer_synchronizer.h>
 
+#include <shared/data_holders/damage_object.hpp>
 #include <shared/entities/entity.h>
 
 //Maybe It would be better if GameLevel was entity aswell?(It could store synchronized global variables)
@@ -19,6 +20,7 @@ private:
 	Node *entities_node = nullptr;
 
 	void _on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent);
+	void _on_entity_damage_taken(const Ref<DamageObject>& damage_object, Entity *ent);
 protected:
 	static void _bind_methods();
 public:
