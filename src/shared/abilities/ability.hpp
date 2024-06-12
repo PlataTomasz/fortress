@@ -9,6 +9,7 @@
 #include <core/string/node_path.h>
 
 class Timer;
+class AbilityCasterComponent;
 
 /**
  * Class responsible for logic and data behind Abilities of mercenaries, items, etc.
@@ -62,6 +63,8 @@ protected:
 
     Timer *get_cooldown_timer();
 public:
+    AbilityCasterComponent *get_ability_caster();
+
     float get_current_cooldown();
 
     float get_max_cooldown();
