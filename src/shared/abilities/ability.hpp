@@ -14,9 +14,9 @@ class AbilityCasterComponent;
 /**
  * Class responsible for logic and data behind Abilities of mercenaries, items, etc.
 */
-class Ability : public Node
+class Ability : public Node3D
 {
-GDCLASS(Ability, Node);
+GDCLASS(Ability, Node3D);
 #ifdef SERVER
 protected:
     void _notification(int p_notification);

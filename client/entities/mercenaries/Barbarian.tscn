@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=15 format=3 uid="uid://brsu7fgraglpj"]
 
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_f2r1n"]
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
@@ -6,21 +6,27 @@
 [ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="3_yvmko"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_nvabn"]
+resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_lh4fg"]
+resource_local_to_scene = true
 base = 30.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_xobwn"]
+resource_local_to_scene = true
 base = 75.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_wt63x"]
 base = 1.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_baeyf"]
+resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_xtxvd"]
+resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_vigl8"]
+resource_local_to_scene = true
 base = 300.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_58crc"]
@@ -35,6 +41,9 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = false
 properties/1/replication_mode = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f2anu"]
+radius = 2.0
 
 [node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component", "status_effect_victim_component", "damageable_component")]
 ability_caster_component = NodePath("AbilityCasterComponent")
@@ -75,15 +84,24 @@ movement_speed = SubResource("FloatAttribute_vigl8")
 root_path = NodePath("../..")
 replication_config = SubResource("SceneReplicationConfig_58crc")
 
-[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="." node_paths=PackedStringArray("ultimate_ability")]
+[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="." node_paths=PackedStringArray("ultimate_ability", "basic_attack")]
 ultimate_ability = NodePath("BarbarianDanceWithDeath")
+basic_attack = NodePath("BarbarianBasicAttack")
 
 [node name="BarbarianDanceWithDeath" type="BarbarianDanceWithDeath" parent="AbilityCasterComponent"]
 displayed_name = "Dance with death"
 displayed_description = "Barbarian focuses, pushing his body to the limits, causing him to lose health over time, but healing when enemy is hit by his basic attacks."
 icon = ExtResource("1_f2r1n")
 
+[node name="BarbarianBasicAttack" type="BarbarianBasicAttack" parent="AbilityCasterComponent" node_paths=PackedStringArray("hitbox")]
+hitbox = NodePath("../../HitboxComponent")
+
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_1leo2")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="."]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("CylinderShape3D_f2anu")

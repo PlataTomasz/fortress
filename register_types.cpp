@@ -71,6 +71,7 @@
 
 #include <shared/abilities/experimental/example_ability_01.h>
 #include <shared/abilities/barbarian/barbarian_dance_with_death.h>
+#include <shared/abilities/barbarian/barbarian_basic_attack.h>
 
 #include <shared/status_effects/barbarian/dance_with_death_status.h>
 
@@ -112,6 +113,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<Component>();
     ClassDB::register_class<EntityAttributesComponent>();
     ClassDB::register_class<DamageableComponent>();
+    ClassDB::register_class<HitboxComponent>();
     ClassDB::register_class<FloatAttribute>();
     ClassDB::register_class<FloatValueModifier>();
     ClassDB::register_class<MovementComponent>();
@@ -136,6 +138,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<OrcWarhornAbility>();
 
     // Barbarian abilities
+    ClassDB::register_class<BarbarianBasicAttack>();
     ClassDB::register_class<BarbarianDanceWithDeath>();
 
     //ClassDB::register_class<>();

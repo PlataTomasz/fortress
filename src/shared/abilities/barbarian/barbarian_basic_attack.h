@@ -14,8 +14,11 @@ GDCLASS(BarbarianBasicAttack, BasicAttack);
 private:
     float damage = 0;
     HitboxComponent *hitbox = nullptr;
+
+    void _reparent_hitbox();
 protected:
-    void BarbarianBasicAttack::_bind_methods();
+    void _notification(int p_notification);
+    static void _bind_methods();
 public:
     Ability::AbilityUseError use(const Ref<ActionContext>& use_context);
 

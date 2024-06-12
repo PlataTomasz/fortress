@@ -32,7 +32,8 @@ void Entity::_tick() {
 }
 
 GameLevel *Entity::get_gamelevel() {
-	return Object::cast_to<GameLevel>(get_parent());
+	// FIXME: Will break if "Entity" node on GameLevel is not at 1 level of ident
+	return Object::cast_to<GameLevel>(get_parent()->get_parent());
 }
 
 void Entity::_init() {

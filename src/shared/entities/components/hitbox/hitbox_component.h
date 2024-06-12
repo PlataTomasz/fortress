@@ -7,6 +7,7 @@
 class Entity;
 
 class HitboxComponent : public Area3D {
+GDCLASS(HitboxComponent, Area3D);
 private:
     // Internal
     void _on_hitbox_entered(Area3D *p_area);
