@@ -7,16 +7,22 @@
 class GameplayEffect {
 private:
 public:
-    virtual void apply() = 0;
-    virtual void undo() = 0;
+    virtual void apply(Entity *target) = 0;
+    virtual void undo(Entity *target) = 0;
 };
 
-class DamageEffect : public GameplayEffect{
-    void apply() {
-        
+// Applies damage to a target
+class DamagingEffect : public GameplayEffect{
+private:
+    DamageType damage_type = 0;
+    float damage_value = 0;
+public:
+    void apply(Entity *target) override {
+        DamageableComponent *damageable = target->get_component<DamageableComponent>();
+        damageable->take_damage();
     }
 
-    void undo() {
+    void undo(Entity *target) override {
         
     }
 };
@@ -30,11 +36,8 @@ void BarbarianBasicAttack::_bind_methods() {
 Ability::AbilityUseError BarbarianBasicAttack::use(const Ref<ActionContext>& use_context) {
     List<HitboxComponent *> hitboxes = hitbox->get_overlapping_hitboxes();
 
-    List<GameplayEffect *> gameplay_effects;
-    gameplay_effects.push_back(memnew(DamageEffect()));
-
     for(HitboxComponent *detected_hitbox : hitboxes) {
-        detected_hitbox->hit(memnew(HitData()));
+        
     }
 }
 
