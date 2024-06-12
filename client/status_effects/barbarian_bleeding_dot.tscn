@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw3e16arhb3lx"]
+
+[ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="1_831ll"]
+
+[node name="BarbarianBleedingDot" type="BleedingStatusEffect"]
+permament = false
+displayed_name = "Bleeding"
+displayed_description = "You are taking damage over time"
+icon = ExtResource("1_831ll")

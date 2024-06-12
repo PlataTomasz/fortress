@@ -43,6 +43,9 @@ public:
     void set_basic_attack(BasicAttack *p_basic_attack);
     BasicAttack *get_basic_attack();
 
+    void set_passive_ability(Ability *p_passive_ability);
+    Ability *get_passive_ability();
+
     void set_first_ability(Ability *p_ability);
     Ability *get_first_ability();
 
@@ -54,8 +57,6 @@ public:
 
     void set_ultimate_ability(Ability *p_ability);
     Ability *get_ultimate_ability();
-
-    Ability *get_passive_ability();
 
     Ability::AbilityUseError use_ability(int index, const Ref<ActionContext>& action_context);
     void use_basic_attack(const Ref<ActionContext>& action_context);
