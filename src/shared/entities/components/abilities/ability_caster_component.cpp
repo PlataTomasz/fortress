@@ -22,6 +22,14 @@ void AbilityCasterComponent::use_basic_attack(const Ref<ActionContext>& action_c
 
 void AbilityCasterComponent::_bind_methods()
 {
+    ClassDB::bind_method(D_METHOD("get_basic_attack"), &AbilityCasterComponent::get_basic_attack);
+    ClassDB::bind_method(D_METHOD("set_basic_attack", "new_basic_attack"), &AbilityCasterComponent::set_basic_attack);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static()), "set_basic_attack", "get_basic_attack");
+
+    ClassDB::bind_method(D_METHOD("get_passive_ability"), &AbilityCasterComponent::get_passive_ability);
+    ClassDB::bind_method(D_METHOD("set_passive_ability", "new_passive_ability"), &AbilityCasterComponent::set_passive_ability);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "passive_ability", PROPERTY_HINT_NODE_TYPE, Ability::get_class_static()), "set_passive_ability", "get_passive_ability");
+
     ClassDB::bind_method(D_METHOD("get_first_ability"), &AbilityCasterComponent::get_first_ability);
     ClassDB::bind_method(D_METHOD("set_first_ability", "new_first_ability"), &AbilityCasterComponent::set_first_ability);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "first_ability", PROPERTY_HINT_NODE_TYPE, "Ability"), "set_first_ability", "get_first_ability");
@@ -37,11 +45,16 @@ void AbilityCasterComponent::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_ultimate_ability"), &AbilityCasterComponent::get_ultimate_ability);
     ClassDB::bind_method(D_METHOD("set_ultimate_ability", "new_ultimate_ability"), &AbilityCasterComponent::set_ultimate_ability);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "ultimate_ability", PROPERTY_HINT_NODE_TYPE, "Ability"), "set_ultimate_ability", "get_ultimate_ability");
-
-    ClassDB::bind_method(D_METHOD("get_basic_attack"), &AbilityCasterComponent::get_basic_attack);
-    ClassDB::bind_method(D_METHOD("set_basic_attack", "new_basic_attack"), &AbilityCasterComponent::set_basic_attack);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static()), "set_basic_attack", "get_basic_attack");
 }
+
+void AbilityCasterComponent::set_passive_ability(Ability *p_passive_ability) {
+    passive_ability = p_passive_ability;
+}
+
+Ability *AbilityCasterComponent::get_passive_ability() {
+    return passive_ability;
+}
+
 
 Entity *AbilityCasterComponent::get_owning_entity() {
     return Object::cast_to<Entity>(get_parent());
