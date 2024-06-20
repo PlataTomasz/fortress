@@ -50,7 +50,6 @@ public:
 
     T *create_instance(const StringName& name) {
         T *status_effect_instance = static_cast<T *>(registered_objects.has(name) ? registered_objects.get(name)->instantiate() : nullptr);
-
         return status_effect_instance;
     }
 

@@ -5,6 +5,8 @@
 #include <scene/main/multiplayer_api.h>
 #include <server/server.h>
 
+class GameLevel;
+
 /**
  * Base class for representing most of the in-game objects, such as projectiles, monsters, ticking entities
  */
@@ -28,6 +30,7 @@ protected:
 
 	void _notification(int p_notification);
 
+	static void _bind_methods();
 public:
 	Vector2 get_position_2d() {
 		Vector3 pos = get_position();
@@ -37,6 +40,9 @@ public:
 	float get_rotation_2d() {
 		return get_rotation().y;
 	}
+
+	// Returns level where this entity is
+	GameLevel *get_gamelevel();
 
 	/**
 	 * Returns a list of all properties that should be networked
@@ -51,8 +57,11 @@ public:
 	Entity() {
 	}
 
-	template <class T>
-	T *get_component();
+	
+	template<class T>
+	T *get_component() {
+		return Object::cast_to<T>(_get_component(T::get_class_static()));
+	}
 };
 
 #endif // ENTITY_INCLUDED

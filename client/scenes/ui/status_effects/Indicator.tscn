@@ -1,41 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://duuxpc71fsp26"]
+[gd_scene load_steps=3 format=3 uid="uid://duuxpc71fsp26"]
 
 [ext_resource type="PackedScene" uid="uid://7k3ukhyty5nu" path="res://scenes/ui/status_effects/Tooltip.tscn" id="1_f3anl"]
 [ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="2_lopc4"]
 
-[sub_resource type="GDScript" id="GDScript_yllit"]
-script/source = "@tool
-extends StatusEffectIndicator
-
-@export var dict: Dictionary
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-"
-
 [node name="Indicator" type="StatusEffectIndicator" node_paths=PackedStringArray("tooltip_object", "icon_display")]
 custom_minimum_size = Vector2(24, 24)
-offset_right = 0.959999
-offset_bottom = 0.239998
+offset_right = 30.0
+offset_bottom = 30.0
 size_flags_horizontal = 0
 size_flags_vertical = 2
 mouse_filter = 1
 tooltip_object = NodePath("Tooltip")
-icon_display = NodePath("Icon")
-script = SubResource("GDScript_yllit")
-
-[node name="Icon" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 24.0
-offset_bottom = 24.0
-texture = ExtResource("2_lopc4")
-expand_mode = 4
+icon_display = NodePath("Panel/Icon")
 
 [node name="Tooltip" parent="." instance=ExtResource("1_f3anl")]
 visible = false
@@ -43,3 +19,18 @@ layout_mode = 0
 offset_top = -77.0
 offset_bottom = 0.0
 mouse_filter = 1
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 30.0
+offset_bottom = 30.0
+mouse_filter = 1
+
+[node name="Icon" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 27.0
+offset_bottom = 27.0
+texture = ExtResource("2_lopc4")
+expand_mode = 4

@@ -6,6 +6,7 @@
 #include <modules/multiplayer/multiplayer_spawner.h>
 #include <modules/multiplayer/multiplayer_synchronizer.h>
 
+#include <shared/data_holders/damage_object.hpp>
 #include <shared/entities/entity.h>
 
 //Maybe It would be better if GameLevel was entity aswell?(It could store synchronized global variables)
@@ -15,47 +16,26 @@ GDCLASS(GameLevel, Node3D);
 private:
 	//Replication of entities on level
 	MultiplayerSpawner *entity_spawner = nullptr;
-	MultiplayerSynchronizer *entity_synchronizer = nullptr;
-
-	Ref<SceneReplicationConfig> replication_config = memnew(SceneReplicationConfig);
 
 	Node *entities_node = nullptr;
 
-	void _on_entity_added(Node *node);
-	void _on_entity_removed(Node *node);
-	void _on_enter_tree();
+	void _on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent);
+	void _on_entity_damage_taken(const Ref<DamageObject>& damage_object, Entity *ent);
 protected:
-	void _notification(int p_notification) {
-		DISABLE_IN_EDITOR();
-		switch (p_notification) {
-			case NOTIFICATION_READY: {
-				_ready();
-			} break;
-
-			case NOTIFICATION_ENTER_TREE:
-				_on_enter_tree();
-				break;
-
-			case NOTIFICATION_POSTINITIALIZE:
-				_init();
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	void _ready();
-
-	void _init();
+	static void _bind_methods();
 public:
 	MultiplayerSpawner *get_entity_spawner() {
 		return entity_spawner;
-	};
-
-	void add_entity(Entity *ent) {
-		entities_node->add_child(ent);
 	}
+
+	void set_entity_spawner(MultiplayerSpawner *p_entity_spawner) {
+		entity_spawner = p_entity_spawner;
+	}
+
+	void add_entity(Entity *ent);
+
+	Node *get_entities_node();
+	void set_entities_node(Node *p_node);
 
 	Entity *get_entity(const String &entity_name);
 

@@ -3,6 +3,7 @@
 
 #include <shared/entities/components/component.h>
 #include <shared/core/managers/component_manager.h>
+#include <shared/core/game_level.h>
 
 //NOTE: That method requires Entity to be part of the SceneTree to work
 void Entity::add_networked_property(const StringName &property_name) {
@@ -18,17 +19,21 @@ void Entity::remove_networked_property(const StringName &property_name) {
 	}
 }
 
+void Entity::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("hit_taken", PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "attacker")));
+}
+
 Node *Entity::_get_component(const String& component_typename) {
 	return nullptr;
 }
 
-template<class T>
-T *Entity::get_component() {
-	return Object::cast_to<T>(_get_component(T::get_class_static()));
-}
-
 void Entity::_tick() {
 
+}
+
+GameLevel *Entity::get_gamelevel() {
+	// FIXME: Will break if "Entity" node on GameLevel is not at 1 level of ident
+	return Object::cast_to<GameLevel>(get_parent()->get_parent());
 }
 
 void Entity::_init() {

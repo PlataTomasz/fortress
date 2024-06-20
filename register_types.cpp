@@ -51,6 +51,7 @@
 #include <shared/entities/mercenaries/orange/orange.h>
 #include <shared/entities/components/component.h>
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
+#include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/components/movement/movement_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
 
@@ -67,6 +68,15 @@
 #include <client/ui/game/status_effect_tooltip.h>
 
 #include <shared/registries/mercenary_registry.h>
+
+#include <shared/abilities/experimental/example_ability_01.h>
+#include <shared/abilities/barbarian/barbarian_dance_with_death.h>
+#include <shared/abilities/barbarian/barbarian_basic_attack.h>
+#include <shared/abilities/barbarian/barbarian_bleeding_passive.h>
+
+#include <shared/status_effects/barbarian/dance_with_death_status.h>
+#include <shared/status_effects/example/bleeding_status_effect.h>
+
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -93,14 +103,19 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 	//Server classes - needed for build with locally hosted server
 	ClassDB::register_class<Server>();
 #endif
-
-	// Shared
+    // Abilities
     ClassDB::register_class<Ability>();
+        // Examples
+        ClassDB::register_class<ExampleAbility01>();
+	// Shared
+    
     ClassDB::register_class<Game>();
     ClassDB::register_class<GameLevel>();
     ClassDB::register_class<Entity>();
     ClassDB::register_class<Component>();
     ClassDB::register_class<EntityAttributesComponent>();
+    ClassDB::register_class<DamageableComponent>();
+    ClassDB::register_class<HitboxComponent>();
     ClassDB::register_class<FloatAttribute>();
     ClassDB::register_class<FloatValueModifier>();
     ClassDB::register_class<MovementComponent>();
@@ -124,6 +139,11 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<OrcLeapSlam>();
     ClassDB::register_class<OrcWarhornAbility>();
 
+    // Barbarian abilities
+    ClassDB::register_class<BarbarianBasicAttack>();
+    ClassDB::register_class<BarbarianBleedingPassive>();
+    ClassDB::register_class<BarbarianDanceWithDeath>();
+
     //ClassDB::register_class<>();
 
     // Attributes
@@ -137,6 +157,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     // Status Effects
     ClassDB::register_class<StatusEffect>();
     ClassDB::register_class<SlowStatusEffect>();
+    ClassDB::register_class<DanceWithDeathStatus>();
+    ClassDB::register_class<BleedingStatusEffect>();
 
     // Singletons
     //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));
