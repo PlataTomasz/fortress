@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://ca282scpps8xr"]
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_1i01r"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_j0kxs"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_k3muw"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_0xrwc"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_fjhnq"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_43eay"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_r7nqj"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1r6fr"]
+properties/0/path = NodePath("EntityAttributesComponent:health:current")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_giigm"]
+radius = 2.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_fyyhi"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+
+[node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component", "status_effect_victim_component", "damageable_component")]
+ability_caster_component = NodePath("AbilityCasterComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+
+[node name="MovementComponent" type="MovementComponent" parent="."]
+
+[node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="StatusEffectVictimComponent"]
+_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
+spawn_path = NodePath("..")
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
+health = SubResource("CappedResourceAttribute_1i01r")
+global_defense = SubResource("FloatAttribute_j0kxs")
+attack_damage = SubResource("FloatAttribute_k3muw")
+attack_speed = SubResource("FloatAttribute_0xrwc")
+magic_power = SubResource("FloatAttribute_fjhnq")
+cooldown_reduction = SubResource("FloatAttribute_43eay")
+movement_speed = SubResource("FloatAttribute_r7nqj")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_1r6fr")
+
+[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="."]
+
+[node name="DamageableComponent" type="DamageableComponent" parent="."]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("CylinderShape3D_giigm")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_fyyhi")

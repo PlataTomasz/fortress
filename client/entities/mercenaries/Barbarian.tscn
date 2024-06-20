@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=15 format=3 uid="uid://brsu7fgraglpj"]
 
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_f2r1n"]
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
 [ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
-[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="3_yvmko"]
 [ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="5_shb2f"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_nvabn"]
@@ -61,12 +60,6 @@ portrait_icon = ExtResource("1_f2r1n")
 mesh = ExtResource("1_sy8qm")
 
 [node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
-
-[node name="SlowStatusEffect" type="SlowStatusEffect" parent="StatusEffectVictimComponent"]
-permament = false
-displayed_name = "Slow"
-displayed_description = "You are slowed"
-icon = ExtResource("3_yvmko")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="StatusEffectVictimComponent"]
 _spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
