@@ -8,6 +8,8 @@
 #include <core/templates/vector.h>
 #include <core/string/node_path.h>
 
+class BasicAttack;
+
 /**
  * Ability caster component is a component which allows using abilities that are child of this component
 */
@@ -16,14 +18,15 @@ class AbilityCasterComponent : public Node3D
 {
 GDCLASS(AbilityCasterComponent, Node3D);
 private:
-    Ability *passive_ability;
-    TypedArray<NodePath> ability_paths;
-    Vector<Ability *> abilities;
+    BasicAttack *attack = nullptr;
+
+    Ability *passive_ability = nullptr;    
+    Ability *first_ability = nullptr;
+    Ability *second_ability = nullptr;
+    Ability *third_ability = nullptr;
+    Ability *ultimate_ability = nullptr;
 public:
-    TypedArray<NodePath> get_ability_paths();
-    void set_ability_paths(const TypedArray<NodePath> &new_ability_paths);
-    
-    enum AbilitySetIndex
+    enum AbilitySetIndex  : int
     {
         ABILITY_PASSIVE = 0,
         ABILITY_FIRST,
@@ -35,11 +38,28 @@ public:
 protected:
     static void _bind_methods();
 public:
+    Entity *get_owning_entity();
+
+    void set_basic_attack(BasicAttack *p_basic_attack);
+    BasicAttack *get_basic_attack();
+
+    void set_passive_ability(Ability *p_passive_ability);
     Ability *get_passive_ability();
 
-    void set_ability(AbilitySetIndex abilityIndex, Ability *ability){};
+    void set_first_ability(Ability *p_ability);
+    Ability *get_first_ability();
+
+    void set_second_ability(Ability *p_ability);
+    Ability *get_second_ability();
+
+    void set_third_ability(Ability *p_ability);
+    Ability *get_third_ability();
+
+    void set_ultimate_ability(Ability *p_ability);
+    Ability *get_ultimate_ability();
+
     Ability::AbilityUseError use_ability(int index, const Ref<ActionContext>& action_context);
-    void use_basic_attack(const Ref<ActionContext>& action_context){};
+    void use_basic_attack(const Ref<ActionContext>& action_context);
 
     void _notification(int notification);
 
@@ -48,5 +68,7 @@ public:
     AbilityCasterComponent();
 
 };
+
+VARIANT_ENUM_CAST(AbilityCasterComponent::AbilitySetIndex);
 
 #endif // ABILITY_CASTER_COMPONENT_H_INCLUDED

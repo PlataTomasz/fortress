@@ -1,54 +1,55 @@
-[gd_scene load_steps=14 format=3 uid="uid://brsu7fgraglpj"]
+[gd_scene load_steps=15 format=3 uid="uid://brsu7fgraglpj"]
 
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_f2r1n"]
 [ext_resource type="PackedScene" uid="uid://bbqg3g7wtq462" path="res://models/level/dungeon/character-human.glb" id="1_q36pj"]
 [ext_resource type="ArrayMesh" uid="uid://bafgnxoe3mh5c" path="res://models/level/dungeon/obj/character-human.obj" id="1_sy8qm"]
-[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="3_yvmko"]
+[ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="5_shb2f"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_nvabn"]
+resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_lh4fg"]
+resource_local_to_scene = true
 base = 30.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_xobwn"]
+resource_local_to_scene = true
 base = 75.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_wt63x"]
 base = 1.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_baeyf"]
+resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_xtxvd"]
+resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_vigl8"]
+resource_local_to_scene = true
 base = 300.0
-
-[sub_resource type="GDScript" id="GDScript_pj8c6"]
-script/source = "extends EntityAttributesComponent
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	var timer = Timer.new()
-	timer.wait_time = 5
-	timer.autostart = true
-	timer.one_shot = false
-	timer.timeout.connect(_on_timer_timeout)
-	add_child(timer)
-
-func _on_timer_timeout():
-	if multiplayer.is_server():
-		health.current = randi_range(0, 100)
-"
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_58crc"]
 properties/0/path = NodePath("EntityAttributesComponent:health:current")
 properties/0/spawn = false
 properties/0/replication_mode = 1
 
-[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("attributes_component", "status_effect_victim_component")]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1leo2"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f2anu"]
+radius = 2.0
+
+[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component", "status_effect_victim_component", "damageable_component")]
+ability_caster_component = NodePath("AbilityCasterComponent")
 attributes_component = NodePath("EntityAttributesComponent")
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
 portrait_icon = ExtResource("1_f2r1n")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
@@ -60,11 +61,9 @@ mesh = ExtResource("1_sy8qm")
 
 [node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
 
-[node name="SlowStatusEffect" type="SlowStatusEffect" parent="StatusEffectVictimComponent"]
-permament = false
-displayed_name = "Slow"
-displayed_description = "You are slowed"
-icon = ExtResource("3_yvmko")
+[node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="StatusEffectVictimComponent"]
+_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
+spawn_path = NodePath("..")
 
 [node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
 health = SubResource("CappedResourceAttribute_nvabn")
@@ -74,8 +73,34 @@ attack_speed = SubResource("FloatAttribute_wt63x")
 magic_power = SubResource("FloatAttribute_baeyf")
 cooldown_reduction = SubResource("FloatAttribute_xtxvd")
 movement_speed = SubResource("FloatAttribute_vigl8")
-script = SubResource("GDScript_pj8c6")
 
 [node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="EntityAttributesComponent"]
 root_path = NodePath("../..")
 replication_config = SubResource("SceneReplicationConfig_58crc")
+
+[node name="AbilityCasterComponent" type="AbilityCasterComponent" parent="." node_paths=PackedStringArray("basic_attack", "ultimate_ability")]
+basic_attack = NodePath("BarbarianBasicAttack")
+ultimate_ability = NodePath("BarbarianDanceWithDeath")
+
+[node name="BarbarianDanceWithDeath" type="BarbarianDanceWithDeath" parent="AbilityCasterComponent"]
+displayed_name = "Dance with death"
+displayed_description = "Barbarian focuses, pushing his body to the limits, causing him to lose health over time, but healing when enemy is hit by his basic attacks."
+icon = ExtResource("1_f2r1n")
+
+[node name="BarbarianBasicAttack" type="BarbarianBasicAttack" parent="AbilityCasterComponent" node_paths=PackedStringArray("hitbox")]
+hitbox = NodePath("../../HitboxComponent")
+
+[node name="BarbarianBleedingPassive" type="BarbarianBleedingPassive" parent="AbilityCasterComponent"]
+displayed_name = "Bleeding"
+displayed_description = "Your basic attacks apply bleeding, dealing physical damage over timer."
+icon = ExtResource("5_shb2f")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_1leo2")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="."]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("CylinderShape3D_f2anu")

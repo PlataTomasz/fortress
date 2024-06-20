@@ -2,6 +2,9 @@
 
 #include <shared/entities/traits/traits.h>
 
+template<>
+Registry<StatusEffect> *Registry<StatusEffect>::singleton = nullptr;
+
 // Define data registry path
 template<>
 String Registry<StatusEffect>::get_initial_data_path() {

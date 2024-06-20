@@ -2,19 +2,21 @@
 #define ABILITY_HPP_INCLUDED
 
 #include <shared/data_holders/action_context.hpp>
+#include <core/object/ref_counted.h>
 #include <core/string/ustring.h>
 #include <shared/helpers/object_ptr.h>
 
 #include <core/string/node_path.h>
 
 class Timer;
+class AbilityCasterComponent;
 
 /**
  * Class responsible for logic and data behind Abilities of mercenaries, items, etc.
 */
-class Ability : public Node
+class Ability : public Node3D
 {
-GDCLASS(Ability, Node);
+GDCLASS(Ability, Node3D);
 #ifdef SERVER
 protected:
     void _notification(int p_notification);
@@ -61,6 +63,8 @@ protected:
 
     Timer *get_cooldown_timer();
 public:
+    AbilityCasterComponent *get_ability_caster();
+
     float get_current_cooldown();
 
     float get_max_cooldown();
@@ -78,12 +82,11 @@ public:
     void set_displayed_name(const String &new_name);
 
     AbilityUseError use_check(const Ref<ActionContext>& action_context);
-
+    
     /**
      * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
     */
-    AbilityUseError use(const Ref<ActionContext>& action_context);
-
+    virtual Ability::AbilityUseError use(const Ref<ActionContext>& action_context);
     Ability();
 };
 
