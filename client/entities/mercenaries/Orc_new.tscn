@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=3 uid="uid://c0s5t5qlu5qjk"]
+
+[ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_gxuoa"]
+[ext_resource type="PackedScene" uid="uid://bvmg3g54iwu08" path="res://models/level/dungeon/character-orc.glb" id="2_2sw20"]
+[ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="2_jmr11"]
+[ext_resource type="ArrayMesh" uid="uid://cge81pd7xjrew" path="res://models/level/dungeon/obj/character-orc.obj" id="3_aynjf"]
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_pv04g"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_jb64c"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_538wb"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_fvtc4"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_gs2ap"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_g2ea8"]
+resource_local_to_scene = true
+base = 300.0
+
+[node name="Mercenary" instance=ExtResource("1_gxuoa")]
+portrait_icon = ExtResource("2_jmr11")
+
+[node name="EntityAttributesComponent" parent="." index="2"]
+health = SubResource("CappedResourceAttribute_pv04g")
+global_defense = SubResource("FloatAttribute_jb64c")
+attack_damage = SubResource("FloatAttribute_538wb")
+magic_power = SubResource("FloatAttribute_fvtc4")
+cooldown_reduction = SubResource("FloatAttribute_gs2ap")
+movement_speed = SubResource("FloatAttribute_g2ea8")
+
+[node name="AbilityCasterComponent" parent="." index="3" node_paths=PackedStringArray("passive_ability", "second_ability", "ultimate_ability")]
+passive_ability = NodePath("OrcResolve")
+second_ability = NodePath("OrcLeapSlam")
+ultimate_ability = NodePath("OrcWarhornAbility")
+
+[node name="OrcResolve" type="OrcResolve" parent="AbilityCasterComponent" index="0"]
+
+[node name="OrcLeapSlam" type="OrcLeapSlam" parent="AbilityCasterComponent" index="1"]
+displayed_name = "354643643"
+
+[node name="OrcWarhornAbility" type="OrcWarhornAbility" parent="AbilityCasterComponent" index="2"]
+
+[node name="ExampleAbility01" type="ExampleAbility01" parent="AbilityCasterComponent" index="3"]
+displayed_name = "example_01"
+displayed_description = "example_01"
+
+[node name="character-orc2" parent="." index="7" instance=ExtResource("2_2sw20")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="8"]
+mesh = ExtResource("3_aynjf")
