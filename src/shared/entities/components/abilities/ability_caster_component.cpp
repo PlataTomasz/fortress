@@ -17,6 +17,7 @@ void AbilityCasterComponent::_notification(int p_notification)
 }
 
 void AbilityCasterComponent::use_basic_attack(const Ref<ActionContext>& action_context) {
+    ERR_FAIL_NULL(attack);
     attack->use(action_context);
 }
 
@@ -115,18 +116,22 @@ Ability::AbilityUseError AbilityCasterComponent::use_ability(int index, const Re
    // TODO: Refactor this - There has to be a better way than this abomination of code
 	switch (index) {
 		case ABILITY_FIRST: {
+            ERR_FAIL_NULL_V(first_ability, Ability::AbilityUseError::INTERNAL_ERROR);
             return first_ability->use(action_context);
 		} break;
 
         case ABILITY_SECOND: {
+            ERR_FAIL_NULL_V(second_ability, Ability::AbilityUseError::INTERNAL_ERROR);
             return second_ability->use(action_context);
 		} break;
 
         case ABILITY_THIRD: {
+            ERR_FAIL_NULL_V(third_ability, Ability::AbilityUseError::INTERNAL_ERROR);
             return third_ability->use(action_context);
 		} break;
 
         case ABILITY_ULTIMATE: {
+            ERR_FAIL_NULL_V(ultimate_ability, Ability::AbilityUseError::INTERNAL_ERROR);
             return ultimate_ability->use(action_context);
 		} break;
 
