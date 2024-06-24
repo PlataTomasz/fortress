@@ -37,8 +37,12 @@ void Client::ready()
 
 void Client::_on_enter_tree() {
     DISABLE_IN_EDITOR();
+    ERR_FAIL_NULL(scene_multiplayer);
     scene_multiplayer->set_root_path(get_path());
-    get_tree()->set_multiplayer(scene_multiplayer, get_path());
+
+    SceneTree *scene_tree = get_tree();
+    ERR_FAIL_NULL(scene_tree);
+    scene_tree->set_multiplayer(scene_multiplayer, get_path());
     scene_multiplayer->set_auth_callback(callable_mp(this, &Client::auth_callback));
     scene_multiplayer->connect("peer_authenticating", callable_mp(this, &Client::_on_auth_start));
     scene_multiplayer->connect("peer_authentication_failed", callable_mp(this, &Client::_on_auth_fail));
@@ -48,20 +52,26 @@ void Client::_on_enter_tree() {
 }
 
 void Client::_on_player_spawn(Player *p_player) {
+    ERR_FAIL_NULL(scene_multiplayer);
     if (scene_multiplayer->get_unique_id() == p_player->get_owner_peer_id()) {
         //pla
     }
 }
 
 void Client::server_rpc_set_controlled_entity(String entity_name) {
+    // Preconditions
+    ERR_FAIL_NULL(game);
+    GameLevel *game_level = game->get_current_level();
+    ERR_FAIL_NULL(game_level);
+    ERR_FAIL_NULL(player);
+
     // Entity is not YET spawned on client - We need to await the spawn somehow
-
-    print_line("Player currently controls", entity_name);
-
     Mercenary *ent = Object::cast_to<Mercenary>(game->get_current_level()->get_entity(entity_name));
     if (!ent) {
         // Controlled entity might not yet spawned on client - Await spawn
-        MultiplayerSpawner *spawner = get_game()->get_current_level()->get_entity_spawner();
+        MultiplayerSpawner *spawner = game_level->get_entity_spawner();
+        ERR_FAIL_NULL(spawner);
+
         Callable callable = callable_mp(this, &Client::_on_controlled_entity_spawn).bind(entity_name);
 
         spawner->connect("spawned", callable);
@@ -72,27 +82,28 @@ void Client::server_rpc_set_controlled_entity(String entity_name) {
 
 void Client::_on_controlled_entity_spawn(Entity *ent, const String& entity_name) {
     Mercenary *mercenary = Object::cast_to<Mercenary>(ent);
-
-    if(mercenary && mercenary->get_name() == entity_name) {
+    ERR_FAIL_NULL(mercenary);
+    if(mercenary->get_name() == entity_name) {
         player->set_controlled_entity(mercenary);
     }
 }
 
 void Client::_on_auth_start(int peer_id) {
+    ERR_FAIL_NULL(scene_multiplayer);
     int len = 0;
     Error err = encode_variant(playerdata, nullptr, len, false, 0);
     ERR_FAIL_COND(err);
 
     PackedByteArray buffer;
-    buffer.resize(len);
-
-    encode_variant(playerdata, buffer.ptrw(), len, false, 0);
-
-    scene_multiplayer->send_auth(peer_id, buffer);
+    ERR_FAIL_COND(buffer.resize(len) != OK);
+    ERR_FAIL_COND(encode_variant(playerdata, buffer.ptrw(), len, false, 0) != OK);
+    ERR_FAIL_COND(scene_multiplayer->send_auth(peer_id, buffer) != OK);
 }
 
 void Client::_on_join_server_btn_press() {
+    ERR_FAIL_NULL(user_interface);
     MainMenu *main_menu = user_interface->get_main_menu();
+    ERR_FAIL_NULL(main_menu);
     String ip = main_menu->get_server_adress();
     int port = main_menu->get_server_port();
 
@@ -112,7 +123,8 @@ void Client::_init()
 
     //Create UI
     Ref<PackedScene> scene = ResourceLoader::load("res://scenes/ui/UserInterface.tscn");
-    user_interface = static_cast<UserInterface *>(scene->instantiate());
+    user_interface = Object::cast_to<UserInterface>(scene->instantiate());
+    ERR_FAIL_NULL(user_interface);
     MainMenu *menu = user_interface->get_main_menu();
     if(menu) {
         menu->get_join_button()->connect("pressed", callable_mp(this, &Client::_on_join_server_btn_press));

@@ -38,7 +38,7 @@ void GameLevel::_on_entity_damage_taken(const Ref<DamageObject>& damage_object, 
 }
 
 void GameLevel::add_entity(Entity *ent) {
-    // Hook into events
+    // Hook into events if possible
     HitboxComponent *hitbox = ent->get_component<HitboxComponent>();
     if(hitbox) hitbox->connect("hit", callable_mp(this, &GameLevel::_on_entity_hit).bind(ent));
 
@@ -49,6 +49,6 @@ void GameLevel::add_entity(Entity *ent) {
 }
 
 Entity *GameLevel::get_entity(const String &entity_name) {
-    Entity *ent = static_cast<Entity *>(entities_node->get_node_or_null(NodePath(entity_name)));
+    Entity *ent = Object::cast_to<Entity>(entities_node->get_node_or_null(NodePath(entity_name)));
     return ent;
 }
