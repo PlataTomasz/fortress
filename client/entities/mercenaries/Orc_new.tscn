@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c0s5t5qlu5qjk"]
+[gd_scene load_steps=12 format=3 uid="uid://c0s5t5qlu5qjk"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_gxuoa"]
 [ext_resource type="PackedScene" uid="uid://bvmg3g54iwu08" path="res://models/level/dungeon/character-orc.glb" id="2_2sw20"]
@@ -25,6 +25,9 @@ resource_local_to_scene = true
 [sub_resource type="FloatAttribute" id="FloatAttribute_g2ea8"]
 resource_local_to_scene = true
 base = 300.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nldr1"]
+viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
 
 [node name="Mercenary" instance=ExtResource("1_gxuoa")]
 portrait_icon = ExtResource("2_jmr11")
@@ -57,3 +60,6 @@ displayed_description = "example_01"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="8"]
 mesh = ExtResource("3_aynjf")
+
+[node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_nldr1")

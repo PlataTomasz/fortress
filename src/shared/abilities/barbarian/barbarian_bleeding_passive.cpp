@@ -9,8 +9,10 @@
 
 void BarbarianBleedingPassive::_on_basic_attack_hit(const Ref<DamageObject>& damage_object, Entity *target) {
     Entity *ent = get_ability_caster()->get_owning_entity();
-    if(damage_object->get_attacker() == ent) return; // Prevent self damage from applying bleed
+    if(damage_object->get_attacker() != ent) return; // Prevent self damage from applying bleed
 
+    // BUG: Without this line, bleed is applied X times, where X is amount of entities that have this ability
+    
     if(!(damage_object->get_subtype() & DamageObject::BASIC_ATTACK_DAMAGE)) return;
 
     StatusEffectVictimComponent *status_effect_victim = target->get_component<StatusEffectVictimComponent>();

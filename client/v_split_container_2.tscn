@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://6srpwap21tsk"]
+
+[ext_resource type="Texture2D" uid="uid://psg43o1pr7ah" path="res://textures/icons/status_effects/blood_drop.png" id="1_4jmad"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gwctm"]
+bg_color = Color(0.6, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wplee"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tn0xi"]
+
+[node name="VSplitContainer" type="VBoxContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -19.5
+offset_right = 6.0
+offset_bottom = 19.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="."]
+editor_description = "\"text\" should default to entity names."
+layout_mode = 2
+text = "player_name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureProgressBar" type="ProgressBar" parent="."]
+visible = false
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_gwctm")
+value = 25.0
+
+[node name="GridContainer" type="HFlowContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="GridContainer/PanelContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("1_4jmad")
+expand_mode = 4
+
+[node name="EntityHealthBar" type="EntityHealthBar" parent="."]
+custom_minimum_size = Vector2(192, 24)
+layout_mode = 2
+value = 25.0
+nine_patch_stretch = true
+texture_under = SubResource("PlaceholderTexture2D_wplee")
+texture_progress = SubResource("PlaceholderTexture2D_tn0xi")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0.6, 0, 0, 1)

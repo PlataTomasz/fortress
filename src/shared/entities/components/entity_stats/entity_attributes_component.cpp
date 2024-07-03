@@ -1,10 +1,10 @@
 #include "entity_attributes_component.h"
 
-Ref<FloatAttribute> EntityAttributesComponent::get_health() {
+Ref<CappedResourceAttribute> EntityAttributesComponent::get_health() {
     return health;
 }
 
-void EntityAttributesComponent::set_health(Ref<FloatAttribute> attribute) {
+void EntityAttributesComponent::set_health(Ref<CappedResourceAttribute> attribute) {
     health = attribute;
 }
 

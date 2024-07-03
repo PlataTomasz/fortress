@@ -57,8 +57,8 @@ void StatusEffectIndicator::_notification(int p_notification) {
     case NOTIFICATION_READY:
     {
         // Toggle visibility when mouse enters and leaves
-        connect("mouse_entered", callable_mp(tooltip_object, method_pointer_fix<StatusEffectTooltip>(&StatusEffectTooltip::set_visible)).bind(true));
-	    connect("mouse_exited", callable_mp(tooltip_object, method_pointer_fix<StatusEffectTooltip>(&StatusEffectTooltip::set_visible)).bind(false));
+        connect("mouse_entered", callable_mp(this, &StatusEffectIndicator::_change_tooltip_visibility).bind(true));
+	    connect("mouse_exited", callable_mp(this, &StatusEffectIndicator::_change_tooltip_visibility).bind(false));
         print_line(Registry<Mercenary>::get_singleton()->get_registered_names());
     }
         break;
@@ -80,3 +80,9 @@ void StatusEffectIndicator::set_status_effect(StatusEffect *status_effect_) {
 	status_effect = status_effect_;
 }
 
+void StatusEffectIndicator::_change_tooltip_visibility(bool p_visibility) {
+    if(tooltip_enabled) {
+        ERR_FAIL_NULL(tooltip_object);
+        tooltip_object->set_visible(p_visibility);
+    }
+}

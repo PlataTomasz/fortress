@@ -57,8 +57,10 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Merce
     }
 
     // Setup signals
-    _on_current_health_changed(health_bar->get_value(), attributes->get_health()->get_current());
+    _on_current_health_changed(attributes->get_health()->get_current());
     attributes->get_health()->connect("current_value_changed", callable_mp(this, &PlayerHUD::_on_current_health_changed));
+    print_line("PlayerHUD::_on_controlled_mercenary_changed::ent:", new_mercenary->to_string());
+    print_line("PlayerHUD::_on_controlled_mercenary_changed::health_attribute:",attributes->get_health()->to_string());
 
     // Change displayed character portrait
     character_portrait->set_texture(new_mercenary->get_portrait_icon());
@@ -77,7 +79,7 @@ void PlayerHUD::_notification(int p_notification) {
 	}
 }
 
-void PlayerHUD::_on_current_health_changed(float old_health, float new_health) {
+void PlayerHUD::_on_current_health_changed(float new_health) {
     ERR_FAIL_NULL(health_bar);
     health_bar->set_value(new_health);
 }

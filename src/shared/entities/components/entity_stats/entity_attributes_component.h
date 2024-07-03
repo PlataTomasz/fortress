@@ -21,8 +21,8 @@ public:
     Ref<FloatAttribute> cooldown_reduction = memnew(FloatAttribute(0));
     Ref<FloatAttribute> movement_speed = memnew(FloatAttribute(300));
 
-    Ref<FloatAttribute> get_health();
-    void set_health(Ref<FloatAttribute> attribute);
+    Ref<CappedResourceAttribute> get_health();
+    void set_health(Ref<CappedResourceAttribute> attribute);
     Ref<FloatAttribute> get_global_defense();
     void set_global_defense(Ref<FloatAttribute> attribute);
     Ref<FloatAttribute> get_attack_damage();

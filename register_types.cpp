@@ -66,6 +66,8 @@
 #include <client/ui/player_hud.h>
 #include <client/ui/status_effect_indicator.h>
 #include <client/ui/game/status_effect_tooltip.h>
+#include <client/ui/game/entity_health_bar.h>
+#include <client/ui/game/entity_status_bar.h>
 
 #include <shared/registries/mercenary_registry.h>
 
@@ -93,10 +95,13 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     //Currently broken - temporarily disabled
 	//ClassDB::register_class<EntityStatusBar3D>();
 
+    // UI
     ClassDB::register_class<PlayerHUD>();
     ClassDB::register_class<StatusEffectIndicator>();
     ClassDB::register_class<StatusEffectTooltip>();
     ClassDB::register_class<MainMenu>();
+    ClassDB::register_class<EntityHealthBar>();
+    ClassDB::register_class<EntityStatusBar>();
 #endif
 
 #ifdef SERVER

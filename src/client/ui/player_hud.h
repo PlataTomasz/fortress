@@ -25,7 +25,7 @@ private:
     TextureRect *character_portrait = nullptr;
 
     void _ready();
-    void _on_current_health_changed(float old_health, float new_health);
+    void _on_current_health_changed(float new_health);
 
     void _on_controlled_mercenary_changed(Mercenary *old_mercenary, Mercenary *new_mercenary);
 

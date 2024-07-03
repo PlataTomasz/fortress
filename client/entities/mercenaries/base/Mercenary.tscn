@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ca282scpps8xr"]
+[gd_scene load_steps=15 format=3 uid="uid://ca282scpps8xr"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_1i01r"]
 resource_local_to_scene = true
@@ -40,6 +40,20 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = false
 properties/1/replication_mode = 1
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_6ot25"]
+viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gwctm"]
+bg_color = Color(0.6, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wplee"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tn0xi"]
+
 [node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component", "status_effect_victim_component", "damageable_component")]
 ability_caster_component = NodePath("AbilityCasterComponent")
 attributes_component = NodePath("EntityAttributesComponent")
@@ -78,3 +92,71 @@ shape = SubResource("CylinderShape3D_giigm")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_fyyhi")
+
+[node name="EntityInfoRenderer" type="Node3D" parent="."]
+
+[node name="EntityHealthBar" type="Node3D" parent="EntityInfoRenderer"]
+
+[node name="Sprite3D" type="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_6ot25")
+
+[node name="SubViewport" type="SubViewport" parent="EntityInfoRenderer/EntityHealthBar"]
+disable_3d = true
+transparent_bg = true
+
+[node name="VSplitContainer" type="VBoxContainer" parent="EntityInfoRenderer/EntityHealthBar/SubViewport"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -19.5
+offset_right = 6.0
+offset_bottom = 19.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer"]
+editor_description = "\"text\" should default to entity names."
+layout_mode = 2
+text = "player_name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureProgressBar" type="ProgressBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer"]
+visible = false
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_gwctm")
+value = 25.0
+
+[node name="EntityHealthBar" type="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
+custom_minimum_size = Vector2(192, 24)
+layout_mode = 2
+value = 100.0
+nine_patch_stretch = true
+texture_under = SubResource("PlaceholderTexture2D_wplee")
+texture_progress = SubResource("PlaceholderTexture2D_tn0xi")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0.6, 0, 0, 1)
+entity = NodePath("../../../../..")
+
+[node name="Label" type="Label" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/EntityHealthBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "null"
+horizontal_alignment = 1
+
+[node name="EntityStatusBar" type="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer"]
+layout_mode = 2
