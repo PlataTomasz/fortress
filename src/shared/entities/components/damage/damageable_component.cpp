@@ -24,7 +24,7 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 	float health_value = health_atr->get_current();
 
 	//Reduce incoming damage with global defense - Damage reduction equation
-	float damage_multiplier = global_defense_val / (100 + global_defense_val);
+	float damage_multiplier = 100 / (100 + global_defense_val);
 	float incoming_damage = damage_multiplier * damage_object->get_value();
 
     health_atr->set_current(health_value - incoming_damage);

@@ -25,6 +25,9 @@ public:
 
     Entity *get_owning_entity();
 
+    // Returns all the status effects associated with this component
+    List<StatusEffect *> get_status_effects();
+
     //TODO: Implement a way to get all the status effects, so UI can iterate over it
 };
 

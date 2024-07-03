@@ -16,6 +16,9 @@ private:
     TextureRect *icon_display = nullptr;
 
     void _init();
+
+    bool tooltip_enabled = true;
+    void _change_tooltip_visibility(bool p_visibility);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -33,6 +36,14 @@ public:
 
     TextureRect *get_icon_display();
     void set_icon_display(TextureRect *p_icon_display);
+
+    bool is_tooltip_enabled() {
+        return tooltip_enabled;
+    }
+
+    void set_tooltip_enabled(bool p_tooltip_enabled) {
+        tooltip_enabled = p_tooltip_enabled;
+    }
 };
 
 #endif // STATUS_EFFECT_INDICATOR_INCLUDED

@@ -19,6 +19,9 @@ private:
 	 */
 	List<StringName> networked_properties;
 
+	// Name which is displayed by the UI
+	String displayed_name;
+
 	void _init();
 	void _ready();
 	void _tick();
@@ -39,6 +42,14 @@ public:
 
 	float get_rotation_2d() {
 		return get_rotation().y;
+	}
+
+	String get_displayed_name() {
+		return displayed_name;
+	}
+
+	void set_displayed_name(const String& p_displayed_name) {
+		displayed_name = p_displayed_name;
 	}
 
 	// Returns level where this entity is

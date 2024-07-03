@@ -37,3 +37,18 @@ bool StatusEffectVictimComponent::apply_status_effect(StatusEffect *status_effec
 	add_child(status_effect, true);
 	return true;
 }
+
+List<StatusEffect *> StatusEffectVictimComponent::get_status_effects() {
+	List<StatusEffect *> status_effect_list;
+
+	TypedArray<Node> children = get_children();
+
+	for (int i = 0; i < get_child_count(); i++) {
+		StatusEffect *child = Object::cast_to<StatusEffect>(children[i].operator Object *());
+		if (child) {
+			status_effect_list.push_back(child);
+		}
+	}
+
+	return status_effect_list;
+}

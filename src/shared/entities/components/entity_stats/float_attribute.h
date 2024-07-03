@@ -144,9 +144,8 @@ protected:
 	void _notification(int p_notification);
 public:
 	void set_current(float p_current) {
-		float old = current;
 		current = p_current;
-		emit_signal("current_value_changed", old, current);
+		emit_signal("current_value_changed", current);
 	};
 
 	CappedResourceAttribute(){};
