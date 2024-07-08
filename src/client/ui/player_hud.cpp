@@ -41,8 +41,8 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Merce
 
     StatusEffectVictimComponent *status_effect_component = new_mercenary->get_status_effect_victim_component();
     if (status_effect_component) {
-        status_effect_component->connect("child_entered_tree", callable_mp(this, &PlayerHUD::_on_self_status_effect_gain));
-        status_effect_component->connect("child_exiting_tree", callable_mp(this, &PlayerHUD::_on_self_status_effect_removed));
+        status_effect_component->connect("status_effect_gained", callable_mp(this, &PlayerHUD::_on_self_status_effect_gain));
+        status_effect_component->connect("status_effect_lost", callable_mp(this, &PlayerHUD::_on_self_status_effect_removed));
 
         //Add current StatusEffects to be rendered on UI
         TypedArray<Node> status_effects = status_effect_component->get_children();

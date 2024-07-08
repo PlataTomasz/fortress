@@ -50,6 +50,7 @@ public:
 
 	void set_displayed_name(const String& p_displayed_name) {
 		displayed_name = p_displayed_name;
+		emit_signal("displayed_name_changed", p_displayed_name);
 	}
 
 	// Returns level where this entity is

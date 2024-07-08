@@ -7,11 +7,12 @@
 #include <shared/status_effects/status_effect.hpp>
 
 void EntityStatusBar::_update_status_bar() {
+    DISABLE_IN_EDITOR();
     ERR_FAIL_NULL(ent);
     StatusEffectVictimComponent *status_effect_component = ent->get_component<StatusEffectVictimComponent>();
 
-    status_effect_component->connect("child_entered_tree", callable_mp(this, &EntityStatusBar::_on_status_effect_gain));
-    status_effect_component->connect("child_exiting_tree", callable_mp(this, &EntityStatusBar::_on_status_effect_removed));
+    status_effect_component->connect("status_effect_gained", callable_mp(this, &EntityStatusBar::_on_status_effect_gain));
+    status_effect_component->connect("status_effect_lost", callable_mp(this, &EntityStatusBar::_on_status_effect_removed));
     
     List<StatusEffect *> status_effect_list = status_effect_component->get_status_effects();
 
@@ -30,6 +31,7 @@ void EntityStatusBar::_bind_methods() {
 }
 
 void EntityStatusBar::_on_status_effect_gain(StatusEffect *status_effect) {
+    ERR_FAIL_NULL(status_effect);
     // Currently the same indicator is used for all status effects
     StatusEffectIndicator *status_effect_indicator = UI::create_status_effect_indicator(status_effect);
     ERR_FAIL_NULL_MSG(status_effect_indicator, "Creating UI representation for status effect failed!");
