@@ -21,6 +21,11 @@ void Entity::remove_networked_property(const StringName &property_name) {
 
 void Entity::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("hit_taken", PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "attacker")));
+	ADD_SIGNAL(MethodInfo("displayed_name_changed", PropertyInfo(Variant::STRING, "new_displayed_name")));
+
+	::ClassDB::bind_method(D_METHOD("get_displayed_name"), &Entity::get_displayed_name);
+    ::ClassDB::bind_method(D_METHOD("set_displayed_name"), &Entity::set_displayed_name);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "displayed_name"), "set_displayed_name", "get_displayed_name");
 }
 
 Node *Entity::_get_component(const String& component_typename) {

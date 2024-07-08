@@ -68,6 +68,7 @@
 #include <client/ui/game/status_effect_tooltip.h>
 #include <client/ui/game/entity_health_bar.h>
 #include <client/ui/game/entity_status_bar.h>
+#include <client/ui/game/entity_name_display.h>
 
 #include <shared/registries/mercenary_registry.h>
 
@@ -102,6 +103,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<MainMenu>();
     ClassDB::register_class<EntityHealthBar>();
     ClassDB::register_class<EntityStatusBar>();
+    ClassDB::register_class<EntityNameDisplay>();
 #endif
 
 #ifdef SERVER

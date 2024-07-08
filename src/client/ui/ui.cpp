@@ -11,7 +11,10 @@ StatusEffectIndicator *UI::create_status_effect_indicator(StatusEffect *for_stat
     }
     else {
         StatusEffectIndicator *instance = Object::cast_to<StatusEffectIndicator>(scene->instantiate());
-        instance->initialize(for_status_effect);
+        if(instance) {
+            instance->initialize(for_status_effect);
+        }
+
         return instance;
     }
 }

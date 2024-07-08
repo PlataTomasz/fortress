@@ -9,8 +9,12 @@
 class StatusEffectVictimComponent : public Component
 {
 GDCLASS(StatusEffectVictimComponent, Component);
+private:
+    void _on_child_added(Node *p_child);
+    void _on_child_removed(Node *p_child);
 protected:
     static void _bind_methods();
+    void _notification(int p_notification);
 public:
     //NOTE: Error codes would be better in this case
     //Remove status effect from entity if it have it: Return true on success, false on fail

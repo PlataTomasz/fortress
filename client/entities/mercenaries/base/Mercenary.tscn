@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ca282scpps8xr"]
+[gd_scene load_steps=14 format=3 uid="uid://ca282scpps8xr"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_1i01r"]
 resource_local_to_scene = true
@@ -39,16 +39,12 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = false
 properties/1/replication_mode = 1
+properties/2/path = NodePath(".:displayed_name")
+properties/2/spawn = true
+properties/2/replication_mode = 2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_6ot25"]
 viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gwctm"]
-bg_color = Color(0.6, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wplee"]
 
@@ -121,20 +117,10 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer"]
-editor_description = "\"text\" should default to entity names."
+[node name="EntityNameDisplay" type="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
 layout_mode = 2
-text = "player_name"
 horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureProgressBar" type="ProgressBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer"]
-visible = false
-custom_minimum_size = Vector2(192, 0)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/fill = SubResource("StyleBoxFlat_gwctm")
-value = 25.0
+entity = NodePath("../../../../..")
 
 [node name="EntityHealthBar" type="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
 custom_minimum_size = Vector2(192, 24)
@@ -158,5 +144,7 @@ grow_vertical = 2
 text = "null"
 horizontal_alignment = 1
 
-[node name="EntityStatusBar" type="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer"]
+[node name="EntityStatusBar" type="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+entity = NodePath("../../../../..")
