@@ -45,10 +45,8 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Merce
         status_effect_component->connect("status_effect_lost", callable_mp(this, &PlayerHUD::_on_self_status_effect_removed));
 
         //Add current StatusEffects to be rendered on UI
-        TypedArray<Node> status_effects = status_effect_component->get_children();
-        for (int i = 0;i<status_effects.size();i++) {
-            StatusEffect *status_effect = static_cast<StatusEffect *>(status_effects[i].operator Object *());
-
+        List<StatusEffect *> status_effects = status_effect_component->get_status_effects();
+        for (StatusEffect *status_effect : status_effects) {
             StatusEffectIndicator *status_effect_indicator = UI::create_status_effect_indicator(status_effect);
             if(status_effect_indicator != nullptr) {
                 status_effect_area->add_child(status_effect_indicator);
