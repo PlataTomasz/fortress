@@ -14,25 +14,38 @@ GDCLASS(GameCamera, Camera3D);
 
 protected:
 static void _bind_methods(){};
+private:
+    bool _camera_drag = false;
 
+    void _init();
+    void _process_frame();
+
+    void _on_tracked_node_exiting();
 protected:
     static Vector3 CAMERA_OFFSET;
+    static Vector3 CAMERA_SPEED_VECTOR;
 
-    bool freeCam = false;
+    bool freecam = true;
 
-    Node3D *followedNode = nullptr;
+    Node3D *tracked_node = nullptr;
+
+    virtual void input(const Ref<InputEvent> &p_event) override;
+    void _notification(int p_notification);
+public:
+    Vector3 screen_to_world(const Vector2& screen_pos);
 
     /**
      * Changes currecntly followed node and disables freecam
     */
-    void setFollowedNode(Node3D *node);
-public:
+    void set_tracked_node(Node3D *node);
+    Node3D *get_tracked_node();
+
     void _ready();
     void _exit_tree();
-    void process_frame();
 
     void startFollowingNode(Node3D *node);
-    void enableFreeCam();
+    bool is_freecam();
+    void set_freecam(bool p_freecam);
 
     GameCamera();
     ~GameCamera(){};

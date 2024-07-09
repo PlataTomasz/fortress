@@ -14,14 +14,14 @@ bool StatusEffectVictimComponent::remove_status_effect(StringName status_effect_
 	}
 }
 
-void StatusEffectVictimComponent::_on_child_removed(Node *p_child) {
+void StatusEffectVictimComponent::_on_child_added(Node *p_child) {
 	//FIXME: This is not emmited - Connect it!
 	if(Object::cast_to<StatusEffect>(p_child)) {
 		emit_signal("status_effect_gained", p_child);
 	}
 }
 
-void StatusEffectVictimComponent::_on_child_added(Node *p_child) {
+void StatusEffectVictimComponent::_on_child_removed(Node *p_child) {
 	//FIXME: This is not emmited - Connect it!
 	if(Object::cast_to<StatusEffect>(p_child)) {
 		emit_signal("status_effect_lost", p_child);
