@@ -28,11 +28,11 @@ void PlayerHUD::_ready() {
     ERR_FAIL_NULL(controlled_entity);
 
     // Initial
-    _on_controlled_mercenary_changed(nullptr, controlled_entity);
+    _on_controlled_mercenary_changed(controlled_entity);
 }
 
 // Player's controlled entity changed - Make UI read from new controlled entity
-void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *old_mercenary, Mercenary *new_mercenary) {
+void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *new_mercenary) {
     // Need to update values 
     EntityAttributesComponent *attributes = new_mercenary->get_attributes_component();
     if(attributes) {

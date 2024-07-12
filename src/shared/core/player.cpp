@@ -24,7 +24,7 @@ void Player::set_controlled_entity(Mercenary *p_controlled_entity)
     controlled_entity = p_controlled_entity;
     controlled_entity->set_displayed_name(get_nickname());
 
-    emit_signal("on_controlled_entity_changed", old, controlled_entity);
+    emit_signal("on_controlled_entity_changed", controlled_entity);
     // Notify entity that player which controlls it changed
     
 }

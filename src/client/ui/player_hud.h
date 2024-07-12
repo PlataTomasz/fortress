@@ -27,7 +27,7 @@ private:
     void _ready();
     void _on_current_health_changed(float new_health);
 
-    void _on_controlled_mercenary_changed(Mercenary *old_mercenary, Mercenary *new_mercenary);
+    void _on_controlled_mercenary_changed(Mercenary *new_mercenary);
 
     // Controlled entity received a new StatusEffect
     void _on_self_status_effect_gain(StatusEffect *status_effect);

@@ -5,7 +5,7 @@
 #include <core/math/vector3.h>
 #include <scene/3d/node_3d.h>
 
-
+class Mercenary;
 
 //Maybe changing it into camera controller would do better job?
 class GameCamera : public Camera3D
@@ -16,11 +16,13 @@ protected:
 static void _bind_methods(){};
 private:
     bool _camera_drag = false;
+    bool _freecam_chase = false;
 
     void _init();
     void _process_frame();
 
     void _on_tracked_node_exiting();
+    void _on_controlled_mercenary_changed(Mercenary *new_ent);
 protected:
     static Vector3 CAMERA_OFFSET;
     static Vector3 CAMERA_SPEED_VECTOR;

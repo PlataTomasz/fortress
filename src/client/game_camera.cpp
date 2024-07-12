@@ -6,6 +6,9 @@
 #include <scene/main/viewport.h>
 
 #include <core/input/input_event.h>
+#include <shared/entities/mercenaries/mercenary.hpp>
+
+#include <client/client.hpp>
 
 Vector3 GameCamera::CAMERA_OFFSET = Vector3(0, 10, 5);
 Vector3 GameCamera::CAMERA_SPEED_VECTOR = Vector3(5, 0, 5);
@@ -13,6 +16,11 @@ Vector3 GameCamera::CAMERA_SPEED_VECTOR = Vector3(5, 0, 5);
 GameCamera::GameCamera()
 {
 
+}
+
+void GameCamera::_on_controlled_mercenary_changed(Mercenary *new_mercenary) {
+    // TODO: Check if camera is currently locked on Node3D, If It is - Snap camera to new tracked_node.
+    tracked_node = new_mercenary;
 }
 
 Vector3 GameCamera::screen_to_world(const Vector2& screen_pos) {
@@ -40,6 +48,14 @@ void GameCamera::input(const Ref<InputEvent> &p_event) {
     }
     if(p_event->is_action_released("camera_drag")) {
         _camera_drag = false;
+        return;
+    }
+    if(p_event->is_action_pressed("camera_reset")) {
+        _freecam_chase = true;
+        return;
+    }
+    if(p_event->is_action_released("camera_reset")) {
+        _freecam_chase = false;
         return;
     }
     // 1: Camera drag press stores position in variable
@@ -87,20 +103,30 @@ void GameCamera::input(const Ref<InputEvent> &p_event) {
 }
 
 void GameCamera::_notification(int p_notification) {
-    DISABLE_IN_EDITOR();
-    switch (p_notification)
-    {
-    case NOTIFICATION_POSTINITIALIZE:
-        _init();
-        break;
+	DISABLE_IN_EDITOR();
+	switch (p_notification) {
+		case NOTIFICATION_POSTINITIALIZE:
+			_init();
+			break;
 
-    case NOTIFICATION_PROCESS:
-        _process_frame();
-        break;
-    
-    default:
-        break;
-    }
+		case NOTIFICATION_READY: {
+            Client *client = Object::cast_to<Client>(get_node_or_null(NodePath("/root/Client")));
+            ERR_FAIL_NULL(client);
+
+            Ref<Player> ply = client->get_player();
+            ERR_FAIL_NULL(ply);
+
+            ply->connect("on_controlled_entity_changed", callable_mp(this, &GameCamera::_on_controlled_mercenary_changed));
+            tracked_node = ply->get_controlled_entity();
+		} break;
+
+		case NOTIFICATION_PROCESS:
+			_process_frame();
+			break;
+
+		default:
+			break;
+	}
 }
 
 void GameCamera::_on_tracked_node_exiting() {
@@ -111,6 +137,7 @@ void GameCamera::_init() {
     set_rotation_degrees(Vector3(-45,0,0));
     set_position(CAMERA_OFFSET);
     set_process_input(true);
+    set_process(true);
 }
 
 void GameCamera::set_tracked_node(Node3D* node)
@@ -144,13 +171,23 @@ void GameCamera::_process_frame()
             Vector3 camPos = this->get_position();
             Vector3 nodePos = tracked_node->get_position();
             /*
-            camPos.x = nodePos.x+GameCamera::CAMERA_OFFSET.x;
+            camPos.x = freecamnodePos.x+GameCamera::CAMERA_OFFSET.x;
             camPos.x = nodePos.y+GameCamera::CAMERA_OFFSET.y;
             camPos.z = nodePos.z+GameCamera::CAMERA_OFFSET.z;
             */
             this->set_position(camPos);
         }
     } else {
+        if(_freecam_chase) {
+            if(!tracked_node) return;
+
+            Vector3 tracked_pos = tracked_node->get_position();
+            Vector3 new_cam_pos = Vector3(tracked_pos.x, 0, tracked_pos.z) + CAMERA_OFFSET;
+            this->set_position(new_cam_pos);
+        } else {
+
+        }
+           
         // Freecam behaviour
         /*
             - Camera position can be modified with middle mouse button
