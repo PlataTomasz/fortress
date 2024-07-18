@@ -37,7 +37,7 @@ private:
     static TeamsManager *singleton;
     // How many teams there are
     int team_count = 2;
-    Vector<TeamData> teams;
+    Vector<TeamData *> teams;
 protected:
     static void _bind_methods();
 public:

@@ -1,8 +1,8 @@
-#include <client/game_logic/collisions/hitbox.h>
+#include <shared/collisions/hitbox.h>
 #include <scene/3d/collision_shape_3d.h>
 #include <scene/3d/area_3d.h>
 #include <scene/3d/ray_cast_3d.h>
-
+/*
 Hitbox::Hitbox()
 {
     area;
@@ -83,18 +83,6 @@ Entity* Hitbox::get_closest_colliding_entity()
     return closest_entity;
 }
 
-bool Hitbox::is_in_blacklist(Area3D* area)
-{
-    for(Area3D* blacklist_elem : blacklist)
-    {
-        if(blacklist_elem == area)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 void Hitbox::set_collision_mask(CollisionMask collision_mask)
 {
     return area->set_collision_mask(collision_mask);
@@ -115,4 +103,17 @@ void Hitbox::set_offset(const Vector3& offset)
 const Vector3& Hitbox::get_offset()
 {
     return offset;
+}
+*/
+
+bool Hitbox::is_in_blacklist(Area3D* area)
+{
+    for(Area3D* blacklist_elem : blacklist)
+    {
+        if(blacklist_elem == area)
+        {
+            return true;
+        }
+    }
+    return false;
 }

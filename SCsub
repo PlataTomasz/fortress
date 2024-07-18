@@ -4,11 +4,21 @@ Import("env")
 Import("env_modules")
 
 import methods
+import os
+import fnmatch
 
 src_dir = "src/"
 cl_src_dir = src_dir+"client/"
 sv_src_dir = src_dir+"server/"
 sh_src_dir = src_dir+"shared/"
+exp_src_dir = src_dir+"experimental/"
+
+def recursive_glob(dir):
+    matches = []
+    for root, dirnames, filenames in os.walk(dir):
+        for filename in fnmatch.filter(filenames, '*.cpp'):
+            matches.append(Glob(os.path.join(root, filename)))
+    return matches
 
 env_zip = env_modules.Clone()
 env_zip.Append(CPPPATH=["src/", sv_src_dir, cl_src_dir])
@@ -33,90 +43,17 @@ build_subtype = ARGUMENTS.get("game_target")
 
 if(build_subtype == "client"): # Client build only code
     env_zip.Append(CPPDEFINES=["CLIENT"])
-    sources += Glob(cl_src_dir+"*.cpp")
-    sources += Glob(cl_src_dir+"status_effects/*.cpp")
-    sources += Glob(cl_src_dir+"status_effects/mercenaries/tundra/*.cpp")
-    sources += Glob(cl_src_dir+"entities/*.cpp")
-    sources += Glob(cl_src_dir+"entities/mercenaries/*.cpp")
-    sources += Glob(cl_src_dir+"entities/mercenaries/aal/*.cpp")
-    sources += Glob(cl_src_dir+"entities/mercenaries/tundra/*.cpp")
-    sources += Glob(cl_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
-    sources += Glob(cl_src_dir+"game_logic/abilities/*.cpp")
-    sources += Glob(cl_src_dir+"game_logic/abilities/aal/*.cpp")
-    sources += Glob(cl_src_dir+"game_logic/abilities/tundra/*.cpp")
-    sources += Glob(cl_src_dir+"game_logic/abilities/fist_mercenary/*.cpp")
-    sources += Glob(cl_src_dir+"string_names/*.cpp")
-
-    sources += Glob(cl_src_dir+"ui/*.cpp")
-    sources += Glob(cl_src_dir+"ui/game/*.cpp")
-
-    sources += Glob(cl_src_dir+"networking/requests/*.cpp")
+    sources += recursive_glob(cl_src_dir)
+    
 elif(build_subtype == "server"): # Server build only code
     env_zip.Append(CPPDEFINES=["SERVER"])
-    sources += Glob(sv_src_dir+"*.cpp")
-    sources += Glob(sv_src_dir+"core/*.cpp")
-    sources += Glob(sv_src_dir+"core/game_commands/*.cpp")
-    sources += Glob(sv_src_dir+"networking/*.cpp")
-    sources += Glob(sv_src_dir+"entities/*.cpp")
-    sources += Glob(sv_src_dir+"networking/requests/*.cpp")
-    sources += Glob(sv_src_dir+"entities/components/*.cpp")
-    sources += Glob(sv_src_dir+"entities/components/movement/*.cpp")
-    sources += Glob(sv_src_dir+"entities/components/status_effects/*.cpp")
-    sources += Glob(sv_src_dir+"entities/components/entity_stats/*.cpp")
+    sources += recursive_glob(sv_src_dir)
 else:
     print("\"game_target\" undefined!")
     Exit(255)
 
 # Both client and server
-sources += Glob(sh_src_dir+"*.cpp")
-
-sources += Glob(sh_src_dir+"registries/*.cpp")
-
-sources += Glob(sh_src_dir+"abilities/*.cpp")
-sources += Glob(sh_src_dir+"abilities/aal/*.cpp")
-sources += Glob(sh_src_dir+"abilities/orc/*.cpp")
-sources += Glob(sh_src_dir+"abilities/barbarian/*.cpp")
-sources += Glob(sh_src_dir+"abilities/fist_mercenary/*.cpp")
-sources += Glob(sh_src_dir+"abilities/interfaces/*.cpp")
-sources += Glob(sh_src_dir+"abilities/sword_mercenary/*.cpp")
-sources += Glob(sh_src_dir+"abilities/tundra/*.cpp")
-sources += Glob(sh_src_dir+"abilities/experimental/*.cpp")
-
-sources += Glob(sh_src_dir+"core/*.cpp")
-sources += Glob(sh_src_dir+"data_holders/*.cpp")
-sources += Glob(sh_src_dir+"entities/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/abilities/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/ai/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/hitbox/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/damage/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/entity_stats/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/status_effects/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/levels/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/movement/*.cpp")
-sources += Glob(sh_src_dir+"entities/components/visual/*.cpp")
-
-sources += Glob(sh_src_dir+"entities/mercenaries/*.cpp")
-sources += Glob(sh_src_dir+"entities/mercenaries/aal/*.cpp")
-sources += Glob(sh_src_dir+"entities/mercenaries/fist_mercenary/*.cpp")
-sources += Glob(sh_src_dir+"entities/mercenaries/sword_mercenary/*.cpp")
-sources += Glob(sh_src_dir+"entities/mercenaries/tundra/*.cpp")
-
-sources += Glob(sh_src_dir+"entities/structures/*.cpp")
-
-sources += Glob(sh_src_dir+"entities/traits/*.cpp")
-
-sources += Glob(sh_src_dir+"status_effects/*.cpp")
-sources += Glob(sh_src_dir+"status_effects/barbarian/*.cpp")
-sources += Glob(sh_src_dir+"status_effects/example/*.cpp")
-
-sources += Glob(sh_src_dir+"string_names/*.cpp")
-
-sources += Glob(sh_src_dir+"helpers/*.cpp")
-
-exp_src_dir = src_dir+"experimental/"
-
-sources += Glob(exp_src_dir+"/*.cpp")
-sources += Glob(exp_src_dir+"/interface/*.cpp")
+sources += recursive_glob(sh_src_dir)
+sources += recursive_glob(exp_src_dir)
     
 env_zip.add_source_files(env.modules_sources, sources)

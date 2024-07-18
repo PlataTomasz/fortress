@@ -1,7 +1,7 @@
 #include "client.hpp"
 #include <scene/main/multiplayer_api.h>
-#include <shared/io/byte_reader.h>
 #include <scene/scene_string_names.h>
+#include <core/io/marshalls.h>
 #include <shared/helper_macros.h>
 #include <client/game.h>
 #include <client/ui/user_interface.h>
