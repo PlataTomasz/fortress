@@ -47,6 +47,10 @@ protected:
 	virtual void _readyv() {};
 	virtual void _tickv() {};
 public:
+	bool has_tag(const String& tag);
+	void add_tag(const String& tag);
+	void remove_tag(const String& tag);
+
 	StatusEffectVictimComponent *get_status_effect_victim_component();
     void set_status_effect_victim_component(StatusEffectVictimComponent *new_status_effect_vicitm_component);
     DamageableComponent *get_damageable_component();
