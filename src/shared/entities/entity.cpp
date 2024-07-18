@@ -64,12 +64,17 @@ void Entity::_notification(int p_notification) {
 	switch (p_notification) {
 		case NOTIFICATION_READY:
 			_ready();
+			_readyv();
 			break;
 		case NOTIFICATION_EXIT_TREE:
 			_exit_tree();
 			break;
 		case NOTIFICATION_POSTINITIALIZE:
 			_init();
+			_initv();
+			break;
+		case NOTIFICATION_PHYSICS_PROCESS:
+			_tickv();
 			break;
 
 		default:

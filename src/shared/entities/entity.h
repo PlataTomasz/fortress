@@ -34,6 +34,10 @@ protected:
 	void _notification(int p_notification);
 
 	static void _bind_methods();
+
+	virtual void _initv() {};
+	virtual void _readyv() {};
+	virtual void _tickv() {};
 public:
 	Vector2 get_position_2d() {
 		Vector3 pos = get_position();
