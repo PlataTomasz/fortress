@@ -80,6 +80,8 @@
 #include <shared/status_effects/barbarian/dance_with_death_status.h>
 #include <shared/status_effects/example/bleeding_status_effect.h>
 
+#include <shared/entities/structures/nexus.h>
+
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -166,6 +168,9 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<SlowStatusEffect>();
     ClassDB::register_class<DanceWithDeathStatus>();
     ClassDB::register_class<BleedingStatusEffect>();
+
+    // Structures
+    ClassDB::register_class<Nexus>();
 
     // Singletons
     //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));
