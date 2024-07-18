@@ -39,6 +39,10 @@ protected:
 	virtual void _readyv() {};
 	virtual void _tickv() {};
 public:
+	bool has_tag(const String& tag);
+	void add_tag(const String& tag);
+	void remove_tag(const String& tag);
+
 	Vector2 get_position_2d() {
 		Vector3 pos = get_position();
 		return Vector2(pos.x, pos.z);

@@ -19,6 +19,18 @@ void Entity::remove_networked_property(const StringName &property_name) {
 	}
 }
 
+bool Entity::has_tag(const String& tag) {
+	return is_in_group(tag);
+}
+
+void Entity::add_tag(const String& tag) {
+	add_to_group(tag);
+}
+
+void Entity::remove_tag(const String& tag) {
+	remove_from_group(tag);
+}
+
 void Entity::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("hit_taken", PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "attacker")));
 	ADD_SIGNAL(MethodInfo("displayed_name_changed", PropertyInfo(Variant::STRING, "new_displayed_name")));
