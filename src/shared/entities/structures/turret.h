@@ -18,6 +18,8 @@ protected:
 public:
     bool has_target();
     bool is_entity_valid_target(Entity *potential_target);
+    Entity *get_higher_priority_target(Entity *first_entity, Entity *second_entity);
+    Entity *get_closest_entity(const Vector<Entity *>& entities);
 
     Entity *find_new_target();
     int get_aggro_priority_for_entity(Entity *entity);
