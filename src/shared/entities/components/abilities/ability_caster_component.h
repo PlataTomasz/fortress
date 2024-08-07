@@ -58,7 +58,7 @@ public:
     void set_ultimate_ability(Ability *p_ability);
     Ability *get_ultimate_ability();
 
-    Ability::AbilityUseError use_ability(int index, const Ref<ActionContext>& action_context);
+    void use_ability(int index, const Ref<ActionContext>& action_context);
     void use_basic_attack(const Ref<ActionContext>& action_context);
 
     void _notification(int notification);

@@ -50,6 +50,7 @@ ultimate_ability = NodePath("BarbarianDanceWithDeath")
 displayed_name = "Dance with death"
 displayed_description = "Barbarian focuses, pushing his body to the limits, causing him to lose health over time, but healing when enemy is hit by his basic attacks."
 icon = ExtResource("1_ngwr0")
+max_cooldown = 30.0
 
 [node name="BarbarianBasicAttack" type="BarbarianBasicAttack" parent="AbilityCasterComponent" index="1" node_paths=PackedStringArray("hitbox")]
 hitbox = NodePath("../../HitboxComponent")
