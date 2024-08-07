@@ -66,6 +66,10 @@ public:
 
         return names;
     }
+
+    bool has(const String& key) {
+        return registered_objects.has(key);
+    }
 };
 
 #endif // REGISTRY_INCLUDED

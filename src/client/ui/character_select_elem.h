@@ -7,14 +7,19 @@
 #include <scene/resources/texture.h>
 
 class TextureButton;
+class TextureRect;
 
 class CharacterSelectElem : public VSplitContainer {
 GDCLASS(CharacterSelectElem, VSplitContainer);
 private:
     Label *name_label = nullptr;
-    TextureButton *texture_button = nullptr;
+    String title = "empty";
+    String character_index;
 
-    String mercenary_identifier;
+    Ref<Texture2D> icon;
+
+    TextureButton *texture_button = nullptr;
+    TextureRect *mercenary_icon_quad = nullptr;
 
     void _notification(int p_notification);
     void _init();
@@ -23,16 +28,23 @@ protected:
     virtual void unhandled_input(const Ref<InputEvent> &p_event);
     static void _bind_methods();
 public:
+    void set_mercenary_icon_quad(TextureRect *new_mercenary_icon_quad);
+    TextureRect *get_mercenary_icon_quad();
+
+    void set_title(const String& new_title);
+    String get_title();
+
+    void set_character_index(const String& new_character_index);
+    String get_character_index();
+
     void set_icon(const Ref<Texture2D>& p_icon);
+    Ref<Texture2D> get_icon();
     void set_displayed_name(const String& p_name);
 
     Label *get_name_label();
     void set_name_label(Label *p_name_label);
     TextureButton *get_texture_button();
     void set_texture_button(TextureButton *p_texture_button);
-
-    String get_mercenary_identifier();
-    void set_mercenary_identifier(const String& p_identifier);
 };
 
 #endif // CHARACTER_SELECT_ELEM_INCLUDED

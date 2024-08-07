@@ -1,4 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwr1mgxijjv32"]
+[gd_scene load_steps=6 format=3 uid="uid://dwr1mgxijjv32"]
+
+[ext_resource type="PackedScene" uid="uid://x3b3wxhlpsi2" path="res://scenes/ui/CharacterListElement.tscn" id="1_fo7ys"]
+[ext_resource type="ButtonGroup" uid="uid://dcoayub2mcste" path="res://scenes/ui/CharacterSelectionBtnGroup.tres" id="1_io8yd"]
+[ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="2_jy8iq"]
+[ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="2_w4lkl"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6a5qc"]
 font_size = 66
@@ -24,6 +29,7 @@ size_flags_vertical = 4
 ip_input = NodePath("CharacterArea/CenterContainer/VBoxContainer/IpInput")
 nickname_input = NodePath("CharacterArea/CenterContainer/VBoxContainer/NicknameInput")
 join_button = NodePath("CharacterArea/CenterContainer/VBoxContainer/JoinBtn")
+character_button_group = ExtResource("1_io8yd")
 character_select_area = NodePath("CharacterArea/MarginContainer/ScrollContainer/GridContainer")
 
 [node name="CharacterArea" type="VBoxContainer" parent="CenterContainer"]
@@ -57,6 +63,21 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 16
 columns = 8
+
+[node name="Barbarian" parent="CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_fo7ys")]
+layout_mode = 2
+character_index = "Barbarian_new"
+title = "Barbarian"
+icon = ExtResource("2_w4lkl")
+
+[node name="Orc" parent="CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_fo7ys")]
+layout_mode = 2
+character_index = "Orc_new"
+title = "Orc"
+icon = ExtResource("2_jy8iq")
+
+[node name="CharacterSelectElem" parent="CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_fo7ys")]
+layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="CenterContainer/CharacterArea"]
 layout_mode = 2

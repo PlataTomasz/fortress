@@ -185,6 +185,11 @@ void Client::_on_server_disconnect()
         game->queue_free();
         game = nullptr;
     }
+
+    MainMenu *main_menu = user_interface->get_main_menu();
+    if(main_menu) {
+        main_menu->set_visible(true);
+    }
 }
 
 void Client::process()

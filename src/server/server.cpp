@@ -67,7 +67,7 @@ void Server::_on_peer_connect(int peer_id)
         String mercenary_name = ply->get_choosen_mercenary();
         mercenary = MercenaryRegistry::get_singleton()->create_instance(mercenary_name);
     }
-
+    ERR_FAIL_NULL(mercenary);
 	mercenary->set_name("p_" + itos(peer_id));
 	game->get_current_level()->add_entity(mercenary);
     connected_players.get(peer_id)->set_controlled_entity(mercenary);
@@ -122,8 +122,14 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
     print_line("Peer", itos(peer_id), "wants to play character named", var_mercenary_name);
 
     Player *ply = memnew(Player);
-    ply->change_nickname(var_nickname.operator String());
-    ply->set_choosen_mercenary(var_mercenary_name.operator String());
+    ply->change_nickname(String(var_nickname));
+    // TODO: Wrap such variant to type conversions in a dedicated class! They are causing me a headache!
+    String mercenary_name_str = String(var_mercenary_name);
+    
+    ERR_FAIL_COND_V(mercenary_name_str.is_empty(), Error::ERR_INVALID_PARAMETER);
+    ERR_FAIL_COND_V_MSG(!(MercenaryRegistry::get_singleton()->has(mercenary_name_str)), Error::ERR_INVALID_PARAMETER, "Invalid mercenary name received from client! Auth failed for " + peer_id);
+
+    ply->set_choosen_mercenary(mercenary_name_str);
 
     Ref<PackedScene> scene = ResourceLoader::load("res://entities/mercenaries/Barbarian.tscn");
     Mercenary *mercenary = static_cast<Mercenary *>(scene->instantiate());
