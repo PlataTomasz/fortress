@@ -34,6 +34,7 @@ String MainMenu::get_choosen_nickname() {
 }
 
 void MainMenu::_notification(int p_notification) {
+    /*
     DISABLE_IN_EDITOR();
 	switch (p_notification) {
 		case NOTIFICATION_POSTINITIALIZE: {
@@ -61,6 +62,7 @@ void MainMenu::_notification(int p_notification) {
 		default:
 			break;
 	}
+    */
 }
 
 Control *MainMenu::get_character_select_area() {
@@ -77,10 +79,11 @@ String MainMenu::get_server_adress() {
 }
 
 String MainMenu::get_selected_mercenary() {
+    //FIXME: Check if whatever came from Client is valid to avoid crash
     BaseButton *selected_btn = character_button_group->get_pressed_button();
     CharacterSelectElem *elem = static_cast< CharacterSelectElem *>(selected_btn->get_owner());
     if (elem) {
-        return elem->get_mercenary_identifier();
+        return elem->get_character_index();
     } else {
         return String();
     }

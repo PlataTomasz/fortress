@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cpfwt8w1avna1"]
+[gd_scene load_steps=6 format=3 uid="uid://cpfwt8w1avna1"]
 
 [ext_resource type="Script" path="res://scenes/ui/JoinBtn.gd" id="1_8etp1"]
+[ext_resource type="PackedScene" uid="uid://x3b3wxhlpsi2" path="res://scenes/ui/CharacterListElement.tscn" id="1_66p24"]
+[ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="2_mimjc"]
+[ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="3_174es"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6a5qc"]
 font_size = 66
@@ -45,6 +48,18 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 16
 columns = 8
+
+[node name="Barbarian" parent="CharacterArea/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_66p24")]
+layout_mode = 2
+character_index = "barbarian"
+title = "Barbarian"
+icon = ExtResource("2_mimjc")
+
+[node name="Orc" parent="CharacterArea/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_66p24")]
+layout_mode = 2
+character_index = "orc"
+title = "Orc"
+icon = ExtResource("3_174es")
 
 [node name="CenterContainer" type="CenterContainer" parent="CharacterArea"]
 layout_mode = 2

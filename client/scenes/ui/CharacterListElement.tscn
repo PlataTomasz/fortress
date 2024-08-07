@@ -1,29 +1,37 @@
 [gd_scene load_steps=4 format=3 uid="uid://x3b3wxhlpsi2"]
 
+[ext_resource type="ButtonGroup" uid="uid://dcoayub2mcste" path="res://scenes/ui/CharacterSelectionBtnGroup.tres" id="1_hb1ak"]
+[ext_resource type="Texture2D" uid="uid://cveq08fqpsfqk" path="res://textures/ui/select_border.png" id="1_tirnu"]
 [ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="1_vvbah"]
-[ext_resource type="Texture2D" uid="uid://dck0q3eo45ojt" path="res://icon.svg" id="2_iu1ts"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ii7vh"]
-resource_local_to_scene = false
-allow_unpress = true
-
-[node name="CharacterSelectElem" type="CharacterSelectElem" node_paths=PackedStringArray("name_label", "texture_button")]
+[node name="CharacterSelectElem" type="CharacterSelectElem" node_paths=PackedStringArray("mercenary_icon_quad", "name_label")]
 offset_right = 40.0
 offset_bottom = 40.0
+mercenary_icon_quad = NodePath("Element/TextureRect")
 name_label = NodePath("Element/Name")
-texture_button = NodePath("Element/IconBtn")
 
 [node name="Element" type="VSplitContainer" parent="."]
 layout_mode = 2
 dragger_visibility = 2
 
-[node name="IconBtn" type="TextureButton" parent="Element"]
+[node name="TextureRect" type="TextureRect" parent="Element"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_vvbah")
+expand_mode = 3
+
+[node name="IconBtn" type="TextureButton" parent="Element/TextureRect"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 toggle_mode = true
-button_group = SubResource("ButtonGroup_ii7vh")
-texture_normal = ExtResource("1_vvbah")
-texture_pressed = ExtResource("2_iu1ts")
+button_group = ExtResource("1_hb1ak")
+texture_pressed = ExtResource("1_tirnu")
 ignore_texture_size = true
 stretch_mode = 5
 
