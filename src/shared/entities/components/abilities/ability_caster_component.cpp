@@ -107,35 +107,35 @@ AbilityCasterComponent::~AbilityCasterComponent()
 
 }
 
-Ability::AbilityUseError AbilityCasterComponent::use_ability(int index, const Ref<ActionContext>& action_context) {
+void AbilityCasterComponent::use_ability(int index, const Ref<ActionContext>& action_context) {
     /*
-    ERR_FAIL_COND_V((index > ability_paths.size() || index < 0), Ability::AbilityUseError::INTERNAL_ERROR);
+    ERR_FAIL_COND_V((index > ability_paths.size() || index < 0), void::INTERNAL_ERROR);
     Ability *ability = static_cast<Ability *>(get_node_or_null(ability_paths.get(index).operator NodePath()));
     return ability->use(action_context);
     */
    // TODO: Refactor this - There has to be a better way than this abomination of code
 	switch (index) {
 		case ABILITY_FIRST: {
-            ERR_FAIL_NULL_V(first_ability, Ability::AbilityUseError::INTERNAL_ERROR);
+            ERR_FAIL_NULL(first_ability);
             return first_ability->use(action_context);
 		} break;
 
         case ABILITY_SECOND: {
-            ERR_FAIL_NULL_V(second_ability, Ability::AbilityUseError::INTERNAL_ERROR);
+            ERR_FAIL_NULL(second_ability);
             return second_ability->use(action_context);
 		} break;
 
         case ABILITY_THIRD: {
-            ERR_FAIL_NULL_V(third_ability, Ability::AbilityUseError::INTERNAL_ERROR);
+            ERR_FAIL_NULL(third_ability);
             return third_ability->use(action_context);
 		} break;
 
         case ABILITY_ULTIMATE: {
-            ERR_FAIL_NULL_V(ultimate_ability, Ability::AbilityUseError::INTERNAL_ERROR);
+            ERR_FAIL_NULL(ultimate_ability);
             return ultimate_ability->use(action_context);
 		} break;
 
 		default:
-			return Ability::AbilityUseError::INTERNAL_ERROR;
+			ERR_FAIL();
 	}
 }

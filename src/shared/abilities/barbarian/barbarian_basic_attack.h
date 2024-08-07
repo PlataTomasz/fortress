@@ -20,7 +20,7 @@ protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
-    Ability::AbilityUseError use(const Ref<ActionContext>& use_context);
+    void _use(const Ref<ActionContext>& use_context);
 
     void set_hitbox(HitboxComponent *p_hitbox);
     HitboxComponent *get_hitbox();

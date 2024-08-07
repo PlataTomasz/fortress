@@ -23,9 +23,9 @@ public:
     }
 
     // TODO: Check if this will cause use_ability method to be overriden in classes, which use that trait
-    Ability::AbilityUseError use_ability(int index, const Ref<ActionContext>& action_context) {
-        ERR_FAIL_NULL_V(ability_caster_component, Ability::AbilityUseError::INTERNAL_ERROR);
-        return ability_caster_component->use_ability(index, action_context);
+    void use_ability(int index, const Ref<ActionContext>& action_context) {
+        ERR_FAIL_NULL(ability_caster_component);
+        ability_caster_component->use_ability(index, action_context);
     }
 
     template<class T>

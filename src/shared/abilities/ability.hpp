@@ -26,33 +26,14 @@ protected:
 #endif
 
 #ifdef CLIENT
-
+    virtual void _use(const Ref<ActionContext>& action_context){};
 #endif
 private:
     void _init();
 public:
     Timer *cooldown_timer = nullptr;
-
-    enum AbilityUseError
-    {
-        SUCCESS = 0,
-        //These two can never occur simulatenously
-        INVALID_TARGET = 1,
-        TARGET_OUT_OF_RANGE = 1<<1,
-
-        NOT_ENOUGH_RESOURCE = 1<<2,
-        ABILITY_ON_COOLDOWN = 1<<3,
-        INTERNAL_ERROR = 1<<31
-    };
 protected:
-    /**
-     * Current cooldown of ability in ticks
-    */
-    int curr_cooldown = 0;
-    /**
-     * Base cooldown of this ability
-    */
-    int max_cooldown = 1;
+    float max_cooldown = 0;
 
     Ref<Texture2D> icon;
 
@@ -61,10 +42,13 @@ protected:
 
     static void _bind_methods();
 
-    Timer *get_cooldown_timer();
+    void _on_ability_cooldown_finished();
+
+    void start_ability_cooldown();
 public:
     AbilityCasterComponent *get_ability_caster();
 
+    void set_current_cooldown(float new_cooldown);
     float get_current_cooldown();
 
     float get_max_cooldown();
@@ -81,15 +65,8 @@ public:
     String get_displayed_name();
     void set_displayed_name(const String &new_name);
 
-    AbilityUseError use_check(const Ref<ActionContext>& action_context);
-    
-    /**
-     * Uses this ability if possible. Returns AbilityCastError value depending on what happened.
-    */
-    virtual Ability::AbilityUseError use(const Ref<ActionContext>& action_context);
+    void use(const Ref<ActionContext>& action_context);
     Ability();
 };
-
-VARIANT_ENUM_CAST(Ability::AbilityUseError);
 
 #endif // ABILITY_HPP_INCLUDED

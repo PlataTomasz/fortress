@@ -9,7 +9,7 @@ private:
 
 public:
     // 
-    virtual Ability::AbilityUseError use(const Ref<ActionContext>& action_context) override;
+    virtual void _use(const Ref<ActionContext>& action_context) override;
 };
 
 #endif // BARBARIAN_DANCE_WITH_DEATH_INCLUDED

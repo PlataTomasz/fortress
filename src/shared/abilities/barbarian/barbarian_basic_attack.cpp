@@ -25,7 +25,7 @@ void BarbarianBasicAttack::_notification(int p_notification) {
 	}
 }
 
-Ability::AbilityUseError BarbarianBasicAttack::use(const Ref<ActionContext>& use_context) {
+void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
     List<HitboxComponent *> hitboxes = hitbox->get_overlapping_hitboxes();
 
     for(HitboxComponent *detected_hitbox : hitboxes) {
@@ -42,7 +42,6 @@ Ability::AbilityUseError BarbarianBasicAttack::use(const Ref<ActionContext>& use
             damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::BASIC_ATTACK_DAMAGE), 15, use_context->get_user())));
         }
     }
-    return AbilityUseError::SUCCESS;
 }
 
 void BarbarianBasicAttack::set_hitbox(HitboxComponent *p_hitbox) {

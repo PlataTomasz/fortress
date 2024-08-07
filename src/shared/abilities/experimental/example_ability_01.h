@@ -6,7 +6,7 @@
 class ExampleAbility01 : public Ability {
 GDCLASS(ExampleAbility01, Ability);
 public:
-    virtual Ability::AbilityUseError use(const Ref<ActionContext>& action_context) override;
+    virtual void _use(const Ref<ActionContext>& action_context) override;
 
     ExampleAbility01(){};
 };
