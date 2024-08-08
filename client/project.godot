@@ -70,5 +70,4 @@ avoidance/layer_2="Blue"
 
 [navigation]
 
-3d/default_cell_size=0.01
 3d/default_cell_height=0.01

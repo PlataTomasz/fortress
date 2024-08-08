@@ -31,7 +31,7 @@ void MovementComponent::_notification(int p_notification) {
 }
 #ifdef SERVER
 void MovementComponent::_tick() {
-	if (nav_agent->is_target_reached()) {
+	if (nav_agent->is_navigation_finished()) {
 		return;
 	}
 
@@ -51,11 +51,28 @@ void MovementComponent::_tick() {
 	float movement_delta = movement_speed * delta;
 	Vector3 next_path_position = nav_agent->get_next_path_position();
 	Vector3 current_position = ent->get_position();
+
+
+	// Here is the source of bug
+
 	Vector3 new_velocity = (next_path_position - current_position).normalized() * movement_delta;
+
+	Vector3 new_position = current_position + new_velocity;
+	// Check if target position is in certain range, if so, alter position so it wont move past the target
+/* 	float distance_between_target_and_current = current_position.distance_to(next_path_position);
+
+	if(distance_between_target_and_current <= nav_agent->get_target_desired_distance()) {
+		Vector3 corrected_new_position = current_position + new_velocity;
+		// Change
+	} else {
+
+	} */
+	
+
 	ent->set_position(current_position + new_velocity);
 	//FIXME: Rotation looks clunky - interpolation?
 	//NOTE: Facing direction (0,0,0) looking towards "-Z"
-	if(ent->get_position() != next_path_position)
+	if(ent->get_position() != next_path_position) // Sets facing direction // TODO: Move to Entity as a new method
 		ent->look_at(next_path_position, Vector3(0, 1, 0), true);
 		/*
 		Vector3 corrected_rotation = ent->get_rotation();
