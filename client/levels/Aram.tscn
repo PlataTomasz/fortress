@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=26 format=3 uid="uid://8tv1es2vlr8m"]
 
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
@@ -56,8 +56,8 @@ _surfaces = [{
 }]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_au2od"]
-vertices = PackedVector3Array(-30.98, 0.02, -1.5, -25.5, 0.02, -1.5, -25.5, 0.02, -7, -39.5, 0.02, -7, -39.5, 0.02, -1.5, -33.01, 0.02, -1.5, -33.01, 0.02, -1.5, -30.98, 0.02, -1.5, -25.5, 0.02, -7, -39.5, 0.02, -7, -23.49, 0.02, -7, -23.49, 0.02, 7, -9.5, 0.02, 7, -9.5, 0.02, -7, -7.49, 0.02, -7, -7.49, 0.02, 7, 7.5, 0.02, 7, 7.5, 0.02, -7, 9.51, 0.02, -7, 9.51, 0.02, 7, 23.5, 0.02, 7, 23.5, 0.02, -7, 25.51, 0.02, -7, 25.51, 0.02, -1.5, 30.99, 0.02, -1.5, 33.02, 0.02, -1.5, 39.5, 0.02, -1.5, 39.5, 0.02, -7, 33.02, 0.02, -1.5, 39.5, 0.02, -7, 25.51, 0.02, -7, 30.99, 0.02, -1.5, -39.5, 0.02, 1.51, -33.01, 0.02, 1.51, -33.34, 0.02, 1.34, -39.5, 0.02, 1.51, -33.34, 0.02, 1.34, -33.5, 0.02, 1.02, -33.34, 0.02, -1.33, -33.01, 0.02, -1.5, -39.5, 0.02, -1.5, -33.5, 0.02, -1.01, -33.34, 0.02, -1.33, -39.5, 0.02, -1.5, -39.5, 0.02, 1.51, -33.5, 0.02, 1.02, -33.5, 0.02, -1.01, -39.5, 0.02, -1.5, -25.5, 0.02, -1.5, -30.98, 0.02, -1.5, -30.66, 0.02, -1.34, -25.5, 0.02, -1.5, -30.66, 0.02, -1.34, -30.49, 0.02, -1.01, -30.66, 0.02, 1.35, -30.98, 0.02, 1.51, -25.5, 0.02, 1.51, -30.49, 0.02, 1.02, -30.66, 0.02, 1.35, -25.5, 0.02, 1.51, -25.5, 0.02, 1.51, -25.5, 0.02, -1.5, -30.49, 0.02, -1.01, -30.49, 0.02, 1.02, 25.51, 0.02, 1.51, 30.99, 0.02, 1.51, 30.66, 0.02, 1.34, 25.51, 0.02, 1.51, 30.66, 0.02, 1.34, 30.5, 0.02, 1.02, 30.66, 0.02, -1.33, 30.99, 0.02, -1.5, 25.51, 0.02, -1.5, 30.5, 0.02, -1.01, 30.66, 0.02, -1.33, 25.51, 0.02, -1.5, 25.51, 0.02, 1.51, 30.5, 0.02, 1.02, 30.5, 0.02, -1.01, 25.51, 0.02, -1.5, 39.5, 0.02, -1.5, 33.02, 0.02, -1.5, 33.34, 0.02, -1.34, 39.5, 0.02, -1.5, 33.34, 0.02, -1.34, 33.51, 0.02, -1.01, 33.34, 0.02, 1.35, 33.02, 0.02, 1.51, 39.5, 0.02, 1.51, 33.51, 0.02, 1.02, 33.34, 0.02, 1.35, 39.5, 0.02, 1.51, 39.5, 0.02, 1.51, 39.5, 0.02, -1.5, 33.51, 0.02, -1.01, 33.51, 0.02, 1.02, -25.5, 0.02, 7, -25.5, 0.02, 1.51, -30.98, 0.02, 1.51, -33.01, 0.02, 1.51, -39.5, 0.02, 1.51, -39.5, 0.02, 7, -33.01, 0.02, 1.51, -39.5, 0.02, 7, -25.5, 0.02, 7, -30.98, 0.02, 1.51, 30.99, 0.02, 1.51, 25.51, 0.02, 1.51, 25.51, 0.02, 7, 39.5, 0.02, 7, 39.5, 0.02, 1.51, 33.02, 0.02, 1.51, 33.02, 0.02, 1.51, 30.99, 0.02, 1.51, 25.51, 0.02, 7, 39.5, 0.02, 7)
-polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(13, 12, 10), PackedInt32Array(10, 12, 11), PackedInt32Array(17, 16, 14), PackedInt32Array(14, 16, 15), PackedInt32Array(21, 20, 18), PackedInt32Array(18, 20, 19), PackedInt32Array(24, 23, 22), PackedInt32Array(27, 26, 25), PackedInt32Array(31, 30, 28), PackedInt32Array(28, 30, 29), PackedInt32Array(34, 33, 32), PackedInt32Array(37, 36, 35), PackedInt32Array(40, 39, 38), PackedInt32Array(41, 43, 42), PackedInt32Array(45, 44, 46), PackedInt32Array(46, 44, 47), PackedInt32Array(50, 49, 48), PackedInt32Array(51, 53, 52), PackedInt32Array(56, 55, 54), PackedInt32Array(59, 58, 57), PackedInt32Array(63, 62, 60), PackedInt32Array(60, 62, 61), PackedInt32Array(66, 65, 64), PackedInt32Array(69, 68, 67), PackedInt32Array(72, 71, 70), PackedInt32Array(75, 74, 73), PackedInt32Array(77, 76, 78), PackedInt32Array(78, 76, 79), PackedInt32Array(82, 81, 80), PackedInt32Array(85, 84, 83), PackedInt32Array(88, 87, 86), PackedInt32Array(91, 90, 89), PackedInt32Array(95, 94, 92), PackedInt32Array(92, 94, 93), PackedInt32Array(98, 97, 96), PackedInt32Array(101, 100, 99), PackedInt32Array(105, 104, 102), PackedInt32Array(102, 104, 103), PackedInt32Array(108, 107, 106), PackedInt32Array(111, 110, 109), PackedInt32Array(113, 112, 114), PackedInt32Array(114, 112, 115)]
+vertices = PackedVector3Array(-30.98, 0.02, -1.5, -25.5, 0.02, -1.5, -25.5, 0.02, -7, -39.5, 0.02, -7, -39.5, 0.02, -1.5, -33.01, 0.02, -1.5, -33.01, 0.02, -1.5, -30.98, 0.02, -1.5, -25.5, 0.02, -7, -39.5, 0.02, -7, -23.49, 0.02, -1.49, -9.01, 0.02, -1.49, -9.34, 0.02, -1.66, -23.49, 0.02, -1.49, -9.34, 0.02, -1.66, -9.5, 0.02, -1.98, -9.5, 0.02, -1.98, -9.5, 0.02, -7, -23.49, 0.02, -7, -23.49, 0.02, -1.49, -7.98, 0.02, -1.49, 7.99, 0.02, -1.49, 7.66, 0.02, -1.66, -7.66, 0.02, -1.65, 7.5, 0.02, -1.98, 7.5, 0.02, -7, -7.49, 0.02, -7, -7.49, 0.02, -1.98, -7.49, 0.02, -1.98, -7.66, 0.02, -1.65, 7.66, 0.02, -1.66, 7.5, 0.02, -1.98, 9.34, 0.02, -1.65, 9.02, 0.02, -1.49, 23.5, 0.02, -1.49, 9.51, 0.02, -1.98, 9.34, 0.02, -1.65, 23.5, 0.02, -1.49, 23.5, 0.02, -7, 9.51, 0.02, -7, 9.51, 0.02, -1.98, 23.5, 0.02, -1.49, 25.51, 0.02, -7, 25.51, 0.02, -1.5, 30.99, 0.02, -1.5, 33.02, 0.02, -1.5, 39.5, 0.02, -1.5, 39.5, 0.02, -7, 33.02, 0.02, -1.5, 39.5, 0.02, -7, 25.51, 0.02, -7, 30.99, 0.02, -1.5, -39.5, 0.02, 1.51, -33.01, 0.02, 1.51, -33.34, 0.02, 1.34, -39.5, 0.02, 1.51, -33.34, 0.02, 1.34, -33.5, 0.02, 1.02, -33.34, 0.02, -1.33, -33.01, 0.02, -1.5, -39.5, 0.02, -1.5, -33.5, 0.02, -1.01, -33.34, 0.02, -1.33, -39.5, 0.02, -1.5, -39.5, 0.02, 1.51, -33.5, 0.02, 1.02, -33.5, 0.02, -1.01, -39.5, 0.02, -1.5, -25.5, 0.02, -1.5, -30.98, 0.02, -1.5, -30.66, 0.02, -1.34, -25.5, 0.02, -1.5, -30.66, 0.02, -1.34, -30.49, 0.02, -1.01, -30.66, 0.02, 1.35, -30.98, 0.02, 1.51, -25.5, 0.02, 1.51, -30.49, 0.02, 1.02, -30.66, 0.02, 1.35, -25.5, 0.02, 1.51, -25.5, 0.02, 1.51, -25.5, 0.02, -1.5, -30.49, 0.02, -1.01, -30.49, 0.02, 1.02, 25.51, 0.02, 1.51, 30.99, 0.02, 1.51, 30.66, 0.02, 1.34, 25.51, 0.02, 1.51, 30.66, 0.02, 1.34, 30.5, 0.02, 1.02, 30.66, 0.02, -1.33, 30.99, 0.02, -1.5, 25.51, 0.02, -1.5, 30.5, 0.02, -1.01, 30.66, 0.02, -1.33, 25.51, 0.02, -1.5, 25.51, 0.02, 1.51, 30.5, 0.02, 1.02, 30.5, 0.02, -1.01, 25.51, 0.02, -1.5, 39.5, 0.02, -1.5, 33.02, 0.02, -1.5, 33.34, 0.02, -1.34, 39.5, 0.02, -1.5, 33.34, 0.02, -1.34, 33.51, 0.02, -1.01, 33.34, 0.02, 1.35, 33.02, 0.02, 1.51, 39.5, 0.02, 1.51, 33.51, 0.02, 1.02, 33.34, 0.02, 1.35, 39.5, 0.02, 1.51, 39.5, 0.02, 1.51, 39.5, 0.02, -1.5, 33.51, 0.02, -1.01, 33.51, 0.02, 1.02, 9.02, 0.02, 1.5, 23.5, 0.02, 1.5, 23.5, 0.02, -1.49, 9.02, 0.02, -1.49, -7.98, 0.02, 1.5, 7.99, 0.02, 1.5, 7.99, 0.02, -1.49, -7.98, 0.02, -1.49, 7.99, 0.02, 1.5, 9.02, 0.02, 1.5, 9.02, 0.02, -1.49, 7.99, 0.02, -1.49, -7.98, 0.02, -1.49, -9.01, 0.02, -1.49, -9.01, 0.02, 1.5, -7.98, 0.02, 1.5, -9.01, 0.02, -1.49, -23.49, 0.02, -1.49, -23.49, 0.02, 1.5, -9.01, 0.02, 1.5, -9.34, 0.02, 1.67, -9.01, 0.02, 1.5, -23.49, 0.02, 1.5, -9.5, 0.02, 1.99, -9.34, 0.02, 1.67, -23.49, 0.02, 1.5, -23.49, 0.02, 7, -9.5, 0.02, 7, -9.5, 0.02, 1.99, -23.49, 0.02, 1.5, 7.66, 0.02, 1.67, 7.99, 0.02, 1.5, -7.98, 0.02, 1.5, -7.66, 0.02, 1.66, -7.49, 0.02, 1.99, -7.49, 0.02, 7, 7.5, 0.02, 7, 7.5, 0.02, 1.99, 7.66, 0.02, 1.67, -7.66, 0.02, 1.66, -7.49, 0.02, 1.99, 7.5, 0.02, 1.99, 23.5, 0.02, 1.5, 9.02, 0.02, 1.5, 9.34, 0.02, 1.66, 23.5, 0.02, 1.5, 9.34, 0.02, 1.66, 9.51, 0.02, 1.99, 9.51, 0.02, 1.99, 9.51, 0.02, 7, 23.5, 0.02, 7, 23.5, 0.02, 1.5, -25.5, 0.02, 7, -25.5, 0.02, 1.51, -30.98, 0.02, 1.51, -33.01, 0.02, 1.51, -39.5, 0.02, 1.51, -39.5, 0.02, 7, -33.01, 0.02, 1.51, -39.5, 0.02, 7, -25.5, 0.02, 7, -30.98, 0.02, 1.51, 30.99, 0.02, 1.51, 25.51, 0.02, 1.51, 25.51, 0.02, 7, 39.5, 0.02, 7, 39.5, 0.02, 1.51, 33.02, 0.02, 1.51, 33.02, 0.02, 1.51, 30.99, 0.02, 1.51, 25.51, 0.02, 7, 39.5, 0.02, 7)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(10, 12, 11), PackedInt32Array(15, 14, 13), PackedInt32Array(17, 16, 18), PackedInt32Array(18, 16, 19), PackedInt32Array(23, 22, 20), PackedInt32Array(20, 22, 21), PackedInt32Array(27, 26, 24), PackedInt32Array(24, 26, 25), PackedInt32Array(31, 30, 28), PackedInt32Array(28, 30, 29), PackedInt32Array(34, 33, 32), PackedInt32Array(35, 37, 36), PackedInt32Array(39, 38, 40), PackedInt32Array(40, 38, 41), PackedInt32Array(44, 43, 42), PackedInt32Array(47, 46, 45), PackedInt32Array(51, 50, 48), PackedInt32Array(48, 50, 49), PackedInt32Array(54, 53, 52), PackedInt32Array(57, 56, 55), PackedInt32Array(60, 59, 58), PackedInt32Array(61, 63, 62), PackedInt32Array(65, 64, 66), PackedInt32Array(66, 64, 67), PackedInt32Array(70, 69, 68), PackedInt32Array(71, 73, 72), PackedInt32Array(76, 75, 74), PackedInt32Array(79, 78, 77), PackedInt32Array(83, 82, 80), PackedInt32Array(80, 82, 81), PackedInt32Array(86, 85, 84), PackedInt32Array(89, 88, 87), PackedInt32Array(92, 91, 90), PackedInt32Array(95, 94, 93), PackedInt32Array(97, 96, 98), PackedInt32Array(98, 96, 99), PackedInt32Array(102, 101, 100), PackedInt32Array(105, 104, 103), PackedInt32Array(108, 107, 106), PackedInt32Array(111, 110, 109), PackedInt32Array(115, 114, 112), PackedInt32Array(112, 114, 113), PackedInt32Array(119, 118, 116), PackedInt32Array(116, 118, 117), PackedInt32Array(123, 122, 120), PackedInt32Array(120, 122, 121), PackedInt32Array(127, 126, 124), PackedInt32Array(124, 126, 125), PackedInt32Array(131, 130, 128), PackedInt32Array(128, 130, 129), PackedInt32Array(135, 134, 132), PackedInt32Array(132, 134, 133), PackedInt32Array(138, 137, 136), PackedInt32Array(141, 140, 139), PackedInt32Array(143, 142, 144), PackedInt32Array(144, 142, 145), PackedInt32Array(149, 148, 146), PackedInt32Array(146, 148, 147), PackedInt32Array(153, 152, 150), PackedInt32Array(150, 152, 151), PackedInt32Array(157, 156, 154), PackedInt32Array(154, 156, 155), PackedInt32Array(160, 159, 158), PackedInt32Array(163, 162, 161), PackedInt32Array(165, 164, 166), PackedInt32Array(166, 164, 167), PackedInt32Array(170, 169, 168), PackedInt32Array(173, 172, 171), PackedInt32Array(177, 176, 174), PackedInt32Array(174, 176, 175), PackedInt32Array(180, 179, 178), PackedInt32Array(183, 182, 181), PackedInt32Array(185, 184, 186), PackedInt32Array(186, 184, 187)]
 sample_partition_type = 1
 geometry_source_geometry_mode = 1
 geometry_source_group_name = &"navigation_mesh"
@@ -88,21 +88,6 @@ sky_material = SubResource("ProceduralSkyMaterial_mjde6")
 sky = SubResource("Sky_ul5dx")
 ambient_light_source = 3
 ambient_light_color = Color(1, 1, 1, 1)
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_scghd"]
-vertices = PackedVector3Array(-1.5, 0.02, -1, -1.5, 0.02, 1, 1.5, 0.02, 1, 1.5, 0.02, -1)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
-cell_size = 0.01
-cell_height = 0.01
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_prna8"]
-size = Vector2(4, 3)
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_raosj"]
-vertices = PackedVector3Array(7, 0.02, -1, 7, 0.02, 1, 10, 0.02, 1, 10, 0.02, -1)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
-cell_size = 0.01
-cell_height = 0.01
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_ehopn"]
 
@@ -174,16 +159,9 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -20, 0, 5)
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8, 0, 0)
 mesh = SubResource("ArrayMesh_sbgw5")
 
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="BlueTurrets2/Outer"]
-avoidance_enabled = false
-radius = 2.13
-
 [node name="Inner" type="MeshInstance3D" parent="BlueTurrets2"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 24, 0, 0)
 mesh = SubResource("ArrayMesh_sbgw5")
-
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="BlueTurrets2/Inner"]
-radius = 2.13
 
 [node name="RedTurrets" type="Node3D" parent="."]
 
@@ -192,20 +170,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 0)
 mesh = ExtResource("4_t1yfl")
 skeleton = NodePath("")
 
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="RedTurrets/Inner"]
-radius = 2.13
-avoidance_layers = 2
-
 [node name="Outer" type="MeshInstance3D" parent="RedTurrets"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.0232061, 0)
 mesh = ExtResource("4_t1yfl")
 
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="RedTurrets/Outer"]
-radius = 2.13
-avoidance_layers = 2
-
 [node name="Navigation" type="NavigationRegion3D" parent="." groups=["navigation_mesh"]]
-visible = false
 navigation_mesh = SubResource("NavigationMesh_au2od")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Navigation" groups=["navigation_mesh"]]
@@ -213,12 +182,12 @@ mesh = SubResource("PlaneMesh_nd5dc")
 skeleton = NodePath("../..")
 
 [node name="UpWall2" type="MeshInstance3D" parent="Navigation"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -8)
 mesh = SubResource("BoxMesh_ep4qn")
 skeleton = NodePath("../DownWall")
 
 [node name="UpWall3" type="MeshInstance3D" parent="Navigation"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, -8)
 mesh = SubResource("BoxMesh_ep4qn")
 skeleton = NodePath("../DownWall")
 
@@ -237,11 +206,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.5, 0, 5)
 mesh = SubResource("BoxMesh_ep4qn")
 
 [node name="DownWall2" type="MeshInstance3D" parent="Navigation"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 8)
 mesh = SubResource("BoxMesh_ep4qn")
 
 [node name="DownWall3" type="MeshInstance3D" parent="Navigation"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 8)
 mesh = SubResource("BoxMesh_ep4qn")
 
 [node name="DownWall4" type="MeshInstance3D" parent="Navigation"]
@@ -253,23 +222,6 @@ environment = SubResource("Environment_s4h7m")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 14, -17)
-
-[node name="RedOnly" type="NavigationRegion3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 0)
-visible = false
-navigation_mesh = SubResource("NavigationMesh_scghd")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RedOnly"]
-mesh = SubResource("PlaneMesh_prna8")
-
-[node name="BlueOnly" type="NavigationRegion3D" parent="."]
-visible = false
-navigation_mesh = SubResource("NavigationMesh_raosj")
-navigation_layers = 2
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BlueOnly"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 0)
-mesh = SubResource("PlaneMesh_prna8")
 
 [node name="Entities" type="Node" parent="."]
 
