@@ -81,6 +81,7 @@
 #include <shared/status_effects/example/bleeding_status_effect.h>
 
 #include <shared/entities/structures/nexus.h>
+#include <shared/entities/projectile_entity.h>
 
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
@@ -152,6 +153,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<BarbarianBasicAttack>();
     ClassDB::register_class<BarbarianBleedingPassive>();
     ClassDB::register_class<BarbarianDanceWithDeath>();
+
+    ClassDB::register_class<ProjectileEntity>();
 
     //ClassDB::register_class<>();
 
