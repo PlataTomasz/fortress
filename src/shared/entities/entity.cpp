@@ -43,8 +43,8 @@ GameLevel *Entity::get_gamelevel() {
 
 void Entity::_init() {
 	DISABLE_IN_EDITOR();
-	add_networked_property(SNAME("position"));
-	add_networked_property(SNAME("rotation"));
+	set_process(true);
+	set_physics_process(true);
 }
 
 void Entity::_ready() {
