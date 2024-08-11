@@ -60,7 +60,7 @@ protected:
     static void _bind_methods();
 public:
     StatusEffectVictimComponent *get_victim_component();
-    Node *get_victim_entity();
+    Entity *get_victim_entity();
 
     String get_displayed_name();
     void set_displayed_name(const String& p_name);

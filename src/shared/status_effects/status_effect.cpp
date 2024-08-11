@@ -179,6 +179,6 @@ void StatusEffect::refresh() {
     current_duration = max_duration;
 }
 
-Node *StatusEffect::get_victim_entity() {
-    return get_node_or_null(NodePath("../.."));
+Entity *StatusEffect::get_victim_entity() {
+    return Object::cast_to<Entity>(get_node_or_null(NodePath("../..")));
 }
