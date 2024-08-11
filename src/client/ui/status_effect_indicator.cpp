@@ -6,7 +6,6 @@
 #include <shared/status_effects/status_effect.hpp>
 
 #include <shared/helper_macros.h>
-#include <shared/entities/traits/traits.h>
 #include <scene/gui/texture_rect.h>
 #include <shared/registries/mercenary_registry.h>
 
