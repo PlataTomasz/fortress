@@ -83,6 +83,9 @@
 #include <shared/entities/structures/nexus.h>
 #include <shared/entities/projectile_entity.h>
 
+#include <shared/core/advanced_area_3d.h>
+#include <shared/entities/structures/turret.h>
+
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -174,6 +177,9 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 
     // Structures
     ClassDB::register_class<Nexus>();
+
+    ClassDB::register_class<AdvancedArea3D>();
+    ClassDB::register_class<Turret>();
 
     // Singletons
     //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));

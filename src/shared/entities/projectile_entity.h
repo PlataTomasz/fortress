@@ -24,6 +24,9 @@ public:
     void set_target(Entity *new_target);
     Entity *get_target();
 
+    void set_creator(Entity *new_creator);
+    Entity *get_creator();
+
     void set_hitbox(Area3D *new_hitbox);
     Area3D *get_hitbox();
 };

@@ -30,7 +30,6 @@ properties/0/spawn = false
 properties/0/replication_mode = 1
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_giigm"]
-radius = 2.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_fyyhi"]
 properties/0/path = NodePath(".:position")
@@ -50,11 +49,11 @@ viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tn0xi"]
 
-[node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component", "status_effect_victim_component", "damageable_component")]
-ability_caster_component = NodePath("AbilityCasterComponent")
-attributes_component = NodePath("EntityAttributesComponent")
+[node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "ability_caster_component")]
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+ability_caster_component = NodePath("AbilityCasterComponent")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
 

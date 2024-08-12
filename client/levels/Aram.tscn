@@ -1,9 +1,10 @@
-[gd_scene load_steps=29 format=3 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=32 format=3 uid="uid://8tv1es2vlr8m"]
 
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
 [ext_resource type="ArrayMesh" uid="uid://cr6e15lyo82mf" path="res://models/level/castle/obj/towerSquareTopRoofHigh.obj" id="2_r5kls"]
 [ext_resource type="ArrayMesh" uid="uid://djgsm5u1h4jy3" path="res://models/Turret_barrier_red.tres" id="4_t1yfl"]
+[ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="5_cf4aq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ddly6"]
 resource_name = "wall"
@@ -113,6 +114,13 @@ radius = 2.0
 [sub_resource type="CylinderMesh" id="CylinderMesh_pg77o"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_b8kaq"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_eucpv"]
+radius = 3.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_7bk3y"]
+radius = 1.0
+height = 4.553
 
 [sub_resource type="AudioStreamOggVorbis" id="AudioStreamOggVorbis_vreua"]
 loop = true
@@ -270,6 +278,19 @@ mesh = SubResource("CylinderMesh_pg77o")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/Projectile01/Area3D"]
 shape = SubResource("CylinderShape3D_b8kaq")
+
+[node name="Turret" type="Turret" parent="Entities" node_paths=PackedStringArray("aggro_area")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4)
+aggro_area = NodePath("AdvancedArea3D")
+projectile_template = ExtResource("5_cf4aq")
+
+[node name="AdvancedArea3D" type="AdvancedArea3D" parent="Entities/Turret"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/Turret/AdvancedArea3D"]
+shape = SubResource("CylinderShape3D_eucpv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Entities/Turret"]
+mesh = SubResource("SphereMesh_7bk3y")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn")

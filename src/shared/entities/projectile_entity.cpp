@@ -2,6 +2,8 @@
 
 #include <scene/3d/area_3d.h>
 
+#include <shared/entities/components/damage/damageable_component.h>
+
 void ProjectileEntity::_tickv() {
     // It definitely goes somewhere, but I'm not sure If it stops in the right place
     float delta = SceneTree::get_singleton()->get_physics_process_time();
@@ -34,6 +36,7 @@ void ProjectileEntity::_on_hit_entity(Entity *hit_entity) {
     if(hit_entity == target) {
         if(DamageableComponent *damageable = hit_entity->get_damageable_component()) {
             //damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, DamageObject::BASIC_ATTACK_DAMAGE, 15, creator)));
+            damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, DamageObject::BASIC_ATTACK_DAMAGE, 15, creator)));
         }
         print_line(this->to_string(), "hit entity", hit_entity, ". Now It will disappear");
         queue_free();
@@ -58,6 +61,13 @@ Area3D *ProjectileEntity::get_hitbox() {
     return hitbox;
 }
 
+void ProjectileEntity::set_creator(Entity *new_creator) {
+    creator = new_creator;
+}
+
+Entity *ProjectileEntity::get_creator() {
+    return creator;
+}
 
 void ProjectileEntity::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_target"), &ProjectileEntity::get_target);
