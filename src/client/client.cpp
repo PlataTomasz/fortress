@@ -120,17 +120,6 @@ void Client::_init()
 {
     client_peer.instantiate(); //Same as using memnew
     scene_multiplayer.instantiate();
-
-    //Create UI
-    Ref<PackedScene> scene = ResourceLoader::load("res://scenes/ui/UserInterface.tscn");
-    user_interface = Object::cast_to<UserInterface>(scene->instantiate());
-    ERR_FAIL_NULL(user_interface);
-    MainMenu *menu = user_interface->get_main_menu();
-    if(menu) {
-        menu->get_join_button()->connect("pressed", callable_mp(this, &Client::_on_join_server_btn_press));
-    }
-    user_interface->set_name("UserInterface");
-    add_child(user_interface);
 }
 
 void Client::_notification(int notification)
@@ -250,4 +239,22 @@ void Client::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_player"), &Client::get_player);
     ClassDB::bind_method(D_METHOD("set_player", "player"), &Client::set_player);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "player"), "set_player", "get_player");
+
+    ClassDB::bind_method(D_METHOD("get_user_interface"), &Client::get_user_interface);
+    ClassDB::bind_method(D_METHOD("set_user_interface", "user_interface"), &Client::set_user_interface);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "user_interface", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_user_interface", "get_user_interface");
+}
+
+void Client::set_user_interface(UserInterface *new_user_interface) {
+    user_interface = new_user_interface;
+
+    DISABLE_IN_EDITOR();
+    MainMenu *menu = user_interface->get_main_menu();
+    if(menu) {
+        menu->get_join_button()->connect("pressed", callable_mp(this, &Client::_on_join_server_btn_press));
+    }
+}
+
+UserInterface *Client::get_user_interface() {
+    return user_interface;
 }
