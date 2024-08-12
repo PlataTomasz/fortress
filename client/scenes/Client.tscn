@@ -1,3 +1,10 @@
-[gd_scene format=3 uid="uid://bjomyg22ywtfl"]
+[gd_scene load_steps=2 format=3 uid="uid://bjomyg22ywtfl"]
 
-[node name="Client" type="Client"]
+[ext_resource type="PackedScene" uid="uid://dwr1mgxijjv32" path="res://scenes/ui/UserInterface.tscn" id="1_u8w0t"]
+
+[node name="Client" type="Client" node_paths=PackedStringArray("user_interface")]
+user_interface = NodePath("UserInterface")
+
+[node name="UserInterface" parent="." instance=ExtResource("1_u8w0t")]
+
+[editable path="UserInterface"]
