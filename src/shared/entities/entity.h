@@ -6,18 +6,25 @@
 #include <server/server.h>
 
 class GameLevel;
-
+class EntityBehaviourProvider;
+class StatusEffectVictimComponent;
+class DamageableComponent;
+class AbilityCasterComponent;
+class EntityAttributesComponent;
+class MovementComponent;
 /**
  * Base class for representing most of the in-game objects, such as projectiles, monsters, ticking entities
  */
 class Entity : public Node3D {
-	GDCLASS(Entity, Node3D);
-
+GDCLASS(Entity, Node3D);
 private:
-	/**
-	 * Stores names of all properties that should be networked
-	 */
-	List<StringName> networked_properties;
+	// Components
+	EntityBehaviourProvider *behaviour = nullptr;
+	StatusEffectVictimComponent *status_effect_victim_component = nullptr;
+    DamageableComponent *damageable_component = nullptr;
+	AbilityCasterComponent *ability_caster_component = nullptr;
+	EntityAttributesComponent *attributes_component = nullptr;
+	MovementComponent *movement_component = nullptr;
 
 	// Name which is displayed by the UI
 	String displayed_name;
@@ -27,6 +34,7 @@ private:
 	void _tick();
 
 	void _exit_tree();
+
 
 protected:
 	virtual Node *_get_component(const String& component_typename);
@@ -42,6 +50,17 @@ public:
 	bool has_tag(const String& tag);
 	void add_tag(const String& tag);
 	void remove_tag(const String& tag);
+
+	StatusEffectVictimComponent *get_status_effect_victim_component();
+    void set_status_effect_victim_component(StatusEffectVictimComponent *new_status_effect_vicitm_component);
+    DamageableComponent *get_damageable_component();
+    void set_damageable_component(DamageableComponent *new_damageable_component);
+	AbilityCasterComponent *get_ability_caster_component();
+    void set_ability_caster_component(AbilityCasterComponent *new_ability_caster_component);
+	EntityAttributesComponent *get_attributes_component();
+    void set_attributes_component(EntityAttributesComponent *new_attributes_component);
+	MovementComponent *get_movement_component();
+    void set_movement_component(MovementComponent *new_movement_component);
 
 	Vector2 get_position_2d() {
 		Vector3 pos = get_position();
@@ -63,16 +82,6 @@ public:
 
 	// Returns level where this entity is
 	GameLevel *get_gamelevel();
-
-	/**
-	 * Returns a list of all properties that should be networked
-	 */
-	List<StringName> &get_networked_properties() {
-		return networked_properties;
-	}
-
-	void add_networked_property(const StringName &property_name);
-	void remove_networked_property(const StringName &property_name);
 
 	Entity() {
 	}

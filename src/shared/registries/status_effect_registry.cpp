@@ -1,7 +1,5 @@
 #include "status_effect_registry.h"
 
-#include <shared/entities/traits/traits.h>
-
 template<>
 Registry<StatusEffect> *Registry<StatusEffect>::singleton = nullptr;
 

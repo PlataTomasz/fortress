@@ -1,16 +1,14 @@
- #include "slow_status_effect.h"
- 
- #include <shared/entities/traits/t_has_attributes.h>
+#include "slow_status_effect.h"
+
+#include <shared/entities/entity.h>
+#include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
 void SlowStatusEffect::_on_apply() {
-    THasAttributes *t_has_attributes = dynamic_cast<THasAttributes *>(get_victim_entity());
-    ERR_FAIL_NULL(t_has_attributes);
-    //if(!t_has_attributes) return;
+    ERR_FAIL_NULL(get_victim_entity());
 
-    EntityAttributesComponent *attributes = t_has_attributes->get_attributes_component();
+    EntityAttributesComponent *attributes = get_victim_entity()->get_attributes_component();
     ERR_FAIL_NULL(attributes);
-    //if(!attributes) return;
-
+    
     Ref<FloatAttribute> move_speed_atr = attributes->get_movement_speed();
     modifier = Ref(memnew(FloatValueModifier));
     modifier->set_type(FloatValueModifier::Type::MULTI_MUL);
@@ -22,13 +20,10 @@ void SlowStatusEffect::_on_apply() {
 }
 
 void SlowStatusEffect::_on_remove() {
-    THasAttributes *t_has_attributes = dynamic_cast<THasAttributes *>(get_victim_entity());
-    ERR_FAIL_NULL(t_has_attributes);
-    //if(!t_has_attributes) return;
+    ERR_FAIL_NULL(get_victim_entity());
 
-    EntityAttributesComponent *attributes = t_has_attributes->get_attributes_component();
+    EntityAttributesComponent *attributes = get_victim_entity()->get_attributes_component();
     ERR_FAIL_NULL(attributes);
-    //if(!attributes) return;
 
     // Effect ended, remove movement speed penalty
     modifier->expire();

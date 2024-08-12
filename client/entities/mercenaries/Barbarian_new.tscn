@@ -30,7 +30,8 @@ base = 300.0
 [sub_resource type="ViewportTexture" id="ViewportTexture_d4l4k"]
 viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
 
-[node name="Mercenary" instance=ExtResource("1_jp0yl")]
+[node name="Mercenary" node_paths=PackedStringArray("movement_component") instance=ExtResource("1_jp0yl")]
+movement_component = NodePath("MovementComponent")
 portrait_icon = ExtResource("1_ngwr0")
 
 [node name="EntityAttributesComponent" parent="." index="2"]
