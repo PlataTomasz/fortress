@@ -4,8 +4,6 @@
 #include <core/object/class_db.h>
 #include <client/client.hpp>
 
-#include <shared/entities/traits/t_has_attributes.h>
-
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 
 #include <shared/entities/mercenaries/mercenary.hpp>
@@ -13,6 +11,8 @@
 #include <client/ui/ui.h>
 #include <client/ui/status_effect_indicator.h>
 #include <scene/gui/texture_rect.h>
+
+#include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
 void PlayerHUD::_ready() {
     // Setup signals

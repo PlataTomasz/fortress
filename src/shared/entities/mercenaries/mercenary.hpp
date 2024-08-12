@@ -6,36 +6,23 @@
 #include <shared/entities/components/abilities/ability_caster_component.h>
 #include <shared/helpers/object_ptr.h>
 
-#include <shared/entities/traits/traits.h>
-#include <shared/entities/traits/t_uses_abilities.h>
-#include <shared/entities/traits/t_has_attributes.h>
-
 class StatusEffectVictimComponent;
-class DamageableComponent;
 
 /**
  * Mercenary is a class responsible for representing
  * specialization of entity which is primarily supposed
  * to be controlled by Player.
 */
-class Mercenary : public Entity, public TUsesAbilities, public THasAttributes
+class Mercenary : public Entity
 {
 GDCLASS(Mercenary, Entity);
 protected:
-    StatusEffectVictimComponent *status_effect_victim_component = nullptr;
-    DamageableComponent *damageable_component = nullptr;
-
     static void _bind_methods();
 
     virtual Node *_get_component(const String& component_typename) override;
 
     Ref<Texture2D> portrait_icon;
 public:
-    StatusEffectVictimComponent *get_status_effect_victim_component();
-    void set_status_effect_victim_component(StatusEffectVictimComponent *p_status_effect_vicitm_component);
-    DamageableComponent *get_damageable_component();
-    void set_damageable_component(DamageableComponent *p_damageable_component);
-
     Ref<Texture2D> get_portrait_icon();
     void set_portrait_icon(const Ref<Texture2D>& p_icon);
 

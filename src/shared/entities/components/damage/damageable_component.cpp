@@ -7,15 +7,13 @@
 
 #include <shared/entities/entity.h>
 
-#include <shared/entities/traits/t_has_attributes.h>
-
 // TODO: Deprecated - Remove
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 {
-    THasAttributes *t_has_attributes = dynamic_cast<THasAttributes *>(get_parent());
-    if(!t_has_attributes) return;
+    Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
+    ERR_FAIL_NULL(parent_entity);
 
-    EntityAttributesComponent *attributes_component = t_has_attributes->get_attributes_component();
+    EntityAttributesComponent *attributes_component = parent_entity->get_attributes_component();
     if(!attributes_component) return;
 
 	float global_defense_val = attributes_component->get_global_defense()->get_current();
