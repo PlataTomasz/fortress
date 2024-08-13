@@ -10,6 +10,10 @@
 
 #include <shared/registries/mercenary_registry.h>
 
+#include <core/variant/variant_utility.h>
+
+#include <server/core/console_cmd/disconnect_peer_console_command.h>
+
 void Server::_ready()
 {
     DISABLE_IN_EDITOR();
@@ -97,6 +101,45 @@ void Server::_init() {
     players = memnew(Node);
     players->set_name("Players");
     add_child(players);
+
+    _setup_console_commands();
+
+    command_listening_thread.instantiate();
+    command_listening_thread->start(callable_mp(this, &Server::_await_console_command), core_bind::Thread::PRIORITY_NORMAL);
+}
+
+void Server::_await_console_command() {
+    while(true) {
+        String console_input = core_bind::OS::get_singleton()->read_string_from_stdin();
+        PackedStringArray console_input_words = console_input.split(" ");
+
+        if(console_input_words.size() != 0) {
+            String console_command_name = console_input_words[0];
+            PackedStringArray command_arguments = console_input_words.size() > 1 ? (console_input_words.slice(1, console_input_words.size())) : PackedStringArray();
+
+            callable_mp(this, &Server::execute_server_command).call_deferred(console_command_name, command_arguments);
+        }
+    }
+}
+
+void Server::_setup_console_commands() {
+    add_console_command("disconnect_peer", memnew(DisconnectPeerConsoleCommand(this)));
+}
+
+void Server::add_console_command(const String& command_name, ServerConsoleCommand *command_object) {
+    ERR_FAIL_COND_MSG(defined_console_commands.has(command_name), "Command with such name is already registered!");
+    defined_console_commands.insert(command_name, command_object);
+}
+
+Error Server::execute_server_command(const String& command_name, PackedStringArray command_arguments) {
+    ERR_FAIL_COND_V_MSG(!defined_console_commands.has(command_name), Error::ERR_INVALID_PARAMETER, "Command with such name doesn't exist!");
+    // TODO: Move into separate class/method/template/idk yet
+    Array command_arguments_array;
+    for(const String& command_argument : command_arguments) {
+        command_arguments_array.push_back(VariantUtilityFunctions::str_to_var(command_argument));
+    }
+
+    return defined_console_commands.get(command_name)->execute(command_arguments_array);
 }
 
 void Server::server_rpc_disconnect(const String reason) {
@@ -174,6 +217,12 @@ void Server::add_player(int peer_id, Ref<Player> player) {
     }
     //Peer already exists - don't add
 };
+
+bool Server::is_peer_connected(int peer_id) {
+    Vector<int> connected_peer_ids = scene_multiplayer->get_peer_ids();
+    
+    return connected_peer_ids.has(peer_id);
+}
 
 Ref<Player> Server::get_player(int peer_id) {
 	if (connected_players.has(peer_id)) {
