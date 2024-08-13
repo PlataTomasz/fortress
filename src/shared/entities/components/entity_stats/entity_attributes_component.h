@@ -12,14 +12,14 @@ private:
 protected:
     static void _bind_methods();
 public:
-    Ref<CappedResourceAttribute> health = memnew(CappedResourceAttribute(100, 0, 100));
+    Ref<CappedResourceAttribute> health;
     //Reduces damage no matter damage type
-    Ref<FloatAttribute> global_defense = memnew(FloatAttribute(30));
-    Ref<FloatAttribute> attack_damage = memnew(FloatAttribute(75));
-    Ref<FloatAttribute> attack_speed = memnew(FloatAttribute(1.0));
-    Ref<FloatAttribute> magic_power = memnew(FloatAttribute(0));
-    Ref<FloatAttribute> cooldown_reduction = memnew(FloatAttribute(0));
-    Ref<FloatAttribute> movement_speed = memnew(FloatAttribute(300));
+    Ref<FloatAttribute> global_defense;
+    Ref<FloatAttribute> attack_damage;
+    Ref<FloatAttribute> attack_speed;
+    Ref<FloatAttribute> magic_power;
+    Ref<FloatAttribute> cooldown_reduction;
+    Ref<FloatAttribute> movement_speed;
 
     Ref<CappedResourceAttribute> get_health();
     void set_health(Ref<CappedResourceAttribute> attribute);
