@@ -45,6 +45,8 @@ public:
     Ref<ENetPacketPeer> get_controlling_peer();
     */
 
+   void cleanup_after_disconnect();
+
     Player(){};
 };
 
