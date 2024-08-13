@@ -179,6 +179,8 @@ void Client::_on_server_disconnect()
     if(main_menu) {
         main_menu->set_visible(true);
     }
+
+    player->cleanup_after_disconnect();
 }
 
 void Client::process()

@@ -86,6 +86,8 @@ public:
 	Entity() {
 	}
 
+	~Entity() {};
+
 	
 	template<class T>
 	T *get_component() {

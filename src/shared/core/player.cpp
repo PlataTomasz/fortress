@@ -29,6 +29,10 @@ void Player::set_controlled_entity(Mercenary *p_controlled_entity)
     
 }
 
+void Player::cleanup_after_disconnect() {
+    controlled_entity = nullptr;
+}
+
 Mercenary *Player::get_controlled_entity()
 {
     return controlled_entity;
