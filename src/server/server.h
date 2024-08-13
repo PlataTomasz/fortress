@@ -14,7 +14,10 @@
 
 #include <shared/core/realm.h>
 
+#include <core/core_bind.h>
+
 class Game;
+class ServerConsoleCommand;
 
 /**
  * Server is a node responsible for managing connections, sending and handling data over network.
@@ -23,12 +26,20 @@ class Server : public Realm
 {
 GDCLASS(Server, Realm);
 private:
+    HashMap<String, ServerConsoleCommand *> defined_console_commands;
+    List<Pair<String, Array>> commands_to_execute;
+
     Ref<ENetMultiplayerPeer> server_peer;
     SceneMultiplayer *scene_multiplayer;
 
     HashMap<int, Ref<Player>> connected_players;
 
+    Ref<core_bind::Thread> command_listening_thread;
+
     Node *players = nullptr;
+
+    void _await_console_command();
+    void _setup_console_commands();
 protected:
     void _notification(int notification)
     {
@@ -96,6 +107,12 @@ public:
 
     void disconnect_peer(int peer_id, const String reason = "Disconnected by server!");
 
+    void add_console_command(const String& command_name, ServerConsoleCommand *command_object);
+
+    Error execute_server_command(const String& command_name, PackedStringArray command_arguments);
+
+    bool is_peer_connected(int peer_id);
+ 
     Server();
 };
 

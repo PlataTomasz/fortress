@@ -33,11 +33,11 @@ void PlayerHUD::_ready() {
 
 // Player's controlled entity changed - Make UI read from new controlled entity
 void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *new_mercenary) {
+    bool are_equal = (ObjectDB::get_instance(new_mercenary->get_instance_id())) == new_mercenary;
+
     // Need to update values 
     EntityAttributesComponent *attributes = new_mercenary->get_attributes_component();
-    if(attributes) {
-
-    }
+    ERR_FAIL_NULL(attributes);
 
     StatusEffectVictimComponent *status_effect_component = new_mercenary->get_status_effect_victim_component();
     if (status_effect_component) {
