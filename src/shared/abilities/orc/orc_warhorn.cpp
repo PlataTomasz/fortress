@@ -1,6 +1,6 @@
 #include "orc_warhorn.h"
 
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 #include <core/variant/variant.h>
 #include <shared/status_effects/status_effect.hpp>
 #include <shared/core/managers/component_manager.h>

@@ -1,7 +1,7 @@
 #include "turret.h"
 
 #include <shared/entities/components/damage/damageable_component.h>
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 #include <shared/core/game_level.h>
 #include <shared/entities/entity.h>
 #include <shared/entities/projectile_entity.h>

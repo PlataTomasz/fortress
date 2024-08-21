@@ -1,6 +1,6 @@
 #include "projectile_entity.h"
 
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 
 #include <shared/entities/components/damage/damageable_component.h>
 

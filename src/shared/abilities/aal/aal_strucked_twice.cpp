@@ -1,10 +1,10 @@
 #include <shared/abilities/aal/aal_strucked_twice.h>
-#include <scene/3d/collision_shape_3d.h>
-#include <scene/resources/sphere_shape_3d.h>
+#include <scene/3d/physics/collision_shape_3d.h>
+#include <scene/resources/3d/sphere_shape_3d.h>
 
 #include <shared/entities/components/abilities/ability_caster_component.h>
 
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 
 void AalStruckedTwice::_use(const Ref<ActionContext>& action_context)
 {

@@ -2,7 +2,7 @@
 #define AAL_STRUCKED_TWICE_H_INCLUDED
 
 #include <shared/abilities/active_ability.hpp>
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 
 struct AbilityHitData
 {

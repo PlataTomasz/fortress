@@ -2,9 +2,9 @@
 
 #include <shared/helper_macros.h>
 
-#include <scene/3d/area_3d.h>
-#include <scene/3d/collision_shape_3d.h>
-#include <scene/resources/cylinder_shape_3d.h>
+#include <scene/3d/physics/area_3d.h>
+#include <scene/3d/physics/collision_shape_3d.h>
+#include <scene/resources/3d/cylinder_shape_3d.h>
 
 #include <shared/entities/entity.h>
 

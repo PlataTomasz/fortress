@@ -2,7 +2,7 @@
 #define HITBOX_COMPONENT_INCLUDED
 
 #include <shared/entities/components/component_3d.h>
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 
 class Entity;
 

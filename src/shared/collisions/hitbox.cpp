@@ -1,7 +1,7 @@
 #include <shared/collisions/hitbox.h>
-#include <scene/3d/collision_shape_3d.h>
-#include <scene/3d/area_3d.h>
-#include <scene/3d/ray_cast_3d.h>
+#include <scene/3d/physics/collision_shape_3d.h>
+#include <scene/3d/physics/area_3d.h>
+#include <scene/3d/physics/ray_cast_3d.h>
 /*
 Hitbox::Hitbox()
 {

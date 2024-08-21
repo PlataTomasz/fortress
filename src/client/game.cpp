@@ -2,7 +2,7 @@
 #include <scene/3d/node_3d.h>
 #include <scene/3d/camera_3d.h>
 #include <scene/3d/mesh_instance_3d.h>
-#include <scene/resources/primitive_meshes.h>
+#include <scene/resources/3d/primitive_meshes.h>
 #include <core/input/input_event.h>
 #include <iostream>
 #include <shared/entities/entity.h>
