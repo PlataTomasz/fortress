@@ -1,7 +1,7 @@
 #if !defined(ADVANCED_AREA_3D_INCLUDED)
 #define ADVANCED_AREA_3D_INCLUDED
 
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 
 class Entity;
 

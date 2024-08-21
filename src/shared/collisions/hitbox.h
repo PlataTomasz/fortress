@@ -2,7 +2,7 @@
 #define HITBOX_H_INCLUDED
 
 #include <core/object/object.h>
-#include <scene/3d/area_3d.h>
+#include <scene/3d/physics/area_3d.h>
 
 class CollisionShape3D;
 class SphereShape3D;

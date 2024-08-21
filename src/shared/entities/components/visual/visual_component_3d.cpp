@@ -1,7 +1,7 @@
 #include "visual_component_3d.h"
 
 #include <scene/3d/mesh_instance_3d.h>
-#include <scene/resources/primitive_meshes.h>
+#include <scene/resources/3d/primitive_meshes.h>
 
 void VisualComponent3D::_notification(int p_notification) {
 	switch (p_notification) {

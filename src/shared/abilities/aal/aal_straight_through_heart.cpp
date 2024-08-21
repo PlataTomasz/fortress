@@ -1,9 +1,9 @@
 #include <shared/abilities/aal/aal_straight_through_heart.h>
-#include <scene/3d/collision_shape_3d.h>
-#include <scene/resources/box_shape_3d.h>
+#include <scene/3d/physics/collision_shape_3d.h>
+#include <scene/resources/3d/box_shape_3d.h>
 #include <scene/resources/packed_scene.h>
 #include <scene/3d/mesh_instance_3d.h>
-#include <scene/resources/primitive_meshes.h>
+#include <scene/resources/3d/primitive_meshes.h>
 
 
 

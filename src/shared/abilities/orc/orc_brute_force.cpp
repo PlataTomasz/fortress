@@ -1,8 +1,8 @@
 #include "orc_brute_force.h"
 
-#include <scene/3d/area_3d.h>
-#include <scene/3d/collision_shape_3d.h>
-#include <scene/resources/box_shape_3d.h>
+#include <scene/3d/physics/area_3d.h>
+#include <scene/3d/physics/collision_shape_3d.h>
+#include <scene/resources/3d/box_shape_3d.h>
 
 void OrcBruteForce::_use(const Ref<ActionContext> &action_context) {
     // Facade?
