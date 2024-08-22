@@ -1,15 +1,15 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
-uid="uid://bpgfcg5di4yim"
-path="res://.godot/imported/orc_rigged.gltf-bc173160c22d02dd81bbeb973b24f44a.scn"
+type="AnimationLibrary"
+uid="uid://dyw8cufffctiy"
+path="res://.godot/imported/animations_orc_human.gltf-bbb9118c19f8d0a889df9b722d4add3d.res"
 
 [deps]
 
-source_file="res://models/orc_rigged.gltf"
-dest_files=["res://.godot/imported/orc_rigged.gltf-bc173160c22d02dd81bbeb973b24f44a.scn"]
+source_file="res://models/animations_orc_human.gltf"
+dest_files=["res://.godot/imported/animations_orc_human.gltf-bbb9118c19f8d0a889df9b722d4add3d.res"]
 
 [params]
 

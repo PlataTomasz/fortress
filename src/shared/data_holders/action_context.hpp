@@ -35,6 +35,10 @@ public:
     {
         return target_entity;
     }
+
+    Vector3 get_use_position() {
+        return use_position;
+    }
     
     ActionContext(
         Entity* _user,

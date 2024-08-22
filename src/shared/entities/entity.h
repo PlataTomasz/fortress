@@ -12,6 +12,9 @@ class DamageableComponent;
 class AbilityCasterComponent;
 class EntityAttributesComponent;
 class MovementComponent;
+class VisualComponent3D;
+class AudioComponent;
+
 /**
  * Base class for representing most of the in-game objects, such as projectiles, monsters, ticking entities
  */
@@ -25,6 +28,8 @@ private:
 	AbilityCasterComponent *ability_caster_component = nullptr;
 	EntityAttributesComponent *attributes_component = nullptr;
 	MovementComponent *movement_component = nullptr;
+	VisualComponent3D *visual_component = nullptr;
+	AudioComponent *audio_component = nullptr;
 
 	// Name which is displayed by the UI
 	String displayed_name;
@@ -61,6 +66,11 @@ public:
     void set_attributes_component(EntityAttributesComponent *new_attributes_component);
 	MovementComponent *get_movement_component();
     void set_movement_component(MovementComponent *new_movement_component);
+	VisualComponent3D *get_visual_component();
+    void set_visual_component(VisualComponent3D *new_visual_component);
+	AudioComponent *get_audio_component();
+    void set_audio_component(AudioComponent *new_audio_component);
+
 
 	Vector2 get_position_2d() {
 		Vector3 pos = get_position();

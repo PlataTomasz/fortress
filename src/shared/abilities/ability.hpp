@@ -26,7 +26,7 @@ protected:
 #endif
 
 #ifdef CLIENT
-    virtual void _use(const Ref<ActionContext>& action_context){};
+    virtual void _clientside_use(const Ref<ActionContext>& action_context){};
 #endif
 private:
     void _init();

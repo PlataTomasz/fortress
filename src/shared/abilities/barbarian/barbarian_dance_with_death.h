@@ -9,7 +9,13 @@ private:
 
 public:
     // 
+    #ifdef CLIENT
+    virtual void _clientside_use(const Ref<ActionContext>& action_context) override;
+    #endif
+    
+    #ifdef SERVER
     virtual void _use(const Ref<ActionContext>& action_context) override;
+    #endif
 };
 
 #endif // BARBARIAN_DANCE_WITH_DEATH_INCLUDED

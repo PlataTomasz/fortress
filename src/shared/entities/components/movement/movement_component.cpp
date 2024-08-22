@@ -30,8 +30,11 @@ void MovementComponent::_notification(int p_notification) {
 #ifdef SERVER
 void MovementComponent::_tick() {
 	if (nav_agent->is_navigation_finished()) {
+		currently_moving = false;
 		return;
 	}
+
+	currently_moving = true;
 
 	Entity *ent = Object::cast_to<Entity>(get_parent());
 	ERR_FAIL_NULL(ent);
@@ -97,6 +100,14 @@ void MovementComponent::_init() {
 	set_physics_process(true);
 }
 
+bool MovementComponent::is_currently_moving() {
+	return currently_moving;
+}
+
+void MovementComponent::set_currently_moving(bool does_currently_move) {
+	currently_moving = does_currently_move;
+}
+
 void MovementComponent::set_destination_position(Vector3 target_position) {
 	nav_agent->set_target_position(target_position);
 }
@@ -106,7 +117,9 @@ Vector3 MovementComponent::get_destination_position() {
 }
 
 void MovementComponent::_bind_methods() {
-    
+    ClassDB::bind_method(D_METHOD("is_currently_moving"), &MovementComponent::is_currently_moving);
+    ClassDB::bind_method(D_METHOD("set_currently_moving", "does_currently_move"), &MovementComponent::set_currently_moving);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "currently_moving"), "set_currently_moving", "is_currently_moving");
 }
 
 void MovementComponent::set_pathfinding_radius(real_t pathfinding_radius) {
