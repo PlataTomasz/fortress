@@ -9,7 +9,9 @@ GDCLASS(TurretAttackAbility, Ability);
 private:
     Ref<PackedScene> turret_projectile_template;
 protected:
+    #ifdef SERVER
     virtual void _use(const Ref<ActionContext>& action_context) override;
+    #endif
 };
 
 #endif // TURRET_ATTACK_ABILITY_INCLUDED

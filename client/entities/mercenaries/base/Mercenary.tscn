@@ -1,4 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://ca282scpps8xr"]
+[gd_scene load_steps=15 format=3 uid="uid://ca282scpps8xr"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_i1yjj"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_1i01r"]
 resource_local_to_scene = true
@@ -49,13 +51,19 @@ viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tn0xi"]
 
-[node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "ability_caster_component")]
+[node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "ability_caster_component", "movement_component", "visual_component", "audio_component")]
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
 attributes_component = NodePath("EntityAttributesComponent")
 ability_caster_component = NodePath("AbilityCasterComponent")
+movement_component = NodePath("MovementComponent")
+visual_component = NodePath("VisualComponent3D")
+audio_component = NodePath("AudioComponent")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="MovementComponent"]
+replication_config = SubResource("SceneReplicationConfig_i1yjj")
 
 [node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
 
@@ -147,3 +155,10 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 entity = NodePath("../../../../..")
+
+[node name="AudioComponent" type="AudioComponent" parent="." node_paths=PackedStringArray("audio_player")]
+audio_player = NodePath("AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="AudioComponent"]
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="."]

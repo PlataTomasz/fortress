@@ -32,7 +32,9 @@ void Ability::_notification(int p_notification) {
 void Ability::use(const Ref<ActionContext>& action_context) {
     //TODO: Show indicator first if needed
     // Call RPC to server on client builds
-    rpc("ability_use_request", action_context);
+    //rpc("ability_use_request", action_context);
+
+    _clientside_use(action_context);
 }
 #endif
 

@@ -10,6 +10,8 @@
 #include <shared/entities/components/abilities/ability_caster_component.h>
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 #include <shared/entities/components/movement/movement_component.h>
+#include <shared/entities/components/visual/visual_component_3d.h>
+#include <shared/entities/components/audio/audio_component.h>
 
 bool Entity::has_tag(const String& tag) {
 	return is_in_group(tag);
@@ -51,6 +53,13 @@ void Entity::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("set_movement_component"), &Entity::set_movement_component);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "movement_component", PROPERTY_HINT_NODE_TYPE, MovementComponent::get_class_static()), "set_movement_component", "get_movement_component");
 
+	::ClassDB::bind_method(D_METHOD("get_visual_component"), &Entity::get_visual_component);
+    ::ClassDB::bind_method(D_METHOD("set_visual_component"), &Entity::set_visual_component);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "visual_component", PROPERTY_HINT_NODE_TYPE, VisualComponent3D::get_class_static()), "set_visual_component", "get_visual_component");
+
+	::ClassDB::bind_method(D_METHOD("get_audio_component"), &Entity::get_audio_component);
+    ::ClassDB::bind_method(D_METHOD("set_audio_component"), &Entity::set_audio_component);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "audio_component", PROPERTY_HINT_NODE_TYPE, AudioComponent::get_class_static()), "set_audio_component", "get_audio_component");
 }
 
 Node *Entity::_get_component(const String& component_typename) {
@@ -134,4 +143,20 @@ MovementComponent *Entity::get_movement_component() {
 
 void Entity::set_movement_component(MovementComponent *new_movement_component) {
 	movement_component = new_movement_component;
+}
+
+VisualComponent3D *Entity::get_visual_component() {
+	return visual_component;
+}
+
+void Entity::set_visual_component(VisualComponent3D *new_visual_component) {
+	visual_component = new_visual_component;
+}
+
+AudioComponent *Entity::get_audio_component() {
+	return audio_component;
+}
+
+void Entity::set_audio_component(AudioComponent *new_audio_component) {
+	audio_component = new_audio_component;
 }

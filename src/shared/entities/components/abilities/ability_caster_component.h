@@ -25,6 +25,8 @@ private:
     Ability *second_ability = nullptr;
     Ability *third_ability = nullptr;
     Ability *ultimate_ability = nullptr;
+
+    void server_rpc_ability_used(int which_ability, Dictionary networked_action_data);
 public:
     enum AbilitySetIndex  : int
     {
@@ -36,6 +38,7 @@ public:
         ABILITY_MAX
     };
 protected:
+    void _notification(int p_notification);
     static void _bind_methods();
 public:
     Entity *get_owning_entity();
@@ -60,8 +63,6 @@ public:
 
     void use_ability(int index, const Ref<ActionContext>& action_context);
     void use_basic_attack(const Ref<ActionContext>& action_context);
-
-    void _notification(int notification);
 
     virtual ~AbilityCasterComponent();
 

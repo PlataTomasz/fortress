@@ -4,6 +4,7 @@
 #include <shared/core/sh_game.h>
 #include <shared/core/game_level.h>
 
+#ifdef SERVER
 void ExampleAbility01::_use(const Ref<ActionContext>& use_context) {
     // Spawn box entity underneath user
     Entity *ent = use_context->get_user();
@@ -13,3 +14,4 @@ void ExampleAbility01::_use(const Ref<ActionContext>& use_context) {
     box->set_name(itos(box->get_instance_id()));
     Realm::get_shared_game()->get_current_level()->add_entity(box);
 }
+#endif

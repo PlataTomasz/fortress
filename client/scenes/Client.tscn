@@ -1,10 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjomyg22ywtfl"]
+[gd_scene load_steps=3 format=3 uid="uid://bjomyg22ywtfl"]
 
 [ext_resource type="PackedScene" uid="uid://dwr1mgxijjv32" path="res://scenes/ui/UserInterface.tscn" id="1_u8w0t"]
+[ext_resource type="AudioStream" uid="uid://coyc7xjcg78xh" path="res://audio/bgm.mp3" id="2_ch10y"]
 
 [node name="Client" type="Client" node_paths=PackedStringArray("user_interface")]
 user_interface = NodePath("UserInterface")
 
 [node name="UserInterface" parent="." instance=ExtResource("1_u8w0t")]
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ch10y")
+autoplay = true
 
 [editable path="UserInterface"]

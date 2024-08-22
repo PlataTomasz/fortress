@@ -45,11 +45,11 @@ properties/1/replication_mode = 1
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_f2anu"]
 radius = 2.0
 
-[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("ability_caster_component", "attributes_component", "status_effect_victim_component", "damageable_component")]
-ability_caster_component = NodePath("AbilityCasterComponent")
-attributes_component = NodePath("EntityAttributesComponent")
+[node name="Barbarian" type="Mercenary" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "ability_caster_component")]
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+ability_caster_component = NodePath("AbilityCasterComponent")
 portrait_icon = ExtResource("1_f2r1n")
 
 [node name="MovementComponent" type="MovementComponent" parent="."]

@@ -6,7 +6,9 @@
 class ExampleAbility01 : public Ability {
 GDCLASS(ExampleAbility01, Ability);
 public:
+    #ifdef SERVER
     virtual void _use(const Ref<ActionContext>& action_context) override;
+    #endif
 
     ExampleAbility01(){};
 };

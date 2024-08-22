@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bpgfcg5di4yim"
-path="res://.godot/imported/orc_rigged.gltf-bc173160c22d02dd81bbeb973b24f44a.scn"
+uid="uid://viq62grq3aix"
+path="res://.godot/imported/barbarian.glb-5ae41a9f5f36535af54ea6e1a85893eb.scn"
 
 [deps]
 
-source_file="res://models/orc_rigged.gltf"
-dest_files=["res://.godot/imported/orc_rigged.gltf-bc173160c22d02dd81bbeb973b24f44a.scn"]
+source_file="res://models/barbarian.glb"
+dest_files=["res://.godot/imported/barbarian.glb-5ae41a9f5f36535af54ea6e1a85893eb.scn"]
 
 [params]
 

@@ -2,6 +2,7 @@
 
 #include <shared/core/game_level.h>
 
+#ifdef SERVER
 void TurretAttackAbility::_use(const Ref<ActionContext>& action_context) {
     action_context->get_target_entity();
 
@@ -20,3 +21,4 @@ void TurretAttackAbility::_use(const Ref<ActionContext>& action_context) {
 
     game_level->add_entity(turret_projectile_instance);
 }
+#endif
