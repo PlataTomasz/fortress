@@ -186,6 +186,8 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<AudioEntry>();
     ClassDB::register_class<AudioComponent>();
 
+    ClassDB::register_class<AdvancedAnimationPlayer>();
+
     // Singletons
     //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));
 }
