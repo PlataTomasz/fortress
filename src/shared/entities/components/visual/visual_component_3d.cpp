@@ -2,15 +2,79 @@
 
 #include <scene/3d/mesh_instance_3d.h>
 #include <scene/resources/3d/primitive_meshes.h>
+#include <shared/entities/entity.h>
+#include <shared/entities/components/movement/movement_component.h>
 
 void VisualComponent3D::_notification(int p_notification) {
+	DISABLE_IN_EDITOR();
 	switch (p_notification) {
 		case NOTIFICATION_POSTINITIALIZE:
 			_init();
 			break;
+		case NOTIFICATION_READY: {
+			Entity* ent = get_owning_entity();
+			ERR_FAIL_NULL(ent);
+
+			MovementComponent *movement_component = ent->get_movement_component();
+			ERR_FAIL_NULL(movement_component);
+
+			movement_component->connect("currently_moving_changed", callable_mp(this, &VisualComponent3D::_on_owner_movement_state_change));
+
+			ERR_FAIL_NULL(animation_player);
+			animation_player->connect("current_animation_changed", callable_mp(this, &VisualComponent3D::_on_animation_finish));
+		}
+		break;
 
 		default:
 			break;
+	}
+}
+
+Entity *VisualComponent3D::get_owning_entity() {
+    return Object::cast_to<Entity>(get_parent());
+}
+
+void VisualComponent3D::switch_to_idle_animation() {
+	ERR_FAIL_NULL(animation_player);
+
+	animation_player->queue_from_any_library("idle");
+	animation_state = AnimationState::IDLE;
+}
+
+void VisualComponent3D::switch_to_walk_animation() {
+	ERR_FAIL_NULL(animation_player);
+
+	animation_player->queue_from_any_library("walk");
+	animation_state = AnimationState::WALK;
+}
+
+void VisualComponent3D::_on_animation_finish(const String& animation_name) {
+		if(animation_state == AnimationState::OVERRIDE) {
+		Entity *ent = get_owning_entity();
+		ERR_FAIL_NULL(ent);
+
+		MovementComponent *movement_component = ent->get_movement_component();
+		ERR_FAIL_NULL(movement_component);
+
+		if(movement_component->is_currently_moving()) {
+			switch_to_walk_animation();
+		} else {
+			switch_to_idle_animation();
+		}
+	}
+}
+
+void VisualComponent3D::_on_owner_movement_state_change(bool is_moving) {
+	Entity *ent = get_owning_entity();
+	ERR_FAIL_NULL(ent);
+
+	MovementComponent *movement_component = ent->get_movement_component();
+	ERR_FAIL_NULL(movement_component);
+
+	if(animation_state == AnimationState::IDLE && is_moving) {
+		switch_to_walk_animation();
+	} else if (animation_state == AnimationState::WALK && !is_moving) {
+		switch_to_idle_animation();
 	}
 }
 
@@ -25,33 +89,15 @@ void VisualComponent3D::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "animation_player", PROPERTY_HINT_NODE_TYPE, AnimationPlayer::get_class_static()), "set_animation_player", "get_animation_player");
 }
 
-void VisualComponent3D::play_animation(const String& animation_name) {
+void VisualComponent3D::play_animation_override(const String& animation_name) {
 	ERR_FAIL_NULL_MSG(animation_player, "VisualComponent cannot play animation - Missing AnimationPlayer");
 
-	// Play animation if it exist in any animation library
-	List<StringName> animation_libraries;
-	animation_player->get_animation_library_list(&animation_libraries);
-	for(StringName animation_library_name : animation_libraries) {
-		Ref<AnimationLibrary> animation_library = animation_player->get_animation_library(animation_library_name);
-
-		animation_library->get_animation(animation_name);
-
-		if(animation_library->has_animation(animation_name)) {
-			if(animation_library_name == StringName()) {
-				animation_player->play(String(animation_name));
-			} else {
-				animation_player->play(String(animation_library_name) + "/" + animation_name);
-			}
-
-			// FIXME: Temporary; will break if additional animation libraries are used
-			animation_player->queue("Walk002"); // Play walk animation once this animation finishes
-			break;
-		}
-	}
+	animation_player->play_animation_from_any_library(animation_name);
+	animation_state = AnimationState::OVERRIDE;
 }
 
 void VisualComponent3D::set_animation_player(AnimationPlayer *new_animation_player) {
-	animation_player = new_animation_player;
+	animation_player = (AdvancedAnimationPlayer *)new_animation_player;
 }
 
 AnimationPlayer *VisualComponent3D::get_animation_player() {

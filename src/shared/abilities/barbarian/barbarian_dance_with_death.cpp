@@ -17,7 +17,7 @@ void BarbarianDanceWithDeath::_use(const Ref<ActionContext>& action_context) {
 
     VisualComponent3D *visual_component = ent->get_visual_component();
     if(visual_component) {
-        visual_component->play_animation(USE_ANIMATION_NAME);
+        visual_component->play_animation_override(USE_ANIMATION_NAME);
     } else {
         print_error("Failed to play animation " + USE_ANIMATION_NAME + "!");
     }
@@ -43,7 +43,7 @@ void BarbarianDanceWithDeath::_clientside_use(const Ref<ActionContext>& action_c
     // Play animation
     VisualComponent3D *visual_component = action_context->get_user()->get_visual_component();
     if(visual_component)  {
-        visual_component->play_animation("warcry");
+        visual_component->play_animation_override("warcry");
     }
     else {
         print_error("Failed to play sound! Missing VisualComponent3D!");

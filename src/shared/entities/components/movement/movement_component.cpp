@@ -106,6 +106,7 @@ bool MovementComponent::is_currently_moving() {
 
 void MovementComponent::set_currently_moving(bool does_currently_move) {
 	currently_moving = does_currently_move;
+	emit_signal("currently_moving_changed", does_currently_move);
 }
 
 void MovementComponent::set_destination_position(Vector3 target_position) {
@@ -120,6 +121,8 @@ void MovementComponent::_bind_methods() {
     ClassDB::bind_method(D_METHOD("is_currently_moving"), &MovementComponent::is_currently_moving);
     ClassDB::bind_method(D_METHOD("set_currently_moving", "does_currently_move"), &MovementComponent::set_currently_moving);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "currently_moving"), "set_currently_moving", "is_currently_moving");
+
+	ADD_SIGNAL(MethodInfo("currently_moving_changed", PropertyInfo(Variant::BOOL, "is_moving")));
 }
 
 void MovementComponent::set_pathfinding_radius(real_t pathfinding_radius) {
