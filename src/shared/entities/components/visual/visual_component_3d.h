@@ -25,10 +25,16 @@ private:
 
     AnimationState animation_state = AnimationState::IDLE;
 
+    StringName idle_animation_name;
+    StringName walk_animation_name;
+
     void _init();
     void _on_animation_finish(const String& animation_name);
 
     void _on_owner_movement_state_change(bool is_moving);
+
+    void _on_movement_start();
+    void _on_movement_finish();
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -39,8 +45,17 @@ public:
     void switch_to_idle_animation();
     void switch_to_walk_animation();
 
+    void play_idle_animation();
+    void play_walk_animation();
+
     void set_animation_player(AnimationPlayer *new_animation_player);
     AnimationPlayer *get_animation_player();
+
+    void set_idle_animation_name(const StringName& new_idle_animation_name);
+    StringName get_idle_animation_name();
+    
+    void set_walk_animation_name(const StringName& new_walk_animation_name);
+    StringName get_walk_animation_name();
 };
 
 #endif // VISUAL_COMPONENT_3D_INCLUDED

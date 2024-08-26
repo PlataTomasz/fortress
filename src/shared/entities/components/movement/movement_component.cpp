@@ -23,6 +23,9 @@ void MovementComponent::_notification(int p_notification) {
 		case NOTIFICATION_POSTINITIALIZE:
 			_init();
 			break;
+		case NOTIFICATION_PROCESS:
+			_frame();
+			break;
 		default:
 			break;
 	}
@@ -83,9 +86,25 @@ void MovementComponent::_tick() {
 
 #ifdef CLIENT
 void MovementComponent::_tick() {
-	
+	bool previous_currently_moving = currently_moving;
+	if(get_global_position() == previous_position ) {
+		currently_moving = false;
+		if(currently_moving != previous_currently_moving ) {
+			emit_signal("movement_finish");
+		}
+	} else {
+		currently_moving = true;
+		if(currently_moving != previous_currently_moving ) {
+			emit_signal("movement_started");
+		}
+	}
+	previous_position = get_global_position();
 }
 #endif
+
+void MovementComponent::_frame() {
+	
+}
 
 void MovementComponent::_parented() {
 	Entity *ent = static_cast<Entity *>(get_parent());
@@ -98,15 +117,11 @@ void MovementComponent::_init() {
 	add_child(nav_agent);
 
 	set_physics_process(true);
+	set_process(true);
 }
 
 bool MovementComponent::is_currently_moving() {
 	return currently_moving;
-}
-
-void MovementComponent::set_currently_moving(bool does_currently_move) {
-	currently_moving = does_currently_move;
-	emit_signal("currently_moving_changed", does_currently_move);
 }
 
 void MovementComponent::set_destination_position(Vector3 target_position) {
@@ -118,11 +133,9 @@ Vector3 MovementComponent::get_destination_position() {
 }
 
 void MovementComponent::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("is_currently_moving"), &MovementComponent::is_currently_moving);
-    ClassDB::bind_method(D_METHOD("set_currently_moving", "does_currently_move"), &MovementComponent::set_currently_moving);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "currently_moving"), "set_currently_moving", "is_currently_moving");
-
 	ADD_SIGNAL(MethodInfo("currently_moving_changed", PropertyInfo(Variant::BOOL, "is_moving")));
+	ADD_SIGNAL(MethodInfo("movement_started"));
+	ADD_SIGNAL(MethodInfo("movement_finish"));
 }
 
 void MovementComponent::set_pathfinding_radius(real_t pathfinding_radius) {
