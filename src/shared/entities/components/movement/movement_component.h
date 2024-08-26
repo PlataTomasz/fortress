@@ -18,15 +18,17 @@ private:
 
     NavigationAgent3D *nav_agent = nullptr;
 
+    Vector3 previous_position;
+
     void _tick();
     void _init();
     void _parented();
+    void _frame();
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
     bool is_currently_moving();
-    void set_currently_moving(bool does_currently_move);
 
     void set_pathfinding_radius(real_t pathfinding_radius);
     real_t get_pathfinding_radius();

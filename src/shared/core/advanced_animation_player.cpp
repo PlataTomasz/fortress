@@ -7,8 +7,6 @@ void AdvancedAnimationPlayer::play_animation_from_any_library(const String& anim
 	for(StringName animation_library_name : animation_libraries) {
 		Ref<AnimationLibrary> animation_library = get_animation_library(animation_library_name);
 
-		animation_library->get_animation(animation_name);
-
 		if(animation_library->has_animation(animation_name)) {
 			if(animation_library_name == StringName()) {
 				play(String(animation_name));
@@ -32,6 +30,24 @@ void AdvancedAnimationPlayer::queue_from_any_library(const String& animation_nam
 				queue(String(animation_name));
 			} else {
 				queue(String(animation_library_name) + "/" + animation_name);
+			}
+		}
+	}
+}
+
+void AdvancedAnimationPlayer::set_next_from_any_library(const String& animation_name) {
+    List<StringName> animation_libraries;
+	get_animation_library_list(&animation_libraries);
+	for(StringName animation_library_name : animation_libraries) {
+		Ref<AnimationLibrary> animation_library = get_animation_library(animation_library_name);
+
+		animation_library->get_animation(animation_name);
+
+		if(animation_library->has_animation(animation_name)) {
+			if(animation_library_name == StringName()) {
+				animation_set_next(get_current_animation(), String(animation_name));
+			} else {
+				animation_set_next(get_current_animation(), String(animation_library_name) + "/" + animation_name);
 			}
 		}
 	}

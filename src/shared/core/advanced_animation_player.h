@@ -8,6 +8,7 @@ GDCLASS(AdvancedAnimationPlayer, AnimationPlayer);
 public:
     void play_animation_from_any_library(const String& animation_name);
     void queue_from_any_library(const String& animation_name);
+    void set_next_from_any_library(const String& animation_name);
 };
 
 #endif // ADVANCED_ANIMATION_PLAYER

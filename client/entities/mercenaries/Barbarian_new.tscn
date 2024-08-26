@@ -2757,32 +2757,30 @@ audio_entries = Array[AudioEntry]([SubResource("AudioEntry_b271i")])
 
 [node name="VisualComponent3D" parent="." index="9" node_paths=PackedStringArray("animation_player")]
 animation_player = NodePath("barbarian/AnimationPlayer")
+idle_animation_name = &"Idle"
+walk_animation_name = &"Walk002"
 
 [node name="barbarian" parent="VisualComponent3D" index="0" instance=ExtResource("4_ubfyo")]
 
 [node name="Skeleton3D" parent="VisualComponent3D/barbarian/Armature" index="0"]
-bones/0/position = Vector3(0, 1.28962, -0.0825693)
-bones/0/rotation = Quaternion(0, 1.19209e-07, 0, 1)
-bones/1/rotation = Quaternion(1.29201e-07, -4.62833e-08, -0.811242, 0.58471)
-bones/2/rotation = Quaternion(-0.133223, 0.257539, -0.205484, 0.93472)
+bones/0/position = Vector3(0, 1.35878, -0.0825692)
+bones/0/rotation = Quaternion(0.0591567, 1.19001e-07, 7.05203e-09, 0.998249)
+bones/1/rotation = Quaternion(-0.243937, -0.338445, -0.737271, 0.531395)
+bones/2/rotation = Quaternion(0.210655, -0.406913, -0.00213758, 0.888843)
 bones/2/scale = Vector3(1, 1, 1)
-bones/3/rotation = Quaternion(0.0862235, 3.23076e-07, -0.00507887, 0.996263)
+bones/3/rotation = Quaternion(-0.0551456, 0.0460313, -0.0557672, 0.995857)
 bones/3/scale = Vector3(1, 1, 1)
 bones/4/rotation = Quaternion(0.022137, -1.84906e-07, -0.00130393, 0.999754)
-bones/5/rotation = Quaternion(5.19984e-09, -1.19096e-07, -0.0436194, 0.999048)
-bones/6/rotation = Quaternion(-6.42146e-08, -9.31225e-08, 0.811242, 0.58471)
-bones/7/rotation = Quaternion(0.192919, 0.295945, 0.190382, 0.915944)
+bones/5/rotation = Quaternion(-0.0408185, -1.1911e-07, -4.86595e-09, 0.999167)
+bones/6/rotation = Quaternion(-0.243937, 0.338444, 0.737271, 0.531395)
+bones/7/rotation = Quaternion(0.210655, 0.406913, 0.00213756, 0.888843)
 bones/7/scale = Vector3(1, 1, 1)
-bones/8/rotation = Quaternion(0.0862235, -3.58523e-07, 0.00507884, 0.996263)
+bones/8/rotation = Quaternion(-0.0551456, -0.0460313, 0.0557671, 0.995857)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/rotation = Quaternion(0.022137, 1.52994e-07, 0.00130395, 0.999754)
-bones/11/rotation = Quaternion(-0.382683, 0, 0, 0.92388)
-bones/12/rotation = Quaternion(-0.284394, 2.28573e-07, -6.78046e-08, 0.958708)
-bones/13/rotation = Quaternion(0.300706, 0, 0, 0.953717)
-bones/14/rotation = Quaternion(-0.782854, -1.48345e-07, 1.86647e-07, 0.622206)
+bones/9/rotation = Quaternion(0.022137, 1.86144e-07, 0.00130393, 0.999754)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.686319, -0.701991, 0.190199, 0.561963, -0.345831, 0.751398, -0.461698, 0.622583, 0.631842, -1.25301, 1.03437, 0.328655)
+transform = Transform3D(-0.471998, -0.875554, 0.10307, 0.0419447, 0.0944773, 0.994643, -0.880601, 0.473793, -0.00786824, -1.38975, 1.5829, 0.434578)
 bone_name = "Hand_R"
 bone_idx = 9
 
@@ -2794,6 +2792,6 @@ libraries = {
 "": SubResource("AnimationLibrary_w85an"),
 "animations_orc_hum": ExtResource("5_amkwr")
 }
-autoplay = "Walk002"
+autoplay = "Idle"
 
 [editable path="VisualComponent3D/barbarian"]
