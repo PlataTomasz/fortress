@@ -66,6 +66,8 @@ public:
     void set_displayed_name(const String &new_name);
 
     void use(const Ref<ActionContext>& action_context);
+
+    bool can_be_used(const Ref<ActionContext>& action_context);
     Ability();
 };
 
