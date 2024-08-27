@@ -2780,7 +2780,7 @@ bones/8/scale = Vector3(1, 1, 1)
 bones/9/rotation = Quaternion(0.022137, 1.86144e-07, 0.00130393, 0.999754)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.471998, -0.875554, 0.10307, 0.0419447, 0.0944773, 0.994643, -0.880601, 0.473793, -0.00786824, -1.38975, 1.5829, 0.434578)
+transform = Transform3D(-0.471998, -0.875554, 0.10307, 0.0419446, 0.0944778, 0.994643, -0.880601, 0.473792, -0.00786853, -1.38975, 1.5829, 0.434578)
 bone_name = "Hand_R"
 bone_idx = 9
 

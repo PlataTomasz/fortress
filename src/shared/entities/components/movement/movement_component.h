@@ -28,6 +28,7 @@ protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
+    void set_currently_moving(bool new_currently_moving);
     bool is_currently_moving();
 
     void set_pathfinding_radius(real_t pathfinding_radius);
