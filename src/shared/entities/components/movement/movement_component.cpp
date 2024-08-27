@@ -86,19 +86,19 @@ void MovementComponent::_tick() {
 
 #ifdef CLIENT
 void MovementComponent::_tick() {
-	bool previous_currently_moving = currently_moving;
-	if(get_global_position() == previous_position ) {
-		currently_moving = false;
-		if(currently_moving != previous_currently_moving ) {
-			emit_signal("movement_finish");
-		}
-	} else {
-		currently_moving = true;
-		if(currently_moving != previous_currently_moving ) {
-			emit_signal("movement_started");
-		}
-	}
-	previous_position = get_global_position();
+	// bool previous_currently_moving = currently_moving;
+	// if(get_global_position() == previous_position ) {
+	// 	currently_moving = false;
+	// 	if(currently_moving != previous_currently_moving ) {
+	// 		emit_signal("movement_finish");
+	// 	}
+	// } else {
+	// 	currently_moving = true;
+	// 	if(currently_moving != previous_currently_moving ) {
+	// 		emit_signal("movement_started");
+	// 	}
+	// }
+	// previous_position = get_global_position();
 }
 #endif
 
@@ -124,6 +124,18 @@ bool MovementComponent::is_currently_moving() {
 	return currently_moving;
 }
 
+void MovementComponent::set_currently_moving(bool new_currently_moving) {
+	bool old_currently_moving = currently_moving;
+	currently_moving = new_currently_moving;
+
+	DISABLE_IN_EDITOR();
+	if(old_currently_moving == true && new_currently_moving == false) {
+		emit_signal("movement_finish");
+	} else if(old_currently_moving == false && new_currently_moving == true) {
+		emit_signal("movement_started");
+	}
+}
+
 void MovementComponent::set_destination_position(Vector3 target_position) {
 	nav_agent->set_target_position(target_position);
 }
@@ -136,6 +148,10 @@ void MovementComponent::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("currently_moving_changed", PropertyInfo(Variant::BOOL, "is_moving")));
 	ADD_SIGNAL(MethodInfo("movement_started"));
 	ADD_SIGNAL(MethodInfo("movement_finish"));
+
+	ClassDB::bind_method(D_METHOD("is_currently_moving"), &MovementComponent::is_currently_moving);
+    ClassDB::bind_method(D_METHOD("set_currently_moving", "currently_moving"), &MovementComponent::set_currently_moving);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "currently_moving"), "set_currently_moving", "is_currently_moving");
 }
 
 void MovementComponent::set_pathfinding_radius(real_t pathfinding_radius) {
