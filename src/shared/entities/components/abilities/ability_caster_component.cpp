@@ -76,7 +76,11 @@ void AbilityCasterComponent::server_rpc_ability_used(int which_ability, Dictiona
         target
     ));
 
-    use_ability(which_ability, local_action_context);
+    
+    Ability *ability_to_use = get_ability_by_index(which_ability);
+    ERR_FAIL_NULL(ability_to_use);
+
+    ability_to_use->use(local_action_context);
 }
 
 void AbilityCasterComponent::set_passive_ability(Ability *p_passive_ability) {
@@ -133,6 +137,29 @@ Ability *AbilityCasterComponent::get_ultimate_ability() {
     return ultimate_ability;
 }
 
+Ability *AbilityCasterComponent::get_ability_by_index(int index) {
+    switch (index) {
+		case ABILITY_FIRST: {
+           return first_ability;
+		} break;
+
+        case ABILITY_SECOND: {
+            return second_ability;
+		} break;
+
+        case ABILITY_THIRD: {
+            return third_ability;
+		} break;
+
+        case ABILITY_ULTIMATE: {
+            return ultimate_ability;
+		} break;
+
+		default:
+            ERR_FAIL_V_MSG(nullptr, "No such ability index!");
+	}
+}
+
 AbilityCasterComponent::~AbilityCasterComponent()
 {
 
@@ -146,37 +173,20 @@ void AbilityCasterComponent::use_ability(int index, const Ref<ActionContext>& ac
     return ability->use(action_context);
     */
 
-    Dictionary networked_action_data;
-    networked_action_data["user_entity_id"] = action_context->get_user() ? action_context->get_user()->get_name() : "0";
-    networked_action_data["target_entity_id"] = action_context->get_target_entity() ? action_context->get_target_entity()->get_name() : "0";
-    networked_action_data["target_position"] = action_context->get_target_position();
-    networked_action_data["use_position"] = action_context->get_use_position();
+    Ability *ability_to_use = get_ability_by_index(index);
+    ERR_FAIL_NULL(ability_to_use);
 
-    rpc("server_rpc_ability_used", index, networked_action_data);
+    if(ability_to_use->can_be_used(action_context)) {
+        Dictionary networked_action_data;
+        networked_action_data["user_entity_id"] = action_context->get_user() ? action_context->get_user()->get_name() : "0";
+        networked_action_data["target_entity_id"] = action_context->get_target_entity() ? action_context->get_target_entity()->get_name() : "0";
+        networked_action_data["target_position"] = action_context->get_target_position();
+        networked_action_data["use_position"] = action_context->get_use_position();
 
-   // TODO: Refactor this - There has to be a better way than this abomination of code
-	switch (index) {
-		case ABILITY_FIRST: {
-            ERR_FAIL_NULL(first_ability);
-            return first_ability->use(action_context);
-		} break;
+        rpc("server_rpc_ability_used", index, networked_action_data);
 
-        case ABILITY_SECOND: {
-            ERR_FAIL_NULL(second_ability);
-            return second_ability->use(action_context);
-		} break;
-
-        case ABILITY_THIRD: {
-            ERR_FAIL_NULL(third_ability);
-            return third_ability->use(action_context);
-		} break;
-
-        case ABILITY_ULTIMATE: {
-            ERR_FAIL_NULL(ultimate_ability);
-            return ultimate_ability->use(action_context);
-		} break;
-
-		default:
-			ERR_FAIL();
-	}
+        ability_to_use->use(action_context);
+    } else {
+        print_error(ability_to_use->to_string() + " couldn't be used!");
+    }
 }

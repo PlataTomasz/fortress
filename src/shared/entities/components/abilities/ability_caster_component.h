@@ -64,6 +64,8 @@ public:
     void use_ability(int index, const Ref<ActionContext>& action_context);
     void use_basic_attack(const Ref<ActionContext>& action_context);
 
+    Ability *get_ability_by_index(int index);
+
     virtual ~AbilityCasterComponent();
 
     AbilityCasterComponent();

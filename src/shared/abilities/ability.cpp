@@ -42,6 +42,10 @@ void Ability::start_ability_cooldown() {
     cooldown_timer->start();
 }
 
+bool Ability::can_be_used(const Ref<ActionContext>& action_context) {
+    return !is_on_cooldown();
+}
+
 float Ability::get_current_cooldown()
 {
     if (cooldown_timer) {
