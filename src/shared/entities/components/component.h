@@ -1,15 +1,15 @@
 #if !defined(COMPONENT_INCLUDED)
 #define COMPONENT_INCLUDED
 
-#include <scene/main/node.h>
+#include <scene/3d/node_3d.h>
 
 /**
  * Base class for all components
  * TODO: Display proper warning on missing pointers via _get_configuration_warnings
 */
-class Component : public Node
+class Component : public Node3D
 {
-GDCLASS(Component, Node);
+GDCLASS(Component, Node3D);
 private:
 
 protected:

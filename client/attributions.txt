@@ -1,0 +1,4 @@
+The following files are licensed as CC-BY 3.0
+
+https://opengameart.org/content/osare-10-sound-pack
+- audio/warcry.wav
