@@ -68,12 +68,6 @@ audio_component = NodePath("AudioComponent")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="MovementComponent"]
 replication_config = SubResource("SceneReplicationConfig_i1yjj")
 
-[node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="StatusEffectVictimComponent"]
-_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
-spawn_path = NodePath("..")
-
 [node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
 health = SubResource("CappedResourceAttribute_1i01r")
 global_defense = SubResource("FloatAttribute_j0kxs")
@@ -165,3 +159,9 @@ audio_player = NodePath("AudioStreamPlayer3D")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="AudioComponent"]
 
 [node name="VisualComponent3D" type="VisualComponent3D" parent="."]
+
+[node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="StatusEffectVictimComponent"]
+_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
+spawn_path = NodePath("..")

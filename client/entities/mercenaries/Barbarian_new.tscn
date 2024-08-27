@@ -1,12 +1,13 @@
-[gd_scene load_steps=43 format=3 uid="uid://cgco77hqkmtwl"]
+[gd_scene load_steps=44 format=3 uid="uid://cgco77hqkmtwl"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_jp0yl"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_ngwr0"]
+[ext_resource type="AudioStream" uid="uid://j8lay2qc84xu" path="res://audio/warcry.wav" id="4_63o53"]
 [ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="4_no128"]
 [ext_resource type="PackedScene" uid="uid://btkmxgv7n00oi" path="res://models/barbarian.gltf" id="4_ubfyo"]
 [ext_resource type="PackedScene" uid="uid://deoh8l3kkh28a" path="res://models/sword.gltf" id="5_87kt6"]
 [ext_resource type="AnimationLibrary" uid="uid://dyw8cufffctiy" path="res://models/animations_orc_human.gltf" id="5_amkwr"]
-[ext_resource type="AudioStream" uid="uid://cljsf7lke3ogy" path="res://audio/bookFlip2.ogg" id="7_dv0fb"]
+[ext_resource type="PackedScene" uid="uid://cw3e16arhb3lx" path="res://status_effects/barbarian_bleeding_dot.tscn" id="8_vqllk"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_040m5"]
 resource_local_to_scene = true
@@ -34,7 +35,7 @@ viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
 
 [sub_resource type="AudioEntry" id="AudioEntry_b271i"]
 stream_name = "warcry"
-stream = ExtResource("7_dv0fb")
+stream = ExtResource("4_63o53")
 
 [sub_resource type="Animation" id="Animation_pvjde"]
 resource_name = "Attack002"
@@ -2722,7 +2723,7 @@ _data = {
 [node name="Mercenary" instance=ExtResource("1_jp0yl")]
 portrait_icon = ExtResource("1_ngwr0")
 
-[node name="EntityAttributesComponent" parent="." index="2"]
+[node name="EntityAttributesComponent" parent="." index="1"]
 health = SubResource("CappedResourceAttribute_040m5")
 global_defense = SubResource("FloatAttribute_ubu72")
 attack_damage = SubResource("FloatAttribute_xu3d6")
@@ -2730,7 +2731,7 @@ magic_power = SubResource("FloatAttribute_ul1nf")
 cooldown_reduction = SubResource("FloatAttribute_x0ybo")
 movement_speed = SubResource("FloatAttribute_rcjpl")
 
-[node name="AbilityCasterComponent" parent="." index="3" node_paths=PackedStringArray("basic_attack", "passive_ability", "ultimate_ability")]
+[node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("basic_attack", "passive_ability", "ultimate_ability")]
 basic_attack = NodePath("BarbarianBasicAttack")
 passive_ability = NodePath("BarbarianBleedingPassive")
 ultimate_ability = NodePath("BarbarianDanceWithDeath")
@@ -2752,10 +2753,10 @@ icon = ExtResource("4_no128")
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_d4l4k")
 
-[node name="AudioComponent" parent="." index="8"]
+[node name="AudioComponent" parent="." index="7"]
 audio_entries = Array[AudioEntry]([SubResource("AudioEntry_b271i")])
 
-[node name="VisualComponent3D" parent="." index="9" node_paths=PackedStringArray("animation_player")]
+[node name="VisualComponent3D" parent="." index="8" node_paths=PackedStringArray("animation_player")]
 animation_player = NodePath("barbarian/AnimationPlayer")
 idle_animation_name = &"Idle"
 walk_animation_name = &"Walk002"
@@ -2793,5 +2794,7 @@ libraries = {
 "animations_orc_hum": ExtResource("5_amkwr")
 }
 autoplay = "Idle"
+
+[node name="BarbarianBleedingDot" parent="StatusEffectVictimComponent" index="1" instance=ExtResource("8_vqllk")]
 
 [editable path="VisualComponent3D/barbarian"]

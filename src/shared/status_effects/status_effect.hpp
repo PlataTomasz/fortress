@@ -5,16 +5,16 @@
 #include <core/variant/dictionary.h>
 #include <core/variant/variant.h>
 #include <cstdio>
-#include <scene/main/node.h>
+#include <scene/3d/node_3d.h>
 
 class Entity;
 class StatusEffectVictimComponent;
 
 //Class which acts as a template for instantiating new status effect instances
 //NOTE: Name is set by StatusEffectManager
-class StatusEffect : public Node
+class StatusEffect : public Node3D
 {
-GDCLASS(StatusEffect, Node);
+GDCLASS(StatusEffect, Node3D);
 public:
     //GameplayAttributes attributes;
     PackedStringArray tags;
