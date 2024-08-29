@@ -4,12 +4,15 @@
 #include <shared/core/managers/component_manager.h>
 #include <shared/core/realm.h>
 #include <shared/core/sh_game.h>
+#include <shared/gamemodes/gamemode.h>
 
 #include <shared/entities/entity.h>
 
 // TODO: Deprecated - Remove
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 {
+    if(!is_damageable_by(damage_object)) return;
+
     Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
     ERR_FAIL_NULL(parent_entity);
 
@@ -34,6 +37,20 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 	if (was_lethal) {
 		emit_signal("death", damage_object->get_attacker(), (Node *)nullptr);
 	}
+}
+
+bool DamageableComponent::is_damageable_by(Ref<DamageObject> damage_object) {
+    SH_Game *game = Realm::get_shared_game();
+    ERR_FAIL_NULL_V(game, false);
+
+    Gamemode *gamemode = game->get_gamemode();
+    ERR_FAIL_NULL_V(gamemode, false);
+
+    if(gamemode->is_entity_enemy_of(get_owning_entity(), damage_object->get_attacker())) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void DamageableComponent::heal(float value) {

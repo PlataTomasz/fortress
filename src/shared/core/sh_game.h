@@ -7,6 +7,7 @@
 class GameLevel;
 class MultiplayerSynchronizer;
 class MultiplayerSpawner;
+class Gamemode;
 
 //NOTE: Should be abstract(in term of engine)
 class SH_Game : public Node {
@@ -51,6 +52,8 @@ public:
     */
     GameLevel *get_current_level();
     GameLevel *load_game_level(const String &level_name);
+
+    Gamemode *get_gamemode();
 };
 
 #endif // SH_GAME_INCLUDED

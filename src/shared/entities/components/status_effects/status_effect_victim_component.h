@@ -27,6 +27,8 @@ public:
     bool apply_status_effect(const StringName &status_effect_name);
     bool apply_status_effect(StatusEffect *status_effect);
 
+    bool can_effect_be_applied(StatusEffect *status_effect);
+
     Entity *get_owning_entity();
 
     // Returns all the status effects associated with this component

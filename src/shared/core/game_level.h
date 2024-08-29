@@ -9,6 +9,8 @@
 #include <shared/data_holders/damage_object.hpp>
 #include <shared/entities/entity.h>
 
+class Gamemode;
+
 //Maybe It would be better if GameLevel was entity aswell?(It could store synchronized global variables)
 class GameLevel : public Node3D
 {
@@ -18,6 +20,8 @@ private:
 	MultiplayerSpawner *entity_spawner = nullptr;
 
 	Node *entities_node = nullptr;
+
+	Gamemode *gamemode = nullptr;
 
 	void _on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent);
 	void _on_entity_damage_taken(const Ref<DamageObject>& damage_object, Entity *ent);
@@ -38,6 +42,9 @@ public:
 	void set_entities_node(Node *p_node);
 
 	Entity *get_entity(const String &entity_name);
+
+	void set_gamemode(Gamemode *new_gamemode);
+	Gamemode *get_gamemode();
 
 	GameLevel()
 	{

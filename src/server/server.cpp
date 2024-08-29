@@ -11,7 +11,7 @@
 #include <shared/registries/mercenary_registry.h>
 
 #include <core/variant/variant_utility.h>
-
+#include <shared/gamemodes/gamemode.h>
 #include <server/core/console_cmd/disconnect_peer_console_command.h>
 
 void Server::_ready()
@@ -73,7 +73,9 @@ void Server::_on_peer_connect(int peer_id)
     }
     ERR_FAIL_NULL(mercenary);
 	mercenary->set_name("p_" + itos(peer_id));
+    mercenary->set_meta("spawned_by_player_connect", true);
 	game->get_current_level()->add_entity(mercenary);
+    
     connected_players.get(peer_id)->set_controlled_entity(mercenary);
     rpc_id(peer_id, "server_rpc_set_controlled_entity", mercenary->get_name());
 }

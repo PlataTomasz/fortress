@@ -62,6 +62,9 @@ public:
     StatusEffectVictimComponent *get_victim_component();
     Entity *get_victim_entity();
 
+    void set_inflictor(Entity *new_inflictor);
+    Entity *get_inflictor();
+
     String get_displayed_name();
     void set_displayed_name(const String& p_name);
     String get_displayed_description();
@@ -78,6 +81,9 @@ public:
 
     int get_max_stacks();
     void set_max_stacks(int p_stacks);
+
+    void set_type(StatusEffect::Type new_type);
+    StatusEffect::Type get_type();
 
     //TODO: Maybe return value, informing that stack was not added and why?
     void add_stacks();

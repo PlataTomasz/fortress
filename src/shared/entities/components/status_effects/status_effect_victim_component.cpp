@@ -1,6 +1,8 @@
 #include "status_effect_victim_component.h"
 #include <core/object/object.h>
 #include <scene/resources/packed_scene.h>
+#include <shared/core/sh_game.h>
+#include <shared/gamemodes/gamemode.h>
 
 #include <shared/entities/entity.h>
 
@@ -62,6 +64,8 @@ bool StatusEffectVictimComponent::apply_status_effect(const StringName &status_e
 }
 
 bool StatusEffectVictimComponent::apply_status_effect(StatusEffect *status_effect) {
+	if(!can_effect_be_applied(status_effect)) return false;
+
 	add_child(status_effect, true);
 	return true;
 }
@@ -79,4 +83,26 @@ List<StatusEffect *> StatusEffectVictimComponent::get_status_effects() {
 	}
 
 	return status_effect_list;
+}
+
+bool StatusEffectVictimComponent::can_effect_be_applied(StatusEffect *status_effect) {
+	ERR_FAIL_NULL_V(status_effect, false);
+
+	SH_Game *game = Realm::get_shared_game();
+	ERR_FAIL_NULL_V(game, false);
+
+	Gamemode *gamemode = game->get_gamemode();
+	ERR_FAIL_NULL_V(gamemode, false);
+
+	bool is_inflictor_enemy = gamemode->is_entity_enemy_of(status_effect->get_victim_entity(), get_owning_entity());
+
+	if(status_effect->get_type() == StatusEffect::Type::BUFF && !is_inflictor_enemy) {
+		return true;
+	} else if(status_effect->get_type() == StatusEffect::Type::DEBUFF && is_inflictor_enemy) {
+		return true;
+	} else if(status_effect->get_type() == StatusEffect::Type::MISC) {
+		return true;
+	} else {
+		return false;
+	}
 }
