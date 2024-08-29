@@ -88,6 +88,8 @@
 
 #include <shared/entities/components/audio/audio_component.h>
 
+#include <shared/gamemodes/moba_gamemode.h>
+
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -187,6 +189,10 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<AudioComponent>();
 
     ClassDB::register_class<AdvancedAnimationPlayer>();
+
+    ClassDB::register_class<Gamemode>();
+    ClassDB::register_class<MobaGamemode>();
+    ClassDB::register_class<Team>();
 
     // Singletons
     //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));

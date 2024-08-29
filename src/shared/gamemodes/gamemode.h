@@ -1,14 +1,19 @@
 #if !defined(GAMEMODE_INCLUDED)
 #define GAMEMODE_INCLUDED
 
-#include <core/object/object.h>
+#include <scene/main/node.h>
 #include <core/object/class_db.h>
 
-class Gamemode : public Object{
-GDCLASS(Gamemode, Object)
+class Entity;
+
+class Gamemode : public Node {
+GDCLASS(Gamemode, Node)
 private:
 protected:
 public:
+    virtual bool is_entity_enemy_of(Entity *first_entity, Entity *second_entity) {
+        return false;
+    };
 };
 
 #endif // GAMEMODE_INCLUDED

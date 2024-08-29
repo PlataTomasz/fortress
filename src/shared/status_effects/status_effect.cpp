@@ -182,3 +182,19 @@ void StatusEffect::refresh() {
 Entity *StatusEffect::get_victim_entity() {
     return Object::cast_to<Entity>(get_node_or_null(NodePath("../..")));
 }
+
+void StatusEffect::set_inflictor(Entity *new_inflictor) {
+    inflictor = new_inflictor;
+}
+
+Entity *StatusEffect::get_inflictor() {
+    return inflictor;
+}
+
+void StatusEffect::set_type(StatusEffect::Type new_type) {
+    type = new_type;
+}
+
+StatusEffect::Type StatusEffect::get_type() {
+    return type;
+}

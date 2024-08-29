@@ -58,6 +58,11 @@ void SH_Game::setup_game()
 
 }
 
+Gamemode *SH_Game::get_gamemode() {
+    ERR_FAIL_NULL_V(get_current_level(), nullptr);
+    return get_current_level()->get_gamemode();
+}
+
 void SH_Game::_notification(int p_notification)
 {
     DISABLE_IN_EDITOR();

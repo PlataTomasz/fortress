@@ -16,6 +16,7 @@ public:
     Entity *get_owning_entity();
     void take_damage(Ref<DamageObject> damage_object);
     void heal(float value);
+    bool is_damageable_by(Ref<DamageObject> damage_object);
 };
 
 #endif // DAMAGEABLE_COMPONENT_INCLUDED

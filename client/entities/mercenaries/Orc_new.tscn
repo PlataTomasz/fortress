@@ -26,6 +26,9 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 base = 300.0
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_nldr1"]
+viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_30ras"]
 resource_name = "colormap"
 cull_mode = 2
@@ -833,13 +836,10 @@ _data = {
 "WarhornUse": SubResource("Animation_esm06")
 }
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_nldr1"]
-viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
-
 [node name="Mercenary" instance=ExtResource("1_gxuoa")]
 portrait_icon = ExtResource("2_jmr11")
 
-[node name="EntityAttributesComponent" parent="." index="2"]
+[node name="EntityAttributesComponent" parent="." index="1"]
 health = SubResource("CappedResourceAttribute_pv04g")
 global_defense = SubResource("FloatAttribute_jb64c")
 attack_damage = SubResource("FloatAttribute_538wb")
@@ -847,7 +847,7 @@ magic_power = SubResource("FloatAttribute_fvtc4")
 cooldown_reduction = SubResource("FloatAttribute_gs2ap")
 movement_speed = SubResource("FloatAttribute_g2ea8")
 
-[node name="AbilityCasterComponent" parent="." index="3" node_paths=PackedStringArray("passive_ability", "second_ability", "ultimate_ability")]
+[node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("passive_ability", "second_ability", "ultimate_ability")]
 passive_ability = NodePath("OrcResolve")
 second_ability = NodePath("OrcLeapSlam")
 ultimate_ability = NodePath("OrcWarhornAbility")
@@ -862,6 +862,9 @@ displayed_name = "354643643"
 [node name="ExampleAbility01" type="ExampleAbility01" parent="AbilityCasterComponent" index="3"]
 displayed_name = "example_01"
 displayed_description = "example_01"
+
+[node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_nldr1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="7"]
 mesh = ExtResource("3_aynjf")
@@ -1003,6 +1006,3 @@ libraries = {
 "": SubResource("AnimationLibrary_rj655")
 }
 autoplay = "Walk002"
-
-[node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_nldr1")
