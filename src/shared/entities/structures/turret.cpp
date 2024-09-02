@@ -30,7 +30,10 @@ void Turret::attack_current_target() {
     ProjectileEntity *projectile_instance = Object::cast_to<ProjectileEntity>(projectile_template->instantiate());
     ERR_FAIL_NULL(projectile_instance);
     
-    projectile_instance->set_position(this->get_position());
+    // Position needs to be offseted, since it is local
+    Vector3 projectile_spawn_position = turret_attack_origin_node ? turret_attack_origin_node->get_global_position() : this->get_position();
+
+    projectile_instance->set_position(projectile_spawn_position);
     projectile_instance->set_target(current_target);
     projectile_instance->set_creator(this);
     game_level->add_entity(projectile_instance);
@@ -129,6 +132,10 @@ void Turret::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_projectile_template"), &Turret::get_projectile_template);
     ClassDB::bind_method(D_METHOD("set_projectile_template", "projectile_template"), &Turret::set_projectile_template);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "projectile_template", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_projectile_template", "get_projectile_template");
+
+    ClassDB::bind_method(D_METHOD("get_turret_attack_origin_node"), &Turret::get_turret_attack_origin_node);
+    ClassDB::bind_method(D_METHOD("set_turret_attack_origin_node", "turret_attack_origin_node"), &Turret::set_turret_attack_origin_node);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "turret_attack_origin_node", PROPERTY_HINT_NODE_TYPE, Node3D::get_class_static()), "set_turret_attack_origin_node", "get_turret_attack_origin_node");
 }
 
 void Turret::_on_entity_enter_aggro_area(Entity *entity_that_entered) {
@@ -165,4 +172,12 @@ void Turret::set_projectile_template(const Ref<PackedScene>& new_projectile_temp
 
 Ref<PackedScene> Turret::get_projectile_template() {
     return projectile_template;
+}
+
+void Turret::set_turret_attack_origin_node(Node3D *new_origin_node) {
+    turret_attack_origin_node = new_origin_node;
+}
+
+Node3D *Turret::get_turret_attack_origin_node() {
+    return turret_attack_origin_node;
 }

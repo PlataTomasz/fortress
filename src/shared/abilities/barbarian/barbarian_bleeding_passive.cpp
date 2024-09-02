@@ -21,6 +21,7 @@ void BarbarianBleedingPassive::_on_basic_attack_hit(const Ref<DamageObject>& dam
         ERR_FAIL_NULL(status_effect);
         // Override damage with proper value
         status_effect->set_damage(5);
+        status_effect->set_inflictor(damage_object->get_attacker());
         status_effect_victim->apply_status_effect(status_effect);
     }
 }

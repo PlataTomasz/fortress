@@ -23,6 +23,8 @@ private:
     Ref<Team> team_to_asign_next_random;
 
     void _on_new_entity_enter_level(Entity *entity_that_entered_level);
+    void _on_first_nexus_destroyed();
+    void _on_second_nexus_destroyed();
 protected:
     void _notification(int p_notification);
     static void _bind_methods();

@@ -12,6 +12,7 @@ private:
     Entity *current_target = nullptr;
 
     Timer *attack_cooldown_counter = nullptr;
+    Node3D *turret_attack_origin_node = nullptr;
 
     AdvancedArea3D *aggro_area = nullptr;
 
@@ -44,6 +45,9 @@ public:
 
     void set_cooldown_between_attacks(float new_cooldown);
     float get_cooldown_between_attacks();
+
+    void set_turret_attack_origin_node(Node3D *new_origin_node);
+    Node3D *get_turret_attack_origin_node();
 
     void set_projectile_template(const Ref<PackedScene>& new_projectile_template);
     Ref<PackedScene> get_projectile_template();

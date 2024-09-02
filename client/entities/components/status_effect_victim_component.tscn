@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dcmi4gsru0sa4"]
+
+[node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent"]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
+spawn_path = NodePath("..")

@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://baqh60utvjmow"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_i1yjj"]
+properties/0/path = NodePath(".:currently_moving")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="MovementComponent" type="MovementComponent" node_paths=PackedStringArray("navigation_agent")]
+navigation_agent = NodePath("NavigationAgent3D")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_i1yjj")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.2

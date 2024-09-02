@@ -10,6 +10,7 @@ void EntityStatusBar::_update_status_bar() {
     DISABLE_IN_EDITOR();
     ERR_FAIL_NULL(ent);
     StatusEffectVictimComponent *status_effect_component = ent->get_component<StatusEffectVictimComponent>();
+    ERR_FAIL_NULL(status_effect_component);
 
     status_effect_component->connect("status_effect_gained", callable_mp(this, &EntityStatusBar::_on_status_effect_gain));
     status_effect_component->connect("status_effect_lost", callable_mp(this, &EntityStatusBar::_on_status_effect_removed));

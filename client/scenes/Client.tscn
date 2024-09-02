@@ -12,5 +12,6 @@ user_interface = NodePath("UserInterface")
 stream = ExtResource("2_ch10y")
 volume_db = -19.594
 autoplay = true
+parameters/looping = true
 
 [editable path="UserInterface"]

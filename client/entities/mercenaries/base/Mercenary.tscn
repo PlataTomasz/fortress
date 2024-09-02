@@ -1,9 +1,8 @@
 [gd_scene load_steps=15 format=3 uid="uid://ca282scpps8xr"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_i1yjj"]
-properties/0/path = NodePath(".:currently_moving")
-properties/0/spawn = true
-properties/0/replication_mode = 1
+[ext_resource type="PackedScene" uid="uid://baqh60utvjmow" path="res://entities/components/movement_component.tscn" id="1_2wqyg"]
+[ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="1_yigtw"]
+[ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="2_ilj2m"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_1i01r"]
 resource_local_to_scene = true
@@ -47,12 +46,8 @@ properties/2/path = NodePath(".:displayed_name")
 properties/2/spawn = true
 properties/2/replication_mode = 2
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_6ot25"]
-viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wplee"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tn0xi"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fpm2n"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [node name="Mercenary" type="Mercenary" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "ability_caster_component", "movement_component", "visual_component", "audio_component")]
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
@@ -63,10 +58,7 @@ movement_component = NodePath("MovementComponent")
 visual_component = NodePath("VisualComponent3D")
 audio_component = NodePath("AudioComponent")
 
-[node name="MovementComponent" type="MovementComponent" parent="."]
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="MovementComponent"]
-replication_config = SubResource("SceneReplicationConfig_i1yjj")
+[node name="MovementComponent" parent="." instance=ExtResource("1_2wqyg")]
 
 [node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="."]
 health = SubResource("CappedResourceAttribute_1i01r")
@@ -93,64 +85,18 @@ shape = SubResource("CylinderShape3D_giigm")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_fyyhi")
 
-[node name="EntityInfoRenderer" type="Node3D" parent="."]
+[node name="EntityInfoRenderer" parent="." instance=ExtResource("1_yigtw")]
 
-[node name="EntityHealthBar" type="Node3D" parent="EntityInfoRenderer"]
+[node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_fpm2n")
 
-[node name="Sprite3D" type="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-billboard = 1
-texture = SubResource("ViewportTexture_6ot25")
-
-[node name="SubViewport" type="SubViewport" parent="EntityInfoRenderer/EntityHealthBar"]
-disable_3d = true
-transparent_bg = true
-
-[node name="VSplitContainer" type="VBoxContainer" parent="EntityInfoRenderer/EntityHealthBar/SubViewport"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -6.0
-offset_top = -19.5
-offset_right = 6.0
-offset_bottom = 19.5
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="EntityNameDisplay" type="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
-layout_mode = 2
-horizontal_alignment = 1
+[node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="EntityHealthBar" type="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
-custom_minimum_size = Vector2(192, 24)
-layout_mode = 2
-value = 100.0
-nine_patch_stretch = true
-texture_under = SubResource("PlaceholderTexture2D_wplee")
-texture_progress = SubResource("PlaceholderTexture2D_tn0xi")
-tint_under = Color(0, 0, 0, 1)
-tint_progress = Color(0.6, 0, 0, 1)
+[node name="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="Label" type="Label" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/EntityHealthBar"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "null"
-horizontal_alignment = 1
-
-[node name="EntityStatusBar" type="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
+[node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
 [node name="AudioComponent" type="AudioComponent" parent="." node_paths=PackedStringArray("audio_player")]
@@ -160,8 +106,6 @@ audio_player = NodePath("AudioStreamPlayer3D")
 
 [node name="VisualComponent3D" type="VisualComponent3D" parent="."]
 
-[node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent" parent="."]
+[node name="StatusEffectVictimComponent" parent="." instance=ExtResource("2_ilj2m")]
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSpawner" parent="StatusEffectVictimComponent"]
-_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn")
-spawn_path = NodePath("..")
+[editable path="EntityInfoRenderer"]

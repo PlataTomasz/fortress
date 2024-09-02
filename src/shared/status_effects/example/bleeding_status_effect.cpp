@@ -35,5 +35,5 @@ void BleedingStatusEffect::_on_bleed_tick() {
     DamageableComponent *damageable = ent->get_component<DamageableComponent>();
     ERR_FAIL_NULL(damageable);
 
-    damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::ABILITY_DAMAGE & DamageObject::OVER_TIME_DAMAGE), damage, ent)));
+    damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::ABILITY_DAMAGE & DamageObject::OVER_TIME_DAMAGE), damage, get_inflictor())));
 }
