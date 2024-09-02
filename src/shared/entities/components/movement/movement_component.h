@@ -28,6 +28,9 @@ protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
+    void set_navigation_agent(NavigationAgent3D *new_nav_agent);
+    NavigationAgent3D *get_navigation_agent();
+
     void set_currently_moving(bool new_currently_moving);
     bool is_currently_moving();
 

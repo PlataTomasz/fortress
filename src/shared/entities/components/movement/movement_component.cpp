@@ -112,16 +112,21 @@ void MovementComponent::_parented() {
 }
 
 void MovementComponent::_init() {
-	nav_agent = memnew(NavigationAgent3D);
-	nav_agent->set_avoidance_enabled(true);
-	add_child(nav_agent);
-
 	set_physics_process(true);
 	set_process(true);
 }
 
 bool MovementComponent::is_currently_moving() {
 	return currently_moving;
+}
+
+void MovementComponent::set_navigation_agent(NavigationAgent3D *new_nav_agent) {
+	nav_agent = new_nav_agent;
+	DISABLE_IN_EDITOR();
+}
+
+NavigationAgent3D *MovementComponent::get_navigation_agent() {
+	return nav_agent;
 }
 
 void MovementComponent::set_currently_moving(bool new_currently_moving) {
@@ -152,6 +157,10 @@ void MovementComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("is_currently_moving"), &MovementComponent::is_currently_moving);
     ClassDB::bind_method(D_METHOD("set_currently_moving", "currently_moving"), &MovementComponent::set_currently_moving);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "currently_moving"), "set_currently_moving", "is_currently_moving");
+
+	ClassDB::bind_method(D_METHOD("get_navigation_agent"), &MovementComponent::get_navigation_agent);
+    ClassDB::bind_method(D_METHOD("set_navigation_agent", "navigation_agent"), &MovementComponent::set_navigation_agent);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "navigation_agent", PROPERTY_HINT_NODE_TYPE, NavigationAgent3D::get_class_static()), "set_navigation_agent", "get_navigation_agent");
 }
 
 void MovementComponent::set_pathfinding_radius(real_t pathfinding_radius) {

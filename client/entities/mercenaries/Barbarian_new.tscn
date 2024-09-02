@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://cgco77hqkmtwl"]
+[gd_scene load_steps=43 format=3 uid="uid://cgco77hqkmtwl"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_jp0yl"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_ngwr0"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://btkmxgv7n00oi" path="res://models/barbarian.gltf" id="4_ubfyo"]
 [ext_resource type="PackedScene" uid="uid://deoh8l3kkh28a" path="res://models/sword.gltf" id="5_87kt6"]
 [ext_resource type="AnimationLibrary" uid="uid://dyw8cufffctiy" path="res://models/animations_orc_human.gltf" id="5_amkwr"]
-[ext_resource type="PackedScene" uid="uid://cw3e16arhb3lx" path="res://status_effects/barbarian_bleeding_dot.tscn" id="8_vqllk"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_040m5"]
 resource_local_to_scene = true
@@ -30,8 +29,8 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 base = 300.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_d4l4k"]
-viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_oyix2"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="AudioEntry" id="AudioEntry_b271i"]
 stream_name = "warcry"
@@ -2751,7 +2750,7 @@ displayed_description = "Your basic attacks apply bleeding, dealing physical dam
 icon = ExtResource("4_no128")
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_d4l4k")
+texture = SubResource("ViewportTexture_oyix2")
 
 [node name="AudioComponent" parent="." index="7"]
 audio_entries = Array[AudioEntry]([SubResource("AudioEntry_b271i")])
@@ -2764,24 +2763,26 @@ walk_animation_name = &"Walk002"
 [node name="barbarian" parent="VisualComponent3D" index="0" instance=ExtResource("4_ubfyo")]
 
 [node name="Skeleton3D" parent="VisualComponent3D/barbarian/Armature" index="0"]
-bones/0/position = Vector3(0, 1.35878, -0.0825692)
-bones/0/rotation = Quaternion(0.0591567, 1.19001e-07, 7.05203e-09, 0.998249)
-bones/1/rotation = Quaternion(-0.243937, -0.338445, -0.737271, 0.531395)
-bones/2/rotation = Quaternion(0.210655, -0.406913, -0.00213758, 0.888843)
+bones/0/position = Vector3(0, 1.35878, -0.0825693)
+bones/0/rotation = Quaternion(0, 1.19209e-07, 0, 1)
+bones/1/rotation = Quaternion(1.29201e-07, -4.62833e-08, -0.811242, 0.58471)
+bones/2/rotation = Quaternion(0.0425803, -0.0390563, -0.208464, 0.976322)
 bones/2/scale = Vector3(1, 1, 1)
-bones/3/rotation = Quaternion(-0.0551456, 0.0460313, -0.0557672, 0.995857)
+bones/3/rotation = Quaternion(-0.0907047, -0.0100988, -0.386335, 0.917832)
 bones/3/scale = Vector3(1, 1, 1)
 bones/4/rotation = Quaternion(0.022137, -1.84906e-07, -0.00130393, 0.999754)
-bones/5/rotation = Quaternion(-0.0408185, -1.1911e-07, -4.86595e-09, 0.999167)
-bones/6/rotation = Quaternion(-0.243937, 0.338444, 0.737271, 0.531395)
-bones/7/rotation = Quaternion(0.210655, 0.406913, 0.00213756, 0.888843)
+bones/5/rotation = Quaternion(0, -1.19209e-07, 0, 1)
+bones/6/rotation = Quaternion(-0.271514, 0.376705, 0.718475, 0.517848)
+bones/7/rotation = Quaternion(0.0787074, 0.100503, 0.205923, 0.970206)
 bones/7/scale = Vector3(1, 1, 1)
-bones/8/rotation = Quaternion(-0.0551456, -0.0460313, 0.0557671, 0.995857)
+bones/8/rotation = Quaternion(0.440511, 0.244986, 0.342, 0.793075)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/rotation = Quaternion(0.022137, 1.86144e-07, 0.00130393, 0.999754)
+bones/9/rotation = Quaternion(0.106604, 0.00233299, 0.00633953, 0.994279)
+bones/12/rotation = Quaternion(-0.629627, 1.85227e-07, -1.50115e-07, 0.776898)
+bones/14/rotation = Quaternion(-0.629627, -1.85227e-07, 1.50115e-07, 0.776898)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.471998, -0.875554, 0.10307, 0.0419446, 0.0944778, 0.994643, -0.880601, 0.473792, -0.00786853, -1.38975, 1.5829, 0.434578)
+transform = Transform3D(-0.997885, -0.0275348, -0.0588772, -0.0577268, 0.791744, 0.608119, 0.0298712, 0.610232, -0.791659, -0.990649, 1.70591, 0.654166)
 bone_name = "Hand_R"
 bone_idx = 9
 
@@ -2795,6 +2796,5 @@ libraries = {
 }
 autoplay = "Idle"
 
-[node name="BarbarianBleedingDot" parent="StatusEffectVictimComponent" index="1" instance=ExtResource("8_vqllk")]
-
+[editable path="EntityInfoRenderer"]
 [editable path="VisualComponent3D/barbarian"]

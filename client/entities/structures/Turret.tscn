@@ -1,21 +1,144 @@
-[gd_scene load_steps=3 format=3 uid="uid://7453g6ydtekb"]
+[gd_scene load_steps=20 format=4 uid="uid://7453g6ydtekb"]
 
-[ext_resource type="ArrayMesh" uid="uid://djgsm5u1h4jy3" path="res://models/Turret_barrier_red.tres" id="1_0viik"]
+[ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="1_1jq6i"]
+[ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="1_coqsg"]
+[ext_resource type="PackedScene" uid="uid://cvdehdk1ecoib" path="res://entities/components/entity_attributes_component.tscn" id="2_8j4i6"]
+[ext_resource type="PackedScene" uid="uid://bg4atg03uyc65" path="res://models/tower-top.glb" id="2_tgsix"]
+[ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="3_fx4gh"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_akbwa"]
-radius = 4.5
+[sub_resource type="ViewportTexture" id="ViewportTexture_e47hh"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
 
-[node name="Turret" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2mec"]
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-mesh = ExtResource("1_0viik")
+[sub_resource type="ArrayMesh" id="ArrayMesh_ewv87"]
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAACAAEAAQACAAMAAAAEAAIAAwACAAQAAAABAAUAAwAFAAEAAAAFAAQAAwAEAAUA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("838AAAuAAADzf/d///8AAAAA938LgAAA83///wuAAADzf/d/AAAAAP//938LgAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7yvhn"]
+resource_local_to_scene = true
+resource_name = "crystal_Cube_001"
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"attribute_data": PackedByteArray("/D8CYPw//F8CQPxfAkACYAKA///8P/8/AkD/PwKAAiD/HwJgAoD83wKAAuD/H/xf/5/83/+fAuD/nwIg/5/8n/w//38CgP+/AkD/fwKA/J//X/xfAoD/P/9fAmACgP9/"),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AQALAAUABAAKAA0AAAAQAAgADAAJABEAAgAGABQADgAVAAcAAwAWABIADwATABcA"),
+"material": SubResource("StandardMaterial3D_b2mec"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("838AAAuA1ODzfwAAC4DFtPN/AAALgMG0838AAAuA1eDzf/d////GtPN/93///8W083/3f///wbTzf/d///8gwAAA938LgNTgAAD3fwuA1eAAAPd/C4DGtAAA938LgMW083///wuA1eDzf///C4DGtPN///8LgCDA83///wuAwPzzf/d/AADU4PN/938AANXg83/3fwAA1eDzf/d/AADA/P//938LgMG0///3fwuAIMD///d/C4DV4P//938LgMD8gzh+pmhQoJmeGZcvfCaAR13matBoUKCZnhmXL3M09ASDOH6mftmEuF3matBoUKCZftmEuF3matBzNPQE1ypNNYM4fqZ+2YS4fCaAR9cqTTWeGZcvczT0BHwmgEfXKk01")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ewv87")
+
+[sub_resource type="Animation" id="Animation_75x5r"]
+resource_name = "floating"
+length = 3.33333
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.0333333, 1, 0, 0.000860277, 0, 0.0666667, 1, 0, 0.00296723, 0, 0.1, 1, 0, 0.00627711, 0, 0.133333, 1, 0, 0.0107462, 0, 0.166667, 1, 0, 0.0163307, 0, 0.2, 1, 0, 0.023315, 0, 0.233333, 1, 0, 0.0312835, 0, 0.266667, 1, 0, 0.0401924, 0, 0.3, 1, 0, 0.0499981, 0, 0.333333, 1, 0, 0.0606568, 0, 0.366667, 1, 0, 0.0723653, 0, 0.4, 1, 0, 0.0847956, 0, 0.433333, 1, 0, 0.0979039, 0, 0.466667, 1, 0, 0.111646, 0, 0.5, 1, 0, 0.12598, 0, 0.533333, 1, 0, 0.141013, 0, 0.566667, 1, 0, 0.156505, 0, 0.6, 1, 0, 0.172413, 0, 0.633333, 1, 0, 0.188692, 0, 0.666667, 1, 0, 0.2053, 0, 0.7, 1, 0, 0.222258, 0, 0.766667, 1, 0, 0.25672, 0, 0.933333, 1, 0, 0.343826, 0, 0.966667, 1, 0, 0.360981, 0, 1, 1, 0, 0.377939, 0, 1.03333, 1, 0, 0.394546, 0, 1.06667, 1, 0, 0.410826, 0, 1.1, 1, 0, 0.426734, 0, 1.13333, 1, 0, 0.442226, 0, 1.16667, 1, 0, 0.457259, 0, 1.2, 1, 0, 0.471592, 0, 1.23333, 1, 0, 0.485335, 0, 1.26667, 1, 0, 0.498443, 0, 1.3, 1, 0, 0.510873, 0, 1.33333, 1, 0, 0.522582, 0, 1.36667, 1, 0, 0.53324, 0, 1.4, 1, 0, 0.543046, 0, 1.43333, 1, 0, 0.551955, 0, 1.46667, 1, 0, 0.559924, 0, 1.5, 1, 0, 0.566908, 0, 1.53333, 1, 0, 0.572492, 0, 1.56667, 1, 0, 0.576962, 0, 1.6, 1, 0, 0.580271, 0, 1.63333, 1, 0, 0.582378, 0, 1.7, 1, 0, 0.582378, 0, 1.73333, 1, 0, 0.580271, 0, 1.76667, 1, 0, 0.576962, 0, 1.8, 1, 0, 0.572492, 0, 1.83333, 1, 0, 0.566908, 0, 1.86667, 1, 0, 0.559924, 0, 1.9, 1, 0, 0.551955, 0, 1.93333, 1, 0, 0.543046, 0, 1.96667, 1, 0, 0.53324, 0, 2, 1, 0, 0.522582, 0, 2.03333, 1, 0, 0.510873, 0, 2.06667, 1, 0, 0.498443, 0, 2.1, 1, 0, 0.485335, 0, 2.13333, 1, 0, 0.471592, 0, 2.16667, 1, 0, 0.457259, 0, 2.2, 1, 0, 0.442226, 0, 2.23333, 1, 0, 0.426734, 0, 2.26667, 1, 0, 0.410826, 0, 2.3, 1, 0, 0.394546, 0, 2.33333, 1, 0, 0.377939, 0, 2.36667, 1, 0, 0.360981, 0, 2.43333, 1, 0, 0.326519, 0, 2.6, 1, 0, 0.239412, 0, 2.63333, 1, 0, 0.222258, 0, 2.66667, 1, 0, 0.2053, 0, 2.7, 1, 0, 0.188692, 0, 2.73333, 1, 0, 0.172413, 0, 2.76667, 1, 0, 0.156505, 0, 2.8, 1, 0, 0.141013, 0, 2.83333, 1, 0, 0.12598, 0, 2.86667, 1, 0, 0.111646, 0, 2.9, 1, 0, 0.0979038, 0, 2.93333, 1, 0, 0.0847956, 0, 2.96667, 1, 0, 0.0723653, 0, 3, 1, 0, 0.0606567, 0, 3.03333, 1, 0, 0.0499982, 0, 3.06667, 1, 0, 0.0401925, 0, 3.1, 1, 0, 0.0312835, 0, 3.13333, 1, 0, 0.0233149, 0, 3.16667, 1, 0, 0.0163307, 0, 3.2, 1, 0, 0.0107462, 0, 3.23333, 1, 0, 0.00627713, 0, 3.26667, 1, 0, 0.00296724, 0, 3.3, 1, 0, 0.000860312, 0, 3.33333, 1, 0, 0, 0)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_45rbh"]
+_data = {
+"floating": SubResource("Animation_75x5r")
+}
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_m1dll"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_e43t2"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_u0ija"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_noqvh"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_ei0nv"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_qy3my"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ecfb6"]
+height = 0.5
+radial_segments = 12
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ogbw3"]
+radius = 2.0
+
+[node name="Turret" type="Turret" node_paths=PackedStringArray("status_effect_victim_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node")]
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("1_coqsg")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="EntityInfoRenderer" parent="." instance=ExtResource("1_1jq6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_e47hh")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="." node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="VisualComponent3D" instance=ExtResource("2_tgsix")]
+
+[node name="crystal" type="Node3D" parent="VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, -1.5, 0)
+mesh = SubResource("ArrayMesh_7yvhn")
 skeleton = NodePath("")
 
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="Mesh"]
-radius = 2.13
-avoidance_layers = 2
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
 
-[node name="DetectionArea" type="Area3D" parent="."]
+[node name="EntityAttributesComponent" parent="." instance=ExtResource("2_8j4i6")]
+health = SubResource("CappedResourceAttribute_m1dll")
+global_defense = SubResource("FloatAttribute_e43t2")
+attack_damage = SubResource("FloatAttribute_u0ija")
+magic_power = SubResource("FloatAttribute_noqvh")
+cooldown_reduction = SubResource("FloatAttribute_ei0nv")
+movement_speed = SubResource("FloatAttribute_qy3my")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
-shape = SubResource("SphereShape3D_akbwa")
+[node name="StatusEffectVictimComponent" parent="." instance=ExtResource("3_fx4gh")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[editable path="EntityInfoRenderer"]

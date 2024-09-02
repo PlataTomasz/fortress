@@ -4,6 +4,7 @@
 
 #include <shared/core/game_level.h>
 #include <shared/core/sh_game.h>
+#include <shared/entities/components/damage/damageable_component.h>
 
 bool MobaGamemode::is_entity_enemy_of(Entity *first_entity, Entity *second_entity) {
     return !are_entities_same_team(first_entity, second_entity);
@@ -105,14 +106,37 @@ void MobaGamemode::_setup_initial_teams() {
     }
 }
 
+void MobaGamemode::_on_first_nexus_destroyed() {
+    print_line("Game finished and first team won!");
+    // emit event that one of the teams has won
+}
+
+void MobaGamemode::_on_second_nexus_destroyed() {
+    print_line("Game finished and second team won!");
+    // emit event that one of the teams has won
+}
+
 void MobaGamemode::_notification(int p_notification) {
 	DISABLE_IN_EDITOR();
 	switch (p_notification) {
 		case NOTIFICATION_ENTER_TREE: {
             get_parent()->connect("ready", callable_mp(this, &MobaGamemode::_setup_initial_teams));
             
-            // Connect to GameLevel "entity_added" event
+            if(first_team_nexus) {
+                DamageableComponent *nexus_damageable = first_team_nexus->get_damageable_component();
+                ERR_FAIL_COND_MSG(!nexus_damageable, "Nexus of the first team cannot be damaged! Game is unwinnable for one of the teams!");
 
+                nexus_damageable->connect("death", callable_mp(this, &MobaGamemode::_on_first_nexus_destroyed));
+            }
+
+            if(second_team_nexus) {
+                DamageableComponent *nexus_damageable = first_team_nexus->get_damageable_component();
+                ERR_FAIL_COND_MSG(!nexus_damageable, "Nexus of the second team cannot be damaged! Game is unwinnable for one of the teams!");
+                
+                nexus_damageable->connect("death", callable_mp(this, &MobaGamemode::_on_second_nexus_destroyed));
+            }
+
+            // Connect to GameLevel "entity_added" event
             SH_Game *game = Realm::get_shared_game();
             ERR_FAIL_NULL(game);
             GameLevel *gamelevel = game->get_current_level();

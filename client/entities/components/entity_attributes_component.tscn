@@ -1,0 +1,43 @@
+[gd_scene load_steps=9 format=3 uid="uid://cvdehdk1ecoib"]
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_su2kk"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_n5qt1"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_lx4s1"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_1qwil"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_x7agx"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_k4bsa"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_yh02f"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gotr4"]
+properties/0/path = NodePath("EntityAttributesComponent:health:current")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent"]
+health = SubResource("CappedResourceAttribute_su2kk")
+global_defense = SubResource("FloatAttribute_n5qt1")
+attack_damage = SubResource("FloatAttribute_lx4s1")
+attack_speed = SubResource("FloatAttribute_1qwil")
+magic_power = SubResource("FloatAttribute_x7agx")
+cooldown_reduction = SubResource("FloatAttribute_k4bsa")
+movement_speed = SubResource("FloatAttribute_yh02f")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")

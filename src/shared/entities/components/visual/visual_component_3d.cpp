@@ -16,10 +16,12 @@ void VisualComponent3D::_notification(int p_notification) {
 			ERR_FAIL_NULL(ent);
 
 			MovementComponent *movement_component = ent->get_movement_component();
-			ERR_FAIL_NULL(movement_component);
-
-			movement_component->connect("movement_started", callable_mp(this, &VisualComponent3D::_on_movement_start));
-			movement_component->connect("movement_finish", callable_mp(this, &VisualComponent3D::_on_movement_finish));
+			if(movement_component) {
+				movement_component->connect("movement_started", callable_mp(this, &VisualComponent3D::_on_movement_start));
+				movement_component->connect("movement_finish", callable_mp(this, &VisualComponent3D::_on_movement_finish));
+			} else {
+				print_error("Movement component is null!");
+			}
 
 			ERR_FAIL_NULL(animation_player);
 			animation_player->connect("animation_finished", callable_mp(this, &VisualComponent3D::_on_animation_finish));
@@ -67,9 +69,8 @@ void VisualComponent3D::_on_animation_finish(const String& animation_name) {
 	ERR_FAIL_NULL(ent);
 
 	MovementComponent *movement_component = ent->get_movement_component();
-	ERR_FAIL_NULL(movement_component);
 
-	if(movement_component->is_currently_moving()) {
+	if(movement_component && movement_component->is_currently_moving()) {
 		play_walk_animation();
 	} else {
 		play_idle_animation();

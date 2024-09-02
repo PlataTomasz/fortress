@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=4 uid="uid://bn624tndx3lip"]
+
+[ext_resource type="PackedScene" uid="uid://7453g6ydtekb" path="res://entities/structures/Turret.tscn" id="1_hcqr0"]
+[ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_fgqlh"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ud6e4"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ewv87"]
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAACAAEAAQACAAMAAAAEAAIAAwACAAQAAAABAAUAAwAFAAEAAAAFAAQAAwAEAAUA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("838AAAuAAADzf/d///8AAAAA938LgAAA83///wuAAADzf/d/AAAAAP//938LgAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_f6hy4"]
+resource_local_to_scene = true
+resource_name = "crystal_Cube_001"
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"attribute_data": PackedByteArray("/D8CYPw//F8CQPxfAkACYAKA///8P/8/AkD/PwKAAiD/HwJgAoD83wKAAuD/H/xf/5/83/+fAuD/nwIg/5/8n/w//38CgP+/AkD/fwKA/J//X/xfAoD/P/9fAmACgP9/"),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AQALAAUABAAKAA0AAAAQAAgADAAJABEAAgAGABQADgAVAAcAAwAWABIADwATABcA"),
+"material": ExtResource("2_fgqlh"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("838AAAuA1ODzfwAAC4DFtPN/AAALgMG0838AAAuA1eDzf/d////GtPN/93///8W083/3f///wbTzf/d///8gwAAA938LgNTgAAD3fwuA1eAAAPd/C4DGtAAA938LgMW083///wuA1eDzf///C4DGtPN///8LgCDA83///wuAwPzzf/d/AADU4PN/938AANXg83/3fwAA1eDzf/d/AADA/P//938LgMG0///3fwuAIMD///d/C4DV4P//938LgMD8gzh+pmhQoJmeGZcvfCaAR13matBoUKCZnhmXL3M09ASDOH6mftmEuF3matBoUKCZftmEuF3matBzNPQE1ypNNYM4fqZ+2YS4fCaAR9cqTTWeGZcvczT0BHwmgEfXKk01")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ewv87")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_m1dll"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_e43t2"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_u0ija"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_noqvh"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_ei0nv"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_qy3my"]
+resource_local_to_scene = true
+base = 300.0
+
+[node name="Dev001" type="GameLevel"]
+
+[node name="Entities" type="Node" parent="."]
+
+[node name="Turret" parent="Entities" instance=ExtResource("1_hcqr0")]
+
+[node name="Sprite3D" parent="Entities/Turret/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_ud6e4")
+
+[node name="Cube" parent="Entities/Turret/VisualComponent3D/crystal" index="0"]
+mesh = SubResource("ArrayMesh_f6hy4")
+
+[node name="EntityAttributesComponent" parent="Entities/Turret" index="2"]
+health = SubResource("CappedResourceAttribute_m1dll")
+global_defense = SubResource("FloatAttribute_e43t2")
+attack_damage = SubResource("FloatAttribute_u0ija")
+magic_power = SubResource("FloatAttribute_noqvh")
+cooldown_reduction = SubResource("FloatAttribute_ei0nv")
+movement_speed = SubResource("FloatAttribute_qy3my")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 4, 5)
+current = true
+
+[editable path="Entities/Turret"]
+[editable path="Entities/Turret/EntityInfoRenderer"]
