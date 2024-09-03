@@ -14,7 +14,19 @@ AbilityCasterComponent::AbilityCasterComponent()
 
 void AbilityCasterComponent::use_basic_attack(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(attack);
-    attack->use(action_context);
+    if(attack->can_be_used(action_context)) {
+        Dictionary networked_action_data;
+        networked_action_data["user_entity_id"] = action_context->get_user() ? action_context->get_user()->get_name() : "0";
+        networked_action_data["target_entity_id"] = action_context->get_target_entity() ? action_context->get_target_entity()->get_name() : "0";
+        networked_action_data["target_position"] = action_context->get_target_position();
+        networked_action_data["use_position"] = action_context->get_use_position();
+
+        rpc("server_rpc_attack_used", networked_action_data);
+
+        attack->use(action_context);
+    } else {
+        print_error(attack->to_string() + " couldn't be used!");
+    }
 }
 
 void AbilityCasterComponent::_notification(int p_notification) {

@@ -106,12 +106,12 @@ void MobaGamemode::_setup_initial_teams() {
     }
 }
 
-void MobaGamemode::_on_first_nexus_destroyed() {
+void MobaGamemode::_on_first_nexus_destroyed(Ref<DamageObject> damage_object) {
     print_line("Game finished and first team won!");
     // emit event that one of the teams has won
 }
 
-void MobaGamemode::_on_second_nexus_destroyed() {
+void MobaGamemode::_on_second_nexus_destroyed(Ref<DamageObject> damage_object) {
     print_line("Game finished and second team won!");
     // emit event that one of the teams has won
 }
@@ -143,6 +143,10 @@ void MobaGamemode::_notification(int p_notification) {
             ERR_FAIL_NULL(gamelevel);
             gamelevel->connect("entity_added", callable_mp(this, &MobaGamemode::_on_new_entity_enter_level));
 		} break;
+
+        case NOTIFICATION_POSTINITIALIZE: {
+            register_gamemode_server_commands();
+        } break;
 
 		default:
 			break;
