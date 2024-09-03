@@ -17,6 +17,10 @@ private:
 
     void _reparent_hitbox();
 protected:
+#ifdef CLIENT
+    virtual void _clientside_use(const Ref<ActionContext>& action_context) override;
+#endif
+
     void _notification(int p_notification);
     static void _bind_methods();
 public:

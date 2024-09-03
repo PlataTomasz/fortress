@@ -1,7 +1,8 @@
-[gd_scene load_steps=52 format=4 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=51 format=4 uid="uid://8tv1es2vlr8m"]
 
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
+[ext_resource type="Texture2D" uid="uid://bo71cbws7jmsi" path="res://textures/skybox/BlueSkySkybox.png" id="2_cq1ar"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="5_3bms1"]
 [ext_resource type="PackedScene" uid="uid://7453g6ydtekb" path="res://entities/structures/Turret.tscn" id="6_on3wb"]
 [ext_resource type="PackedScene" uid="uid://p0n6q2bliu2b" path="res://entities/structures/default_nexus.tscn" id="6_pk64u"]
@@ -14,23 +15,17 @@ color = Color(0, 0.2, 0.72549, 1)
 team_name = "Red"
 color = Color(0.768627, 0.0392157, 0, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_hsijy"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0gg1w"]
+panorama = ExtResource("2_cq1ar")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_oqh8t"]
-noise = SubResource("FastNoiseLite_hsijy")
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mjde6"]
-sky_top_color = Color(0.22071, 0.775784, 0.921336, 1)
-sky_horizon_color = Color(1, 1, 1, 1)
-sky_cover = SubResource("NoiseTexture2D_oqh8t")
-
-[sub_resource type="Sky" id="Sky_ul5dx"]
-sky_material = SubResource("ProceduralSkyMaterial_mjde6")
+[sub_resource type="Sky" id="Sky_2msnm"]
+sky_material = SubResource("PanoramaSkyMaterial_0gg1w")
 
 [sub_resource type="Environment" id="Environment_s4h7m"]
-sky = SubResource("Sky_ul5dx")
-ambient_light_source = 3
-ambient_light_color = Color(1, 1, 1, 1)
+background_mode = 2
+sky = SubResource("Sky_2msnm")
+ambient_light_source = 2
+ambient_light_color = Color(0.665883, 0.896065, 1, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_dtngh"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")

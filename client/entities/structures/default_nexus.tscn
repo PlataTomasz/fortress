@@ -67,6 +67,7 @@ attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
 
 [node name="EntityInfoRenderer" parent="." instance=ExtResource("1_4l8rx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_5t406")

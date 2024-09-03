@@ -76,4 +76,5 @@ Entity *DamageableComponent::get_owning_entity() {
 
 void DamageableComponent::_bind_methods() {
     ADD_SIGNAL(MethodInfo("damage_taken", PropertyInfo(Variant::OBJECT, "damage_object")));
+    ADD_SIGNAL(MethodInfo("death", PropertyInfo(Variant::OBJECT, "damage_object")));
 }

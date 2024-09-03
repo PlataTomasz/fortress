@@ -95,6 +95,7 @@ protected:
     void _on_auth_start(int peer_id);
     void _on_auth_fail(int peer_id);
 public:
+    static Server *get_instance();
     //Returns player by peer_id, nullptr if no player has such peer
     Ref<Player> get_player(int peer_id);
 

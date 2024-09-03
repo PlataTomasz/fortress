@@ -3,6 +3,7 @@
 #include <scene/3d/physics/area_3d.h>
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/components/abilities/ability_caster_component.h>
+#include <shared/entities/components/visual/visual_component_3d.h>
 
 void BarbarianBasicAttack::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_hitbox"), &BarbarianBasicAttack::get_hitbox);
@@ -43,6 +44,23 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
         }
     }
 }
+
+#ifdef CLIENT
+void BarbarianBasicAttack::_clientside_use(const Ref<ActionContext>& action_context) {
+    ERR_FAIL_NULL(action_context->get_user());
+    // Play swing sound
+    
+    // Play animation
+    // TODO: Move to sandboxed method
+    VisualComponent3D *visual_component = action_context->get_user()->get_visual_component();
+    if(visual_component)  {
+        visual_component->play_animation_override("Attack002");
+    }
+    else {
+        print_error("Failed to play animation! Missing VisualComponent3D!");
+    }
+}
+#endif
 
 void BarbarianBasicAttack::set_hitbox(HitboxComponent *p_hitbox) {
     hitbox = p_hitbox;
