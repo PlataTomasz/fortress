@@ -113,6 +113,11 @@ public:
     Error execute_server_command(const String& command_name, PackedStringArray command_arguments);
 
     bool is_peer_connected(int peer_id);
+
+    Ref<Player> find_player_by_nickname(const String& nickname);
+    bool is_player_currently_connected(const Ref<Player>& player);
+
+    void change_player_peer_id(const Ref<Player>& player_to_alter, int new_peer_id);
  
     Server();
 };

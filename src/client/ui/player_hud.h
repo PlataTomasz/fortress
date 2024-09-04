@@ -24,6 +24,9 @@ private:
     ProgressBar *health_bar = nullptr;
     TextureRect *character_portrait = nullptr;
 
+    Control *victory_screen = nullptr;
+    Control *defeat_screen = nullptr;
+
     void _ready();
     void _on_current_health_changed(float new_health);
 
@@ -50,6 +53,14 @@ public:
     void set_character_portrait(TextureRect *p_status_effect_area);
     TextureRect *get_character_portrait();
 
+    Control *get_victory_screen();
+    void set_victory_screen(Control *new_victory_screen);
+
+    Control *get_defeat_screen();
+    void set_defeat_screen(Control *new_defeat_screen);
+
+    void show_victory_screen();
+    void show_defeat_screen();
 };
 
 #endif // PLAYER_HUD_INCLUDED

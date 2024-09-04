@@ -79,15 +79,22 @@ void Server::_on_peer_connect(int peer_id)
     Mercenary *mercenary = nullptr;
     if(connected_players.has(peer_id)) {
         Ref<Player> ply = connected_players.get(peer_id);
-        String mercenary_name = ply->get_choosen_mercenary();
-        mercenary = MercenaryRegistry::get_singleton()->create_instance(mercenary_name);
+
+        if(!ply->get_controlled_entity()) {
+            String mercenary_name = ply->get_choosen_mercenary();
+            mercenary = MercenaryRegistry::get_singleton()->create_instance(mercenary_name);
+
+            ERR_FAIL_NULL(mercenary);
+            mercenary->set_name("p_" + itos(peer_id));
+            mercenary->set_meta("spawned_by_player_connect", true);
+            game->get_current_level()->add_entity(mercenary);
+            
+            connected_players.get(peer_id)->set_controlled_entity(mercenary);
+        } else {
+            mercenary = ply->get_controlled_entity();
+        }
     }
-    ERR_FAIL_NULL(mercenary);
-	mercenary->set_name("p_" + itos(peer_id));
-    mercenary->set_meta("spawned_by_player_connect", true);
-	game->get_current_level()->add_entity(mercenary);
     
-    connected_players.get(peer_id)->set_controlled_entity(mercenary);
     rpc_id(peer_id, "server_rpc_set_controlled_entity", mercenary->get_name());
 }
 
@@ -119,6 +126,18 @@ void Server::_init() {
 
     command_listening_thread.instantiate();
     command_listening_thread->start(callable_mp(this, &Server::_await_console_command), core_bind::Thread::PRIORITY_NORMAL);
+}
+
+void Server::change_player_peer_id(const Ref<Player>& player_to_alter, int new_peer_id) {
+    for(KeyValue<int, Ref<Player>> kv : connected_players) {
+        Ref<Player> player = kv.value;
+        ERR_CONTINUE(player.is_null());
+
+        if(player == player_to_alter) {
+            connected_players.replace_key(kv.key, new_peer_id);
+            break;
+        }
+    }
 }
 
 void Server::_await_console_command() {
@@ -177,27 +196,53 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
 
     print_line("Peer", itos(peer_id), "wants to play character named", var_mercenary_name);
 
-    Player *ply = memnew(Player);
-    ply->change_nickname(String(var_nickname));
-    // TODO: Wrap such variant to type conversions in a dedicated class! They are causing me a headache!
-    String mercenary_name_str = String(var_mercenary_name);
+    // If there is already player with such nickname and it is not connected, then take control of that player
+    // If player with such nickname exists, but is connected by other player, then kick peer that attempted to take controll
+    // If player with such nickname doesn't exist, create it
+
+    Ref<Player> player_with_matching_nickname = find_player_by_nickname(String(var_nickname));
+    Ref<Player> player_to_add;
+    if(!player_with_matching_nickname.is_null()) {
+        if(is_player_currently_connected(player_with_matching_nickname)) {
+            // Kick impostor
+            return Error::ERR_ALREADY_IN_USE;
+        } else {
+            player_to_add = player_with_matching_nickname;
+            change_player_peer_id(player_to_add, peer_id);
+        }
+    } else {
+        // TODO: Wrap such variant to type conversions in a dedicated class! They are causing me a headache!
+        String mercenary_name_str = String(var_mercenary_name);
+        ERR_FAIL_COND_V_MSG(!(MercenaryRegistry::get_singleton()->has(mercenary_name_str)), Error::ERR_INVALID_PARAMETER, "Invalid mercenary name received from client! Auth failed for " + peer_id);
+
+        player_to_add.instantiate();
+        player_to_add->change_nickname(String(var_nickname));
+        player_to_add->set_choosen_mercenary(mercenary_name_str);
+        add_player(peer_id, player_to_add);
+    }
+
     
-    ERR_FAIL_COND_V(mercenary_name_str.is_empty(), Error::ERR_INVALID_PARAMETER);
-    ERR_FAIL_COND_V_MSG(!(MercenaryRegistry::get_singleton()->has(mercenary_name_str)), Error::ERR_INVALID_PARAMETER, "Invalid mercenary name received from client! Auth failed for " + peer_id);
-
-    ply->set_choosen_mercenary(mercenary_name_str);
-
-    Ref<PackedScene> scene = ResourceLoader::load("res://entities/mercenaries/Barbarian.tscn");
-    Mercenary *mercenary = static_cast<Mercenary *>(scene->instantiate());
-    mercenary->set_name(itos(get_instance_id()));
-    
-    ply->set_controlled_entity(mercenary);
-
-    add_player(peer_id, ply);
     print_line("Auth succeeded on server for peer ", peer_id);
     scene_multiplayer->complete_auth(peer_id);
-    print_line("Player", ply->get_nickname(), "joined the game!");
+    print_line("Player", player_to_add->get_nickname(), "joined the game!");
     return OK;
+}
+
+bool Server::is_player_currently_connected(const Ref<Player>& player) {
+    ERR_FAIL_NULL_V(scene_multiplayer, false);
+
+    for(KeyValue<int, Ref<Player>> kv : connected_players) {
+        Ref<Player> player = kv.value;
+        ERR_CONTINUE(player.is_null());
+
+        for(int peer_id : scene_multiplayer->get_peer_ids()) {
+            if(peer_id == kv.key) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 void Server::_on_auth_start(int peer_id) {
@@ -222,6 +267,19 @@ void Server::remove_player(int peer_id) {
     if(connected_players.has(peer_id)) {
         connected_players.erase(peer_id);
     }
+}
+
+Ref<Player> Server::find_player_by_nickname(const String& nickname) {
+    for(KeyValue<int, Ref<Player>> var : connected_players) {
+        Ref<Player> player = var.value;
+        ERR_CONTINUE(player.is_null());
+
+        if(player->get_nickname() == nickname) {
+            return player;
+        }
+    }
+    
+    return Ref<Player>();
 }
 
 void Server::add_player(int peer_id, Ref<Player> player) { 

@@ -11,6 +11,12 @@ class UserInterface : public Control {
 GDCLASS(UserInterface, Control);
 private:
     MainMenu *main_menu = nullptr;
+
+    Control *victory_screen = nullptr;
+    Control *defeat_screen = nullptr;
+
+    void show_defeat_screen();
+    void show_victory_screen();
 protected:
     void _ready();
 

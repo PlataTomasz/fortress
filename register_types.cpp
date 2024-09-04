@@ -30,6 +30,18 @@
 
 #include "register_types.h"
 
+#if defined(CLIENT)
+
+#include "register_clientside_types.h"
+
+#endif // CLIENT
+
+#if defined(SERVER)
+
+#include "register_serverside_types.h"
+
+#endif // SERVER
+
 #ifdef CLIENT
 #include <client/game.h>
 #include <client/client.hpp>
@@ -190,12 +202,26 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 
     ClassDB::register_class<AdvancedAnimationPlayer>();
 
-    ClassDB::register_class<Gamemode>();
+    ClassDB::register_abstract_class<Gamemode>();
     ClassDB::register_class<MobaGamemode>();
     ClassDB::register_class<Team>();
 
     // Singletons
     //Engine::get_singleton()->add_singleton(Engine::Singleton("MercenaryRegistry", MercenaryRegistry::get_singleton()));
+
+    #if defined(CLIENT)
+    
+    register_clientside_types();
+    
+    #endif // CLIENT
+    
+    #if defined(SERVER)
+    
+    register_serverside_types();
+    
+    #endif // SERVER
+    
+    
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)

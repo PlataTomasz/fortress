@@ -260,3 +260,17 @@ void Client::set_user_interface(UserInterface *new_user_interface) {
 UserInterface *Client::get_user_interface() {
     return user_interface;
 }
+
+Client *Client::get_instance() {
+    ERR_FAIL_NULL_V(SceneTree::get_singleton(), nullptr);
+    ERR_FAIL_NULL_V(SceneTree::get_singleton()->get_root(), nullptr);
+
+    Client *client_instance = Object::cast_to<Client>(SceneTree::get_singleton()->get_root()->get_node_or_null(NodePath("Client")));
+
+    return client_instance;
+}
+
+void Client::disconnect_from_server() {
+    ERR_FAIL_NULL(scene_multiplayer);
+    scene_multiplayer->disconnect_peer(1);
+}

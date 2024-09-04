@@ -41,3 +41,13 @@ MainMenu *UserInterface::get_main_menu() {
 void UserInterface::set_main_menu(MainMenu *p_main_menu) {
     main_menu = p_main_menu;
 }
+
+void UserInterface::show_defeat_screen() {
+    ERR_FAIL_NULL(defeat_screen);
+    defeat_screen->set_visible(true);
+}
+
+void UserInterface::show_victory_screen() {
+    ERR_FAIL_NULL(victory_screen);
+    victory_screen->set_visible(true);
+}
