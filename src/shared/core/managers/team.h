@@ -5,6 +5,8 @@
 #include <core/object/class_db.h>
 #include <scene/main/node.h>
 
+#include <shared/core/player.h>
+
 class Entity;
 
 class Team : public Resource {
@@ -13,7 +15,8 @@ private:
     String name = "unnamed";
     // Color of units associated with this team - Without alpha
     Color color = Color(1,1,1);
-    List<Entity *> members;
+    List<Entity *> entity_members;
+    List<Ref<Player>> player_members;
 protected:
     static void _bind_methods();
 public:
@@ -23,12 +26,17 @@ public:
     void set_color(const Color &new_color);
     Color get_color();
 
-    bool has_member(Entity *member);
-    void remove_member(Entity *new_member);
-    void add_member(Entity *new_member);
-    void clear_members();
-    Vector<Entity *> get_members();
+    bool has_entity_member(Entity *member);
+    void remove_entity_member(Entity *new_member);
+    void add_entity_member(Entity *new_member);
+    void clear_entity_members();
+    Vector<Entity *> get_entity_members();
 
+    bool has_player_member(const Ref<Player> &player);
+    void remove_player_member(const Ref<Player> &player);
+    void add_player_member(const Ref<Player> &player);
+    void clear_player_members();
+    Vector<Ref<Player>> get_player_members();
 };
 
 #endif // TEAM_INCLUDED

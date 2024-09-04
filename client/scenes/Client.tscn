@@ -8,6 +8,9 @@ user_interface = NodePath("UserInterface")
 
 [node name="UserInterface" parent="." instance=ExtResource("1_u8w0t")]
 
+[node name="IconBtn" parent="UserInterface/CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer/Barbarian/Element/TextureRect" index="0"]
+button_pressed = true
+
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_ch10y")
 volume_db = -19.594
@@ -15,3 +18,4 @@ autoplay = true
 parameters/looping = true
 
 [editable path="UserInterface"]
+[editable path="UserInterface/CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer/Barbarian"]

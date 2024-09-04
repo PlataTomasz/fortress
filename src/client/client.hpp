@@ -62,6 +62,10 @@ protected:
 
     Ref<ENetMultiplayerPeer> get_peer();
 public:
+    void disconnect_from_server();
+
+    static Client *get_instance();
+
     void set_user_interface(UserInterface *new_user_interface);
     UserInterface *get_user_interface();
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://r74sdo7qqa4i"]
+[gd_scene load_steps=13 format=3 uid="uid://r74sdo7qqa4i"]
 
 [ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="1_50r8y"]
 [ext_resource type="StyleBox" uid="uid://db3ejfwdx7hyb" path="res://ui/health_bars/DefaultMercenaryHealthBarFill.tres" id="2_kpe8t"]
@@ -27,6 +27,12 @@ load_path = "res://.godot/imported/box.png-2eee6b074402d7651281382bc00988cc.ctex
 [sub_resource type="LabelSettings" id="LabelSettings_mqrtc"]
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qrt2k"]
+bg_color = Color(0.325441, 0.325441, 0.325441, 0.443137)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6kus0"]
+font_size = 224
 
 [node name="PlayerHud" type="PlayerHUD" node_paths=PackedStringArray("health_bar", "status_effect_area", "character_portrait")]
 anchors_preset = 15
@@ -297,3 +303,29 @@ theme_override_styles/background = ExtResource("1_50r8y")
 theme_override_styles/fill = ExtResource("2_kpe8t")
 value = 100.0
 show_percentage = false
+
+[node name="DefeatScreen" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qrt2k")
+
+[node name="VSplitContainer" type="VSplitContainer" parent="DefeatScreen"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="DefeatScreen/VSplitContainer"]
+layout_mode = 2
+text = "You've lost!"
+label_settings = SubResource("LabelSettings_6kus0")
+
+[node name="DisconnectButton" type="Button" parent="DefeatScreen/VSplitContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Disconnect"
+
+[node name="VictoryScreen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0

@@ -1,0 +1,8 @@
+#if !defined(REGISTER_SERVERSIDE_TYPES_INCLUDED)
+#define REGISTER_SERVERSIDE_TYPES_INCLUDED
+
+void register_serverside_types() {
+
+}
+
+#endif // REGISTER_SERVERSIDE_TYPES_INCLUDED

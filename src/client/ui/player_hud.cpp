@@ -11,6 +11,8 @@
 #include <client/ui/ui.h>
 #include <client/ui/status_effect_indicator.h>
 #include <scene/gui/texture_rect.h>
+#include <shared/core/sh_game.h>
+#include <shared/gamemodes/gamemode.h>
 
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
@@ -18,6 +20,18 @@ void PlayerHUD::_ready() {
     // Setup signals
     Client *client = static_cast<Client *>(get_node(NodePath("/root/Client")));
     ERR_FAIL_NULL(client);
+
+    SH_Game *game = client->get_shared_game();
+    ERR_FAIL_NULL(game);
+
+    Gamemode *gamemode = game->get_gamemode();
+
+    if(gamemode) {
+        gamemode->connect("victory", callable_mp(this, &PlayerHUD::show_victory_screen));
+        gamemode->connect("defeat", callable_mp(this, &PlayerHUD::show_defeat_screen));
+    } else {
+        print_error("Missing gamemode object! Defeat and victory screens won't be shown!");
+    }
 
     Ref<Player> ply = client->get_player();
     ERR_FAIL_NULL(ply);
@@ -143,4 +157,30 @@ void PlayerHUD::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_character_portrait"), &PlayerHUD::get_character_portrait);
     ::ClassDB::bind_method(D_METHOD("set_character_portrait"), &PlayerHUD::set_character_portrait);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "character_portrait", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_character_portrait", "get_character_portrait");
+}
+
+Control *PlayerHUD::get_victory_screen() {
+    return victory_screen;
+}
+
+void PlayerHUD::set_victory_screen(Control *new_victory_screen) {
+    victory_screen = new_victory_screen;
+}
+
+Control *PlayerHUD::get_defeat_screen() {
+    return defeat_screen;
+}
+
+void PlayerHUD::set_defeat_screen(Control *new_defeat_screen) {
+    defeat_screen = new_defeat_screen;
+}
+
+void PlayerHUD::show_victory_screen() {
+    ERR_FAIL_NULL(victory_screen);
+    victory_screen->set_visible(true);
+}
+
+void PlayerHUD::show_defeat_screen() {
+    ERR_FAIL_NULL(defeat_screen);
+    defeat_screen->set_visible(true);
 }
