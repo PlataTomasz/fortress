@@ -21,6 +21,10 @@ bool MobaGamemode::are_entities_same_team(Entity *first_entity, Entity *second_e
     }
 }
 
+void MobaGamemode::test_debug_signal(Node *node) {
+
+}
+
 bool MobaGamemode::is_entity_in_team(Entity *entity, const Ref<Team>& team) {
     return team->has_entity_member(entity);
 }
@@ -54,6 +58,8 @@ void MobaGamemode::_bind_shared_methods() {
 
     ClassDB::bind_method(D_METHOD("server_rpc_defeat"), &MobaGamemode::server_rpc_defeat);
     ClassDB::bind_method(D_METHOD("server_rpc_victory"), &MobaGamemode::server_rpc_victory);
+
+    ADD_SIGNAL(MethodInfo("game_over"));
 }
 
 Ref<Team> MobaGamemode::get_first_team() {
@@ -154,6 +160,13 @@ void MobaGamemode::_notification(int p_notification) {
             _ready();
 		} break;
 
+        case NOTIFICATION_PROCESS: {
+            #if defined(SERVER)
+            
+            #endif // SERVER
+            
+        } break;
+
 		default:
 			break;
 	}
@@ -234,9 +247,7 @@ void MobaGamemode::_ready() {
     _shared_ready();
 }
 
-void MobaGamemode::_enter_tree() {
-    get_parent()->connect("ready", callable_mp(this, &MobaGamemode::_setup_initial_teams));
-    
+void MobaGamemode::_post_level_load() {
     if(first_team_nexus) {
         DamageableComponent *nexus_damageable = first_team_nexus->get_damageable_component();
         ERR_FAIL_COND_MSG(!nexus_damageable, "Nexus of the first team cannot be damaged! Game is unwinnable for one of the teams!");
@@ -245,11 +256,15 @@ void MobaGamemode::_enter_tree() {
     }
 
     if(second_team_nexus) {
-        DamageableComponent *nexus_damageable = first_team_nexus->get_damageable_component();
+        DamageableComponent *nexus_damageable = second_team_nexus->get_damageable_component();
         ERR_FAIL_COND_MSG(!nexus_damageable, "Nexus of the second team cannot be damaged! Game is unwinnable for one of the teams!");
         
         nexus_damageable->connect("death", callable_mp(this, &MobaGamemode::_on_second_nexus_destroyed));
     }
+}
+
+void MobaGamemode::_enter_tree() {
+    get_parent()->connect("ready", callable_mp(this, &MobaGamemode::_setup_initial_teams));
 
     // Connect to GameLevel "entity_added" event
     SH_Game *game = Realm::get_shared_game();
@@ -257,6 +272,11 @@ void MobaGamemode::_enter_tree() {
     GameLevel *gamelevel = game->get_current_level();
     ERR_FAIL_NULL(gamelevel);
     gamelevel->connect("entity_added", callable_mp(this, &MobaGamemode::_on_new_entity_enter_level));
+    game->connect("post_level_load", callable_mp(this, &MobaGamemode::_post_level_load));
+
+    Server *server = Server::get_instance();
+
+    server->connect("new_player_join", callable_mp(this, &MobaGamemode::_on_new_player_join));
 }
 
 void MobaGamemode::_bind_methods() {
@@ -265,14 +285,17 @@ void MobaGamemode::_bind_methods() {
 }
 
 void MobaGamemode::make_player_lose(const Ref<Player> &player) {
+    // TODO: Register this RPC
     rpc_id(player->get_owner_peer_id(), "server_rpc_defeat");
 }
 
 void MobaGamemode::make_player_win(const Ref<Player> &player) {
+    // TODO: Register this RPC
     rpc_id(player->get_owner_peer_id(), "server_rpc_victory");
 }
 
 void MobaGamemode::_init() {
+    set_process(true);
     //register_gamemode_server_commands();
 }
 
@@ -284,7 +307,7 @@ void MobaGamemode::server_rpc_victory() {
     // Empty intentionally
 }
 
-void MobaGamemode::_on_first_nexus_destroyed(Ref<DamageObject> damage_object){
+void MobaGamemode::_on_first_nexus_destroyed(const Ref<DamageObject>& damage_object){
     print_line("Game finished and first team won!");
     // Get all players in first team
     Vector<Ref<Player>> first_team_player_members = first_team->get_player_members();
@@ -292,13 +315,15 @@ void MobaGamemode::_on_first_nexus_destroyed(Ref<DamageObject> damage_object){
         make_player_lose(player);
     }
 
-    Vector<Ref<Player>> second_team_player_members = first_team->get_player_members();
+    Vector<Ref<Player>> second_team_player_members = second_team->get_player_members();
     for(Ref<Player> player : second_team_player_members) {
         make_player_win(player);
     }
+
+    emit_signal("game_over");
 }
 
-void MobaGamemode::_on_second_nexus_destroyed(Ref<DamageObject> damage_object) {
+void MobaGamemode::_on_second_nexus_destroyed(const Ref<DamageObject>& damage_object) {
     print_line("Game finished and second team won!");
     // Get all players in first team
     Vector<Ref<Player>> first_team_player_members = first_team->get_player_members();
@@ -306,10 +331,11 @@ void MobaGamemode::_on_second_nexus_destroyed(Ref<DamageObject> damage_object) {
         make_player_win(player);
     }
 
-    Vector<Ref<Player>> second_team_player_members = first_team->get_player_members();
+    Vector<Ref<Player>> second_team_player_members = second_team->get_player_members();
     for(Ref<Player> player : second_team_player_members) {
         make_player_lose(player);
     }
-}
 
+    emit_signal("game_over");
+}
 #endif

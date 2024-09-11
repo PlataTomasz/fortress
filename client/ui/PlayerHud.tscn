@@ -34,7 +34,7 @@ bg_color = Color(0.325441, 0.325441, 0.325441, 0.443137)
 [sub_resource type="LabelSettings" id="LabelSettings_6kus0"]
 font_size = 224
 
-[node name="PlayerHud" type="PlayerHUD" node_paths=PackedStringArray("health_bar", "status_effect_area", "character_portrait")]
+[node name="PlayerHud" type="PlayerHUD" node_paths=PackedStringArray("health_bar", "status_effect_area", "character_portrait", "victory_screen", "defeat_screen")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -46,6 +46,8 @@ mouse_filter = 1
 health_bar = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/LifeBar")
 status_effect_area = NodePath("VSplitContainer/VSplitContainer/MarginContainer/StatusEffects")
 character_portrait = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/PanelContainer/CharacterPortaitArea/CharacterPortrait")
+victory_screen = NodePath("VictoryScreen")
+defeat_screen = NodePath("DefeatScreen")
 metadata/_edit_use_anchors_ = true
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
@@ -305,6 +307,7 @@ value = 100.0
 show_percentage = false
 
 [node name="DefeatScreen" type="PanelContainer" parent="."]
+visible = false
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 0
 mouse_filter = 2
@@ -320,12 +323,31 @@ layout_mode = 2
 text = "You've lost!"
 label_settings = SubResource("LabelSettings_6kus0")
 
-[node name="DisconnectButton" type="Button" parent="DefeatScreen/VSplitContainer"]
+[node name="DisconnectButton" type="DisconnectFromServerButton" parent="DefeatScreen/VSplitContainer"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Disconnect"
 
-[node name="VictoryScreen" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
+[node name="VictoryScreen" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qrt2k")
+
+[node name="VSplitContainer" type="VSplitContainer" parent="VictoryScreen"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="VictoryScreen/VSplitContainer"]
+layout_mode = 2
+text = "You've won!"
+label_settings = SubResource("LabelSettings_6kus0")
+
+[node name="DisconnectButton" type="DisconnectFromServerButton" parent="VictoryScreen/VSplitContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Disconnect"

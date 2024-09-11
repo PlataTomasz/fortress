@@ -33,6 +33,8 @@ public:
 
     static Game *get_game();
     static SH_Game *get_shared_game();
+
+    void close();
 };
 
 VARIANT_ENUM_CAST(Realm::JoinState);

@@ -27,7 +27,7 @@ private:
     void _update_healthbar() {
         ERR_FAIL_NULL(ent);
         // Initialize displayed health bar value
-        EntityAttributesComponent *attributes = ent->get_component<EntityAttributesComponent>();
+        EntityAttributesComponent *attributes = ent->get_attributes_component();
         ERR_FAIL_NULL_MSG(attributes, "Entity is missing attributes component. EntityHealthBar cannot work without it!");
 
         // BUG: For some unknown for me reason, an invalid attribute is returned if called outside ready. Possibly a refactor of set_entity is needed.

@@ -35,6 +35,9 @@ private:
     void _shared_ready();
     void _register_rpcs();
     void _enter_tree();
+    void _post_level_load();
+
+    void test_debug_signal(Node *node);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -67,8 +70,8 @@ public:
 
 #ifdef SERVER
 private:
-    void _on_first_nexus_destroyed(Ref<DamageObject> damage_object);
-    void _on_second_nexus_destroyed(Ref<DamageObject> damage_object);
+    void _on_first_nexus_destroyed(const Ref<DamageObject> &damage_object);
+    void _on_second_nexus_destroyed(const Ref<DamageObject> &damage_object);
 protected:
 public:
     // Entities are asigned to teams to handle damaging

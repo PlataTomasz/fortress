@@ -5,12 +5,11 @@
 #include <shared/core/realm.h>
 #include <shared/core/sh_game.h>
 #include <shared/gamemodes/gamemode.h>
-
+#include <shared/data_holders/damage_object.hpp>
 #include <shared/entities/entity.h>
 
-// TODO: Deprecated - Remove
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
-{
+ {
     if(!is_damageable_by(damage_object)) return;
 
     Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
@@ -31,11 +30,11 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
     health_atr->set_current(health_value - incoming_damage);
 
 	bool was_lethal = attributes_component->get_health()->get_current() <= 0;
-
 	emit_signal("damage_taken", damage_object);
 
 	if (was_lethal) {
-		emit_signal("death", damage_object->get_attacker(), (Node *)nullptr);
+		emit_signal("death", damage_object);
+        print_line(get_owning_entity(), "died!");
 	}
 }
 
@@ -76,5 +75,5 @@ Entity *DamageableComponent::get_owning_entity() {
 
 void DamageableComponent::_bind_methods() {
     ADD_SIGNAL(MethodInfo("damage_taken", PropertyInfo(Variant::OBJECT, "damage_object")));
-    ADD_SIGNAL(MethodInfo("death", PropertyInfo(Variant::OBJECT, "damage_object")));
+    ADD_SIGNAL(MethodInfo("death", PropertyInfo(Variant::OBJECT, "damage_object", PROPERTY_HINT_RESOURCE_TYPE, DamageObject::get_class_static())));
 }

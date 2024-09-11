@@ -13,7 +13,7 @@
 #endif
 
 #include <shared/string_names/component_stringnames.h>
-
+#include <shared/gamemodes/gamemode.h>
 #include <scene/main/timer.h>
 #include <shared/entities/components/movement/movement_component.h>
 
@@ -23,6 +23,32 @@ Game::Game()
     gameinfo["level"] = "Aram";
 }
 
+void Game::_on_game_over() {
+    // TODO: What if somehow it happened?
+    ERR_FAIL_NULL_MSG(server, "Server couldn't be terminated! 'server' is NULL!"); // That should NEVER happen
+    Ref<SceneTreeTimer> timer = SceneTree::get_singleton()->create_timer(5);
+
+    timer->connect("timeout", callable_mp(static_cast<Realm *>(server), &Server::close));
+}
+
+void Game::_on_gamemode_change(Gamemode *new_gamemode) {
+    if(current_gamemode) {
+        current_gamemode->disconnect("game_over", callable_mp(this, &Game::_on_game_over));
+    }
+
+    ERR_FAIL_NULL(new_gamemode);
+    new_gamemode->connect("game_over", callable_mp(this, &Game::_on_game_over));
+}
+
+void Game::_post_level_load() {
+    ERR_FAIL_NULL(game_level);
+    _on_gamemode_change(game_level->get_gamemode());
+}
+
+void Game::_init() {
+    connect("post_level_load", callable_mp(this, &Game::_post_level_load));
+}
+ 
 void Game::_ready()
 {
     DISABLE_IN_EDITOR();
@@ -34,25 +60,25 @@ void Game::_ready()
 }
 
 //Notifications are called cascade
-void Game::_notification(int notification)
-{
-    DISABLE_IN_EDITOR();
-    switch (notification)
-    {
-    case NOTIFICATION_READY:
-    {
-        _ready();
-    }
-    break;
+void Game::_notification(int notification) {
+	DISABLE_IN_EDITOR();
+	switch (notification) {
+		case NOTIFICATION_READY: {
+			_ready();
+		} break;
 
-    default:
-        break;
-    }
+		case NOTIFICATION_POSTINITIALIZE: {
+			_init();
+		} break;
+
+		default:
+			break;
+	}
 }
 
 void Game::_bind_methods()
 {
-
+    ADD_SIGNAL(MethodInfo("gamemode_change", PropertyInfo(Variant::OBJECT, "new_gamemode")));
 }
 
 // Player send invalid playerdata or didn't send it at all - kick him

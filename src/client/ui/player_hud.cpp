@@ -25,12 +25,11 @@ void PlayerHUD::_ready() {
     ERR_FAIL_NULL(game);
 
     Gamemode *gamemode = game->get_gamemode();
-
     if(gamemode) {
-        gamemode->connect("victory", callable_mp(this, &PlayerHUD::show_victory_screen));
-        gamemode->connect("defeat", callable_mp(this, &PlayerHUD::show_defeat_screen));
+        _reconnect_gamemode_signals(gamemode);
     } else {
-        print_error("Missing gamemode object! Defeat and victory screens won't be shown!");
+        // Not loaded yet - defer
+        game->connect("post_level_load", callable_mp(this, &PlayerHUD::_on_level_ready));
     }
 
     Ref<Player> ply = client->get_player();
@@ -43,6 +42,24 @@ void PlayerHUD::_ready() {
 
     // Initial
     _on_controlled_mercenary_changed(controlled_entity);
+}
+
+void PlayerHUD::_on_level_ready() {
+    Client *client = Client::get_instance();
+    ERR_FAIL_NULL(client);
+
+    SH_Game *game = client->get_shared_game();
+    ERR_FAIL_NULL(game);
+
+    Gamemode *gamemode = game->get_gamemode();
+    ERR_FAIL_NULL(gamemode);
+
+    _reconnect_gamemode_signals(gamemode);
+}
+
+void PlayerHUD::_reconnect_gamemode_signals(Gamemode *new_gamemode) {
+    new_gamemode->connect("defeat", callable_mp(this, &PlayerHUD::_on_player_defeat));
+    new_gamemode->connect("victory", callable_mp(this, &PlayerHUD::_on_player_victory));
 }
 
 // Player's controlled entity changed - Make UI read from new controlled entity
@@ -157,6 +174,14 @@ void PlayerHUD::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_character_portrait"), &PlayerHUD::get_character_portrait);
     ::ClassDB::bind_method(D_METHOD("set_character_portrait"), &PlayerHUD::set_character_portrait);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "character_portrait", PROPERTY_HINT_NODE_TYPE, TextureRect::get_class_static()), "set_character_portrait", "get_character_portrait");
+
+    ::ClassDB::bind_method(D_METHOD("get_victory_screen"), &PlayerHUD::get_victory_screen);
+    ::ClassDB::bind_method(D_METHOD("set_victory_screen"), &PlayerHUD::set_victory_screen);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "victory_screen", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_victory_screen", "get_victory_screen");
+
+    ::ClassDB::bind_method(D_METHOD("get_defeat_screen"), &PlayerHUD::get_defeat_screen);
+    ::ClassDB::bind_method(D_METHOD("set_defeat_screen"), &PlayerHUD::set_defeat_screen);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "defeat_screen", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_defeat_screen", "get_defeat_screen");
 }
 
 Control *PlayerHUD::get_victory_screen() {
@@ -184,3 +209,12 @@ void PlayerHUD::show_defeat_screen() {
     ERR_FAIL_NULL(defeat_screen);
     defeat_screen->set_visible(true);
 }
+
+void PlayerHUD::_on_player_defeat() {
+    show_defeat_screen();
+}
+
+void PlayerHUD::_on_player_victory() {
+    show_victory_screen();
+}
+
