@@ -37,7 +37,7 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
 
         print_line(use_context->get_user(), "attacked", ent);
 
-        DamageableComponent *damageable = ent->get_component<DamageableComponent>();
+        DamageableComponent *damageable = ent->get_damageable_component();
         if(damageable) {
             // TODO: Area of Effect is the inflictor, which is created by this ability. It's not ability itself that deals damage!
             damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::BASIC_ATTACK_DAMAGE), 15, use_context->get_user())));

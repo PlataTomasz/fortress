@@ -11,12 +11,14 @@
 #include <shared/core/sh_game.h>
 
 class Server;
+class Gamemode;
 
 class Game : public SH_Game
 {
 GDCLASS(Game, SH_Game);
 private:
     Server *server = nullptr;
+    Gamemode *current_gamemode = nullptr;
 
     // Seems messy - Reimplment one day
     HashMap<int, Ref<SceneTreeTimer>> playerdata_timers;
@@ -25,6 +27,10 @@ private:
     void _ready();
 
     void _on_receive_playerdata(Dictionary playerdata);
+    void _on_game_over();
+    void _on_gamemode_change(Gamemode *new_gamemode);
+    void _post_level_load();
+    void _init();
 protected:
     void _notification(int notification);
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://p0n6q2bliu2b"]
+[gd_scene load_steps=15 format=4 uid="uid://p0n6q2bliu2b"]
 
 [ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="1_4l8rx"]
 [ext_resource type="PackedScene" uid="uid://cvdehdk1ecoib" path="res://entities/components/entity_attributes_component.tscn" id="2_qexr5"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="4_3gfmm"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_5t406"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_i0uew"]
 resource_local_to_scene = true
@@ -61,8 +60,12 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
 }]
 
-[node name="DefaultNexus" type="Entity" node_paths=PackedStringArray("status_effect_victim_component", "attributes_component", "visual_component")]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xm3c4"]
+radius = 2.0
+
+[node name="DefaultNexus" type="Entity" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component")]
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
 attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
 
@@ -96,5 +99,13 @@ mesh = SubResource("ArrayMesh_48fuh")
 skeleton = NodePath("../..")
 
 [node name="StatusEffectVictimComponent" parent="." instance=ExtResource("4_3gfmm")]
+
+[node name="DamageableComponent" type="DamageableComponent" parent="."]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_xm3c4")
 
 [editable path="EntityInfoRenderer"]

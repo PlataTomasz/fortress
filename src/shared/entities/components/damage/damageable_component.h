@@ -4,12 +4,12 @@
 #include <scene/main/node.h>
 #include <shared/data_holders/damage_object.hpp>
 
-template<class T>
-class ObjectPtr;
-
 class DamageableComponent : public Node
 {
 GDCLASS(DamageableComponent, Node);
+private:
+    void _on_something_took_damage(const Ref<DamageObject>& something_damage_object);
+    void _on_something_took_fatal_damage(const Ref<DamageObject>& something_damage_object);
 protected:
     static void _bind_methods();
 public:

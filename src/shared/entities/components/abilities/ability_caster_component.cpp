@@ -33,6 +33,7 @@ void AbilityCasterComponent::_notification(int p_notification) {
 	switch (p_notification) {
 		case NOTIFICATION_READY: {
 			ADD_RPC_CONFIG(server_rpc_ability_used, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+            ADD_RPC_CONFIG(server_rpc_attack_used, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
 		} break;
 
 		default:

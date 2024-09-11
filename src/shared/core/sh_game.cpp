@@ -102,7 +102,8 @@ void SH_Game::_bind_methods()
 
     // Global game events
     ADD_SIGNAL(MethodInfo("on_basic_attack_hit", PropertyInfo(Variant::OBJECT, "target"), PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "caused_by")));
-
+    ADD_SIGNAL(MethodInfo("pre_level_load"));
+    ADD_SIGNAL(MethodInfo("post_level_load"));
     /*
     ClassDB::bind_method(D_METHOD("set_example_property", "value"), &SH_Game::set_example_property);
     ClassDB::bind_method(D_METHOD("get_example_property"), &SH_Game::get_example_property);

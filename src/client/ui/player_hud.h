@@ -8,6 +8,7 @@ class ProgressBar;
 class Entity;
 class Mercenary;
 class StatusEffect;
+class Gamemode;
 
 /**
  * Class which purpose is to display Player's current Mercenary data, such as status effects, health, mana, abilities, etc.
@@ -35,6 +36,12 @@ private:
     // Controlled entity received a new StatusEffect
     void _on_self_status_effect_gain(StatusEffect *status_effect);
     void _on_self_status_effect_removed(StatusEffect *status_effect);
+
+    void _on_player_defeat();
+    void _on_player_victory();
+
+    void _on_level_ready();
+    void _reconnect_gamemode_signals(Gamemode *new_gamemode);
 protected:
     void _notification(int p_notification);
 

@@ -285,6 +285,7 @@ Ref<Player> Server::find_player_by_nickname(const String& nickname) {
 void Server::add_player(int peer_id, Ref<Player> player) { 
     if(!connected_players.has(peer_id)) {
         connected_players.insert(peer_id, player);
+        emit_signal("new_player_join", player);
     }
     //Peer already exists - don't add
 };
@@ -309,6 +310,8 @@ void Server::server_rpc_set_controlled_entity(String entity_name) {
 void Server::_bind_methods() {
     ClassDB::bind_method(D_METHOD("server_rpc_disconnect"), &Server::server_rpc_disconnect);
     ClassDB::bind_method(D_METHOD("server_rpc_set_controlled_entity", "entity_name"), &Server::server_rpc_set_controlled_entity);
+
+    ADD_SIGNAL(MethodInfo("new_player_join", PropertyInfo(Variant::OBJECT, "player")));
 }
 
 Server::Server()

@@ -38,6 +38,10 @@ void Realm::_init() {
     replication_config.instantiate();
 }
 
+void Realm::close() {
+    SceneTree::get_singleton()->quit();
+}
+
 void Realm::_ready() {
     DISABLE_IN_EDITOR();
     ADD_RPC_CONFIG(server_rpc_disconnect, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
