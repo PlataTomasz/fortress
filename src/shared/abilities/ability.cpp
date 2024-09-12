@@ -16,6 +16,7 @@ void Ability::use(const Ref<ActionContext>& action_context)
         print_error("Ability instance" + Variant(this).operator String() + "is on cooldown! Remaining: " + get_current_cooldown() + " seconds");
     }
 }
+#endif
 
 void Ability::_notification(int p_notification) {
 	switch (p_notification) {
@@ -26,14 +27,13 @@ void Ability::_notification(int p_notification) {
 			break;
 	}
 }
-#endif
 
 #ifdef CLIENT
 void Ability::use(const Ref<ActionContext>& action_context) {
     //TODO: Show indicator first if needed
     // Call RPC to server on client builds
     //rpc("ability_use_request", action_context);
-
+    start_ability_cooldown();
     _clientside_use(action_context);
 }
 #endif
@@ -51,7 +51,6 @@ float Ability::get_current_cooldown()
     if (cooldown_timer) {
         return cooldown_timer->get_time_left();
 	} else {
-        print_error("Cooldown timer is null!");
         return 0;
 	}
 }

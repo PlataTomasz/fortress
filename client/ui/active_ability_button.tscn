@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://f2fdn3fvi163"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_23nj1"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p1ya1"]
+load_path = "res://.godot/imported/box.png-2eee6b074402d7651281382bc00988cc.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_mqrtc"]
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="PanelContainer" type="ActiveAbilityButton" node_paths=PackedStringArray("progress_bar", "value_indicator")]
+offset_right = 48.0
+offset_bottom = 48.0
+progress_bar = NodePath("TextureRect5")
+value_indicator = NodePath("TextureRect5/CooldownValue")
+
+[node name="TextureRect5" type="TextureProgressBar" parent="."]
+layout_mode = 2
+value = 12.0
+fill_mode = 4
+nine_patch_stretch = true
+stretch_margin_left = 48
+stretch_margin_top = 48
+texture_under = SubResource("PlaceholderTexture2D_23nj1")
+texture_progress = SubResource("CompressedTexture2D_p1ya1")
+tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
+
+[node name="CooldownValue" type="Label" parent="TextureRect5"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "4.08"
+label_settings = SubResource("LabelSettings_mqrtc")
+horizontal_alignment = 1
+vertical_alignment = 1

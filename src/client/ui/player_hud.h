@@ -9,6 +9,8 @@ class Entity;
 class Mercenary;
 class StatusEffect;
 class Gamemode;
+class ActiveAbilityButton;
+class AbilityCasterComponent;
 
 /**
  * Class which purpose is to display Player's current Mercenary data, such as status effects, health, mana, abilities, etc.
@@ -28,6 +30,11 @@ private:
     Control *victory_screen = nullptr;
     Control *defeat_screen = nullptr;
 
+    ActiveAbilityButton *first_ability_button = nullptr;
+    ActiveAbilityButton *second_ability_button = nullptr;
+    ActiveAbilityButton *third_ability_button = nullptr;
+    ActiveAbilityButton *ultimate_ability_button = nullptr;
+
     void _ready();
     void _on_current_health_changed(float new_health);
 
@@ -42,6 +49,7 @@ private:
 
     void _on_level_ready();
     void _reconnect_gamemode_signals(Gamemode *new_gamemode);
+    void _reinitialize_ability_buttons(AbilityCasterComponent *ability_caster_component);
 protected:
     void _notification(int p_notification);
 
@@ -68,6 +76,17 @@ public:
 
     void show_victory_screen();
     void show_defeat_screen();
+
+    ActiveAbilityButton *get_first_ability_button();
+    void set_first_ability_button(ActiveAbilityButton *new_ability_button);
+    ActiveAbilityButton *get_second_ability_button();
+    void set_second_ability_button(ActiveAbilityButton *new_ability_button);
+    ActiveAbilityButton *get_third_ability_button();
+    void set_third_ability_button(ActiveAbilityButton *new_ability_button);
+    ActiveAbilityButton *get_ultimate_ability_button();
+    void set_ultimate_ability_button(ActiveAbilityButton *new_ability_button);
+
+
 };
 
 #endif // PLAYER_HUD_INCLUDED

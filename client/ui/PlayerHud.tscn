@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://r74sdo7qqa4i"]
+[gd_scene load_steps=11 format=3 uid="uid://r74sdo7qqa4i"]
 
+[ext_resource type="PackedScene" uid="uid://f2fdn3fvi163" path="res://ui/active_ability_button.tscn" id="1_12gq1"]
 [ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="1_50r8y"]
 [ext_resource type="StyleBox" uid="uid://db3ejfwdx7hyb" path="res://ui/health_bars/DefaultMercenaryHealthBarFill.tres" id="2_kpe8t"]
 
@@ -19,22 +20,13 @@ bg_color = Color(0.917647, 0.823529, 0, 1)
 width = 36
 height = 36
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_23nj1"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p1ya1"]
-load_path = "res://.godot/imported/box.png-2eee6b074402d7651281382bc00988cc.ctex"
-
-[sub_resource type="LabelSettings" id="LabelSettings_mqrtc"]
-outline_size = 2
-outline_color = Color(0, 0, 0, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qrt2k"]
 bg_color = Color(0.325441, 0.325441, 0.325441, 0.443137)
 
 [sub_resource type="LabelSettings" id="LabelSettings_6kus0"]
 font_size = 224
 
-[node name="PlayerHud" type="PlayerHUD" node_paths=PackedStringArray("health_bar", "status_effect_area", "character_portrait", "victory_screen", "defeat_screen")]
+[node name="PlayerHud" type="PlayerHUD" node_paths=PackedStringArray("health_bar", "status_effect_area", "character_portrait", "victory_screen", "defeat_screen", "first_ability_button", "second_ability_button", "third_ability_button", "ultimate_ability_button")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -48,6 +40,10 @@ status_effect_area = NodePath("VSplitContainer/VSplitContainer/MarginContainer/S
 character_portrait = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/PanelContainer/CharacterPortaitArea/CharacterPortrait")
 victory_screen = NodePath("VictoryScreen")
 defeat_screen = NodePath("DefeatScreen")
+first_ability_button = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/First")
+second_ability_button = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/Second")
+third_ability_button = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/Third")
+ultimate_ability_button = NodePath("VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/Ultimate")
 metadata/_edit_use_anchors_ = true
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
@@ -182,121 +178,17 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = SubResource("NoiseTexture2D_wksc4")
 
-[node name="TextureRect2" type="TextureProgressBar" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+[node name="First" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
 layout_mode = 2
-value = 28.0
-fill_mode = 4
-nine_patch_stretch = true
-stretch_margin_left = 48
-stretch_margin_top = 48
-texture_under = SubResource("PlaceholderTexture2D_23nj1")
-texture_progress = SubResource("CompressedTexture2D_p1ya1")
-tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
 
-[node name="CooldownValue" type="Label" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/TextureRect2"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "4.08"
-label_settings = SubResource("LabelSettings_mqrtc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureRect3" type="TextureProgressBar" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+[node name="Second" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
 layout_mode = 2
-value = 28.0
-fill_mode = 4
-nine_patch_stretch = true
-stretch_margin_left = 48
-stretch_margin_top = 48
-texture_under = SubResource("PlaceholderTexture2D_23nj1")
-texture_progress = SubResource("CompressedTexture2D_p1ya1")
-tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
 
-[node name="CooldownValue" type="Label" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/TextureRect3"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "4.08"
-label_settings = SubResource("LabelSettings_mqrtc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureRect4" type="TextureProgressBar" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+[node name="Third" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
 layout_mode = 2
-value = 28.0
-fill_mode = 4
-nine_patch_stretch = true
-stretch_margin_left = 48
-stretch_margin_top = 48
-texture_under = SubResource("PlaceholderTexture2D_23nj1")
-texture_progress = SubResource("CompressedTexture2D_p1ya1")
-tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
 
-[node name="CooldownValue" type="Label" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/TextureRect4"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "4.08"
-label_settings = SubResource("LabelSettings_mqrtc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureRect5" type="TextureProgressBar" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer"]
+[node name="Ultimate" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
 layout_mode = 2
-value = 28.0
-fill_mode = 4
-nine_patch_stretch = true
-stretch_margin_left = 48
-stretch_margin_top = 48
-texture_under = SubResource("PlaceholderTexture2D_23nj1")
-texture_progress = SubResource("CompressedTexture2D_p1ya1")
-tint_progress = Color(0.306923, 0.306923, 0.306923, 0.709804)
-
-[node name="CooldownValue" type="Label" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer/TextureRect5"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "4.08"
-label_settings = SubResource("LabelSettings_mqrtc")
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="LifeBar" type="ProgressBar" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea"]
 custom_minimum_size = Vector2(0, 32)

@@ -13,6 +13,7 @@
 #include <scene/gui/texture_rect.h>
 #include <shared/core/sh_game.h>
 #include <shared/gamemodes/gamemode.h>
+#include <client/ui/game/abilities/ability_button.h>
 
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
@@ -93,6 +94,17 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *new_mercenary) {
     character_portrait->set_texture(new_mercenary->get_portrait_icon());
 
     // TODO: Disconnect signals from old entity if old_entity is valid
+
+    if(AbilityCasterComponent *ability_caster_component = new_mercenary->get_ability_caster_component()) {
+        _reinitialize_ability_buttons(ability_caster_component);
+    }
+}
+
+void PlayerHUD::_reinitialize_ability_buttons(AbilityCasterComponent *ability_caster_component) {
+    first_ability_button->set_ability(ability_caster_component->get_first_ability());
+    second_ability_button->set_ability(ability_caster_component->get_second_ability());
+    third_ability_button->set_ability(ability_caster_component->get_third_ability());
+    ultimate_ability_button->set_ability(ability_caster_component->get_ultimate_ability());
 }
 
 void PlayerHUD::_notification(int p_notification) {
@@ -182,6 +194,22 @@ void PlayerHUD::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_defeat_screen"), &PlayerHUD::get_defeat_screen);
     ::ClassDB::bind_method(D_METHOD("set_defeat_screen"), &PlayerHUD::set_defeat_screen);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "defeat_screen", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_defeat_screen", "get_defeat_screen");
+
+    ::ClassDB::bind_method(D_METHOD("get_first_ability_button"), &PlayerHUD::get_first_ability_button);
+    ::ClassDB::bind_method(D_METHOD("set_first_ability_button"), &PlayerHUD::set_first_ability_button);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "first_ability_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_first_ability_button", "get_first_ability_button");
+
+    ::ClassDB::bind_method(D_METHOD("get_second_ability_button"), &PlayerHUD::get_second_ability_button);
+    ::ClassDB::bind_method(D_METHOD("set_second_ability_button"), &PlayerHUD::set_second_ability_button);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "second_ability_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_second_ability_button", "get_second_ability_button");
+
+    ::ClassDB::bind_method(D_METHOD("get_third_ability_button"), &PlayerHUD::get_third_ability_button);
+    ::ClassDB::bind_method(D_METHOD("set_third_ability_button"), &PlayerHUD::set_third_ability_button);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "third_ability_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_third_ability_button", "get_third_ability_button");
+
+    ::ClassDB::bind_method(D_METHOD("get_ultimate_ability_button"), &PlayerHUD::get_ultimate_ability_button);
+    ::ClassDB::bind_method(D_METHOD("set_ultimate_ability_button"), &PlayerHUD::set_ultimate_ability_button);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "ultimate_ability_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_ultimate_ability_button", "get_ultimate_ability_button");
 }
 
 Control *PlayerHUD::get_victory_screen() {
@@ -218,3 +246,34 @@ void PlayerHUD::_on_player_victory() {
     show_victory_screen();
 }
 
+ActiveAbilityButton *PlayerHUD::get_first_ability_button() {
+    return first_ability_button;
+}
+
+void PlayerHUD::set_first_ability_button(ActiveAbilityButton *new_ability_button) {
+    first_ability_button = new_ability_button;
+}
+
+ActiveAbilityButton *PlayerHUD::get_second_ability_button() {
+    return second_ability_button;
+}
+
+void PlayerHUD::set_second_ability_button(ActiveAbilityButton *new_ability_button) {
+    second_ability_button = new_ability_button;
+}
+
+ActiveAbilityButton *PlayerHUD::get_third_ability_button() {
+    return third_ability_button;
+}
+
+void PlayerHUD::set_third_ability_button(ActiveAbilityButton *new_ability_button) {
+   third_ability_button = new_ability_button;
+}
+
+ActiveAbilityButton *PlayerHUD::get_ultimate_ability_button() {
+    return ultimate_ability_button;
+}
+
+void PlayerHUD::set_ultimate_ability_button(ActiveAbilityButton *new_ability_button) {
+    ultimate_ability_button = new_ability_button;
+}
