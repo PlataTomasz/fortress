@@ -19,7 +19,6 @@ class Ability : public Node3D
 GDCLASS(Ability, Node3D);
 #ifdef SERVER
 protected:
-    void _notification(int p_notification);
 
     // Internal use: Without most checks
     virtual void _use(const Ref<ActionContext>& action_context){};
@@ -33,6 +32,8 @@ private:
 public:
     Timer *cooldown_timer = nullptr;
 protected:
+    void _notification(int p_notification);
+
     float max_cooldown = 0;
 
     Ref<Texture2D> icon;
