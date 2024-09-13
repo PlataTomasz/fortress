@@ -23,6 +23,8 @@ void BarbarianDanceWithDeath::_use(const Ref<ActionContext>& action_context) {
     }
 
     StatusEffect *status_effect = Registry<StatusEffect>::get_singleton()->create_instance("dance_with_death");
+    status_effect->set_inflictor(action_context->get_user()); // TODO: There has to be a better way of doing this, than setting manualy...
+
     ERR_FAIL_NULL(status_effect);
     status_effect_component->apply_status_effect(status_effect);
 }

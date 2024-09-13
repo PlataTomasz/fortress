@@ -51,7 +51,7 @@ void ActiveAbilityButton::set_indicator_current_value(float current_value) {
     if(current_value == 0) {
         value_indicator->set_text("");
     } else {
-        value_indicator->set_text(vformat("%.2f", current_value));
+        value_indicator->set_text(vformat("%.f", current_value));
     }
 
     progress_bar->set_value(current_value);

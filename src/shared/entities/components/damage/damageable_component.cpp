@@ -45,7 +45,7 @@ bool DamageableComponent::is_damageable_by(Ref<DamageObject> damage_object) {
     Gamemode *gamemode = game->get_gamemode();
     ERR_FAIL_NULL_V(gamemode, false);
 
-    if(gamemode->is_entity_enemy_of(get_owning_entity(), damage_object->get_attacker())) {
+    if(gamemode->is_entity_enemy_of(get_owning_entity(), damage_object->get_attacker()) || damage_object->is_self_damage()) {
         return true;
     } else {
         return false;
