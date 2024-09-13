@@ -94,7 +94,7 @@ bool StatusEffectVictimComponent::can_effect_be_applied(StatusEffect *status_eff
 	Gamemode *gamemode = game->get_gamemode();
 	ERR_FAIL_NULL_V(gamemode, false);
 
-	bool is_inflictor_enemy = gamemode->is_entity_enemy_of(status_effect->get_victim_entity(), get_owning_entity());
+	bool is_inflictor_enemy = gamemode->is_entity_enemy_of(status_effect->get_inflictor(), get_owning_entity());
 
 	if(status_effect->get_type() == StatusEffect::Type::BUFF && !is_inflictor_enemy) {
 		return true;

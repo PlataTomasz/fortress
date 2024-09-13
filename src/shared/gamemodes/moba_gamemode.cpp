@@ -21,10 +21,6 @@ bool MobaGamemode::are_entities_same_team(Entity *first_entity, Entity *second_e
     }
 }
 
-void MobaGamemode::test_debug_signal(Node *node) {
-
-}
-
 bool MobaGamemode::is_entity_in_team(Entity *entity, const Ref<Team>& team) {
     return team->has_entity_member(entity);
 }
@@ -138,11 +134,8 @@ Ref<Team> MobaGamemode::asign_player_to_random_team(const Ref<Player>& player) {
 void MobaGamemode::_on_new_player_join(const Ref<Player>& player) {
     // TODO: Make sure player and controlled entity are in the same team
     ERR_FAIL_NULL(player);
-
+    // FIXME: It fails because controlled_entity is not set at this point!
     Ref<Team> player_team = asign_player_to_random_team(player);
-    if(player->get_controlled_entity()) {
-        player_team->add_entity_member(player->get_controlled_entity());
-    }
 }
 
 void MobaGamemode::_notification(int p_notification) {
@@ -172,8 +165,26 @@ void MobaGamemode::_notification(int p_notification) {
 	}
 }
 
-void MobaGamemode::_on_new_entity_enter_level(Entity *entity_that_entered_level) {
+void MobaGamemode::_on_entity_enter_level(Entity *entity_that_entered_level) {
     // If entity was spawned by entity already in team, asign the same team to that entity
+    if(entity_that_entered_level->has_meta("spawned_for_player")) {
+        Ref<Player> player = entity_that_entered_level->get_meta("spawned_for_player", Ref<Player>());
+        
+        Ref<Team> player_team = get_player_team(player);
+        if(player_team.is_valid()) {
+            player_team->add_entity_member(entity_that_entered_level);
+        }
+    }
+}
+
+Ref<Team> MobaGamemode::get_player_team(const Ref<Player>& player) {
+    if(first_team->has_player_member(player)) {
+        return first_team;
+    } else if(second_team->has_player_member(player)) {
+        return second_team;
+    } else {
+        return Ref<Team>();
+    }
 }
 
 void MobaGamemode::asign_to_random_team_balanced(Entity *entity_to_asign) {
@@ -271,7 +282,7 @@ void MobaGamemode::_enter_tree() {
     ERR_FAIL_NULL(game);
     GameLevel *gamelevel = game->get_current_level();
     ERR_FAIL_NULL(gamelevel);
-    gamelevel->connect("entity_added", callable_mp(this, &MobaGamemode::_on_new_entity_enter_level));
+    gamelevel->connect("entity_added", callable_mp(this, &MobaGamemode::_on_entity_enter_level));
     game->connect("post_level_load", callable_mp(this, &MobaGamemode::_post_level_load));
 
     Server *server = Server::get_instance();

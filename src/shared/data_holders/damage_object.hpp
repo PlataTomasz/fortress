@@ -19,7 +19,8 @@ public:
         BASIC_ATTACK_DAMAGE = 1,
         ABILITY_DAMAGE = 1 << 1,
         OVER_TIME_DAMAGE = 1 << 2,
-        AREA_DAMAGE = 1 << 3
+        AREA_DAMAGE = 1 << 3,
+        SELF_DAMAGE = 1 << 4
     };
 
     DamageType type;
@@ -30,6 +31,10 @@ public:
     //TODO: Type of origin - What exactly caused damage? Ability, attack, enviroment?
     //DamagingInstance *origin;
 public:
+    bool is_self_damage() {
+        return subtype & DamageSubtype::SELF_DAMAGE;
+    }
+
     DamageType get_type() {
         return type;
     }

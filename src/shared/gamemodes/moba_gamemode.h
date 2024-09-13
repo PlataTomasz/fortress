@@ -24,7 +24,7 @@ private:
 
     //Players in teams
 
-    void _on_new_entity_enter_level(Entity *entity_that_entered_level);
+    void _on_entity_enter_level(Entity *entity_that_entered_level);
     void _on_new_player_join(const Ref<Player>& player);
 
     void server_rpc_defeat();
@@ -36,8 +36,6 @@ private:
     void _register_rpcs();
     void _enter_tree();
     void _post_level_load();
-
-    void test_debug_signal(Node *node);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -48,6 +46,8 @@ public:
     bool is_entity_in_team(Entity *entity, const Ref<Team>& team);
     Vector<Entity *> get_all_entities_in_team(const Ref<Team>& team);
     Ref<Team> get_team_by_name(const String& team_name);
+    
+    Ref<Team> get_player_team(const Ref<Player>& player);
 
     Ref<Team> get_first_team();
     void set_first_team(const Ref<Team>& new_first_team);

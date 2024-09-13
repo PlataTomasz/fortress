@@ -173,6 +173,10 @@ void StatusEffect::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_icon"), &StatusEffect::get_icon);
     ClassDB::bind_method(D_METHOD("set_icon"), &StatusEffect::set_icon);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "icon", PROPERTY_HINT_RESOURCE_TYPE, Texture::get_class_static()), "set_icon", "get_icon");
+
+    ClassDB::bind_method(D_METHOD("get_type"), &StatusEffect::get_type);
+    ClassDB::bind_method(D_METHOD("set_type"), &StatusEffect::set_type);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "new_type", PROPERTY_HINT_ENUM, "Misc,Buff,Debuff"), "set_type", "get_type");
 }
 
 void StatusEffect::refresh() {

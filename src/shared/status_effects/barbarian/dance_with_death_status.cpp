@@ -36,7 +36,7 @@ void DanceWithDeathStatus::_on_self_damage_tick() {
 	Entity *ent = get_victim_component()->get_owning_entity();
 	DamageableComponent *damageable = ent->get_component<DamageableComponent>();
 	if (damageable) {
-		damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::OVER_TIME_DAMAGE), 5, ent))); 
+		damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::OVER_TIME_DAMAGE | DamageObject::SELF_DAMAGE), 5, ent))); 
 	}
 }
 

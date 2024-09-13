@@ -85,6 +85,7 @@ void Server::_on_peer_connect(int peer_id)
             mercenary = MercenaryRegistry::get_singleton()->create_instance(mercenary_name);
 
             ERR_FAIL_NULL(mercenary);
+            mercenary->set_meta("spawned_for_player", ply);
             mercenary->set_name("p_" + itos(peer_id));
             mercenary->set_meta("spawned_by_player_connect", true);
             game->get_current_level()->add_entity(mercenary);

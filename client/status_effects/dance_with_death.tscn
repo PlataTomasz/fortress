@@ -7,3 +7,4 @@ permament = false
 displayed_name = "Dance with Death"
 displayed_description = "You are losing health over time, but heal when you hit enemy with basic attack"
 icon = ExtResource("1_5bma5")
+new_type = 1

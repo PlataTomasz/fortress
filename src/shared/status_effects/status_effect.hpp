@@ -41,7 +41,7 @@ private:
 
     float max_duration = 10;
     float current_duration = 10;
-    StatusEffect::Type type;
+    StatusEffect::Type type = StatusEffect::Type::MISC;
 
     bool permament = true;
 
