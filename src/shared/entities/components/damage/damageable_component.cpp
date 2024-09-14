@@ -77,3 +77,15 @@ void DamageableComponent::_bind_methods() {
     ADD_SIGNAL(MethodInfo("damage_taken", PropertyInfo(Variant::OBJECT, "damage_object")));
     ADD_SIGNAL(MethodInfo("death", PropertyInfo(Variant::OBJECT, "damage_object", PROPERTY_HINT_RESOURCE_TYPE, DamageObject::get_class_static())));
 }
+
+bool DamageableComponent::is_dead() {
+    Entity *ent = get_owning_entity();
+    ERR_FAIL_NULL_V(ent, false);
+    EntityAttributesComponent *attribute_component = ent->get_attributes_component();
+    ERR_FAIL_NULL_V(attribute_component, false);
+    return !(attribute_component->get_health()->get_current() > 0);
+}
+
+void DamageableComponent::set_dead(bool new_state) {
+    dead = new_state;
+}

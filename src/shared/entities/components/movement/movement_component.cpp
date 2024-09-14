@@ -5,6 +5,7 @@
 #include <shared/helper_macros.h>
 
 #include <shared/string_names/component_stringnames.h>
+#include <shared/entities/components/damage/damageable_component.h>
 
 #include <shared/entities/entity.h>
 
@@ -16,6 +17,7 @@ void MovementComponent::_notification(int p_notification) {
 			_tick();
 			break;
 		case NOTIFICATION_READY:
+			_ready();
 			break;
 		case NOTIFICATION_PARENTED:
 			_parented();
@@ -30,6 +32,11 @@ void MovementComponent::_notification(int p_notification) {
 			break;
 	}
 }
+
+Entity *MovementComponent::get_owning_entity() {
+	return Object::cast_to<Entity>(get_parent());
+}
+
 #ifdef SERVER
 void MovementComponent::_tick() {
 	if (nav_agent->is_navigation_finished()) {
@@ -82,6 +89,25 @@ void MovementComponent::_tick() {
 		ent->set_rotation(corrected_rotation);
 		*/
 }
+
+void MovementComponent::_on_entity_death(const Ref<DamageObject>& damage_object) {
+	stop_movement();
+}
+
+void MovementComponent::stop_movement() {
+	Entity *ent = get_owning_entity();
+	set_destination_position(ent->get_position());
+}
+
+void MovementComponent::_ready() {
+	Entity *ent = get_owning_entity();
+	ERR_FAIL_NULL(ent);
+	DamageableComponent *damageable = ent->get_damageable_component();
+	if(damageable) {
+		damageable->connect("death", callable_mp(this, &MovementComponent::_on_entity_death));
+	}
+}
+
 #endif
 
 #ifdef CLIENT
@@ -99,6 +125,10 @@ void MovementComponent::_tick() {
 	// 	}
 	// }
 	// previous_position = get_global_position();
+}
+
+void MovementComponent::_ready() {
+	
 }
 #endif
 
