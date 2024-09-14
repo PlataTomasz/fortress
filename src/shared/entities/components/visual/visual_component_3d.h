@@ -3,6 +3,7 @@
 
 #include <shared/entities/components/component_3d.h>
 #include <shared/core/advanced_animation_player.h>
+#include <shared/data_holders/damage_object.hpp>
 
 class MeshInstance3D;
 class Entity;
@@ -14,6 +15,7 @@ public:
     enum AnimationState {
         IDLE,
         WALK,
+        DEAD,
         OVERRIDE,
         ANIMATION_STATE_MAX
     };
@@ -27,6 +29,7 @@ private:
 
     StringName idle_animation_name;
     StringName walk_animation_name;
+    StringName death_animation_name;
 
     void _init();
     void _on_animation_finish(const String& animation_name);
@@ -35,6 +38,7 @@ private:
 
     void _on_movement_start();
     void _on_movement_finish();
+    void _on_entity_death(const Ref<DamageObject>& damage_object);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -47,6 +51,8 @@ public:
 
     void play_idle_animation();
     void play_walk_animation();
+    void play_death_animation();
+    bool is_currently_playing_death_animation();
 
     void set_animation_player(AnimationPlayer *new_animation_player);
     AnimationPlayer *get_animation_player();
@@ -56,6 +62,9 @@ public:
     
     void set_walk_animation_name(const StringName& new_walk_animation_name);
     StringName get_walk_animation_name();
+
+    void set_death_animation_name(const StringName& new_death_animation_name);
+    StringName get_death_animation_name();
 };
 
 #endif // VISUAL_COMPONENT_3D_INCLUDED

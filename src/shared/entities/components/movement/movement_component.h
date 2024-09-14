@@ -2,10 +2,12 @@
 #define MOVEMENT_COMPONENT_INCLUDED
 
 #include "../component_3d.h"
+#include <shared/data_holders/damage_object.hpp>
 
 class Node3D;
 class NavigationAgent3D;
 class EntityStatsComponent;
+class Entity;
 
 /**
  * Node, which instantes control movement of an Entity
@@ -13,6 +15,9 @@ class EntityStatsComponent;
 class MovementComponent : public Component3D
 {
 GDCLASS(MovementComponent, Component3D);
+#ifdef SERVER
+
+#endif
 private:
     bool currently_moving = false;
 
@@ -20,6 +25,8 @@ private:
 
     Vector3 previous_position;
 
+    void _ready();
+    void _on_entity_death(const Ref<DamageObject>& damage_object);
     void _tick();
     void _init();
     void _parented();
@@ -28,6 +35,10 @@ protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
+    void stop_movement();
+
+    Entity *get_owning_entity();
+
     void set_navigation_agent(NavigationAgent3D *new_nav_agent);
     NavigationAgent3D *get_navigation_agent();
 
