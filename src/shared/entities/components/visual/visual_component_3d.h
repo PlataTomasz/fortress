@@ -4,6 +4,7 @@
 #include <shared/entities/components/component_3d.h>
 #include <shared/core/advanced_animation_player.h>
 #include <shared/data_holders/damage_object.hpp>
+#include "animation_states.h"
 
 class MeshInstance3D;
 class Entity;
@@ -12,20 +13,13 @@ class Entity;
 class VisualComponent3D : public Component3D {
 GDCLASS(VisualComponent3D, Component3D);
 public:
-    enum AnimationState {
-        IDLE,
-        WALK,
-        DEAD,
-        OVERRIDE,
-        ANIMATION_STATE_MAX
-    };
 private:
     MeshInstance3D *mesh_instance = nullptr;
     AdvancedAnimationPlayer *animation_player = nullptr;
 
     bool was_previously_moving = false;
 
-    AnimationState animation_state = AnimationState::IDLE;
+    AnimationState *animation_state = nullptr;
 
     StringName idle_animation_name;
     StringName walk_animation_name;
@@ -33,8 +27,6 @@ private:
 
     void _init();
     void _on_animation_finish(const String& animation_name);
-
-    void _on_owner_movement_state_change(bool is_moving);
 
     void _on_movement_start();
     void _on_movement_finish();
@@ -46,9 +38,8 @@ public:
     Entity *get_owning_entity();
 
     void play_animation_override(const String& animation_name);
-    void switch_to_idle_animation();
-    void switch_to_walk_animation();
 
+    void play_named_animation(const StringName& animation_name);
     void play_idle_animation();
     void play_walk_animation();
     void play_death_animation();
