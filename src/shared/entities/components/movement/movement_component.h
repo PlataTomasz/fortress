@@ -31,10 +31,14 @@ private:
     void _init();
     void _parented();
     void _frame();
+    void _on_entity_revive();
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
 public:
+    void clear_destination();
+    void set_movement_processing(bool should_process_movement);
+
     void stop_movement();
 
     Entity *get_owning_entity();

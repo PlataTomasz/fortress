@@ -15,6 +15,7 @@ private:
 protected:
     static void _bind_methods();
 public:
+    void revive();
     Entity *get_owning_entity();
     void take_damage(Ref<DamageObject> damage_object);
     void heal(float value);

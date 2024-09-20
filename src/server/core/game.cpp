@@ -142,14 +142,7 @@ void Game::movement_request_impl(Vector2 target_pos)
     Entity *issuer = player->get_controlled_entity();
     ERR_FAIL_COND_MSG(!issuer, "Player doesn't control any entity!");
 
-    MovementComponent *movement_component = static_cast<MovementComponent *>(issuer->get_node_or_null(NodePath("MovementComponent")));
+    MovementComponent *movement_component = issuer->get_movement_component();
     ERR_FAIL_NULL(movement_component);
     movement_component->set_destination_position(Vector3(target_pos.x,0,target_pos.y));
-
-    //TODO: Parse movement request here
-
-    //FIXME: Connection is established, RPC work, Replication doesn't
-    //Entity *ent = static_cast<Entity *>(get_node(NodePath("Level/Entities/Entity")));
-
-    //ent->set_position(ent->get_position() + Vector3(1,0,0));
 }

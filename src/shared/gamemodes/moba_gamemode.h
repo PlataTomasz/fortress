@@ -22,6 +22,8 @@ private:
     Ref<Team> team_to_asign_next_random;
     Ref<Team> team_to_asign_next_player_random;
 
+    float death_time = 15;
+
     //Players in teams
 
     void _on_entity_enter_level(Entity *entity_that_entered_level);
@@ -36,16 +38,22 @@ private:
     void _register_rpcs();
     void _enter_tree();
     void _post_level_load();
+    void _on_entity_death(Entity *entity, const Ref<DamageObject> &damage_object);
+    void _on_death_timer_expire(Entity *entity);
+    void _death_timer_cleanup(Timer *timer);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
     static void _bind_shared_methods();
 public:
+    void respawn_entity(Entity *entity);
+    void respawn_entity_at_position(Entity *entity, const Vector3 &position);
     bool are_entities_same_team(Entity *first_entity, Entity *second_entity);
     virtual bool is_entity_enemy_of(Entity *first_entity, Entity *second_entity) override;
     bool is_entity_in_team(Entity *entity, const Ref<Team>& team);
     Vector<Entity *> get_all_entities_in_team(const Ref<Team>& team);
     Ref<Team> get_team_by_name(const String& team_name);
+    Ref<Team> get_team_of_entity(Entity *entity);
     
     Ref<Team> get_player_team(const Ref<Player>& player);
 

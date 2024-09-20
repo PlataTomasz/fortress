@@ -11,6 +11,7 @@
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
  {
     if(!is_damageable_by(damage_object)) return;
+    if(is_dead()) return;
 
     Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
     ERR_FAIL_NULL(parent_entity);
@@ -76,6 +77,7 @@ Entity *DamageableComponent::get_owning_entity() {
 void DamageableComponent::_bind_methods() {
     ADD_SIGNAL(MethodInfo("damage_taken", PropertyInfo(Variant::OBJECT, "damage_object")));
     ADD_SIGNAL(MethodInfo("death", PropertyInfo(Variant::OBJECT, "damage_object", PROPERTY_HINT_RESOURCE_TYPE, DamageObject::get_class_static())));
+    ADD_SIGNAL(MethodInfo("revived"));
 }
 
 bool DamageableComponent::is_dead() {
@@ -88,4 +90,18 @@ bool DamageableComponent::is_dead() {
 
 void DamageableComponent::set_dead(bool new_state) {
     dead = new_state;
+}
+
+void DamageableComponent::revive() {
+    Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
+    ERR_FAIL_NULL(parent_entity);
+
+    EntityAttributesComponent *attributes_component = parent_entity->get_attributes_component();
+    if(!attributes_component) return;
+
+    // Restore health to maximum
+    heal(attributes_component->get_health()->get_max());
+
+    set_dead(false);
+    emit_signal("revived");
 }

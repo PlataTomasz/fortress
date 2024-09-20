@@ -19,6 +19,14 @@ Color Team::get_color() {
     return color;
 };
 
+Vector3 Team::get_respawn_position() {
+    return respawn_position;
+}
+
+void Team::set_respawn_position(const Vector3 &new_respawn_position) {
+    respawn_position = new_respawn_position;
+}
+
 Vector<Entity *> Team::get_entity_members() {
     Vector<Entity *> team_entity_members;
     team_entity_members.resize(entity_members.size());
@@ -64,6 +72,10 @@ void Team::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_color"), &Team::get_color);
     ClassDB::bind_method(D_METHOD("set_color", "color"), &Team::set_color);
     ADD_PROPERTY(PropertyInfo(Variant::COLOR, "color"), "set_color", "get_color");
+    
+    ClassDB::bind_method(D_METHOD("get_respawn_position"), &Team::get_respawn_position);
+    ClassDB::bind_method(D_METHOD("set_respawn_position", "respawn_position"), &Team::set_respawn_position);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "respawn_position"), "set_respawn_position", "get_respawn_position");
 }
 
 bool Team::has_player_member(const Ref<Player> &player) {
@@ -71,7 +83,7 @@ bool Team::has_player_member(const Ref<Player> &player) {
 
     if(elem) {
         return true;
-    } else {
+    } else { 
         return false;
     }
 }

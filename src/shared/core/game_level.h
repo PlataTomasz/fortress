@@ -25,6 +25,7 @@ private:
 
 	void _on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent);
 	void _on_entity_damage_taken(const Ref<DamageObject>& damage_object, Entity *ent);
+	void _on_entity_death(const Ref<DamageObject> &damage_object, Entity *entity);
 protected:
 	static void _bind_methods();
 public:

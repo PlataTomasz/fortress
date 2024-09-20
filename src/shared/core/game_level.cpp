@@ -27,11 +27,17 @@ void GameLevel::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "gamemode", PROPERTY_HINT_NODE_TYPE, Gamemode::get_class_static()), "set_gamemode", "get_gamemode");
 
     // "what" hit "affected_entity" because of "by" - Some entity was struck by something because of some other entity
-    ADD_SIGNAL(MethodInfo("entity_hit", PropertyInfo(Variant::OBJECT, "affected_entity"), PropertyInfo(Variant::OBJECT, "inflictor"), PropertyInfo(Variant::OBJECT, "attacker_entity")));
+    ADD_SIGNAL(MethodInfo("entity_hit", PropertyInfo(Variant::OBJECT, "affected_entity"), PropertyInfo(Variant::OBJECT, "inflictor"), 
+        PropertyInfo(Variant::OBJECT, "attacker_entity")));
 
     ADD_SIGNAL(MethodInfo("entity_damage_taken", PropertyInfo(Variant::OBJECT, "entity"), PropertyInfo(Variant::OBJECT, "damage_object")));
 
     ADD_SIGNAL(MethodInfo("entity_added", PropertyInfo(Variant::OBJECT, "entity")));
+
+    ADD_SIGNAL(MethodInfo("entity_death", PropertyInfo(Variant::OBJECT, "entity"), 
+        PropertyInfo(Variant::OBJECT, "damage_object", PROPERTY_HINT_RESOURCE_TYPE, DamageObject::get_class_static())));
+
+    
 }
 
 // Order is weird to correctly bind callable arguments
@@ -51,10 +57,17 @@ void GameLevel::add_entity(Entity *ent) {
     if(hitbox) hitbox->connect("hit", callable_mp(this, &GameLevel::_on_entity_hit).bind(ent));
 
     DamageableComponent *damageable = ent->get_component<DamageableComponent>();
-    if(damageable) damageable->connect("damage_taken", callable_mp(this, &GameLevel::_on_entity_damage_taken).bind(ent));
+    if(damageable) {
+        damageable->connect("damage_taken", callable_mp(this, &GameLevel::_on_entity_damage_taken).bind(ent));
+        damageable->connect("death", callable_mp(this, &GameLevel::_on_entity_death).bind(ent));
+    }
 
 	entities_node->add_child(ent);
     emit_signal("entity_added", ent);
+}
+
+void GameLevel::_on_entity_death(const Ref<DamageObject> &damage_object, Entity *entity) {
+    emit_signal("entity_death", entity, damage_object);
 }
 
 Entity *GameLevel::get_entity(const String &entity_name) {

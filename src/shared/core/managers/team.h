@@ -17,9 +17,14 @@ private:
     Color color = Color(1,1,1);
     List<Entity *> entity_members;
     List<Ref<Player>> player_members;
+
+    Vector3 respawn_position;
 protected:
     static void _bind_methods();
 public:
+    Vector3 get_respawn_position();
+    void set_respawn_position(const Vector3 &new_respawn_position);
+
     void set_team_name(const String &name);
     String get_team_name();
 
