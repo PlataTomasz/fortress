@@ -6,6 +6,7 @@
 #include <shared/core/sh_game.h>
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
+#include <scene/main/timer.h>
 
 bool MobaGamemode::is_entity_enemy_of(Entity *first_entity, Entity *second_entity) {
     return !are_entities_same_team(first_entity, second_entity);
@@ -88,6 +89,57 @@ Entity *MobaGamemode::get_second_team_nexus() {
 
 void MobaGamemode::set_second_team_nexus(Entity *nexus) {
     second_team_nexus = nexus;
+}
+
+void MobaGamemode::respawn_entity(Entity *entity) {
+    DamageableComponent *damageable = entity->get_damageable_component();
+    ERR_FAIL_NULL_MSG(damageable, "Entity couldn't be respawned!");
+
+    damageable->revive();
+}
+
+void MobaGamemode::respawn_entity_at_position(Entity *entity, const Vector3 &respawn_position) {
+    DamageableComponent *damageable = entity->get_damageable_component();
+    ERR_FAIL_NULL_MSG(damageable, "Entity couldn't be respawned!");
+
+    entity->set_position(respawn_position);
+    damageable->revive();
+}
+
+void MobaGamemode::_on_death_timer_expire(Entity *entity) {
+    Ref<Team> entity_team = get_team_of_entity(entity); 
+    Vector3 respawn_position;
+    if(entity_team.is_valid()) {
+        respawn_position = entity_team->get_respawn_position();
+    }
+
+    respawn_entity_at_position(entity, respawn_position);
+}
+
+void MobaGamemode::_death_timer_cleanup(Timer *timer) {
+    timer->queue_free();
+}
+
+void MobaGamemode::_on_entity_death(Entity *entity, const Ref<DamageObject> &damage_object) {
+    Timer *death_timer = memnew(Timer);
+    death_timer->set_autostart(true);
+    death_timer->set_wait_time(death_time);
+    death_timer->set_one_shot(true);
+
+    death_timer->connect("timeout", callable_mp(this, &MobaGamemode::_on_death_timer_expire).bind(entity));
+    death_timer->connect("timeout", callable_mp(this, &MobaGamemode::_death_timer_cleanup));
+
+    add_child(death_timer);
+}
+
+Ref<Team> MobaGamemode::get_team_of_entity(Entity *entity) {
+    if(first_team->has_entity_member(entity)) {
+        return first_team;
+    } else if(second_team->has_entity_member(entity)) {
+        return second_team;
+    } else {
+        return Ref<Team>();
+    }
 }
 
 void MobaGamemode::_setup_initial_teams() {
@@ -271,6 +323,11 @@ void MobaGamemode::_post_level_load() {
         ERR_FAIL_COND_MSG(!nexus_damageable, "Nexus of the second team cannot be damaged! Game is unwinnable for one of the teams!");
         
         nexus_damageable->connect("death", callable_mp(this, &MobaGamemode::_on_second_nexus_destroyed));
+    }
+
+    GameLevel *gamelevel = Object::cast_to<GameLevel>(get_parent());
+    if(gamelevel) {
+        gamelevel->connect("entity_death", callable_mp(this, &MobaGamemode::_on_entity_death));
     }
 }
 

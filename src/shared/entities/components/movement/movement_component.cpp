@@ -92,11 +92,27 @@ void MovementComponent::_tick() {
 
 void MovementComponent::_on_entity_death(const Ref<DamageObject>& damage_object) {
 	stop_movement();
+	set_movement_processing(false);
 }
 
 void MovementComponent::stop_movement() {
 	Entity *ent = get_owning_entity();
 	set_destination_position(ent->get_position());
+}
+
+void MovementComponent::_on_entity_revive() {
+	// Allow movement again
+	clear_destination();
+	set_movement_processing(true);
+}
+
+void MovementComponent::clear_destination() {
+	Entity *ent = get_owning_entity();
+	set_destination_position(ent->get_position());
+}
+
+void MovementComponent::set_movement_processing(bool should_process_movement) {
+	set_physics_process(should_process_movement);
 }
 
 void MovementComponent::_ready() {
@@ -105,6 +121,7 @@ void MovementComponent::_ready() {
 	DamageableComponent *damageable = ent->get_damageable_component();
 	if(damageable) {
 		damageable->connect("death", callable_mp(this, &MovementComponent::_on_entity_death));
+		damageable->connect("revived", callable_mp(this, &MovementComponent::_on_entity_revive));
 	}
 }
 

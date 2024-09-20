@@ -10,10 +10,12 @@
 [sub_resource type="Team" id="Team_4qvpv"]
 team_name = "Blue"
 color = Color(0, 0.2, 0.72549, 1)
+respawn_position = Vector3(37, 0, 0)
 
 [sub_resource type="Team" id="Team_7bxgj"]
 team_name = "Red"
 color = Color(0.768627, 0.0392157, 0, 1)
+respawn_position = Vector3(-37, 0, 0)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0gg1w"]
 panorama = ExtResource("2_cq1ar")
@@ -417,8 +419,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.399806, 0)
 curve = SubResource("Curve3D_kkowv")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." groups=["navigation_mesh"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000183105, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 navigation_mesh = SubResource("NavigationMesh_p1vv5")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="NavigationRegion3D" groups=["navigation_mesh"]]
@@ -513,6 +514,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
 vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
 affect_navigation_mesh = true
 carve_navigation_mesh = true
+
+[node name="SpawnPointRed" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 0, 0)
+
+[node name="SpawnPointBlue" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 0)
 
 [editable path="Entities/BlueNexus"]
 [editable path="Entities/BlueNexus/EntityInfoRenderer"]
