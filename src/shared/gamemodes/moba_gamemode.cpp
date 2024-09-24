@@ -225,6 +225,7 @@ void MobaGamemode::_on_entity_enter_level(Entity *entity_that_entered_level) {
         Ref<Team> player_team = get_player_team(player);
         if(player_team.is_valid()) {
             player_team->add_entity_member(entity_that_entered_level);
+            entity_that_entered_level->set_position(player_team->get_respawn_position());
         }
     }
 }
