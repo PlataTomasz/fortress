@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://7453g6ydtekb"]
+[gd_scene load_steps=21 format=4 uid="uid://7453g6ydtekb"]
 
 [ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="1_1jq6i"]
 [ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="1_coqsg"]
@@ -60,6 +60,8 @@ _data = {
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_m1dll"]
 resource_local_to_scene = true
+max = 1000.0
+current = 1000.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_e43t2"]
 resource_local_to_scene = true
@@ -86,8 +88,12 @@ radial_segments = 12
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ogbw3"]
 radius = 2.0
 
-[node name="Turret" type="Turret" node_paths=PackedStringArray("status_effect_victim_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node")]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vbos0"]
+radius = 3.091
+
+[node name="Turret" type="Turret" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node")]
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
 attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
 aggro_area = NodePath("Area3D")
@@ -100,6 +106,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_e47hh")
+
+[node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
 
 [node name="VisualComponent3D" type="VisualComponent3D" parent="." node_paths=PackedStringArray("animation_player")]
 animation_player = NodePath("crystal/AnimationPlayer")
@@ -140,5 +155,12 @@ mesh = SubResource("CylinderMesh_ecfb6")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="."]
 
 [editable path="EntityInfoRenderer"]
