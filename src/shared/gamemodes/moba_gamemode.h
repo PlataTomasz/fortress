@@ -7,9 +7,16 @@
 #include <shared/data_holders/damage_object.hpp>
 
 class Entity;
+class Timer;
 
 class MobaGamemode : public Gamemode {
 GDCLASS(MobaGamemode, Gamemode);
+public:
+    enum TeamIdentifier {
+        NONE,
+        FIRST,
+        SECOND
+    };
 private:
     Ref<Team> first_team;
     Ref<Team> second_team;

@@ -7,13 +7,24 @@
 #include <shared/entities/projectile_entity.h>
 #include <scene/main/timer.h>
 #include <scene/resources/packed_scene.h>
+#include <shared/gamemodes/gamemode.h>
 
+#ifdef SERVER
 void Turret::_initv() {
     attack_cooldown_counter = memnew(Timer);
     attack_cooldown_counter->set_autostart(true);
     attack_cooldown_counter->connect("timeout", callable_mp(this, &Turret::_attack_off_cooldown));
     add_child(attack_cooldown_counter);
 }
+#endif
+
+#ifdef CLIENT
+void Turret::_initv() {
+
+}
+#endif
+
+
 
 void Turret::_attack_off_cooldown() {
     if(has_target()) {
@@ -36,6 +47,7 @@ void Turret::attack_current_target() {
     projectile_instance->set_position(projectile_spawn_position);
     projectile_instance->set_target(current_target);
     projectile_instance->set_creator(this);
+    projectile_instance->set_name(itos(projectile_instance->get_instance_id()));
     game_level->add_entity(projectile_instance);
 }
 
@@ -48,7 +60,7 @@ Entity *Turret::find_new_target() {
     5. Return potential target
     */
 
-    return get_closest_entity(aggro_area->get_entities_in_area());;
+    return get_closest_entity(aggro_area->get_entities_in_area());
 }
 
 Entity *Turret::get_closest_entity(const Vector<Entity *> &potential_closest_entities) {
@@ -65,7 +77,7 @@ Entity *Turret::get_closest_entity(const Vector<Entity *> &potential_closest_ent
         Entity *potential_closest_entity = potential_closest_entities[potential_closest_index];
         float potential_closest_entity_distance = potential_closest_entity->get_position_2d().distance_squared_to(this->get_position_2d());
 
-		if (potential_closest_entity_distance < closest_entity_data.squared_distance_to) {
+		if (potential_closest_entity_distance < closest_entity_data.squared_distance_to && is_entity_valid_target(potential_closest_entity)) {
             closest_entity_data.entity = potential_closest_entity;
             closest_entity_data.squared_distance_to = potential_closest_entity_distance;
 		}
@@ -109,7 +121,8 @@ void Turret::_on_target_left_aggro_area() {
 }
 
 bool Turret::is_entity_valid_target(Entity *potential_target) {
-    if(potential_target->get_damageable_component()) {
+    bool is_enemy_of = get_gamelevel()->get_gamemode()->is_entity_enemy_of(this, potential_target);
+    if(get_gamelevel()->get_gamemode()->is_entity_enemy_of(this, potential_target) && potential_target->get_damageable_component()) {
         return true;
     } else {
         return false;
@@ -139,6 +152,9 @@ void Turret::_bind_methods() {
 }
 
 void Turret::_on_entity_enter_aggro_area(Entity *entity_that_entered) {
+    ERR_FAIL_NULL(get_gamelevel());
+    ERR_FAIL_NULL(get_gamelevel()->get_gamemode());
+
     if(!has_target() && is_entity_valid_target(entity_that_entered)) {
         current_target = entity_that_entered;
     }
@@ -159,7 +175,9 @@ AdvancedArea3D *Turret::get_aggro_area() {
 void Turret::set_cooldown_between_attacks(float new_cooldown) {
     cooldown_between_attacks = new_cooldown;
     DISABLE_IN_EDITOR();
+    #ifdef SERVER
     attack_cooldown_counter->set_wait_time(new_cooldown);
+    #endif
 }
 
 float Turret::get_cooldown_between_attacks() {
