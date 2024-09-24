@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://cgco77hqkmtwl"]
+[gd_scene load_steps=44 format=3 uid="uid://cgco77hqkmtwl"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_jp0yl"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_ngwr0"]
@@ -10,6 +10,8 @@
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_040m5"]
 resource_local_to_scene = true
+max = 99999.0
+current = 99999.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_ubu72"]
 resource_local_to_scene = true
@@ -2719,6 +2721,9 @@ _data = {
 "walk": SubResource("Animation_xugw0")
 }
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tggda"]
+radius = 2.0
+
 [node name="Mercenary" instance=ExtResource("1_jp0yl")]
 portrait_icon = ExtResource("1_ngwr0")
 
@@ -2764,21 +2769,19 @@ death_animation_name = &"death"
 [node name="barbarian2" parent="VisualComponent3D" index="0" instance=ExtResource("4_ubfyo")]
 
 [node name="Skeleton3D" parent="VisualComponent3D/barbarian2/Armature" index="0"]
-bones/0/position = Vector3(0, 0.694842, -0.0484282)
-bones/0/rotation = Quaternion(0.648468, 9.07471e-08, 7.73034e-08, 0.761242)
+bones/0/position = Vector3(0, 1.35878, -0.0825693)
 bones/1/rotation = Quaternion(1.29201e-07, -4.62833e-08, -0.811242, 0.58471)
 bones/2/rotation = Quaternion(0.0425803, -0.0390563, -0.208464, 0.976322)
 bones/3/rotation = Quaternion(-0.0907047, -0.0100988, -0.386335, 0.917832)
-bones/6/rotation = Quaternion(-6.42146e-08, -9.31225e-08, 0.811242, 0.58471)
-bones/7/rotation = Quaternion(0.0425803, 0.0390563, 0.208464, 0.976322)
-bones/8/rotation = Quaternion(-0.0907047, 0.0100988, 0.386335, 0.917832)
-bones/9/rotation = Quaternion(0.022137, 1.84585e-07, 0.00130393, 0.999754)
-bones/10/rotation = Quaternion(0.761242, 0, 0, -0.648468)
-bones/11/position = Vector3(0.36807, 0.526162, -0.696056)
-bones/13/position = Vector3(-0.36807, 0.526162, -0.696056)
+bones/6/rotation = Quaternion(-0.271514, 0.376705, 0.718476, 0.517848)
+bones/7/rotation = Quaternion(0.0787074, 0.100503, 0.205923, 0.970206)
+bones/8/rotation = Quaternion(0.440511, 0.244986, 0.342, 0.793075)
+bones/9/rotation = Quaternion(0.106604, 0.00233299, 0.00633953, 0.994279)
+bones/11/position = Vector3(0.36807, 0.414078, 0)
+bones/13/position = Vector3(-0.36807, 0.414078, 0)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian2/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.997885, -0.0275347, -0.0588776, 0.0624563, -0.155372, -0.98588, 0.0179978, -0.987472, 0.156763, -0.990649, 0.58463, -0.601795)
+transform = Transform3D(-0.997885, -0.0275348, -0.0588777, -0.0577273, 0.791744, 0.608119, 0.0298719, 0.610232, -0.791659, -0.990649, 1.70591, 0.654167)
 bone_name = "Hand_R"
 bone_idx = 9
 
@@ -2813,6 +2816,11 @@ libraries = {
 "animations_orc_hum": ExtResource("5_amkwr")
 }
 autoplay = "Idle"
+
+[node name="HitboxComponent2" type="HitboxComponent" parent="." index="10"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent2" index="0"]
+shape = SubResource("CylinderShape3D_tggda")
 
 [editable path="EntityInfoRenderer"]
 [editable path="VisualComponent3D/barbarian2"]

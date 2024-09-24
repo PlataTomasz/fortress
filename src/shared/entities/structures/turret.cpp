@@ -27,7 +27,9 @@ void Turret::_initv() {
 
 
 void Turret::_attack_off_cooldown() {
-    if(has_target()) {
+    DamageableComponent *damageable = get_damageable_component();
+    // Check if turret has target before atacking and if turret is alive if it has damageable component
+    if(has_target() && ((damageable && !damageable->is_dead()) || !damageable)) {
         attack_current_target();
     }
 }
@@ -49,6 +51,13 @@ void Turret::attack_current_target() {
     projectile_instance->set_creator(this);
     projectile_instance->set_name(itos(projectile_instance->get_instance_id()));
     game_level->add_entity(projectile_instance);
+}
+
+void Turret::_readyv() {
+    DamageableComponent *damageable = get_damageable_component();
+    if(damageable) {
+        damageable->connect("death", callable_mp(this, &Turret::_on_death));
+    }
 }
 
 Entity *Turret::find_new_target() {
@@ -114,6 +123,11 @@ void Turret::_on_entity_left_aggro_area(Entity *entity_that_left) {
     if(entity_that_left == current_target) {
         _on_target_left_aggro_area();
     }
+}
+
+void Turret::_on_death() {
+    // Prevent firing and change color to indicate
+    set_displayed_name("[DESTROYED]");
 }
 
 void Turret::_on_target_left_aggro_area() {

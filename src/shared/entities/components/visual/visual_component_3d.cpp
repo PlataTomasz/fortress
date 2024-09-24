@@ -33,6 +33,7 @@ void VisualComponent3D::_notification(int p_notification) {
 			}
 
 			animation_state = new IdleAnimationState(this);
+			animation_state->play_animation();
 		}
 		break;
 

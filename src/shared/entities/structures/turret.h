@@ -25,8 +25,10 @@ private:
     Ref<PackedScene> projectile_template;
 
     void _attack_off_cooldown();
+    void _on_death();
 protected:
     void _initv() override;
+    void _readyv() override;
     static void _bind_methods();
 public:
     void attack_current_target();
