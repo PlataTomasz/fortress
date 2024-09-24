@@ -10,12 +10,12 @@
 [sub_resource type="Team" id="Team_4qvpv"]
 team_name = "Blue"
 color = Color(0, 0.2, 0.72549, 1)
-respawn_position = Vector3(37, 0, 0)
+respawn_position = Vector3(-37, 0, 0)
 
 [sub_resource type="Team" id="Team_7bxgj"]
 team_name = "Red"
 color = Color(0.768627, 0.0392157, 0, 1)
-respawn_position = Vector3(-37, 0, 0)
+respawn_position = Vector3(37, 0, 0)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0gg1w"]
 panorama = ExtResource("2_cq1ar")
@@ -303,7 +303,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 14, -17)
 
 [node name="Entities" type="Node" parent="."]
 
-[node name="BlueNexus" parent="Entities" instance=ExtResource("6_pk64u")]
+[node name="BlueNexus" parent="Entities" groups=["default_team_second"] instance=ExtResource("6_pk64u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0)
 
 [node name="Sprite3D" parent="Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
@@ -320,7 +320,7 @@ movement_speed = SubResource("FloatAttribute_21238")
 [node name="NexusMesh" parent="Entities/BlueNexus/VisualComponent3D" index="0"]
 mesh = SubResource("ArrayMesh_ytm08")
 
-[node name="RedNexus" parent="Entities" instance=ExtResource("6_pk64u")]
+[node name="RedNexus" parent="Entities" groups=["default_team_first"] instance=ExtResource("6_pk64u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 0)
 
 [node name="Sprite3D" parent="Entities/RedNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
@@ -337,7 +337,7 @@ movement_speed = SubResource("FloatAttribute_pf0yo")
 [node name="NexusMesh" parent="Entities/RedNexus/VisualComponent3D" index="0"]
 mesh = SubResource("ArrayMesh_mtq6m")
 
-[node name="BlueTurretOuter" parent="Entities" instance=ExtResource("6_on3wb")]
+[node name="BlueTurretOuter" parent="Entities" groups=["default_team_second"] instance=ExtResource("6_on3wb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
 
 [node name="Sprite3D" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
@@ -354,7 +354,7 @@ magic_power = SubResource("FloatAttribute_noqvh")
 cooldown_reduction = SubResource("FloatAttribute_ei0nv")
 movement_speed = SubResource("FloatAttribute_qy3my")
 
-[node name="RedTurretInner" parent="Entities" instance=ExtResource("6_on3wb")]
+[node name="RedTurretInner" parent="Entities" groups=["default_team_first"] instance=ExtResource("6_on3wb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
 
 [node name="Sprite3D" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
@@ -372,7 +372,7 @@ magic_power = SubResource("FloatAttribute_ikfb4")
 cooldown_reduction = SubResource("FloatAttribute_7ouus")
 movement_speed = SubResource("FloatAttribute_rmdhb")
 
-[node name="RedTurretOuter" parent="Entities" instance=ExtResource("6_on3wb")]
+[node name="RedTurretOuter" parent="Entities" groups=["default_team_first"] instance=ExtResource("6_on3wb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
 
 [node name="Sprite3D" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
@@ -390,7 +390,7 @@ magic_power = SubResource("FloatAttribute_ikfb4")
 cooldown_reduction = SubResource("FloatAttribute_7ouus")
 movement_speed = SubResource("FloatAttribute_rmdhb")
 
-[node name="BlueTurretInner" parent="Entities" instance=ExtResource("6_on3wb")]
+[node name="BlueTurretInner" parent="Entities" groups=["default_team_second"] instance=ExtResource("6_on3wb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 0)
 
 [node name="Sprite3D" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
@@ -408,7 +408,7 @@ cooldown_reduction = SubResource("FloatAttribute_ei0nv")
 movement_speed = SubResource("FloatAttribute_qy3my")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn")
+_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

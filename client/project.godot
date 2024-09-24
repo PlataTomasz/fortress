@@ -25,6 +25,7 @@ window/stretch/aspect="ignore"
 [global_group]
 
 default_team_first=""
+default_team_second=""
 
 [input]
 
