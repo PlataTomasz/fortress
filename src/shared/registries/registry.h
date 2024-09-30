@@ -35,7 +35,6 @@ protected:
             String filename_no_extension = filename_split[0];
             registered_objects.insert(filename_no_extension, packed_status_effect);
         }
-        print_line(get_registered_names());
     }
 public:
     static Registry<T> *get_singleton() {

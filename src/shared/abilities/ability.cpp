@@ -84,7 +84,6 @@ bool Ability::is_on_cooldown()
 
 void Ability::_init() {
     cooldown_timer = memnew(Timer);
-    cooldown_timer->set_wait_time(max_cooldown);
     cooldown_timer->set_one_shot(true);
     add_child(cooldown_timer);
 }
