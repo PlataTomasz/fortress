@@ -2781,7 +2781,7 @@ bones/11/position = Vector3(0.36807, 0.414078, 0)
 bones/13/position = Vector3(-0.36807, 0.414078, 0)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian2/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.997885, -0.0275348, -0.0588777, -0.0577273, 0.791744, 0.608119, 0.0298719, 0.610232, -0.791659, -0.990649, 1.70591, 0.654167)
+transform = Transform3D(-0.997885, -0.0275354, -0.0588781, -0.057728, 0.791744, 0.608119, 0.0298719, 0.610233, -0.791659, -0.990649, 1.70591, 0.654167)
 bone_name = "Hand_R"
 bone_idx = 9
 

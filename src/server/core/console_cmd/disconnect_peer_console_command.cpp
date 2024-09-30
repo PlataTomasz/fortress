@@ -13,6 +13,7 @@ Error DisconnectPeerConsoleCommand::execute(Array args) {
     //get_server_instance()->disconnect_peer(peer_id);
 
     get_server_instance()->disconnect_peer(peer_id);
+    print_line("Peer", peer_id, "disconnected from server!");
 
     return Error::OK;
 }
