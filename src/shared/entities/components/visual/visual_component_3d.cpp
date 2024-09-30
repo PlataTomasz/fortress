@@ -71,7 +71,12 @@ void VisualComponent3D::play_walk_animation() {
 }
 
 void VisualComponent3D::_on_animation_finish(const String& animation_name) {
-	animation_state = animation_state->on_animation_finish();
+	Entity *owning_entity = get_owning_entity();
+	ERR_FAIL_NULL(owning_entity);
+	MovementComponent *movement_component = owning_entity->get_movement_component();
+	bool is_currently_walking = movement_component && movement_component->is_currently_moving() ? true : false;
+
+	animation_state = animation_state->on_animation_finish(is_currently_walking);
 	animation_state->play_animation();
 }
 

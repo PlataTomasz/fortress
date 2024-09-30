@@ -68,6 +68,32 @@ void AbilityCasterComponent::_bind_methods()
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "ultimate_ability", PROPERTY_HINT_NODE_TYPE, "Ability"), "set_ultimate_ability", "get_ultimate_ability");
 
     ::ClassDB::bind_method(D_METHOD("server_rpc_ability_used", "ability_index", "networked_action_context"), &AbilityCasterComponent::server_rpc_ability_used);
+    ::ClassDB::bind_method(D_METHOD("server_rpc_attack_used", "networked_action_context"), &AbilityCasterComponent::server_rpc_attack_used);
+}
+
+void AbilityCasterComponent::server_rpc_attack_used(Dictionary networked_action_data) {
+    print_line("[INFO] server_rpc_attack_used");
+    GameLevel *level = get_owning_entity()->get_gamelevel();
+
+    String user_entity_id = networked_action_data.get("user_entity_id", "0");
+    String target_entity_id = networked_action_data.get("target_entity_id", "0");
+
+
+    Entity *user = level->get_entity(user_entity_id);
+    Entity *target = level->get_entity(target_entity_id);
+
+    Ref<ActionContext> local_action_context = memnew(ActionContext(
+        user,
+        networked_action_data.get("use_position", Vector3(0, 0, 0)),
+        networked_action_data.get("target_position", Vector3(0, 0, 0)),
+        target
+    ));
+
+    
+    Ability *ability_to_use = get_basic_attack();
+    ERR_FAIL_NULL(ability_to_use);
+
+    ability_to_use->use(local_action_context);
 }
 
 void AbilityCasterComponent::server_rpc_ability_used(int which_ability, Dictionary networked_action_data) {

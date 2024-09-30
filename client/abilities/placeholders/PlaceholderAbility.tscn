@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://ceofiqts6yeun"]
+
+[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="1_umj0m"]
+
+[node name="PlaceholderAbility" type="Ability"]
+displayed_name = "Placeholder Ability"
+displayed_description = "Placeholder ability - for testing only!"
+icon = ExtResource("1_umj0m")
+max_cooldown = 10.0

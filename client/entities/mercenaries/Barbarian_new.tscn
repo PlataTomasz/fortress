@@ -1,7 +1,8 @@
-[gd_scene load_steps=44 format=3 uid="uid://cgco77hqkmtwl"]
+[gd_scene load_steps=45 format=3 uid="uid://cgco77hqkmtwl"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_jp0yl"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_ngwr0"]
+[ext_resource type="PackedScene" uid="uid://ceofiqts6yeun" path="res://abilities/placeholders/PlaceholderAbility.tscn" id="4_1eacd"]
 [ext_resource type="AudioStream" uid="uid://j8lay2qc84xu" path="res://audio/warcry.wav" id="4_63o53"]
 [ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="4_no128"]
 [ext_resource type="PackedScene" uid="uid://btkmxgv7n00oi" path="res://models/barbarian.gltf" id="4_ubfyo"]
@@ -2735,9 +2736,12 @@ magic_power = SubResource("FloatAttribute_ul1nf")
 cooldown_reduction = SubResource("FloatAttribute_x0ybo")
 movement_speed = SubResource("FloatAttribute_rcjpl")
 
-[node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("basic_attack", "passive_ability", "ultimate_ability")]
+[node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("basic_attack", "passive_ability", "first_ability", "second_ability", "third_ability", "ultimate_ability")]
 basic_attack = NodePath("BarbarianBasicAttack")
 passive_ability = NodePath("BarbarianBleedingPassive")
+first_ability = NodePath("PlaceholderAbility")
+second_ability = NodePath("PlaceholderAbility2")
+third_ability = NodePath("PlaceholderAbility3")
 ultimate_ability = NodePath("BarbarianDanceWithDeath")
 
 [node name="BarbarianDanceWithDeath" type="BarbarianDanceWithDeath" parent="AbilityCasterComponent" index="0"]
@@ -2753,6 +2757,12 @@ hitbox = NodePath("../../HitboxComponent")
 displayed_name = "Bleeding"
 displayed_description = "Your basic attacks apply bleeding, dealing physical damage over timer."
 icon = ExtResource("4_no128")
+
+[node name="PlaceholderAbility" parent="AbilityCasterComponent" index="3" instance=ExtResource("4_1eacd")]
+
+[node name="PlaceholderAbility2" parent="AbilityCasterComponent" index="4" instance=ExtResource("4_1eacd")]
+
+[node name="PlaceholderAbility3" parent="AbilityCasterComponent" index="5" instance=ExtResource("4_1eacd")]
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_oyix2")
