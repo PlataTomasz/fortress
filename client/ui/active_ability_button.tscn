@@ -17,7 +17,6 @@ value_indicator = NodePath("TextureRect5/CooldownValue")
 
 [node name="TextureRect5" type="TextureProgressBar" parent="."]
 layout_mode = 2
-value = 12.0
 fill_mode = 4
 nine_patch_stretch = true
 stretch_margin_left = 48
@@ -39,7 +38,6 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "4.08"
 label_settings = SubResource("LabelSettings_mqrtc")
 horizontal_alignment = 1
 vertical_alignment = 1

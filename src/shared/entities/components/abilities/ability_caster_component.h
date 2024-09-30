@@ -27,6 +27,7 @@ private:
     Ability *ultimate_ability = nullptr;
 
     void server_rpc_ability_used(int which_ability, Dictionary networked_action_data);
+    void server_rpc_attack_used(Dictionary networked_action_data);
 public:
     enum AbilitySetIndex  : int
     {

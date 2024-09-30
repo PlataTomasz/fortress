@@ -19,7 +19,7 @@ AnimationState *IdleAnimationState::on_stop_walking() {
 AnimationState *IdleAnimationState::on_animation_override(const StringName& animation_name) {
     return new OverrideAnimationState(visual_component, animation_name);
 }
-AnimationState *IdleAnimationState::on_animation_finish() {
+AnimationState *IdleAnimationState::on_animation_finish(bool is_walking) {
     return new IdleAnimationState(visual_component);
 }
 
@@ -41,7 +41,7 @@ AnimationState *WalkAnimationState::on_stop_walking() {
 AnimationState *WalkAnimationState::on_animation_override(const StringName& animation_name) {
     return new OverrideAnimationState(visual_component, animation_name);
 }
-AnimationState *WalkAnimationState::on_animation_finish() {
+AnimationState *WalkAnimationState::on_animation_finish(bool is_walking) {
     return new WalkAnimationState(visual_component);
 }
 
@@ -66,7 +66,7 @@ AnimationState *DeadAnimationState::on_stop_walking() {
 AnimationState *DeadAnimationState::on_animation_override(const StringName& animation_name) {
     return new DeadAnimationState(*this);
 }
-AnimationState *DeadAnimationState::on_animation_finish() {
+AnimationState *DeadAnimationState::on_animation_finish(bool is_walking) {
     return new DeadAnimationState(*this);
 }
 
@@ -88,6 +88,10 @@ AnimationState *OverrideAnimationState::on_stop_walking() {
 AnimationState *OverrideAnimationState::on_animation_override(const StringName& animation_name) {
     return new OverrideAnimationState(visual_component, animation_name);
 }
-AnimationState *OverrideAnimationState::on_animation_finish() {
-    return new IdleAnimationState(visual_component);
+AnimationState *OverrideAnimationState::on_animation_finish(bool is_walking) {
+    if(is_walking) {
+        return new WalkAnimationState(visual_component);
+    } else {
+        return new IdleAnimationState(visual_component);
+    }
 }
