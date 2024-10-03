@@ -26,6 +26,7 @@ private:
 
     void _attack_off_cooldown();
     void _on_death();
+    void _on_attack_speed_changed(float new_final_attack_speed);
 protected:
     void _initv() override;
     void _readyv() override;
