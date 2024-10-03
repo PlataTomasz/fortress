@@ -5,7 +5,7 @@
 #include <shared/entities/components/damage/damageable_component.h>
 
 void ProjectileEntity::_tickv() {
-    ERR_FAIL_NULL(target);
+    if(!target) return;
     // It definitely goes somewhere, but I'm not sure If it stops in the right place
     float delta = SceneTree::get_singleton()->get_physics_process_time();
 
