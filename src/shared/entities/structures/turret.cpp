@@ -8,6 +8,7 @@
 #include <scene/main/timer.h>
 #include <scene/resources/packed_scene.h>
 #include <shared/gamemodes/gamemode.h>
+#include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
 #ifdef SERVER
 void Turret::_initv() {
@@ -27,9 +28,10 @@ void Turret::_initv() {
 
 
 void Turret::_attack_off_cooldown() {
-    DamageableComponent *damageable = get_damageable_component();
+    if(!has_target()) return;
+    DamageableComponent *target_damageable = current_target->get_damageable_component();
     // Check if turret has target before atacking and if turret is alive if it has damageable component
-    if(has_target() && ((damageable && !damageable->is_dead()) || !damageable)) {
+    if(((target_damageable && !target_damageable->is_dead()) || !target_damageable)) {
         attack_current_target();
     }
 }
@@ -51,6 +53,15 @@ void Turret::attack_current_target() {
     projectile_instance->set_creator(this);
     projectile_instance->set_name(itos(projectile_instance->get_instance_id()));
     game_level->add_entity(projectile_instance);
+
+    EntityAttributesComponent *attributes = get_attributes_component();
+    ERR_FAIL_NULL_MSG(attributes, "Missing attributes! Used default value insted!");
+
+    float attack_speed = attributes->get_attack_speed()->get_current();
+    float time_between_attacks = 1/attack_speed;
+
+    // Attack speed scaling
+    attack_cooldown_counter->set_wait_time(time_between_attacks);
 }
 
 void Turret::_readyv() {
