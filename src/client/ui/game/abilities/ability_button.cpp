@@ -3,6 +3,7 @@
 #include <shared/abilities/ability.hpp>
 #include <scene/gui/texture_progress_bar.h>
 #include <scene/gui/label.h>
+#include <client/ui/game/abilities/ability_tooltip.h>
 
 void ActiveAbilityButton::_init() {
     cooldown_timer = memnew(Timer);
@@ -20,6 +21,10 @@ void ActiveAbilityButton::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_value_indicator"), &ActiveAbilityButton::get_value_indicator);
     ClassDB::bind_method(D_METHOD("set_value_indicator", "value_indicator"), &ActiveAbilityButton::set_value_indicator);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "value_indicator", PROPERTY_HINT_NODE_TYPE, Label::get_class_static()), "set_value_indicator", "get_value_indicator");
+
+    ClassDB::bind_method(D_METHOD("get_ability_tooltip"), &ActiveAbilityButton::get_ability_tooltip);
+    ClassDB::bind_method(D_METHOD("set_ability_tooltip", "ability_tooltip"), &ActiveAbilityButton::set_ability_tooltip);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "ability_tooltip", PROPERTY_HINT_NODE_TYPE, AbilityTooltip::get_class_static()), "set_ability_tooltip", "get_ability_tooltip");
 }
 
 void ActiveAbilityButton::_on_ability_change(Ability *new_ability) {
@@ -29,7 +34,8 @@ void ActiveAbilityButton::_on_ability_change(Ability *new_ability) {
     set_indicator_max_value(new_ability->get_max_cooldown());
     set_indicator_current_value(new_ability->get_current_cooldown());
     
-    
+    ERR_FAIL_NULL(ability_tooltip);
+    ability_tooltip->set_ability(new_ability);
 }
 
 void ActiveAbilityButton::_process_frame() {
@@ -96,4 +102,32 @@ void ActiveAbilityButton::_notification(int p_notification) {
 		default:
 			break;
 	}
+}
+
+void ActiveAbilityButton::_on_mouse_entered() {
+    ERR_FAIL_NULL(ability_tooltip);
+    ability_tooltip->set_visible(true);
+}
+
+void ActiveAbilityButton::_on_mouse_exited() {
+    ERR_FAIL_NULL(ability_tooltip);
+    ability_tooltip->set_visible(false);
+}
+ 
+void ActiveAbilityButton::set_ability_tooltip(AbilityTooltip *new_ability_tooltip) {
+    ability_tooltip = new_ability_tooltip;
+    DISABLE_IN_EDITOR();
+    _reconnect_tooltip_signals(new_ability_tooltip);
+}
+
+AbilityTooltip *ActiveAbilityButton::get_ability_tooltip() {
+    return ability_tooltip;
+}
+
+void ActiveAbilityButton::_reconnect_tooltip_signals(AbilityTooltip *new_ability_tooltip) {
+    if(ability) 
+        new_ability_tooltip->set_ability(ability);
+
+    connect("mouse_entered", callable_mp(this, &ActiveAbilityButton::_on_mouse_entered));
+    connect("mouse_exited", callable_mp(this, &ActiveAbilityButton::_on_mouse_exited));
 }

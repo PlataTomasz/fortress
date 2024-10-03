@@ -76,9 +76,6 @@ character_index = "Orc_new"
 title = "Orc"
 icon = ExtResource("2_jy8iq")
 
-[node name="CharacterSelectElem" parent="CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_fo7ys")]
-layout_mode = 2
-
 [node name="CenterContainer" type="CenterContainer" parent="CenterContainer/CharacterArea"]
 layout_mode = 2
 

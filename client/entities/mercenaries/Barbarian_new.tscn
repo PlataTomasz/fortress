@@ -11,8 +11,6 @@
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_040m5"]
 resource_local_to_scene = true
-max = 99999.0
-current = 99999.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_ubu72"]
 resource_local_to_scene = true

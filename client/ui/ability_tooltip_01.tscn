@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1ttpyf5y3rxj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ebsd8"]
+width = 48
+height = 48
+
+[node name="AbilityTooltip1" type="AbilityTooltip" node_paths=PackedStringArray("ability_icon_display", "ability_name_display", "ability_description_display")]
+custom_minimum_size = Vector2(512, 0)
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 2
+ability_icon_display = NodePath("MarginContainer/VBoxContainer/FlowContainer/TextureRect")
+ability_name_display = NodePath("MarginContainer/VBoxContainer/FlowContainer/AbilityName")
+ability_description_display = NodePath("MarginContainer/VBoxContainer/AbilityText")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="FlowContainer" type="HSplitContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+dragger_visibility = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/FlowContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_ebsd8")
+expand_mode = 3
+
+[node name="AbilityName" type="Label" parent="MarginContainer/VBoxContainer/FlowContainer"]
+layout_mode = 2
+text = "Ability name here"
+
+[node name="AbilityText" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Basic attacks apply bleeding to hit target dealing {x} damage, every 0.5s for 4s.
+
+Total damage: {x*8}"
+autowrap_mode = 2

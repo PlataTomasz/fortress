@@ -5,6 +5,7 @@
 
 class Ability;
 class TextureProgressBar;
+class AbilityTooltip;
 
 class ActiveAbilityButton : public PanelContainer {
 GDCLASS(ActiveAbilityButton, PanelContainer);
@@ -12,12 +13,15 @@ private:
     Ability *ability = nullptr;
     TextureProgressBar *progress_bar = nullptr;
     Label *value_indicator = nullptr;
-
     Timer *cooldown_timer = nullptr;
+    AbilityTooltip *ability_tooltip = nullptr;
 
     void _on_ability_change(Ability *new_ability);
     void _init();
     void _process_frame();
+    void _on_mouse_entered();
+    void _on_mouse_exited();
+    void _reconnect_tooltip_signals(AbilityTooltip *new_ability_tooltip);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -36,6 +40,8 @@ public:
     void set_value_indicator(Label *new_value_indicator);
     Label *get_value_indicator();
 
+    void set_ability_tooltip(AbilityTooltip *new_ability_tooltip);
+    AbilityTooltip *get_ability_tooltip();
 };
 
 #endif // ACTIVE_ABILITY_BUTTON_INCLUDED
