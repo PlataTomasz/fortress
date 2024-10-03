@@ -3,10 +3,12 @@
 
 #include <client/ui/buttons/disconnect_from_server_button.h>
 #include <client/ui/game/abilities/ability_button.h>
+#include <client/ui/game/abilities/ability_tooltip.h>
 
 void register_clientside_types() {
     ClassDB::register_class<DisconnectFromServerButton>();
     ClassDB::register_class<ActiveAbilityButton>();
+    ClassDB::register_class<AbilityTooltip>();
 }
 
 #endif // REGISTER_CLIENTSIDE_TYPES_INCLUDED

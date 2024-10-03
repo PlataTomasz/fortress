@@ -1,12 +1,23 @@
-[gd_scene load_steps=11 format=3 uid="uid://r74sdo7qqa4i"]
+[gd_scene load_steps=14 format=3 uid="uid://r74sdo7qqa4i"]
 
 [ext_resource type="PackedScene" uid="uid://f2fdn3fvi163" path="res://ui/active_ability_button.tscn" id="1_12gq1"]
 [ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="1_50r8y"]
+[ext_resource type="PackedScene" uid="uid://c1ttpyf5y3rxj" path="res://ui/ability_tooltip_01.tscn" id="1_85kqk"]
 [ext_resource type="StyleBox" uid="uid://db3ejfwdx7hyb" path="res://ui/health_bars/DefaultMercenaryHealthBarFill.tres" id="2_kpe8t"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ebsd8"]
-width = 48
-height = 48
+[sub_resource type="Gradient" id="Gradient_3nsy2"]
+offsets = PackedFloat32Array(0.367347, 1)
+colors = PackedColorArray(0.458824, 0.329412, 0.0627451, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ql81j"]
+gradient = SubResource("Gradient_3nsy2")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.478632, 0.504274)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sx8vm"]
+texture = SubResource("GradientTexture2D_ql81j")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bppis"]
 
@@ -60,32 +71,21 @@ grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="PanelContainer" type="PanelContainer" parent="VSplitContainer"]
+[node name="AbilityTooltip1" parent="VSplitContainer" instance=ExtResource("1_85kqk")]
 visible = false
 layout_mode = 2
-size_flags_vertical = 8
-mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/PanelContainer"]
+[node name="AbilityTooltip2" parent="VSplitContainer" instance=ExtResource("1_85kqk")]
+visible = false
 layout_mode = 2
 
-[node name="FlowContainer" type="HSplitContainer" parent="VSplitContainer/PanelContainer/VBoxContainer"]
+[node name="AbilityTooltip3" parent="VSplitContainer" instance=ExtResource("1_85kqk")]
+visible = false
 layout_mode = 2
-dragger_visibility = 2
 
-[node name="TextureRect" type="TextureRect" parent="VSplitContainer/PanelContainer/VBoxContainer/FlowContainer"]
+[node name="AbilityTooltip4" parent="VSplitContainer" instance=ExtResource("1_85kqk")]
+visible = false
 layout_mode = 2
-texture = SubResource("NoiseTexture2D_ebsd8")
-
-[node name="AbilityName" type="Label" parent="VSplitContainer/PanelContainer/VBoxContainer/FlowContainer"]
-layout_mode = 2
-text = "Ability name here"
-
-[node name="AbilityText" type="Label" parent="VSplitContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-text = "Basic attacks apply bleeding to hit target dealing {x} damage, every 0.5s for 4s.
-
-Total damage: {x*8}"
 
 [node name="VSplitContainer" type="VSplitContainer" parent="VSplitContainer"]
 layout_mode = 2
@@ -108,6 +108,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_sx8vm")
 
 [node name="Container" type="HSplitContainer" parent="VSplitContainer/VSplitContainer/PanelContainer2"]
 layout_mode = 2
@@ -178,17 +179,21 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = SubResource("NoiseTexture2D_wksc4")
 
-[node name="First" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
+[node name="First" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" node_paths=PackedStringArray("ability_tooltip") instance=ExtResource("1_12gq1")]
 layout_mode = 2
+ability_tooltip = NodePath("../../../../../../../AbilityTooltip1")
 
-[node name="Second" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
+[node name="Second" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" node_paths=PackedStringArray("ability_tooltip") instance=ExtResource("1_12gq1")]
 layout_mode = 2
+ability_tooltip = NodePath("../../../../../../../AbilityTooltip2")
 
-[node name="Third" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
+[node name="Third" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" node_paths=PackedStringArray("ability_tooltip") instance=ExtResource("1_12gq1")]
 layout_mode = 2
+ability_tooltip = NodePath("../../../../../../../AbilityTooltip3")
 
-[node name="Ultimate" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" instance=ExtResource("1_12gq1")]
+[node name="Ultimate" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea/MarginContainer/AbilitiesContainer" node_paths=PackedStringArray("ability_tooltip") instance=ExtResource("1_12gq1")]
 layout_mode = 2
+ability_tooltip = NodePath("../../../../../../../AbilityTooltip4")
 
 [node name="LifeBar" type="ProgressBar" parent="VSplitContainer/VSplitContainer/PanelContainer2/Container/CenterArea"]
 custom_minimum_size = Vector2(0, 32)
@@ -197,6 +202,11 @@ theme_override_styles/background = ExtResource("1_50r8y")
 theme_override_styles/fill = ExtResource("2_kpe8t")
 value = 100.0
 show_percentage = false
+
+[node name="ColorRect" type="ColorRect" parent="VSplitContainer/VSplitContainer/PanelContainer2"]
+visible = false
+layout_mode = 2
+color = Color(0.458717, 0.329259, 0.0625162, 1)
 
 [node name="DefeatScreen" type="PanelContainer" parent="."]
 visible = false
