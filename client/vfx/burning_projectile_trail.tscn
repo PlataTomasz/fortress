@@ -1,0 +1,37 @@
+[gd_scene load_steps=9 format=3 uid="uid://d2v6w4dv4lhuh"]
+
+[ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="1_fhkf7"]
+[ext_resource type="Shader" uid="uid://c7kodwxilvnmp" path="res://vfx/vfx_01.tres" id="1_q275f"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_eglc8"]
+material = ExtResource("1_fhkf7")
+
+[sub_resource type="Curve" id="Curve_v344x"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_f15hw"]
+curve = SubResource("Curve_v344x")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d6hfu"]
+gravity = Vector3(0, 0, 0)
+color = Color(1, 0, 0, 1)
+alpha_curve = SubResource("CurveTexture_f15hw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_owd1j"]
+render_priority = 0
+shader = ExtResource("1_q275f")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wmiwr"]
+material = SubResource("ShaderMaterial_owd1j")
+size = Vector2(2, 2)
+
+[node name="BurningProjectileTrail" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.4481, 0, 0)
+mesh = SubResource("SphereMesh_eglc8")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="MeshInstance3D"]
+process_material = SubResource("ParticleProcessMaterial_d6hfu")
+draw_pass_1 = SubResource("QuadMesh_wmiwr")
