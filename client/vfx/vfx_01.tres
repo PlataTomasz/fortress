@@ -133,7 +133,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-723.295, -71.2329)
 varyings/vertex_color = "0,5"
 varyings/lifetime = "0,0"
 nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_lg6gx")

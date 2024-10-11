@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwbu72tyq7yd3"]
+
+[ext_resource type="Texture2D" uid="uid://djxe44nwoq1uq" path="res://textures/vfx/border_01_trans.png" id="1_bq00e"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j7x2f"]
+size = Vector2(20, 20)
+
+[node name="BasicAttack01VFX" type="Node3D"]
+
+[node name="Decal" type="Decal" parent="."]
+size = Vector3(1, 1, 1)
+texture_albedo = ExtResource("1_bq00e")
+texture_emission = ExtResource("1_bq00e")
+modulate = Color(1, 0, 0.133333, 1)
+cull_mask = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("PlaneMesh_j7x2f")

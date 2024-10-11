@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://q8aaqb40m1sm"]
+
+[ext_resource type="PackedScene" uid="uid://dwbu72tyq7yd3" path="res://vfx/barbarian/basic_attack_01_vfx.tscn" id="1_3yf2i"]
+
+[sub_resource type="PackedScene" id="PackedScene_7yjb7"]
+
+[node name="BasicAttack01" type="BarbarianBasicAttack"]
+displayed_name = "Barbarian's basic attack"
+displayed_description = "Slash in a rectangular area in front of you, dealing damage to enemies."
+hit_visual_effect = SubResource("PackedScene_7yjb7")
+attack_area_vfx = ExtResource("1_3yf2i")
