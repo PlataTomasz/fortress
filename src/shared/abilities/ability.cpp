@@ -6,6 +6,7 @@
 #ifdef SERVER
 void Ability::use(const Ref<ActionContext>& action_context)
 {
+    _before_ability_use(action_context);
     if(!is_on_cooldown())
     {
         start_ability_cooldown();
@@ -82,6 +83,28 @@ bool Ability::is_on_cooldown()
     return get_current_cooldown() > 0;
 }
 
+void Ability::_before_ability_use(const Ref<ActionContext>& action_context) {
+    _get_where_to_look_behaviour()->look(action_context);
+}
+
+
+Ability::LookAtBehaviour *Ability::_get_where_to_look_behaviour() {
+	switch (where_to_look_at) {
+		case KEEP_CURRENT: {
+			return &_unchanged_look_at_behaviour;
+		} break;
+		case AT_TARGET_ENTITY: {
+			return &_at_target_entity_look_at_behaviour;
+		} break;
+		case AT_TARGET_POSITION: {
+			return &_at_target_position_look_at_behaviour;
+		} break;
+		default: {
+			return &_unchanged_look_at_behaviour;
+		} break;
+	}
+}
+
 void Ability::_init() {
     cooldown_timer = memnew(Timer);
     cooldown_timer->set_one_shot(true);
@@ -143,10 +166,21 @@ void Ability::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_current_cooldown", "new_icon"), &Ability::set_current_cooldown);
     ClassDB::bind_method(D_METHOD("get_current_cooldown"), &Ability::get_current_cooldown);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "current_cooldown"), "set_current_cooldown", "get_current_cooldown");
+
+    ClassDB::bind_method(D_METHOD("set_where_to_look_at", "new_icon"), &Ability::set_where_to_look_at);
+    ClassDB::bind_method(D_METHOD("get_where_to_look_at"), &Ability::get_where_to_look_at);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "where_to_look_at", PROPERTY_HINT_ENUM, "Keep,At position,At entity"), "set_where_to_look_at", "get_where_to_look_at");
 }
 
 AbilityCasterComponent *Ability::get_ability_caster() {
     return Object::cast_to<AbilityCasterComponent>(get_parent());
+}
+
+void Ability::set_where_to_look_at(Ability::WhereToLookBeforeUse new_where_to_look_at) {
+    where_to_look_at = new_where_to_look_at;
+}
+Ability::WhereToLookBeforeUse Ability::get_where_to_look_at() {
+    return where_to_look_at;
 }
 
 /*

@@ -7,5 +7,6 @@
 [node name="BasicAttack01" type="BarbarianBasicAttack"]
 displayed_name = "Barbarian's basic attack"
 displayed_description = "Slash in a rectangular area in front of you, dealing damage to enemies."
+where_to_look_at = 1
 hit_visual_effect = SubResource("PackedScene_7yjb7")
 attack_area_vfx = ExtResource("1_3yf2i")
