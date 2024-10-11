@@ -17,6 +17,12 @@ class AbilityCasterComponent;
 class Ability : public Node3D
 {
 GDCLASS(Ability, Node3D);
+public:
+    enum WhereToLookBeforeUse {
+        KEEP_CURRENT,
+        AT_TARGET_POSITION,
+        AT_TARGET_ENTITY
+    }; 
 #ifdef SERVER
 protected:
 
@@ -25,10 +31,44 @@ protected:
 #endif
 
 #ifdef CLIENT
-    virtual void _clientside_use(const Ref<ActionContext>& action_context){};
+    virtual void _clientside_use(const Ref<ActionContext>& action_context) {};
 #endif
 private:
+    WhereToLookBeforeUse where_to_look_at;
+
+    class LookAtBehaviour {
+    public:
+        virtual void look(const Ref<ActionContext>& action_context) = 0; 
+    };
+
+    class UnchangedLookingAtCurrentBehaviour : public LookAtBehaviour{
+    public:
+        virtual void look(const Ref<ActionContext>& action_context) override {
+            // Do nothing
+        }
+    } _unchanged_look_at_behaviour;
+
+    class LookAtEntityBehaviour : public LookAtBehaviour {
+    public:
+        virtual void look(const Ref<ActionContext>& action_context) override {
+            ERR_FAIL_NULL(action_context->get_target_entity());
+            ERR_FAIL_NULL(action_context->get_user());
+            action_context->get_user()->look_at(action_context->get_target_entity()->get_global_position(), Vector3(0,1,0), true);
+        } 
+    } _at_target_entity_look_at_behaviour;
+
+    class LookAtTargetPositionBehaviour : public LookAtBehaviour {
+    public:
+        virtual void look(const Ref<ActionContext>& action_context) override {
+            ERR_FAIL_NULL(action_context->get_user());
+            action_context->get_user()->look_at(action_context->get_target_position(), Vector3(0,1,0), true);
+        }
+    } _at_target_position_look_at_behaviour;
+
+    void _before_ability_use(const Ref<ActionContext>& action_context);
+
     void _init();
+    LookAtBehaviour *_get_where_to_look_behaviour();
 public:
     Timer *cooldown_timer = nullptr;
 protected:
@@ -66,10 +106,17 @@ public:
     String get_displayed_name();
     void set_displayed_name(const String &new_name);
 
+
+    void set_where_to_look_at(WhereToLookBeforeUse new_where_to_look_at);
+    WhereToLookBeforeUse get_where_to_look_at();
+    
+
     void use(const Ref<ActionContext>& action_context);
 
     bool can_be_used(const Ref<ActionContext>& action_context);
     Ability();
 };
+
+VARIANT_ENUM_CAST(Ability::WhereToLookBeforeUse);
 
 #endif // ABILITY_HPP_INCLUDED

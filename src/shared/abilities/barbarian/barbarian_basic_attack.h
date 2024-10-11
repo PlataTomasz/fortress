@@ -16,6 +16,12 @@ private:
     HitboxComponent *hitbox = nullptr;
 
     void _reparent_hitbox();
+
+    Ref<PackedScene> hit_visual_effect;
+    Ref<PackedScene> attack_area_vfx;
+
+    void _prepare_attack(const Ref<ActionContext>& use_context);
+    void _entity_hit_with_attack(Entity *entity, const Ref<ActionContext>& use_context);
 protected:
 #ifdef CLIENT
     virtual void _clientside_use(const Ref<ActionContext>& action_context) override;
@@ -28,6 +34,12 @@ public:
 
     void set_hitbox(HitboxComponent *p_hitbox);
     HitboxComponent *get_hitbox();
+
+    void set_hit_visual_effect(const Ref<PackedScene> &new_hit_visual_effect);
+    Ref<PackedScene> get_hit_visual_effect();
+
+    void set_attack_area_vfx(const Ref<PackedScene> &new_attack_area_vfx);
+    Ref<PackedScene> get_attack_area_vfx();
 };
 
 #endif // BARBARIAN_BASIC_ATTACK_INCLUDED
