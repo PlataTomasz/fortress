@@ -9,15 +9,14 @@ void Ability::use(const Ref<ActionContext>& action_context)
 {
     if(!is_on_cooldown())
     {
-        emit_signal("use_started");
         _handle_look_at(action_context);
+        emit_signal("use_started");
         start_ability_cooldown();
         //Ability cast
         if(_use_time > 0) {
             _deferred_use(action_context);
         } else {
-            _use(action_context);
-            emit_signal("use_finished", false);
+            _instant_use(action_context);
         }
     } else {
         print_line(get_current_cooldown());
@@ -224,6 +223,12 @@ bool Ability::is_valid_target(const Ref<ActionContext>& action_context) {
 }
 */
 
+void Ability::_deferred_use_handler(const Ref<ActionContext>& action_context) {
+    // TODO: Check if ability can still be used
+    _use(action_context);
+    emit_signal("use_finished", false);
+}
+
 void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
     Timer *timer = memnew(Timer);
     timer->set_autostart(true);
@@ -231,7 +236,12 @@ void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
     timer->set_one_shot(true);
 
     // FIXME: Nothing checks that ability can no longer be used at this point - might lead to ability use after death
-    timer->connect("timeout", callable_mp(this, &Ability::_use).bind(action_context));
+    timer->connect("timeout", callable_mp(this, &Ability::_deferred_use_handler).bind(action_context));
 
     add_child(timer);
+}
+
+void Ability::_instant_use(const Ref<ActionContext>& action_context) {
+    _use(action_context);
+    emit_signal("use_finished", false);
 }

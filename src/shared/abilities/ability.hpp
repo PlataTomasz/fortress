@@ -73,6 +73,8 @@ private:
 
     void _init();
     LookAtBehaviour *_get_where_to_look_behaviour();
+    void _instant_use(const Ref<ActionContext>& action_context);
+    void _deferred_use_handler(const Ref<ActionContext>& action_context);
 public:
     Timer *cooldown_timer = nullptr;
 protected:
