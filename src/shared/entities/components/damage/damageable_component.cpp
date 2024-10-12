@@ -9,7 +9,7 @@
 #include <shared/entities/entity.h>
 
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
- {
+{
     if(!is_damageable_by(damage_object)) return;
     if(is_dead()) return;
 
@@ -34,6 +34,7 @@ void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 	emit_signal("damage_taken", damage_object);
 
 	if (was_lethal) {
+        rpc("server_rpc_death");
 		emit_signal("death", damage_object);
         print_line(get_owning_entity(), "died!");
 	}
@@ -78,6 +79,9 @@ void DamageableComponent::_bind_methods() {
     ADD_SIGNAL(MethodInfo("damage_taken", PropertyInfo(Variant::OBJECT, "damage_object")));
     ADD_SIGNAL(MethodInfo("death", PropertyInfo(Variant::OBJECT, "damage_object", PROPERTY_HINT_RESOURCE_TYPE, DamageObject::get_class_static())));
     ADD_SIGNAL(MethodInfo("revived"));
+
+    ClassDB::bind_method(D_METHOD("server_rpc_death"), &DamageableComponent::server_rpc_death);
+    ClassDB::bind_method(D_METHOD("server_rpc_revive"), &DamageableComponent::server_rpc_revive);
 }
 
 bool DamageableComponent::is_dead() {
@@ -88,20 +92,23 @@ bool DamageableComponent::is_dead() {
     return !(attribute_component->get_health()->get_current() > 0);
 }
 
+
+
 void DamageableComponent::set_dead(bool new_state) {
     dead = new_state;
 }
 
-void DamageableComponent::revive() {
-    Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
-    ERR_FAIL_NULL(parent_entity);
-
-    EntityAttributesComponent *attributes_component = parent_entity->get_attributes_component();
-    if(!attributes_component) return;
-
-    // Restore health to maximum
-    heal(attributes_component->get_health()->get_max());
-
-    set_dead(false);
-    emit_signal("revived");
+void DamageableComponent::_notification(int p_notification) {
+    switch (p_notification)
+    {
+    case NOTIFICATION_READY:
+        {
+            ADD_RPC_CONFIG(server_rpc_death, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+            ADD_RPC_CONFIG(server_rpc_revive, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+        }
+        break;
+    
+    default:
+        break;
+    }
 }

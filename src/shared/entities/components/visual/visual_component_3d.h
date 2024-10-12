@@ -31,6 +31,7 @@ private:
     void _on_movement_start();
     void _on_movement_finish();
     void _on_entity_death(const Ref<DamageObject>& damage_object);
+    void _on_entity_revive();
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
