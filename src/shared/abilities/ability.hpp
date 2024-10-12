@@ -22,7 +22,7 @@ public:
         KEEP_CURRENT,
         AT_TARGET_POSITION,
         AT_TARGET_ENTITY
-    }; 
+    };
 #ifdef SERVER
 protected:
 
@@ -35,6 +35,10 @@ protected:
 #endif
 private:
     WhereToLookBeforeUse where_to_look_at;
+    // MovementComponent should pause movement until this ability finishes if true
+    bool locks_movement = true;
+
+    float _use_time = 0;
 
     class LookAtBehaviour {
     public:
@@ -86,6 +90,9 @@ protected:
     void _on_ability_cooldown_finished();
 
     void start_ability_cooldown();
+    void _handle_look_at(const Ref<ActionContext>& action_context);
+
+    void _deferred_use(const Ref<ActionContext>& action_context);
 public:
     AbilityCasterComponent *get_ability_caster();
 
@@ -106,10 +113,14 @@ public:
     String get_displayed_name();
     void set_displayed_name(const String &new_name);
 
-
     void set_where_to_look_at(WhereToLookBeforeUse new_where_to_look_at);
     WhereToLookBeforeUse get_where_to_look_at();
     
+    void set_use_time(float new_use_time);
+    float get_use_time();
+
+    void set_locks_movement(bool new_locks_movement);
+    bool is_locks_movement();
 
     void use(const Ref<ActionContext>& action_context);
 

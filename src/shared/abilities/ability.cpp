@@ -2,16 +2,23 @@
 #include <scene/main/timer.h>
 
 #include <shared/entities/components/abilities/ability_caster_component.h>
+#include <shared/entities/components/movement/movement_component.h>
 
 #ifdef SERVER
 void Ability::use(const Ref<ActionContext>& action_context)
 {
-    _before_ability_use(action_context);
     if(!is_on_cooldown())
     {
+        emit_signal("use_started");
+        _handle_look_at(action_context);
         start_ability_cooldown();
-        //Ability cast 
-        _use(action_context);
+        //Ability cast
+        if(_use_time > 0) {
+            _deferred_use(action_context);
+        } else {
+            _use(action_context);
+            emit_signal("use_finished", false);
+        }
     } else {
         print_line(get_current_cooldown());
         print_error("Ability instance" + Variant(this).operator String() + "is on cooldown! Remaining: " + get_current_cooldown() + " seconds");
@@ -84,7 +91,7 @@ bool Ability::is_on_cooldown()
 }
 
 void Ability::_before_ability_use(const Ref<ActionContext>& action_context) {
-    _get_where_to_look_behaviour()->look(action_context);
+
 }
 
 
@@ -142,6 +149,9 @@ Ability::Ability()
 }
 
 void Ability::_bind_methods() {
+    ADD_SIGNAL(MethodInfo("use_started"));
+    ADD_SIGNAL(MethodInfo("use_finished", PropertyInfo(Variant::BOOL, "was_interrupted")));
+
     ClassDB::bind_method(D_METHOD("use", "action_context"), &Ability::use);
 
     ClassDB::bind_method(D_METHOD("set_displayed_description", "new_description"), &Ability::set_displayed_description);
@@ -170,6 +180,10 @@ void Ability::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_where_to_look_at", "new_icon"), &Ability::set_where_to_look_at);
     ClassDB::bind_method(D_METHOD("get_where_to_look_at"), &Ability::get_where_to_look_at);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "where_to_look_at", PROPERTY_HINT_ENUM, "Keep,At position,At entity"), "set_where_to_look_at", "get_where_to_look_at");
+
+    ClassDB::bind_method(D_METHOD("set_locks_movement", "locks_movement"), &Ability::set_locks_movement);
+    ClassDB::bind_method(D_METHOD("get_locks_movement"), &Ability::is_locks_movement);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "locks_movement"), "set_locks_movement", "is_locks_movement");
 }
 
 AbilityCasterComponent *Ability::get_ability_caster() {
@@ -183,8 +197,41 @@ Ability::WhereToLookBeforeUse Ability::get_where_to_look_at() {
     return where_to_look_at;
 }
 
+void Ability::set_use_time(float new_use_time) {
+    _use_time = new_use_time;
+}
+
+float Ability::get_use_time() {
+    return _use_time;
+}
+
+void Ability::set_locks_movement(bool new_locks_movement) {
+    locks_movement = new_locks_movement;
+}
+
+bool Ability::is_locks_movement() {
+    return locks_movement;
+}
+
+void Ability::_handle_look_at(const Ref<ActionContext>& action_context) {
+    _get_where_to_look_behaviour()->look(action_context);
+}
+
+
 /*
 bool Ability::is_valid_target(const Ref<ActionContext>& action_context) {
     return true;
 }
 */
+
+void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
+    Timer *timer = memnew(Timer);
+    timer->set_autostart(true);
+    timer->set_wait_time(_use_time);
+    timer->set_one_shot(true);
+
+    // FIXME: Nothing checks that ability can no longer be used at this point - might lead to ability use after death
+    timer->connect("timeout", callable_mp(this, &Ability::_use).bind(action_context));
+
+    add_child(timer);
+}

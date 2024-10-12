@@ -18,6 +18,9 @@ class AbilityCasterComponent : public Node3D
 {
 GDCLASS(AbilityCasterComponent, Node3D);
 private:
+    // Ability, which is currently being used, set back to nullptr when ability use is finished
+    Ability *currently_used_ability = nullptr;
+
     BasicAttack *attack = nullptr;
 
     Ability *passive_ability = nullptr;    
