@@ -6,6 +6,7 @@
 
 #include <shared/string_names/component_stringnames.h>
 #include <shared/entities/components/damage/damageable_component.h>
+#include <shared/abilities/ability.hpp>
 
 #include <shared/entities/entity.h>
 
@@ -39,6 +40,8 @@ Entity *MovementComponent::get_owning_entity() {
 
 #ifdef SERVER
 void MovementComponent::_tick() {
+	if(is_movement_paused()) return;
+
 	if (nav_agent->is_navigation_finished()) {
 		currently_moving = false;
 		return;
@@ -88,6 +91,16 @@ void MovementComponent::_tick() {
 		corrected_rotation.y = corrected_rotation.y + 180;
 		ent->set_rotation(corrected_rotation);
 		*/
+}
+
+void MovementComponent::_on_ability_use_start(Ability *ability) {
+	if(ability->is_locks_movement()) {
+		movement_pause_locker.lock(ability);
+	}
+}
+
+void MovementComponent::_on_ability_use_finish(Ability *ability) {
+	movement_pause_locker.unlock(ability);
 }
 
 void MovementComponent::_on_entity_death(const Ref<DamageObject>& damage_object) {
@@ -216,4 +229,16 @@ void MovementComponent::set_pathfinding_radius(real_t pathfinding_radius) {
 
 real_t MovementComponent::get_pathfinding_radius() {
     return nav_agent->get_radius();
+}
+
+bool MovementComponent::is_movement_paused() {
+	return movement_pause_locker.is_locked();
+}
+
+void MovementComponent::pause_movement(void *who_paused) {
+	movement_pause_locker.lock(who_paused);
+}
+
+void MovementComponent::unpause_movement(void *who_paused) {
+	movement_pause_locker.unlock(who_paused);
 }
