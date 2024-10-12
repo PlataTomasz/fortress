@@ -212,6 +212,8 @@ void AbilityCasterComponent::use_ability(int index, const Ref<ActionContext>& ac
     return ability->use(action_context);
     */
 
+    ERR_FAIL_COND(currently_used_ability != nullptr); // We are already using an ability!
+
     Ability *ability_to_use = get_ability_by_index(index);
     ERR_FAIL_NULL(ability_to_use);
 
