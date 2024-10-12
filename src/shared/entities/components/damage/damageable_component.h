@@ -12,8 +12,11 @@ private:
 
     void _on_something_took_damage(const Ref<DamageObject>& something_damage_object);
     void _on_something_took_fatal_damage(const Ref<DamageObject>& something_damage_object);
+    void server_rpc_death();
+    void server_rpc_revive();
 protected:
     static void _bind_methods();
+    void _notification(int p_notification);
 public:
     void revive();
     Entity *get_owning_entity();

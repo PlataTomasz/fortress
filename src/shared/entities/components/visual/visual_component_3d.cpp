@@ -30,6 +30,7 @@ void VisualComponent3D::_notification(int p_notification) {
 			DamageableComponent *damageable = ent->get_damageable_component();
 			if(damageable) {
 				damageable->connect("death", callable_mp(this, &VisualComponent3D::_on_entity_death));
+				damageable->connect("revived", callable_mp(this, &VisualComponent3D::_on_entity_revive));
 			}
 
 			animation_state = new IdleAnimationState(this);
@@ -158,4 +159,9 @@ void VisualComponent3D::set_animation_player(AnimationPlayer *new_animation_play
 
 AnimationPlayer *VisualComponent3D::get_animation_player() {
 	return animation_player;
+}
+
+void VisualComponent3D::_on_entity_revive() {
+	animation_state = animation_state->on_respawn();
+	animation_state->play_animation();
 }
