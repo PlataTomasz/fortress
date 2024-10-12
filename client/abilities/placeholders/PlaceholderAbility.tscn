@@ -7,3 +7,4 @@ displayed_name = "Placeholder Ability"
 displayed_description = "Placeholder ability - for testing only!"
 icon = ExtResource("1_umj0m")
 max_cooldown = 10.0
+where_to_look_at = 48

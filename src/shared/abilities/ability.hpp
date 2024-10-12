@@ -23,16 +23,10 @@ public:
         AT_TARGET_POSITION,
         AT_TARGET_ENTITY
     };
-#ifdef SERVER
 protected:
 
     // Internal use: Without most checks
     virtual void _use(const Ref<ActionContext>& action_context){};
-#endif
-
-#ifdef CLIENT
-    virtual void _clientside_use(const Ref<ActionContext>& action_context) {};
-#endif
 private:
     WhereToLookBeforeUse where_to_look_at;
     // MovementComponent should pause movement until this ability finishes if true

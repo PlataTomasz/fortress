@@ -10,7 +10,7 @@ private:
 public:
     // 
     #ifdef CLIENT
-    virtual void _clientside_use(const Ref<ActionContext>& action_context) override;
+    virtual void _use(const Ref<ActionContext>& action_context) override;
     #endif
     
     #ifdef SERVER
