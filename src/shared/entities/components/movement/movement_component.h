@@ -8,6 +8,7 @@ class Node3D;
 class NavigationAgent3D;
 class EntityStatsComponent;
 class Entity;
+class Ability;
 
 /**
  * Node, which instantes control movement of an Entity
@@ -24,6 +25,25 @@ private:
     NavigationAgent3D *nav_agent = nullptr;
 
     Vector3 previous_position;
+    
+    class CounteredLock {
+    private:
+        List<void *> locks;
+    public:
+        bool is_locked() {
+            return locks.size() > 0;
+        }
+        
+        void lock(void *key) {
+            locks.push_back(key);
+        }
+
+        void unlock(void *key) {
+            List<void *>::Element *e = locks.find(key);
+            ERR_FAIL_NULL_MSG(e, "Passed object isn't locking this locker!");
+            e->erase();
+        }
+    } movement_pause_locker;
 
     void _ready();
     void _on_entity_death(const Ref<DamageObject>& damage_object);
@@ -32,6 +52,8 @@ private:
     void _parented();
     void _frame();
     void _on_entity_revive();
+    void _on_ability_use_start(Ability *ability);
+    void _on_ability_use_finish(Ability *ability);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -54,6 +76,10 @@ public:
 
     Vector3 get_destination_position();
     void set_destination_position(Vector3 target_pos);
+
+    void pause_movement(void *who_paused);
+    void unpause_movement(void *who_paused);
+    bool is_movement_paused();
 };
 
 #endif // MOVEMENT_COMPONENT_INCLUDED
