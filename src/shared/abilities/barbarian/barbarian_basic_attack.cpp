@@ -34,7 +34,7 @@ void BarbarianBasicAttack::_notification(int p_notification) {
 			break;
 	}
 }
-
+#ifdef SERVER
 void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
     _prepare_attack(use_context);
 
@@ -51,7 +51,7 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
         _entity_hit_with_attack(ent, use_context);
     }
 }
-
+#endif
 void BarbarianBasicAttack::set_hit_visual_effect(const Ref<PackedScene> &new_hit_visual_effect) {
     hit_visual_effect = new_hit_visual_effect;
 }
@@ -85,7 +85,7 @@ void BarbarianBasicAttack::_entity_hit_with_attack(Entity *entity, const Ref<Act
     }
 }
 
-void BarbarianBasicAttack::_clientside_use(const Ref<ActionContext>& action_context) {
+void BarbarianBasicAttack::_use(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(action_context->get_user());
     // Play swing sound
     

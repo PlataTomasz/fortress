@@ -32,7 +32,7 @@ void BarbarianDanceWithDeath::_use(const Ref<ActionContext>& action_context) {
 
 #ifdef CLIENT
 
-void BarbarianDanceWithDeath::_clientside_use(const Ref<ActionContext>& action_context) {
+void BarbarianDanceWithDeath::_use(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(action_context->get_user());
     // Play sound
     AudioComponent *audio_component = action_context->get_user()->get_audio_component();

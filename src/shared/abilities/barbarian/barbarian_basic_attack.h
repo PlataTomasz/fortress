@@ -23,14 +23,11 @@ private:
     void _prepare_attack(const Ref<ActionContext>& use_context);
     void _entity_hit_with_attack(Entity *entity, const Ref<ActionContext>& use_context);
 protected:
-#ifdef CLIENT
-    virtual void _clientside_use(const Ref<ActionContext>& action_context) override;
-#endif
+    virtual void _use(const Ref<ActionContext>& action_context) override;
 
     void _notification(int p_notification);
     static void _bind_methods();
 public:
-    void _use(const Ref<ActionContext>& use_context);
 
     void set_hitbox(HitboxComponent *p_hitbox);
     HitboxComponent *get_hitbox();

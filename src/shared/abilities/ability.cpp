@@ -41,7 +41,7 @@ void Ability::use(const Ref<ActionContext>& action_context) {
     // Call RPC to server on client builds
     //rpc("ability_use_request", action_context);
     start_ability_cooldown();
-    _clientside_use(action_context);
+    _use(action_context);
 }
 #endif
 
@@ -183,6 +183,10 @@ void Ability::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_locks_movement", "locks_movement"), &Ability::set_locks_movement);
     ClassDB::bind_method(D_METHOD("get_locks_movement"), &Ability::is_locks_movement);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "locks_movement"), "set_locks_movement", "is_locks_movement");
+
+    ClassDB::bind_method(D_METHOD("set_use_time", "new_icon"), &Ability::set_use_time);
+    ClassDB::bind_method(D_METHOD("get_use_time"), &Ability::get_use_time);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "use_time"), "set_use_time", "get_use_time");
 }
 
 AbilityCasterComponent *Ability::get_ability_caster() {
