@@ -12,11 +12,18 @@ private:
     Entity *current_target = nullptr;
 
     Timer *attack_cooldown_counter = nullptr;
+    Timer *attack_window_timer = nullptr;
+    Timer *recharge_timer = nullptr;
     Node3D *turret_attack_origin_node = nullptr;
 
     AdvancedArea3D *aggro_area = nullptr;
 
     float cooldown_between_attacks = 0;
+    float attack_time_window = 7;
+    float recharge_time = 5;
+
+    bool recharging = false;
+    bool ready_to_attack = false;
     
     void _on_target_left_aggro_area();
     void _on_entity_left_aggro_area(Entity *entity_that_left);
@@ -24,9 +31,17 @@ private:
 
     Ref<PackedScene> projectile_template;
 
-    void _attack_off_cooldown();
     void _on_death();
     void _on_attack_speed_changed(float new_final_attack_speed);
+    void _on_recharge_start();
+    void _on_recharge_end();
+
+    void _setup_recharge_timer();
+    void _setup_attack_window_timer();
+    void _on_attack_window_expire();
+    void _on_recharge_finished();
+    void _on_attack_cooldown_expire();
+    void _on_target_death();
 protected:
     void _initv() override;
     void _readyv() override;
@@ -54,6 +69,11 @@ public:
 
     void set_projectile_template(const Ref<PackedScene>& new_projectile_template);
     Ref<PackedScene> get_projectile_template();
+
+    float get_max_recharge_time();
+    float get_current_recharge_time();
+
+    bool can_attack();
 };
 
 #endif // TURRET_INCLUDED

@@ -1,13 +1,20 @@
-[gd_scene load_steps=21 format=4 uid="uid://7453g6ydtekb"]
+[gd_scene load_steps=24 format=4 uid="uid://7453g6ydtekb"]
 
 [ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="1_1jq6i"]
 [ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="1_coqsg"]
 [ext_resource type="PackedScene" uid="uid://cvdehdk1ecoib" path="res://entities/components/entity_attributes_component.tscn" id="2_8j4i6"]
 [ext_resource type="PackedScene" uid="uid://bg4atg03uyc65" path="res://models/tower-top.glb" id="2_tgsix"]
+[ext_resource type="Texture2D" uid="uid://caqcenx4yld48" path="res://textures/icons/misc/lightning-spanner.png" id="3_6p4am"]
 [ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="3_fx4gh"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_e47hh"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncy44"]
+bg_color = Color(0.563283, 0.647901, 0.145389, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnmwe"]
+bg_color = Color(0.353018, 0.700631, 1.34766e-06, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2mec"]
 
@@ -107,13 +114,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_e47hh")
 
-[node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("entity")]
+[node name="HFlowContainer" type="TurretRechargeIndicator" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("turret", "progress_bar")]
+layout_mode = 2
+turret = NodePath("../../../../..")
+progress_bar = NodePath("ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_6p4am")
+expand_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ncy44")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gnmwe")
+value = 50.0
+
+[node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+[node name="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+[node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="3" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
 [node name="VisualComponent3D" type="VisualComponent3D" parent="." node_paths=PackedStringArray("animation_player")]
