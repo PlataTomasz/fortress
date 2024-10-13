@@ -5,6 +5,7 @@
 
 #define DISABLE_IN_EDITOR() if(unlikely(Engine::get_singleton()->is_editor_hint())) return;
 
+// DEPRECATED
 #define ADD_RPC_CONFIG(method_name, rpc_mode, transfer_mode, channel, call_local) \
     Dictionary method_name ## _rpc_cfg; \
     method_name ## _rpc_cfg["rpc_mode"] = rpc_mode; \
@@ -13,6 +14,7 @@
     method_name ## _rpc_cfg["transfer_mode"] = transfer_mode; \
     rpc_config(#method_name, method_name ## _rpc_cfg); \
 
+// DEPRECATED
 #define ADD_RPC_CONFIG_SHARED(method_name, rpc_mode, transfer_mode, channel, call_local) \
     Dictionary method_name ## _rpc_cfg; \
     method_name ## _rpc_cfg["rpc_mode"] = rpc_mode; \
