@@ -14,7 +14,8 @@
 void Turret::_initv() {
     attack_cooldown_counter = memnew(Timer);
     attack_cooldown_counter->set_autostart(true);
-    attack_cooldown_counter->connect("timeout", callable_mp(this, &Turret::_attack_off_cooldown));
+    attack_cooldown_counter->set_one_shot(true);
+    attack_cooldown_counter->connect("timeout", callable_mp(this, &Turret::_on_attack_cooldown_expire));
     add_child(attack_cooldown_counter);
 }
 #endif
@@ -24,17 +25,6 @@ void Turret::_initv() {
 
 }
 #endif
-
-
-
-void Turret::_attack_off_cooldown() {
-    if(!has_target()) return;
-    DamageableComponent *target_damageable = current_target->get_damageable_component();
-    // Check if turret has target before atacking and if turret is alive if it has damageable component
-    if(((target_damageable && !target_damageable->is_dead()) || !target_damageable)) {
-        attack_current_target();
-    }
-}
 
 void Turret::attack_current_target() {
     ERR_FAIL_NULL(current_target);
@@ -61,7 +51,7 @@ void Turret::attack_current_target() {
     float time_between_attacks = 1/attack_speed;
 
     // Attack speed scaling
-    attack_cooldown_counter->set_wait_time(time_between_attacks);
+    attack_cooldown_counter->start(time_between_attacks);
 }
 
 void Turret::_readyv() {
@@ -69,6 +59,9 @@ void Turret::_readyv() {
     if(damageable) {
         damageable->connect("death", callable_mp(this, &Turret::_on_death));
     }
+
+    _setup_recharge_timer();
+    _setup_attack_window_timer();
 }
 
 Entity *Turret::find_new_target() {
@@ -127,6 +120,12 @@ int Turret::get_aggro_priority_for_entity(Entity *entity) {
 }
 
 void Turret::change_target(Entity *new_target) {
+    if(current_target) {
+        current_target->get_damageable_component()->disconnect("death", callable_mp(this, &Turret::_on_target_death));
+    }
+    if(new_target) {
+        new_target->get_damageable_component()->connect("death", callable_mp(this, &Turret::_on_target_death));
+    }
     current_target = new_target;
 }
 
@@ -142,12 +141,17 @@ void Turret::_on_death() {
 }
 
 void Turret::_on_target_left_aggro_area() {
-    current_target = find_new_target();
+    change_target(find_new_target());
 }
 
+// Valid target is considered a target that is enemy of turret, has damageable component and is not already dead
 bool Turret::is_entity_valid_target(Entity *potential_target) {
     bool is_enemy_of = get_gamelevel()->get_gamemode()->is_entity_enemy_of(this, potential_target);
-    if(get_gamelevel()->get_gamemode()->is_entity_enemy_of(this, potential_target) && potential_target->get_damageable_component()) {
+    DamageableComponent *target_damageable = potential_target->get_damageable_component();
+
+    if(get_gamelevel()->get_gamemode()->is_entity_enemy_of(this, potential_target) 
+        && potential_target->get_damageable_component()
+        && ((target_damageable && !target_damageable->is_dead()))) {
         return true;
     } else {
         return false;
@@ -174,14 +178,22 @@ void Turret::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_turret_attack_origin_node"), &Turret::get_turret_attack_origin_node);
     ClassDB::bind_method(D_METHOD("set_turret_attack_origin_node", "turret_attack_origin_node"), &Turret::set_turret_attack_origin_node);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "turret_attack_origin_node", PROPERTY_HINT_NODE_TYPE, Node3D::get_class_static()), "set_turret_attack_origin_node", "get_turret_attack_origin_node");
+
+    ADD_SIGNAL(MethodInfo("recharge_started"));
+    ADD_SIGNAL(MethodInfo("recharge_finished"));
 }
 
 void Turret::_on_entity_enter_aggro_area(Entity *entity_that_entered) {
     ERR_FAIL_NULL(get_gamelevel());
     ERR_FAIL_NULL(get_gamelevel()->get_gamemode());
 
+    // Pick a target if don't have one already, then attack if turret was ready to attack
     if(!has_target() && is_entity_valid_target(entity_that_entered)) {
-        current_target = entity_that_entered;
+        change_target(entity_that_entered);
+        if(current_target && ready_to_attack && can_attack()) {
+            attack_current_target();
+            ready_to_attack = false;
+        }
     }
 }
 
@@ -223,4 +235,61 @@ void Turret::set_turret_attack_origin_node(Node3D *new_origin_node) {
 
 Node3D *Turret::get_turret_attack_origin_node() {
     return turret_attack_origin_node;
+}
+
+void Turret::_setup_recharge_timer() {
+    recharge_timer = memnew(Timer);
+    recharge_timer->set_one_shot(true);
+    recharge_timer->set_wait_time(recharge_time);
+    recharge_timer->connect("timeout", callable_mp(this, &Turret::_on_recharge_finished));
+    recharge_timer->set_autostart(false);
+    add_child(recharge_timer);
+}
+
+void Turret::_setup_attack_window_timer() {
+    attack_window_timer = memnew(Timer);
+    attack_window_timer->set_wait_time(attack_time_window);
+    attack_window_timer->set_one_shot(true);
+    attack_window_timer->connect("timeout", callable_mp(this, &Turret::_on_attack_window_expire));
+    attack_window_timer->set_autostart(true);
+    add_child(attack_window_timer);
+}
+
+void Turret::_on_attack_window_expire() {
+    recharging = true;
+    recharge_timer->start();
+    emit_signal("recharge_started");
+}
+
+void Turret::_on_recharge_finished() {
+    recharging = false;
+    attack_window_timer->start();
+    emit_signal("recharge_finished");
+}
+
+void Turret::_on_attack_cooldown_expire() {
+    // Attack target if exists or wait until new target is chosen if not
+    if(has_target() && can_attack()) {
+        attack_current_target();
+    } else {
+        ready_to_attack = true;
+    }
+}
+
+void Turret::_on_target_death() {
+    change_target(find_new_target());
+}
+
+bool Turret::can_attack() {
+    return !recharging;
+}
+
+float Turret::get_max_recharge_time() {
+    ERR_FAIL_NULL_V(recharge_timer, 0);
+    return recharge_timer->get_wait_time();
+}
+
+float Turret::get_current_recharge_time() {
+    ERR_FAIL_NULL_V(recharge_timer, 0);
+    return recharge_timer->get_wait_time() - recharge_timer->get_time_left();
 }
