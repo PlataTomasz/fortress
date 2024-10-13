@@ -8,6 +8,9 @@
 #include <shared/data_holders/damage_object.hpp>
 #include <shared/entities/entity.h>
 
+#include <shared/networking/rpc/rpc_config_builder.h>
+#include <shared/networking/rpc/rpc_registerer.h>
+
 void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
 {
     if(!is_damageable_by(damage_object)) return;
@@ -103,8 +106,23 @@ void DamageableComponent::_notification(int p_notification) {
     {
     case NOTIFICATION_READY:
         {
-            ADD_RPC_CONFIG(server_rpc_death, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
-            ADD_RPC_CONFIG(server_rpc_revive, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+            RPCRegisterer(this, "server_rpc_death", 
+                RPCConfigBuilder()
+                    .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+                    .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+                    .channel(0)
+                    .call_local(false)
+                    .build()
+                );
+            
+            RPCRegisterer(this, "server_rpc_revive", 
+                RPCConfigBuilder()
+                    .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+                    .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+                    .channel(0)
+                    .call_local(false)
+                    .build()
+                );
         }
         break;
     
