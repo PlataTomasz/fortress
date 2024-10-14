@@ -13,7 +13,7 @@ void TurretRechargeIndicator::_on_recharge_finished() {
 void TurretRechargeIndicator::_notification(int p_notification) {
     DISABLE_IN_EDITOR();
 	switch (p_notification) {
-		case NOTIFICATION_DRAW: {
+		case NOTIFICATION_PROCESS: {
 			_draw();
 		} break;
 
@@ -29,9 +29,6 @@ void TurretRechargeIndicator::_notification(int p_notification) {
 void TurretRechargeIndicator::_draw() {
     // Get maximum recharge time as maximum displayed on bar
     // Get current recharge time as current value displayed on bar
-    float a = turret->get_current_recharge_time();
-    float b = turret->get_max_recharge_time();
-
     if(progress_bar) {
         float progress_bar_percentage = (turret->get_current_recharge_time() / turret->get_max_recharge_time())*100;
         progress_bar->set_value(progress_bar_percentage);
@@ -41,6 +38,8 @@ void TurretRechargeIndicator::_draw() {
 void TurretRechargeIndicator::_ready() {
     ERR_FAIL_NULL(turret);
     ERR_FAIL_NULL(progress_bar);
+
+    set_process(true);
 
     turret->connect("recharge_started", callable_mp(this, &TurretRechargeIndicator::_on_recharge_started));
     turret->connect("recharge_finished", callable_mp(this, &TurretRechargeIndicator::_on_recharge_finished));

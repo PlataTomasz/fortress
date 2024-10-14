@@ -9,6 +9,8 @@
 #include <scene/resources/packed_scene.h>
 #include <shared/gamemodes/gamemode.h>
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
+#include <shared/networking/rpc/rpc_config_builder.h>
+#include <shared/networking/rpc/rpc_registerer.h>
 
 #ifdef SERVER
 void Turret::_initv() {
@@ -62,6 +64,24 @@ void Turret::_readyv() {
 
     _setup_recharge_timer();
     _setup_attack_window_timer();
+
+    RPCRegisterer(this, "server_rpc_recharge_started", 
+        RPCConfigBuilder()
+            .call_local(false)
+            .channel(0)
+            .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+            .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+            .build()
+    );
+
+    RPCRegisterer(this, "server_rpc_recharge_finished", 
+        RPCConfigBuilder()
+            .call_local(false)
+            .channel(0)
+            .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+            .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+            .build()
+    );
 }
 
 Entity *Turret::find_new_target() {
@@ -163,6 +183,9 @@ bool Turret::has_target() {
 }
 
 void Turret::_bind_methods() {
+    ClassDB::bind_method("server_rpc_recharge_started", &Turret::server_rpc_recharge_started);
+    ClassDB::bind_method("server_rpc_recharge_finished", &Turret::server_rpc_recharge_finished);
+
     ClassDB::bind_method(D_METHOD("get_aggro_area"), &Turret::get_aggro_area);
     ClassDB::bind_method(D_METHOD("set_aggro_area", "aggro_area"), &Turret::set_aggro_area);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "aggro_area", PROPERTY_HINT_NODE_TYPE, AdvancedArea3D::get_class_static()), "set_aggro_area", "get_aggro_area");
@@ -253,18 +276,6 @@ void Turret::_setup_attack_window_timer() {
     attack_window_timer->connect("timeout", callable_mp(this, &Turret::_on_attack_window_expire));
     attack_window_timer->set_autostart(true);
     add_child(attack_window_timer);
-}
-
-void Turret::_on_attack_window_expire() {
-    recharging = true;
-    recharge_timer->start();
-    emit_signal("recharge_started");
-}
-
-void Turret::_on_recharge_finished() {
-    recharging = false;
-    attack_window_timer->start();
-    emit_signal("recharge_finished");
 }
 
 void Turret::_on_attack_cooldown_expire() {

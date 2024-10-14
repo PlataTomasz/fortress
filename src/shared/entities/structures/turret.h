@@ -42,6 +42,9 @@ private:
     void _on_recharge_finished();
     void _on_attack_cooldown_expire();
     void _on_target_death();
+
+    void server_rpc_recharge_started();
+    void server_rpc_recharge_finished();
 protected:
     void _initv() override;
     void _readyv() override;
