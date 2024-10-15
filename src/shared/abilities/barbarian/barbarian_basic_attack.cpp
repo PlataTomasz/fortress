@@ -5,6 +5,8 @@
 #include <shared/entities/components/abilities/ability_caster_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
 #include <scene/main/timer.h>
+#include <shared/core/game_level.h>
+#include <shared/gamemodes/gamemode.h>
 
 void BarbarianBasicAttack::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_hitbox"), &BarbarianBasicAttack::get_hitbox);
@@ -42,6 +44,9 @@ void BarbarianBasicAttack::_notification(int p_notification) {
 void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
     _prepare_attack(use_context);
 
+    ERR_FAIL_NULL(use_context->get_user());
+    ERR_FAIL_NULL(use_context->get_user()->get_gamelevel());
+
     List<HitboxComponent *> hitboxes = hitbox->get_overlapping_hitboxes();
 
     for(HitboxComponent *detected_hitbox : hitboxes) {
@@ -49,6 +54,7 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
         ERR_CONTINUE(!ent);
 
         if(ent == use_context->get_user()) continue; // Prevent hitting yourself
+        if(!use_context->get_user()->get_gamelevel()->get_gamemode()->is_entity_enemy_of(use_context->get_user(), ent)) return; // Prevent hitting allies
 
         print_line(use_context->get_user(), "attacked", ent);
 

@@ -4,7 +4,6 @@
 #include <scene/main/timer.h>
 
 void OrcResolve::_tick() {
-    print_line("Heal tick!");
     float heal_value = 1;
 
     Entity *owner = Object::cast_to<Entity>(get_node_or_null(NodePath("../..")));

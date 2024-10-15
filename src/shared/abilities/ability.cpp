@@ -3,6 +3,8 @@
 
 #include <shared/entities/components/abilities/ability_caster_component.h>
 #include <shared/entities/components/movement/movement_component.h>
+#include <shared/entities/components/audio/audio_component.h>
+#include <shared/entities/components/visual/visual_component_3d.h>
 
 #ifdef SERVER
 void Ability::use(const Ref<ActionContext>& action_context)
@@ -260,4 +262,25 @@ void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
 void Ability::_instant_use(const Ref<ActionContext>& action_context) {
     _use(action_context);
     emit_signal("use_finished", false);
+}
+
+void Ability::play_sound(const Ref<ActionContext> &action_context, const Ref<AudioStream> &sound_resource) {
+    ERR_FAIL_NULL(action_context->get_user());
+    ERR_FAIL_NULL(action_context->get_user()->get_audio_component());
+
+    action_context->get_user()->get_audio_component()->play_audio_stream(sound_resource);
+}
+
+void Ability::play_animation(const Ref<ActionContext> &action_context, const String &animation_name) {
+    ERR_FAIL_NULL(action_context->get_user());
+    ERR_FAIL_NULL_MSG(action_context->get_user()->get_visual_component(), "Failed to play animation! Missing VisualComponent3D!");
+
+    action_context->get_user()->get_visual_component()->play_animation_override("WarhornUse");
+}
+
+void Ability::play_vfx(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene) {
+    ERR_FAIL_NULL(vfx_scene);
+    Node3D *vfx_instance = Object::cast_to<Node3D>(vfx_scene->instantiate());
+    ERR_FAIL_NULL(vfx_instance);
+    add_child(vfx_instance);
 }

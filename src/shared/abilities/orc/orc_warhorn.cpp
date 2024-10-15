@@ -7,26 +7,40 @@
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/registries/status_effect_registry.h>
 
-#ifdef SERVER
-void OrcWarhornAbility::_use(const Ref<ActionContext>& action_context) {
-	Vector3 use_position;
+void OrcWarhornAbility::set_buff_hitarea(Area3D *new_buff_hitarea) {
+	buff_hitarea = new_buff_hitarea;
+}
 
-	Area3D *buff_hitarea = nullptr;
-	//Area3DFactory::create_radius_area(radius);
-	TypedArray<Area3D> areas = buff_hitarea->get_overlapping_areas();
-
-	for (int i = 0; i < areas.size(); i++) {
-		Area3D *colliding_area = static_cast<Area3D *>(areas[i].get_validated_object());
-		StatusEffectVictimComponent *status_effect_component = ComponentManager::get_component<StatusEffectVictimComponent>(colliding_area->get_parent());
-
-		if (status_effect_component) {
-			StatusEffect *status_effect = Registry<StatusEffect>::get_singleton()->create_instance("orc_warhorn_buff");
-			status_effect_component->apply_status_effect(status_effect);
-		}
-	}
-};
+Area3D *OrcWarhornAbility::get_buff_hitarea() {
+	return buff_hitarea;
+}
 
 void OrcWarhornAbility::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("_use", "action_context"), &OrcWarhornAbility::_use);
+	::ClassDB::bind_method(D_METHOD("get_buff_hitarea"), &OrcWarhornAbility::get_buff_hitarea);
+    ::ClassDB::bind_method(D_METHOD("set_buff_hitarea"), &OrcWarhornAbility::set_buff_hitarea);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "buff_hitarea", PROPERTY_HINT_NODE_TYPE, Area3D::get_class_static()), "set_buff_hitarea", "get_buff_hitarea");
+
+	::ClassDB::bind_method(D_METHOD("get_warhorn_audio"), &OrcWarhornAbility::get_warhorn_audio);
+    ::ClassDB::bind_method(D_METHOD("set_warhorn_audio"), &OrcWarhornAbility::set_warhorn_audio);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "warhorn_audio", PROPERTY_HINT_RESOURCE_TYPE, AudioStream::get_class_static()), "set_warhorn_audio", "get_warhorn_audio");
+
+	::ClassDB::bind_method(D_METHOD("get_warhorn_vfx"), &OrcWarhornAbility::get_warhorn_vfx);
+    ::ClassDB::bind_method(D_METHOD("set_warhorn_vfx"), &OrcWarhornAbility::set_warhorn_vfx);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "warhorn_vfx", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_warhorn_vfx", "get_warhorn_vfx");
 }
-#endif
+
+void OrcWarhornAbility::set_warhorn_audio(const Ref<AudioStream> &audio_stream) {
+	warhorn_audio = audio_stream;
+}
+
+Ref<AudioStream> OrcWarhornAbility::get_warhorn_audio() {
+	return warhorn_audio;
+}
+
+void OrcWarhornAbility::set_warhorn_vfx(const Ref<PackedScene> &new_warhorn_vfx) {
+	warhorn_vfx = new_warhorn_vfx;
+}
+
+Ref<PackedScene> OrcWarhornAbility::get_warhorn_vfx() {
+	return warhorn_vfx;
+}

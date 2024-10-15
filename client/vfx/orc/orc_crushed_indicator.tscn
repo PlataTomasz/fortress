@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxu3k5nox6u5b"]
+
+[ext_resource type="Texture2D" uid="uid://c2n0gvrty4yv0" path="res://textures/vfx/cracked-shield.png" id="1_5ftb4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xt50i"]
+transparency = 1
+no_depth_test = true
+albedo_texture = ExtResource("1_5ftb4")
+rim_enabled = true
+rim = 0.49
+rim_tint = 0.64
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_nt7u0"]
+material = SubResource("StandardMaterial3D_xt50i")
+
+[node name="VFX" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("QuadMesh_nt7u0")
