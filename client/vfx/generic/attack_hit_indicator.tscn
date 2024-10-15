@@ -1,0 +1,87 @@
+[gd_scene load_steps=7 format=3 uid="uid://co8on0eucrvgw"]
+
+[ext_resource type="Texture2D" uid="uid://dx0brcl2fh7nd" path="res://textures/vfx/flare_01.png" id="1_3qbfn"]
+
+[sub_resource type="Animation" id="Animation_kegny"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.4, 0.4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_qlcx4"]
+resource_name = "play"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.4, 0.4), Vector2(1.6, 0.4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u3w43"]
+_data = {
+"RESET": SubResource("Animation_kegny"),
+"play": SubResource("Animation_qlcx4")
+}
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cxug"]
+transparency = 1
+albedo_color = Color(0.801263, 4.23551e-06, 2.88785e-07, 1)
+albedo_texture = ExtResource("1_3qbfn")
+emission_enabled = true
+emission = Color(0.627451, 0, 0.0784314, 1)
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_rg85l"]
+material = SubResource("StandardMaterial3D_8cxug")
+size = Vector2(0.4, 0.4)
+
+[node name="AttackHitIndicator" type="Node3D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u3w43")
+}
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.304673, 0)
+mesh = SubResource("QuadMesh_rg85l")
