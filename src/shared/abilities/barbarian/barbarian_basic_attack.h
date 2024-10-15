@@ -20,6 +20,10 @@ private:
     Ref<PackedScene> hit_visual_effect;
     Ref<PackedScene> attack_area_vfx;
 
+    Node3D *slash_vfx_origin = nullptr;
+
+    float range = 2;
+
     void _prepare_attack(const Ref<ActionContext>& use_context);
     void _entity_hit_with_attack(Entity *entity, const Ref<ActionContext>& use_context);
 protected:
@@ -37,6 +41,12 @@ public:
 
     void set_attack_area_vfx(const Ref<PackedScene> &new_attack_area_vfx);
     Ref<PackedScene> get_attack_area_vfx();
+
+    void set_range(float new_range);
+    float get_range();
+
+    void set_slash_vfx_origin(Node3D *new_slash_vfx_origin);
+    Node3D *get_slash_vfx_origin();
 };
 
 #endif // BARBARIAN_BASIC_ATTACK_INCLUDED

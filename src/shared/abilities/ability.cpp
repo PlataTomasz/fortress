@@ -182,7 +182,7 @@ void Ability::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_locks_movement", "locks_movement"), &Ability::set_locks_movement);
     ClassDB::bind_method(D_METHOD("get_locks_movement"), &Ability::is_locks_movement);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "locks_movement"), "set_locks_movement", "is_locks_movement");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "locks_movement"), "set_locks_movement", "get_locks_movement");
 
     ClassDB::bind_method(D_METHOD("set_use_time", "new_icon"), &Ability::set_use_time);
     ClassDB::bind_method(D_METHOD("get_use_time"), &Ability::get_use_time);
@@ -228,12 +228,24 @@ bool Ability::is_valid_target(const Ref<ActionContext>& action_context) {
 */
 
 void Ability::_deferred_use_handler(const Ref<ActionContext>& action_context) {
+    ERR_FAIL_NULL(action_context->get_user());
+    MovementComponent *movement_component = action_context->get_user()->get_movement_component();
+    if(movement_component) {
+        movement_component->unpause_movement(this);
+    }
+
     // TODO: Check if ability can still be used
     _use(action_context);
     emit_signal("use_finished", false);
 }
 
 void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
+    ERR_FAIL_NULL(action_context->get_user());
+    MovementComponent *movement_component = action_context->get_user()->get_movement_component();
+    if(movement_component && locks_movement) {
+        movement_component->pause_movement(this);
+    }
+
     Timer *timer = memnew(Timer);
     timer->set_autostart(true);
     timer->set_wait_time(_use_time);

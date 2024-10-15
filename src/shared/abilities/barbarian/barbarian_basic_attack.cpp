@@ -18,6 +18,10 @@ void BarbarianBasicAttack::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_attack_area_vfx"), &BarbarianBasicAttack::get_attack_area_vfx);
     ::ClassDB::bind_method(D_METHOD("set_attack_area_vfx"), &BarbarianBasicAttack::set_attack_area_vfx);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "attack_area_vfx", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_attack_area_vfx", "get_attack_area_vfx");
+
+    ::ClassDB::bind_method(D_METHOD("get_slash_vfx_origin"), &BarbarianBasicAttack::get_slash_vfx_origin);
+    ::ClassDB::bind_method(D_METHOD("set_slash_vfx_origin"), &BarbarianBasicAttack::set_slash_vfx_origin);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "slash_vfx_origin", PROPERTY_HINT_NODE_TYPE, Node3D::get_class_static()), "set_slash_vfx_origin", "get_slash_vfx_origin");
 }
 
 void BarbarianBasicAttack::_reparent_hitbox() {
@@ -99,23 +103,28 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& action_context) {
     else {
         print_error("Failed to play animation! Missing VisualComponent3D!");
     }
+
+    // Spawn slash VFX
+    if(attack_area_vfx.is_null()) return;
+    Node3D *attack_area_vfx_instance = Object::cast_to<Node3D>(attack_area_vfx->instantiate());
+    if(attack_area_vfx_instance) {
+        // Make it disappear when attack finishes
+        Timer *timer = memnew(Timer);
+        timer->set_wait_time(0.5);
+        timer->set_autostart(true);
+        timer->connect("timeout", callable_mp((Node *)attack_area_vfx_instance, &Node::queue_free));
+
+        attack_area_vfx_instance->add_child(timer);
+
+        add_child(attack_area_vfx_instance);
+
+        // Make VFX cover entire attack area - scale if by range parameter?
+        attack_area_vfx_instance->set_global_position(slash_vfx_origin ? slash_vfx_origin->get_global_position() : Vector3());
+    }
 }
 
-
 void BarbarianBasicAttack::_prepare_attack(const Ref<ActionContext>& action_context) {
-    // Append attack VFX to attacker
-    Node3D *visual_effect_instance = Object::cast_to<Node3D>(attack_area_vfx->instantiate());
-    ERR_FAIL_NULL(visual_effect_instance);
-
-    // Make it disappear when attack finishes
-    Timer *timer = memnew(Timer);
-    timer->set_wait_time(0.5);
-    timer->set_autostart(true);
-    timer->connect("timeout", callable_mp((Node *)visual_effect_instance, &Node::queue_free));
-
-    visual_effect_instance->add_child(timer);
-
-    add_child(visual_effect_instance);
+    
 }
 #endif
 
@@ -133,3 +142,19 @@ void BarbarianBasicAttack::_prepare_attack(const Ref<ActionContext>& action_cont
 
 }
 #endif
+
+void BarbarianBasicAttack::set_range(float new_range) {
+    range = new_range;
+}
+
+float BarbarianBasicAttack::get_range() {
+    return range;
+}
+
+void BarbarianBasicAttack::set_slash_vfx_origin(Node3D *new_slash_vfx_origin) {
+    slash_vfx_origin = new_slash_vfx_origin;
+}
+
+Node3D *BarbarianBasicAttack::get_slash_vfx_origin() {
+    return slash_vfx_origin;
+}
