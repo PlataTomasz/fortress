@@ -1,9 +1,13 @@
-[gd_scene load_steps=24 format=4 uid="uid://c0s5t5qlu5qjk"]
+[gd_scene load_steps=28 format=4 uid="uid://c0s5t5qlu5qjk"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_gxuoa"]
 [ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="2_jmr11"]
 [ext_resource type="ArrayMesh" uid="uid://cge81pd7xjrew" path="res://models/level/dungeon/obj/character-orc.obj" id="3_aynjf"]
+[ext_resource type="PackedScene" uid="uid://68ew2rctpxd7" path="res://abilities/OrcWarhornAbility.tscn" id="3_ir8n4"]
 [ext_resource type="Texture2D" uid="uid://cwx675vsehgr2" path="res://models/colormap.png" id="3_rmehy"]
+[ext_resource type="PackedScene" uid="uid://q8aaqb40m1sm" path="res://abilities/barbarian/basic_attack_01.tscn" id="4_bknsa"]
+[ext_resource type="PackedScene" uid="uid://do3yq7wbnyrav" path="res://abilities/orc/orc_crushing_blows_ability.tscn" id="5_2lqjj"]
+[ext_resource type="PackedScene" uid="uid://baebr42ggmydh" path="res://models/orc_warhorn.gltf" id="6_0o4ml"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_pv04g"]
 resource_local_to_scene = true
@@ -27,7 +31,7 @@ resource_local_to_scene = true
 base = 300.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_nldr1"]
-viewport_path = NodePath("EntityInfoRenderer/EntityHealthBar/SubViewport")
+viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_30ras"]
 resource_name = "colormap"
@@ -847,21 +851,35 @@ magic_power = SubResource("FloatAttribute_fvtc4")
 cooldown_reduction = SubResource("FloatAttribute_gs2ap")
 movement_speed = SubResource("FloatAttribute_g2ea8")
 
-[node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("passive_ability", "second_ability", "ultimate_ability")]
+[node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("basic_attack", "passive_ability", "second_ability", "third_ability", "ultimate_ability")]
+basic_attack = NodePath("BasicAttack01")
 passive_ability = NodePath("OrcResolve")
 second_ability = NodePath("OrcLeapSlam")
-ultimate_ability = NodePath("OrcWarhornAbility")
+third_ability = NodePath("OrcCrushingBlows")
+ultimate_ability = NodePath("OrcWarhornAbility2")
 
 [node name="OrcResolve" type="OrcResolve" parent="AbilityCasterComponent" index="0"]
+displayed_name = "Orcish resolve"
+displayed_description = "Orc regenerates life over time."
+where_to_look_at = -1
 
 [node name="OrcLeapSlam" type="OrcLeapSlam" parent="AbilityCasterComponent" index="1"]
-displayed_name = "354643643"
+displayed_name = "Leap slam"
+displayed_description = "Orc leaps upwards, then falls, dealing damage in area where he stood."
+where_to_look_at = 108
 
-[node name="OrcWarhornAbility" type="OrcWarhornAbility" parent="AbilityCasterComponent" index="2"]
+[node name="OrcWarhornAbility2" parent="AbilityCasterComponent" index="2" instance=ExtResource("3_ir8n4")]
 
 [node name="ExampleAbility01" type="ExampleAbility01" parent="AbilityCasterComponent" index="3"]
 displayed_name = "example_01"
 displayed_description = "example_01"
+where_to_look_at = 101
+
+[node name="BasicAttack01" parent="AbilityCasterComponent" index="4" node_paths=PackedStringArray("hitbox") instance=ExtResource("4_bknsa")]
+hitbox = NodePath("../../HitboxComponent")
+
+[node name="OrcCrushingBlows" parent="AbilityCasterComponent" index="5" instance=ExtResource("5_2lqjj")]
+where_to_look_at = 7274608
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_nldr1")
@@ -879,29 +897,29 @@ bones/0/name = "Spine"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, 0, 1.28962, -0.0825693)
 bones/0/enabled = true
-bones/0/position = Vector3(0, 1.28962, -0.0825693)
-bones/0/rotation = Quaternion(0, 1.19209e-07, 0, 1)
+bones/0/position = Vector3(0, 1.35878, -0.0825693)
+bones/0/rotation = Quaternion(-0.266541, 1.14897e-07, -3.17742e-08, 0.963824)
 bones/0/scale = Vector3(1, 1, 1)
 bones/1/name = "BuffBone_L"
 bones/1/parent = 0
 bones/1/rest = Transform3D(-0.316228, 0.948683, -2.63751e-07, -0.948683, -0.316228, -7.59959e-08, -1.55501e-07, 2.26184e-07, 1, 1.77636e-15, 0.313688, -7.45058e-09)
 bones/1/enabled = true
 bones/1/position = Vector3(1.77636e-15, 0.313688, -7.45058e-09)
-bones/1/rotation = Quaternion(1.29201e-07, -4.62833e-08, -0.811242, 0.58471)
+bones/1/rotation = Quaternion(0.267002, -0.192444, -0.766044, 0.552133)
 bones/1/scale = Vector3(1, 1, 1)
 bones/2/name = "Arm_L"
 bones/2/parent = 1
 bones/2/rest = Transform3D(0.952075, -0.304421, 0.0296723, 0.30058, 0.913262, -0.274964, 0.056606, 0.270705, 0.960997, -8.28681e-09, 0.727462, -2.63541e-09)
 bones/2/enabled = true
 bones/2/position = Vector3(-8.28681e-09, 0.727462, -2.63541e-09)
-bones/2/rotation = Quaternion(-0.133223, 0.257539, -0.205484, 0.93472)
+bones/2/rotation = Quaternion(0.338402, -0.617101, -0.167317, 0.690417)
 bones/2/scale = Vector3(1, 1, 1)
 bones/3/name = "Forearm_L"
 bones/3/parent = 2
 bones/3/rest = Transform3D(0.999948, 0.0101198, -0.00087513, -0.0101197, 0.98508, -0.171803, -0.000876536, 0.171803, 0.985131, -9.66247e-09, 0.394451, -1.86265e-08)
 bones/3/enabled = true
 bones/3/position = Vector3(-9.66247e-09, 0.394451, -1.86265e-08)
-bones/3/rotation = Quaternion(0.0862235, 3.23074e-07, -0.00507887, 0.996263)
+bones/3/rotation = Quaternion(0.414373, 0.113092, -0.363323, 0.826741)
 bones/3/scale = Vector3(1, 1, 1)
 bones/4/name = "Hand_L"
 bones/4/parent = 3
@@ -915,35 +933,35 @@ bones/5/parent = 0
 bones/5/rest = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 1.77636e-15, 0.313688, -7.45058e-09)
 bones/5/enabled = true
 bones/5/position = Vector3(1.77636e-15, 0.313688, -7.45058e-09)
-bones/5/rotation = Quaternion(5.19984e-09, -1.19096e-07, -0.0436194, 0.999048)
+bones/5/rotation = Quaternion(-0.217429, -1.16357e-07, -2.59196e-08, 0.976076)
 bones/5/scale = Vector3(1, 1, 1)
 bones/6/name = "BuffBone_R"
 bones/6/parent = 0
 bones/6/rest = Transform3D(-0.316228, -0.948683, -2.13087e-07, 0.948683, -0.316228, -7.59959e-08, 4.71218e-09, -2.26184e-07, 1, 1.77636e-15, 0.313688, -7.45058e-09)
 bones/6/enabled = true
 bones/6/position = Vector3(1.77636e-15, 0.313688, -7.45058e-09)
-bones/6/rotation = Quaternion(-6.42146e-08, -9.31225e-08, 0.811242, 0.58471)
+bones/6/rotation = Quaternion(-6.03486e-08, -1.00501e-07, 0.811242, 0.58471)
 bones/6/scale = Vector3(1, 1, 1)
 bones/7/name = "Arm_R"
 bones/7/parent = 6
 bones/7/rest = Transform3D(0.952075, 0.304421, -0.0296723, -0.30058, 0.913262, -0.274964, -0.056606, 0.270705, 0.960997, 8.28681e-09, 0.727462, -2.63545e-09)
 bones/7/enabled = true
 bones/7/position = Vector3(8.28681e-09, 0.727462, -2.63545e-09)
-bones/7/rotation = Quaternion(0.192919, 0.295945, 0.190382, 0.915944)
+bones/7/rotation = Quaternion(0.139479, 0.00688452, -0.154644, 0.978051)
 bones/7/scale = Vector3(1, 1, 1)
 bones/8/name = "Forearm_R"
 bones/8/parent = 7
 bones/8/rest = Transform3D(0.999948, -0.0101198, 0.00087513, 0.0101197, 0.98508, -0.171803, 0.000876536, 0.171803, 0.985131, 9.66247e-09, 0.394451, -1.86265e-08)
 bones/8/enabled = true
 bones/8/position = Vector3(9.66247e-09, 0.394451, -1.86265e-08)
-bones/8/rotation = Quaternion(0.0862235, -3.58549e-07, 0.00507884, 0.996263)
+bones/8/rotation = Quaternion(0.0862235, -3.26154e-07, 0.00507885, 0.996263)
 bones/8/scale = Vector3(1, 1, 1)
 bones/9/name = "Hand_R"
 bones/9/parent = 8
 bones/9/rest = Transform3D(0.999997, -0.00260721, 5.81e-05, 0.00260723, 0.999016, -0.0442631, 5.73605e-05, 0.0442631, 0.99902, -1.02445e-08, 0.383559, 0)
 bones/9/enabled = true
 bones/9/position = Vector3(-1.02445e-08, 0.383559, 0)
-bones/9/rotation = Quaternion(0.022137, 1.52993e-07, 0.00130395, 0.999754)
+bones/9/rotation = Quaternion(0.022137, 1.78649e-07, 0.00130393, 0.999754)
 bones/9/scale = Vector3(1, 1, 1)
 bones/10/name = "Pelvis"
 bones/10/parent = -1
@@ -957,28 +975,28 @@ bones/11/parent = 10
 bones/11/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36807, 0.414078, 7.45058e-09)
 bones/11/enabled = true
 bones/11/position = Vector3(0.36807, 0.414078, 7.45058e-09)
-bones/11/rotation = Quaternion(-0.382683, 0, 0, 0.92388)
+bones/11/rotation = Quaternion(0, 0, 0, 1)
 bones/11/scale = Vector3(1, 1, 1)
 bones/12/name = "Foot_L"
 bones/12/parent = 11
 bones/12/rest = Transform3D(1, 0, 4.76837e-07, -4.66495e-07, 0.20714, 0.978311, -9.87719e-08, -0.978311, 0.20714, 2.98023e-08, 0.641948, 7.45058e-09)
 bones/12/enabled = true
 bones/12/position = Vector3(2.98023e-08, 0.641948, 7.45058e-09)
-bones/12/rotation = Quaternion(-0.284394, 2.28573e-07, -6.78045e-08, 0.958708)
+bones/12/rotation = Quaternion(-0.629627, 1.85227e-07, -1.50115e-07, 0.776898)
 bones/12/scale = Vector3(1, 1, 1)
 bones/13/name = "Thigh_R"
 bones/13/parent = 10
 bones/13/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36807, 0.414078, 7.45058e-09)
 bones/13/enabled = true
 bones/13/position = Vector3(-0.36807, 0.414078, 7.45058e-09)
-bones/13/rotation = Quaternion(0.300706, 0, 0, 0.953717)
+bones/13/rotation = Quaternion(0, 0, 0, 1)
 bones/13/scale = Vector3(1, 1, 1)
 bones/14/name = "Foot_R"
 bones/14/parent = 13
 bones/14/rest = Transform3D(1, 0, -4.76837e-07, 4.66495e-07, 0.20714, 0.978311, 9.87719e-08, -0.978311, 0.20714, -2.98023e-08, 0.641948, 7.45058e-09)
 bones/14/enabled = true
 bones/14/position = Vector3(-2.98023e-08, 0.641948, 7.45058e-09)
-bones/14/rotation = Quaternion(-0.782854, -1.48345e-07, 1.86647e-07, 0.622206)
+bones/14/rotation = Quaternion(-0.629627, -1.85227e-07, 1.50115e-07, 0.776898)
 bones/14/scale = Vector3(1, 1, 1)
 bones/15/name = "neutral_bone"
 bones/15/parent = -1
@@ -993,7 +1011,7 @@ mesh = SubResource("ArrayMesh_cc5tj")
 skin = SubResource("Skin_2jblr")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="orc_rigged/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.686319, -0.701991, 0.190199, 0.561963, -0.345831, 0.751398, -0.461698, 0.622583, 0.631843, -1.25301, 1.03436, 0.328655)
+transform = Transform3D(-0.0277492, -0.881653, 0.471081, 0.829791, 0.242459, 0.502654, -0.557384, 0.404847, 0.72486, -1.41571, 1.5706, 0.108329)
 bone_name = "Hand_R"
 bone_idx = 9
 
@@ -1001,8 +1019,24 @@ bone_idx = 9
 transform = Transform3D(1, 0, 5.96046e-08, 2.98023e-08, 1, 0, 5.96046e-08, 2.98023e-08, 1, 0.00291622, 0.155908, 0.579293)
 mesh = SubResource("BoxMesh_t3dss")
 
+[node name="BoneAttachment3D2" type="BoneAttachment3D" parent="orc_rigged/Armature/Skeleton3D" index="2"]
+transform = Transform3D(-0.799068, -0.599755, 0.0422383, -0.588369, 0.794487, 0.150373, -0.123745, 0.0953064, -0.987727, 0.373503, 2.13666, 0.639529)
+bone_name = "Hand_L"
+bone_idx = 4
+
+[node name="orc_warhorn" parent="orc_rigged/Armature/Skeleton3D/BoneAttachment3D2" index="0" instance=ExtResource("6_0o4ml")]
+transform = Transform3D(-0.321603, -0.158675, -0.254939, -0.153341, 0.407957, -0.0604757, 0.258182, 0.0446442, -0.353481, 0, 0, 0)
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="orc_rigged" index="1"]
 libraries = {
 "": SubResource("AnimationLibrary_rj655")
 }
 autoplay = "Walk002"
+
+[node name="VisualComponent3D" parent="." index="10" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("../orc_rigged/AnimationPlayer")
+idle_animation_name = &"Idle"
+walk_animation_name = &"Walk"
+death_animation_name = &"TPose"
+
+[editable path="EntityInfoRenderer"]

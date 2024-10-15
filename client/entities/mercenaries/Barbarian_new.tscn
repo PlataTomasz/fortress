@@ -2839,6 +2839,7 @@ autoplay = "Idle"
 [node name="HitboxComponent2" type="HitboxComponent" parent="." index="10"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent2" index="0"]
+visible = false
 shape = SubResource("CylinderShape3D_tggda")
 
 [node name="BasicAttack01VFX" parent="." index="11" instance=ExtResource("9_428v0")]

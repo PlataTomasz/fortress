@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bru18m53a16rp"]
+
+[ext_resource type="Texture2D" uid="uid://bxdnwfpsp17c8" path="res://textures/icons/abilities/hunting-horn.png" id="1_xx2ay"]
+[ext_resource type="PackedScene" uid="uid://836en1tttoeo" path="res://vfx/orc/warhorn_effect_vfx.tscn" id="2_yxtnm"]
+
+[node name="OrcWarhornBuff" type="OrcWarhornBuff"]
+permament = false
+displayed_name = "Warhorn"
+displayed_description = "This unit has increased attack speed"
+icon = ExtResource("1_xx2ay")
+new_type = 1
+
+[node name="WarhornEffectVFX" parent="." instance=ExtResource("2_yxtnm")]

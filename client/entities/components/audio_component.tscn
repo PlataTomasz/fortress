@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://vnauuqs782sr"]
+
+[node name="AudioComponent" type="AudioComponent" node_paths=PackedStringArray("audio_player")]
+audio_player = NodePath("AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]

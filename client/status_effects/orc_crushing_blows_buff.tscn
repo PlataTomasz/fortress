@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cbi2cg5yvkjmh"]
+
+[node name="OrcCrushingBlowsBuff" type="OrcCrushingBlowsBuff"]
+permament = false
+displayed_name = "Crushing blows"
+displayed_description = "Next basic attacks applies Crushed debuff on enemy, causing reduced defense"

@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://ca282scpps8xr"]
+[gd_scene load_steps=16 format=3 uid="uid://ca282scpps8xr"]
 
 [ext_resource type="PackedScene" uid="uid://baqh60utvjmow" path="res://entities/components/movement_component.tscn" id="1_2wqyg"]
 [ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="1_yigtw"]
 [ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="2_ilj2m"]
+[ext_resource type="PackedScene" uid="uid://vnauuqs782sr" path="res://entities/components/audio_component.tscn" id="3_dll65"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_1i01r"]
 resource_local_to_scene = true
@@ -99,10 +100,7 @@ entity = NodePath("../../../../..")
 [node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="AudioComponent" type="AudioComponent" parent="." node_paths=PackedStringArray("audio_player")]
-audio_player = NodePath("AudioStreamPlayer3D")
-
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="AudioComponent"]
+[node name="AudioComponent" parent="." instance=ExtResource("3_dll65")]
 
 [node name="VisualComponent3D" type="VisualComponent3D" parent="."]
 

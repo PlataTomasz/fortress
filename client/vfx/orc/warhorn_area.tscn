@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=3 uid="uid://cq83f1c6n03hh"]
+
+[ext_resource type="Shader" uid="uid://dtegynhrg1db6" path="res://vfx/orc/warhorn_area_v2.tres" id="2_jypgy"]
+[ext_resource type="Texture2D" uid="uid://b85io50chp4x5" path="res://textures/vfx/light_02.png" id="3_vpsyt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5eefn"]
+render_priority = 0
+shader = ExtResource("2_jypgy")
+shader_parameter/WaveColor = Color(1, 1, 0, 1)
+shader_parameter/lifetime = 0.0
+shader_parameter/triplanar_scale = Vector3(1, 1, 1)
+shader_parameter/triplanar_offset = null
+shader_parameter/triplanar_sharpness = 0.5
+shader_parameter/TextureParameterTriplanar = ExtResource("3_vpsyt")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_56gf8"]
+material = SubResource("ShaderMaterial_5eefn")
+size = Vector2(4, 4)
+
+[sub_resource type="Animation" id="Animation_nubwc"]
+resource_name = "play"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:material:shader_parameter/lifetime")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_scph3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:material:shader_parameter/lifetime")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8liur"]
+_data = {
+"RESET": SubResource("Animation_scph3"),
+"play": SubResource("Animation_nubwc")
+}
+
+[node name="WarhornArea" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.403836, 0)
+mesh = SubResource("PlaneMesh_56gf8")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8liur")
+}
+autoplay = "play"

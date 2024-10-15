@@ -101,7 +101,10 @@
 #include <shared/entities/components/audio/audio_component.h>
 
 #include <shared/gamemodes/moba_gamemode.h>
-
+#include <shared/status_effects/orc/orc_warhorn_buff.h>
+#include <shared/status_effects/orc/orc_crushing_blows_buff.h>
+#include <shared/status_effects/orc/orc_crushing_blows_debuff.h>
+#include <shared/abilities/orc/orc_crushing_blows.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -221,6 +224,11 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     
     #endif // SERVER
     
+
+    ClassDB::register_class<OrcWarhornBuff>();
+    ClassDB::register_class<OrcCrushingBlowsDebuff>();
+    ClassDB::register_class<OrcCrushingBlowsBuff>();
+    ClassDB::register_class<OrcCrushingBlows>();
     
 }
 

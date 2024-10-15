@@ -1,8 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://q8aaqb40m1sm"]
+[gd_scene load_steps=4 format=3 uid="uid://q8aaqb40m1sm"]
 
 [ext_resource type="PackedScene" uid="uid://bgngxpo7tj7nh" path="res://vfx/generic/attack_arc.tscn" id="1_ohgui"]
 
 [sub_resource type="PackedScene" id="PackedScene_7yjb7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6n2vo"]
 
 [node name="BasicAttack01" type="BarbarianBasicAttack" node_paths=PackedStringArray("slash_vfx_origin")]
 displayed_name = "Barbarian's basic attack"
@@ -15,3 +17,9 @@ slash_vfx_origin = NodePath("Node3D")
 
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.339477, 0)
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+shape = SubResource("BoxShape3D_6n2vo")

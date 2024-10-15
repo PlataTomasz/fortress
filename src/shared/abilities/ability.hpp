@@ -7,6 +7,7 @@
 #include <shared/helpers/object_ptr.h>
 
 #include <core/string/node_path.h>
+#include <servers/audio/audio_stream.h>
 
 class Timer;
 class AbilityCasterComponent;
@@ -27,6 +28,10 @@ protected:
 
     // Internal use: Without most checks
     virtual void _use(const Ref<ActionContext>& action_context){};
+
+    void play_sound(const Ref<ActionContext> &action_context, const Ref<AudioStream> &sound_resource);
+    void play_animation(const Ref<ActionContext> &action_context, const String &animation_name);
+    void play_vfx(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene);
 private:
     WhereToLookBeforeUse where_to_look_at;
     // MovementComponent should pause movement until this ability finishes if true

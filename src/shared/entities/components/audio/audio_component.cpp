@@ -53,3 +53,9 @@ void AudioComponent::play_defined_sound(const String& sound_name) {
         }
     }
 }
+
+void AudioComponent::play_audio_stream(const Ref<AudioStream> &audio_stream) {
+    ERR_FAIL_NULL(audio_player);
+    audio_player->set_stream(audio_stream);
+    audio_player->play();
+}

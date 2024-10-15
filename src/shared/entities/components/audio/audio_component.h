@@ -39,6 +39,7 @@ protected:
     static void _bind_methods(); 
 public:
     void play_defined_sound(const String& sound_name);
+    void play_audio_stream(const Ref<AudioStream> &audio_stream);
 
     void set_audio_entries(const TypedArray<AudioEntry>& new_audio_entries);
     TypedArray<AudioEntry> get_audio_entries();
