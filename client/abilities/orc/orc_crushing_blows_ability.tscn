@@ -1,6 +1,10 @@
-[gd_scene format=3 uid="uid://do3yq7wbnyrav"]
+[gd_scene load_steps=2 format=3 uid="uid://do3yq7wbnyrav"]
+
+[ext_resource type="Texture2D" uid="uid://du23u6u6fae7v" path="res://textures/icons/abilities/orc/crushing_blows.png" id="1_jimg4"]
 
 [node name="OrcCrushingBlows" type="OrcCrushingBlows"]
 displayed_name = "Crushing blows"
 displayed_description = "Grants buff, which causes Orc's next basic attack to apply Crushed debuff, reducing target defenses."
+icon = ExtResource("1_jimg4")
+max_cooldown = 12.0
 where_to_look_at = -1018691584

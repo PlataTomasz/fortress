@@ -32,6 +32,7 @@ protected:
     void play_sound(const Ref<ActionContext> &action_context, const Ref<AudioStream> &sound_resource);
     void play_animation(const Ref<ActionContext> &action_context, const String &animation_name);
     void play_vfx(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene);
+    void play_vfx_at_position(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene, const Vector3 &vfx_position);
 private:
     WhereToLookBeforeUse where_to_look_at;
     // MovementComponent should pause movement until this ability finishes if true

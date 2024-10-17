@@ -284,3 +284,11 @@ void Ability::play_vfx(const Ref<ActionContext> &action_context, const Ref<Packe
     ERR_FAIL_NULL(vfx_instance);
     add_child(vfx_instance);
 }
+
+void Ability::play_vfx_at_position(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene, const Vector3 &vfx_position) {
+    ERR_FAIL_NULL(vfx_scene);
+    Node3D *vfx_instance = Object::cast_to<Node3D>(vfx_scene->instantiate());
+    ERR_FAIL_NULL(vfx_instance);
+    vfx_instance->set_position(vfx_position);
+    add_child(vfx_instance);
+}
