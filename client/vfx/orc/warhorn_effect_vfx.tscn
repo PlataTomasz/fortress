@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://836en1tttoeo"]
 
-[ext_resource type="Texture2D" uid="uid://dxf6o8hwd2pup" path="res://vfx/textures/smoke_04.png" id="1_o7c60"]
+[ext_resource type="Texture2D" uid="uid://dxf6o8hwd2pup" path="res://textures/vfx/smoke_04.png" id="1_o7c60"]
 
 [sub_resource type="Curve" id="Curve_hcouk"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -16,14 +16,14 @@ angle_min = -360.0
 angle_max = 360.0
 gravity = Vector3(0, 3, 0)
 scale_curve = SubResource("CurveTexture_fumxl")
-color = Color(0.98794, 0.920592, 0, 1)
+color = Color(0, 0.99, 0.0165, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_31mc8"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_o7c60")
 emission_enabled = true
-emission = Color(1, 1, 0, 1)
+emission = Color(0.15, 1, 0, 1)
 billboard_mode = 3
 billboard_keep_scale = true
 particles_anim_h_frames = 1

@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://4eg7r3le8o74"]
+
+[ext_resource type="Texture2D" uid="uid://diuty115eri8k" path="res://textures/vfx/circle_03.png" id="1_kbhf5"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_n8tpc"]
+size = Vector2(20, 20)
+
+[sub_resource type="Animation" id="Animation_13j1l"]
+resource_name = "play"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_521id"]
+_data = {
+"play": SubResource("Animation_13j1l")
+}
+
+[node name="BruteForceArea" type="Node3D"]
+
+[node name="Decal" type="Decal" parent="."]
+size = Vector3(1, 1, 1)
+texture_albedo = ExtResource("1_kbhf5")
+texture_emission = ExtResource("1_kbhf5")
+modulate = Color(1, 0, 0.133333, 1)
+cull_mask = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("PlaneMesh_n8tpc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_521id")
+}
+autoplay = "play"

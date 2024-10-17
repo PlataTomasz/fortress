@@ -105,6 +105,9 @@
 #include <shared/status_effects/orc/orc_crushing_blows_buff.h>
 #include <shared/status_effects/orc/orc_crushing_blows_debuff.h>
 #include <shared/abilities/orc/orc_crushing_blows.h>
+#include <shared/abilities/orc/orc_brute_force.h>
+
+#include <shared/abilities/barbarian/barbarian_intimidating_cry_ability.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -229,6 +232,9 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<OrcCrushingBlowsDebuff>();
     ClassDB::register_class<OrcCrushingBlowsBuff>();
     ClassDB::register_class<OrcCrushingBlows>();
+    ClassDB::register_class<OrcBruteForce>();
+
+    ClassDB::register_class<BarbarianIntimidatingCryAbility>();
     
 }
 

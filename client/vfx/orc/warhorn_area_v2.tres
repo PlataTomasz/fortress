@@ -167,7 +167,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1390.09, 203.948)
 varyings/INV_MODEL_MATRIX = "0,7"
 nodes/fragment/0/position = Vector2(440, 500)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_2m6su")
