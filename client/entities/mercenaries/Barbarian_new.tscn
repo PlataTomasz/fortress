@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_jp0yl"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_ngwr0"]
 [ext_resource type="Texture2D" uid="uid://bcyr6po2fkwls" path="res://textures/icons/abilities/barbarian/dance_with_death.png" id="3_ag2ea"]
+[ext_resource type="PackedScene" uid="uid://dsqcm25nbbc55" path="res://abilities/barbarian/barbarian_intimidating_cry_ability.tscn" id="3_mrb7k"]
 [ext_resource type="PackedScene" uid="uid://ceofiqts6yeun" path="res://abilities/placeholders/PlaceholderAbility.tscn" id="4_1eacd"]
 [ext_resource type="AudioStream" uid="uid://j8lay2qc84xu" path="res://audio/warcry.wav" id="4_63o53"]
 [ext_resource type="PackedScene" uid="uid://btkmxgv7n00oi" path="res://models/barbarian.gltf" id="4_ubfyo"]
@@ -10,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://q8aaqb40m1sm" path="res://abilities/barbarian/basic_attack_01.tscn" id="5_77pm2"]
 [ext_resource type="PackedScene" uid="uid://deoh8l3kkh28a" path="res://models/sword.gltf" id="5_87kt6"]
 [ext_resource type="AnimationLibrary" uid="uid://dyw8cufffctiy" path="res://models/animations_orc_human.gltf" id="5_amkwr"]
-[ext_resource type="Texture2D" uid="uid://dwofxv6xbpra4" path="res://textures/icons/abilities/barbarian/intimidating_cry.png" id="6_r1rp3"]
 [ext_resource type="Texture2D" uid="uid://bhb85ew838xi7" path="res://textures/icons/abilities/barbarian/pointy-sword.png" id="7_ot3p7"]
 [ext_resource type="PackedScene" uid="uid://dwbu72tyq7yd3" path="res://vfx/barbarian/hightlight_area.tscn" id="9_428v0"]
 
@@ -2743,30 +2743,28 @@ movement_speed = SubResource("FloatAttribute_rcjpl")
 basic_attack = NodePath("BasicAttack01")
 passive_ability = NodePath("BarbarianBleedingPassive")
 first_ability = NodePath("PlaceholderAbility")
-second_ability = NodePath("PlaceholderAbility2")
+second_ability = NodePath("BarbarianIntimidatingCryAbility")
 third_ability = NodePath("PlaceholderAbility3")
 ultimate_ability = NodePath("BarbarianDanceWithDeath")
 
-[node name="BarbarianDanceWithDeath" type="BarbarianDanceWithDeath" parent="AbilityCasterComponent" index="0"]
+[node name="BarbarianIntimidatingCryAbility" parent="AbilityCasterComponent" index="0" instance=ExtResource("3_mrb7k")]
+
+[node name="BarbarianDanceWithDeath" type="BarbarianDanceWithDeath" parent="AbilityCasterComponent" index="1"]
 displayed_name = "Dance with death"
 displayed_description = "Barbarian focuses, pushing his body to the limits, causing him to lose health over time, but healing when enemy is hit by his basic attacks."
 icon = ExtResource("3_ag2ea")
 max_cooldown = 30.0
 where_to_look_at = -65536
 
-[node name="BarbarianBleedingPassive" type="BarbarianBleedingPassive" parent="AbilityCasterComponent" index="1"]
+[node name="BarbarianBleedingPassive" type="BarbarianBleedingPassive" parent="AbilityCasterComponent" index="2"]
 displayed_name = "Bleeding"
 displayed_description = "Basic attacks apply bleeding, dealing physical damage over time."
 icon = ExtResource("4_w0xr7")
 where_to_look_at = -125896061
 
-[node name="PlaceholderAbility" parent="AbilityCasterComponent" index="2" instance=ExtResource("4_1eacd")]
+[node name="PlaceholderAbility" parent="AbilityCasterComponent" index="3" instance=ExtResource("4_1eacd")]
 icon = ExtResource("4_w0xr7")
 where_to_look_at = 1
-
-[node name="PlaceholderAbility2" parent="AbilityCasterComponent" index="3" instance=ExtResource("4_1eacd")]
-icon = ExtResource("6_r1rp3")
-where_to_look_at = 2
 
 [node name="PlaceholderAbility3" parent="AbilityCasterComponent" index="4" instance=ExtResource("4_1eacd")]
 icon = ExtResource("7_ot3p7")

@@ -3,5 +3,5 @@
 [node name="StatusEffectVictimComponent" type="StatusEffectVictimComponent"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn", "res://status_effects/orc_warhorn_buff.tscn", "res://status_effects/orc_crushing_blows_buff.tscn", "res://status_effects/orc_crushing_blows_debuff.tscn")
+_spawnable_scenes = PackedStringArray("res://status_effects/dance_with_death.tscn", "res://status_effects/barbarian_bleeding_dot.tscn", "res://status_effects/orc_warhorn_buff.tscn", "res://status_effects/orc_crushing_blows_buff.tscn", "res://status_effects/orc_crushing_blows_debuff.tscn", "res://status_effects/barbarian_intimidating_cry_debuff.tscn")
 spawn_path = NodePath("..")

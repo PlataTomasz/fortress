@@ -71,7 +71,7 @@ void StatusEffect::_notification(int p_notification) {
             break;
 
 		case NOTIFICATION_ENTER_TREE:
-            GDVIRTUAL_CALL_MODULE(_on_apply);
+            _on_apply_internal();
 			break;
 
 		case NOTIFICATION_EXIT_TREE:
@@ -177,6 +177,10 @@ void StatusEffect::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_type"), &StatusEffect::get_type);
     ClassDB::bind_method(D_METHOD("set_type"), &StatusEffect::set_type);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "new_type", PROPERTY_HINT_ENUM, "Misc,Buff,Debuff"), "set_type", "get_type");
+
+    ClassDB::bind_method(D_METHOD("get_max_duration"), &StatusEffect::get_max_duration);
+    ClassDB::bind_method(D_METHOD("set_max_duration"), &StatusEffect::set_max_duration);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "new_max_duration"), "set_max_duration", "get_max_duration");
 }
 
 void StatusEffect::refresh() {
@@ -201,4 +205,18 @@ void StatusEffect::set_type(StatusEffect::Type new_type) {
 
 StatusEffect::Type StatusEffect::get_type() {
     return type;
+}
+
+float StatusEffect::get_max_duration() {
+    return max_duration;
+}
+
+void StatusEffect::set_max_duration(float new_max_duration) {
+    max_duration = new_max_duration;
+}
+
+void StatusEffect::_on_apply_internal() {
+    current_duration = max_duration;
+
+    _on_apply();
 }

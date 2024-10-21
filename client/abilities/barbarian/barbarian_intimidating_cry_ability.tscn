@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsqcm25nbbc55"]
+
+[ext_resource type="Texture2D" uid="uid://dwofxv6xbpra4" path="res://textures/icons/abilities/barbarian/intimidating_cry.png" id="1_ghvo5"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_l2xle"]
+radius = 2.0
+
+[node name="BarbarianIntimidatingCryAbility" type="BarbarianIntimidatingCryAbility" node_paths=PackedStringArray("warcry_area")]
+displayed_name = "Intimidating cry"
+displayed_description = "Barbarian makes shouts loudly, causing enemies in area around him to be slowed for a duration."
+icon = ExtResource("1_ghvo5")
+max_cooldown = 15.0
+where_to_look_at = -2076805702
+use_time = 0.5
+warcry_area = NodePath("Area3D")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_l2xle")

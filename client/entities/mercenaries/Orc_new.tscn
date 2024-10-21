@@ -1015,7 +1015,7 @@ mesh = SubResource("ArrayMesh_cc5tj")
 skin = SubResource("Skin_2jblr")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="orc_rigged/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.997885, -0.0275349, -0.058877, -0.0577268, 0.791744, 0.608119, 0.0298711, 0.610232, -0.79166, -0.990649, 1.70591, 0.654166)
+transform = Transform3D(-0.997885, -0.0275348, -0.0588772, -0.0577268, 0.791744, 0.608119, 0.0298712, 0.610232, -0.791659, -0.990649, 1.70591, 0.654166)
 bone_name = "Hand_R"
 bone_idx = 9
 
@@ -1024,7 +1024,7 @@ transform = Transform3D(1, 0, 5.96046e-08, 2.98023e-08, 1, 0, 5.96046e-08, 2.980
 mesh = SubResource("BoxMesh_t3dss")
 
 [node name="BoneAttachment3D2" type="BoneAttachment3D" parent="orc_rigged/Armature/Skeleton3D" index="2"]
-transform = Transform3D(-0.997885, 0.0275339, 0.0588776, -0.0276976, -0.999614, -0.00196511, 0.0588008, -0.00359173, 0.998263, 0.990648, 0.794929, -0.0617331)
+transform = Transform3D(-0.997885, 0.0275338, 0.0588776, -0.0276975, -0.999614, -0.00196511, 0.0588008, -0.00359173, 0.998263, 0.990648, 0.794929, -0.0617331)
 bone_name = "Hand_L"
 bone_idx = 4
 
