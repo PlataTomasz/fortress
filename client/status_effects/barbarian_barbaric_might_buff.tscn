@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwa5heyje8p0r"]
+
+[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="1_cpf7r"]
+
+[node name="BarbarianBarbaricMightBuff" type="BarbarianBarbaricMightBuff"]
+displayed_name = "Barbaric might"
+displayed_description = "Next basic attack deals additional damage."
+icon = ExtResource("1_cpf7r")

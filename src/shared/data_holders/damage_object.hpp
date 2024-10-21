@@ -31,10 +31,6 @@ public:
     //TODO: Type of origin - What exactly caused damage? Ability, attack, enviroment?
     //DamagingInstance *origin;
 public:
-    bool is_self_damage() {
-        return subtype & DamageSubtype::SELF_DAMAGE;
-    }
-
     DamageType get_type() {
         return type;
     }
@@ -51,7 +47,35 @@ public:
         return attacker;
     }
 
-    DamageObject(DamageType _type, int _subtype, float _value, ObjectPtr<Entity> _attacker)
+    bool is_magic_damage() {
+        return type & DamageType::DAMAGE_MAGICAL;
+    }
+
+    bool is_physical_damage() {
+        return type & DamageType::DAMAGE_PHYSICAL;
+    }
+
+    bool is_basic_attack_damage() {
+        return subtype & DamageSubtype::BASIC_ATTACK_DAMAGE;
+    }
+
+    bool is_ability_damage() {
+        return subtype & DamageSubtype::ABILITY_DAMAGE;
+    }
+
+    bool is_damage_over_time() {
+        return subtype & DamageSubtype::OVER_TIME_DAMAGE;
+    }
+
+    bool is_area_damage() {
+        return subtype & DamageSubtype::AREA_DAMAGE;
+    }
+
+    bool is_self_damage() {
+        return subtype & DamageSubtype::SELF_DAMAGE;
+    }
+
+    DamageObject(DamageType _type, int _subtype, float _value, Entity *_attacker)
         : type(_type), subtype(_subtype), value(_value), attacker(_attacker)
     {
 
