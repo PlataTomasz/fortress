@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cgco77hqkmtwl"]
+[gd_scene load_steps=51 format=3 uid="uid://cgco77hqkmtwl"]
 
 [ext_resource type="PackedScene" uid="uid://ca282scpps8xr" path="res://entities/mercenaries/base/Mercenary.tscn" id="1_jp0yl"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="1_ngwr0"]
@@ -13,6 +13,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://dyw8cufffctiy" path="res://models/animations_orc_human.gltf" id="5_amkwr"]
 [ext_resource type="Texture2D" uid="uid://bhb85ew838xi7" path="res://textures/icons/abilities/barbarian/pointy-sword.png" id="7_ot3p7"]
 [ext_resource type="PackedScene" uid="uid://dwbu72tyq7yd3" path="res://vfx/barbarian/hightlight_area.tscn" id="9_428v0"]
+[ext_resource type="PackedScene" uid="uid://dtxru2neop725" path="res://abilities/barbarian/barbarian_barbaric_might_ability.tscn" id="10_5p5r7"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_040m5"]
 resource_local_to_scene = true
@@ -2742,7 +2743,7 @@ movement_speed = SubResource("FloatAttribute_rcjpl")
 [node name="AbilityCasterComponent" parent="." index="2" node_paths=PackedStringArray("basic_attack", "passive_ability", "first_ability", "second_ability", "third_ability", "ultimate_ability")]
 basic_attack = NodePath("BasicAttack01")
 passive_ability = NodePath("BarbarianBleedingPassive")
-first_ability = NodePath("PlaceholderAbility")
+first_ability = NodePath("BarbarianBarbaricMightAbility")
 second_ability = NodePath("BarbarianIntimidatingCryAbility")
 third_ability = NodePath("PlaceholderAbility3")
 ultimate_ability = NodePath("BarbarianDanceWithDeath")
@@ -2773,6 +2774,9 @@ where_to_look_at = 109053018
 [node name="BasicAttack01" parent="AbilityCasterComponent" index="5" node_paths=PackedStringArray("hitbox") instance=ExtResource("5_77pm2")]
 hitbox = NodePath("../../HitboxComponent2")
 hit_visual_effect = ExtResource("9_428v0")
+
+[node name="BarbarianBarbaricMightAbility" parent="AbilityCasterComponent" index="6" instance=ExtResource("10_5p5r7")]
+where_to_look_at = 32
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_oyix2")
