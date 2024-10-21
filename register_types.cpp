@@ -108,6 +108,7 @@
 #include <shared/abilities/orc/orc_brute_force.h>
 
 #include <shared/abilities/barbarian/barbarian_intimidating_cry_ability.h>
+#include <shared/status_effects/barbarian/barbarian_intimidating_cry_debuff.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
 {
@@ -235,7 +236,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<OrcBruteForce>();
 
     ClassDB::register_class<BarbarianIntimidatingCryAbility>();
-    
+    ClassDB::register_class<BarbarianIntimidatingCryDebuff>();
 }
 
 void uninitialize_artifact_seekers_module(ModuleInitializationLevel p_level)

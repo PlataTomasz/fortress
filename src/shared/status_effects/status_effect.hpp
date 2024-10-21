@@ -45,6 +45,7 @@ private:
 
     bool permament = true;
 
+    void _on_apply_internal();
 protected:
     // Script Overrideable methods
     GDVIRTUAL0(_on_apply)
@@ -75,6 +76,9 @@ public:
     //Permament effects are those which max_duration is -1. That also includes effect that expire under certain conditions(like leaving slowing area)
     bool is_permament();
     void set_permament(bool p_permament);
+
+    float get_max_duration();
+    void set_max_duration(float new_max_duration);
 
     int get_current_stacks();
     void set_current_stacks(int stacks);
