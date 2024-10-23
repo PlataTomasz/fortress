@@ -2761,6 +2761,7 @@ where_to_look_at = -65536
 displayed_name = "Bleeding"
 displayed_description = "Basic attacks apply bleeding, dealing physical damage over time."
 icon = ExtResource("4_w0xr7")
+max_cooldown = nan
 where_to_look_at = -125896061
 
 [node name="PlaceholderAbility" parent="AbilityCasterComponent" index="3" instance=ExtResource("4_1eacd")]
@@ -2772,6 +2773,7 @@ icon = ExtResource("7_ot3p7")
 where_to_look_at = 109053018
 
 [node name="BasicAttack01" parent="AbilityCasterComponent" index="5" node_paths=PackedStringArray("hitbox") instance=ExtResource("5_77pm2")]
+max_cooldown = nan
 hitbox = NodePath("../../HitboxComponent2")
 hit_visual_effect = ExtResource("9_428v0")
 

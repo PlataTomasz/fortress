@@ -5,11 +5,12 @@
 #include <shared/entities/components/movement/movement_component.h>
 #include <shared/entities/components/audio/audio_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
+#include <shared/entities/components/damage/damageable_component.h>
 
 #ifdef SERVER
 void Ability::use(const Ref<ActionContext>& action_context)
 {
-    if(!is_on_cooldown())
+    if(can_be_used(action_context))
     {
         _handle_look_at(action_context);
         emit_signal("use_started");
@@ -52,7 +53,18 @@ void Ability::start_ability_cooldown() {
 }
 
 bool Ability::can_be_used(const Ref<ActionContext>& action_context) {
-    return !is_on_cooldown();
+    if(is_on_cooldown()) return false;
+
+    if(action_context->get_user()) {
+        DamageableComponent *damageable = action_context->get_user()->get_damageable_component();
+        if(damageable) {
+            if(damageable->is_dead() && !is_useable_while_dead()) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 float Ability::get_current_cooldown()
@@ -94,7 +106,6 @@ bool Ability::is_on_cooldown()
 void Ability::_before_ability_use(const Ref<ActionContext>& action_context) {
 
 }
-
 
 Ability::LookAtBehaviour *Ability::_get_where_to_look_behaviour() {
 	switch (where_to_look_at) {
@@ -177,6 +188,10 @@ void Ability::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_current_cooldown", "new_icon"), &Ability::set_current_cooldown);
     ClassDB::bind_method(D_METHOD("get_current_cooldown"), &Ability::get_current_cooldown);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "current_cooldown"), "set_current_cooldown", "get_current_cooldown");
+
+    ClassDB::bind_method(D_METHOD("set_useable_while_dead", "new_icon"), &Ability::set_useable_while_dead);
+    ClassDB::bind_method(D_METHOD("is_useable_while_dead"), &Ability::is_useable_while_dead);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "useable_while_dead"), "set_useable_while_dead", "is_useable_while_dead");
 
     ClassDB::bind_method(D_METHOD("set_where_to_look_at", "new_icon"), &Ability::set_where_to_look_at);
     ClassDB::bind_method(D_METHOD("get_where_to_look_at"), &Ability::get_where_to_look_at);
@@ -291,4 +306,13 @@ void Ability::play_vfx_at_position(const Ref<ActionContext> &action_context, con
     ERR_FAIL_NULL(vfx_instance);
     vfx_instance->set_position(vfx_position);
     add_child(vfx_instance);
+}
+
+void Ability::set_useable_while_dead(bool new_useable_while_dead) {
+    useable_while_dead = new_useable_while_dead;
+}
+
+bool Ability::is_useable_while_dead() {
+    
+    return useable_while_dead;
 }

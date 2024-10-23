@@ -6,11 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://68ew2rctpxd7" path="res://abilities/OrcWarhornAbility.tscn" id="3_ir8n4"]
 [ext_resource type="PackedScene" uid="uid://dpgeurmhvw2k" path="res://abilities/orc/orc_brute_force_ability.tscn" id="3_p13d5"]
 [ext_resource type="Texture2D" uid="uid://cwx675vsehgr2" path="res://models/colormap.png" id="3_rmehy"]
-[ext_resource type="Texture2D" uid="uid://bs83lch2wqge7" path="res://textures/icons/abilities/screen-impact.png" id="4_bduft"]
 [ext_resource type="PackedScene" uid="uid://q8aaqb40m1sm" path="res://abilities/barbarian/basic_attack_01.tscn" id="4_bknsa"]
 [ext_resource type="PackedScene" uid="uid://do3yq7wbnyrav" path="res://abilities/orc/orc_crushing_blows_ability.tscn" id="5_2lqjj"]
 [ext_resource type="Texture2D" uid="uid://b1d0l0sq4dnx" path="res://textures/icons/abilities/orc/resolve.png" id="5_ixlnr"]
 [ext_resource type="PackedScene" uid="uid://baebr42ggmydh" path="res://models/orc_warhorn.gltf" id="6_0o4ml"]
+[ext_resource type="PackedScene" uid="uid://bchj5fpygqquo" path="res://abilities/orc/orc_leap_slam_ability.tscn" id="8_lyoij"]
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_pv04g"]
 resource_local_to_scene = true
@@ -858,7 +858,7 @@ movement_speed = SubResource("FloatAttribute_g2ea8")
 basic_attack = NodePath("BasicAttack01")
 passive_ability = NodePath("OrcResolve")
 first_ability = NodePath("OrcBruteForceAbility")
-second_ability = NodePath("OrcLeapSlam")
+second_ability = NodePath("OrcLeapSlamAbility")
 third_ability = NodePath("OrcCrushingBlows")
 ultimate_ability = NodePath("OrcWarhornAbility2")
 
@@ -868,22 +868,19 @@ ultimate_ability = NodePath("OrcWarhornAbility2")
 displayed_name = "Orcish resolve"
 displayed_description = "Orc regenerates life over time."
 icon = ExtResource("5_ixlnr")
+max_cooldown = 2.27891e+22
 where_to_look_at = -911486723
 
-[node name="OrcLeapSlam" type="OrcLeapSlam" parent="AbilityCasterComponent" index="2"]
-displayed_name = "Leap slam"
-displayed_description = "Orc leaps upwards, then falls, dealing damage in area where he stood."
-icon = ExtResource("4_bduft")
-max_cooldown = 10.0
-where_to_look_at = 108
+[node name="OrcWarhornAbility2" parent="AbilityCasterComponent" index="2" instance=ExtResource("3_ir8n4")]
 
-[node name="OrcWarhornAbility2" parent="AbilityCasterComponent" index="3" instance=ExtResource("3_ir8n4")]
-
-[node name="BasicAttack01" parent="AbilityCasterComponent" index="4" node_paths=PackedStringArray("hitbox") instance=ExtResource("4_bknsa")]
+[node name="BasicAttack01" parent="AbilityCasterComponent" index="3" node_paths=PackedStringArray("hitbox") instance=ExtResource("4_bknsa")]
+max_cooldown = -1.20862e+26
 hitbox = NodePath("../../HitboxComponent")
 
-[node name="OrcCrushingBlows" parent="AbilityCasterComponent" index="5" instance=ExtResource("5_2lqjj")]
+[node name="OrcCrushingBlows" parent="AbilityCasterComponent" index="4" instance=ExtResource("5_2lqjj")]
 where_to_look_at = 7274608
+
+[node name="OrcLeapSlamAbility" parent="AbilityCasterComponent" index="5" instance=ExtResource("8_lyoij")]
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_nldr1")

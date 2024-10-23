@@ -34,6 +34,8 @@ protected:
     void play_vfx(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene);
     void play_vfx_at_position(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene, const Vector3 &vfx_position);
 private:
+    bool useable_while_dead = false;
+
     WhereToLookBeforeUse where_to_look_at;
     // MovementComponent should pause movement until this ability finishes if true
     bool locks_movement = true;
@@ -80,7 +82,7 @@ public:
 protected:
     void _notification(int p_notification);
 
-    float max_cooldown = 0;
+    float max_cooldown;
 
     Ref<Texture2D> icon;
 
@@ -123,6 +125,9 @@ public:
 
     void set_locks_movement(bool new_locks_movement);
     bool is_locks_movement();
+
+    void set_useable_while_dead(bool new_useable_while_dead);
+    bool is_useable_while_dead();
 
     void use(const Ref<ActionContext>& action_context);
 

@@ -1,9 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://dtxru2neop725"]
 
-[ext_resource type="Texture2D" uid="uid://cat54ac6n4e03" path="res://textures/icons/status_effects/snail.png" id="1_mhrf2"]
+[ext_resource type="Texture2D" uid="uid://bhb85ew838xi7" path="res://textures/icons/abilities/barbarian/pointy-sword.png" id="1_i1tfc"]
 
 [node name="BarbarianBarbaricMightAbility" type="BarbarianBarbaricMightAbility"]
 displayed_name = "Barbaric might"
-displayed_description = "Grants a buff that causes next Barbarian attack, to deal additional damage."
-icon = ExtResource("1_mhrf2")
+displayed_description = "Grants a buff that causes attacks dealt in the next 4 seconds, to deal additional damage."
+icon = ExtResource("1_i1tfc")
 max_cooldown = 12.0
+where_to_look_at = 97

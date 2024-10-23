@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bchj5fpygqquo"]
+
+[ext_resource type="Texture2D" uid="uid://bs83lch2wqge7" path="res://textures/icons/abilities/screen-impact.png" id="1_doann"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_w8uog"]
+radius = 0.8
+
+[node name="OrcLeapSlamAbility" type="OrcLeapSlamAbility" node_paths=PackedStringArray("leap_slam_area")]
+displayed_name = "Leap slam"
+displayed_description = "Orc leaps upwards, then falls, dealing damage in area where he stood."
+icon = ExtResource("1_doann")
+max_cooldown = 15.0
+where_to_look_at = 1
+use_time = 0.1
+leap_slam_area = NodePath("Area3D")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_w8uog")
