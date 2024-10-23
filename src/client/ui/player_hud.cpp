@@ -17,6 +17,8 @@
 
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
+#include <shared/abilities/basic_attack.h>
+
 void PlayerHUD::_ready() {
     // Setup signals
     Client *client = static_cast<Client *>(get_node(NodePath("/root/Client")));
@@ -101,6 +103,8 @@ void PlayerHUD::_on_controlled_mercenary_changed(Mercenary *new_mercenary) {
 }
 
 void PlayerHUD::_reinitialize_ability_buttons(AbilityCasterComponent *ability_caster_component) {
+    basic_attack_button->set_ability(ability_caster_component->get_basic_attack());
+    passive_ability_button->set_ability(ability_caster_component->get_passive_ability());
     first_ability_button->set_ability(ability_caster_component->get_first_ability());
     second_ability_button->set_ability(ability_caster_component->get_second_ability());
     third_ability_button->set_ability(ability_caster_component->get_third_ability());
@@ -195,6 +199,14 @@ void PlayerHUD::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("set_defeat_screen"), &PlayerHUD::set_defeat_screen);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "defeat_screen", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_defeat_screen", "get_defeat_screen");
 
+    ::ClassDB::bind_method(D_METHOD("get_basic_attack_button"), &PlayerHUD::get_basic_attack_button);
+    ::ClassDB::bind_method(D_METHOD("set_basic_attack_button"), &PlayerHUD::set_basic_attack_button);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "basic_attack_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_basic_attack_button", "get_basic_attack_button");
+
+    ::ClassDB::bind_method(D_METHOD("get_passive_ability_button"), &PlayerHUD::get_passive_ability_button);
+    ::ClassDB::bind_method(D_METHOD("set_passive_ability_button"), &PlayerHUD::set_passive_ability_button);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "passive_ability_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_passive_ability_button", "get_passive_ability_button");
+
     ::ClassDB::bind_method(D_METHOD("get_first_ability_button"), &PlayerHUD::get_first_ability_button);
     ::ClassDB::bind_method(D_METHOD("set_first_ability_button"), &PlayerHUD::set_first_ability_button);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "first_ability_button", PROPERTY_HINT_NODE_TYPE, ActiveAbilityButton::get_class_static()), "set_first_ability_button", "get_first_ability_button");
@@ -244,6 +256,22 @@ void PlayerHUD::_on_player_defeat() {
 
 void PlayerHUD::_on_player_victory() {
     show_victory_screen();
+}
+
+ActiveAbilityButton *PlayerHUD::get_basic_attack_button() {
+    return basic_attack_button;
+}
+
+void PlayerHUD::set_basic_attack_button(ActiveAbilityButton *new_ability_button) {
+    basic_attack_button = new_ability_button;
+}
+
+ActiveAbilityButton *PlayerHUD::get_passive_ability_button() {
+    return passive_ability_button;
+}
+
+void PlayerHUD::set_passive_ability_button(ActiveAbilityButton *new_ability_button) {
+    passive_ability_button = new_ability_button;
 }
 
 ActiveAbilityButton *PlayerHUD::get_first_ability_button() {

@@ -31,7 +31,11 @@ void ActiveAbilityButton::_on_ability_change(Ability *new_ability) {
     ERR_FAIL_NULL(new_ability);
 
     set_indicator_icon(new_ability->get_icon());
-    set_indicator_max_value(new_ability->get_max_cooldown());
+
+    if(new_ability->get_max_cooldown() > 0) {
+        set_indicator_max_value(new_ability->get_max_cooldown());
+    }
+
     set_indicator_current_value(new_ability->get_current_cooldown());
     
     ERR_FAIL_NULL(ability_tooltip);
@@ -40,7 +44,10 @@ void ActiveAbilityButton::_on_ability_change(Ability *new_ability) {
 
 void ActiveAbilityButton::_process_frame() {
     if(ability) {
-        set_indicator_max_value(ability->get_max_cooldown());
+        if(ability->get_max_cooldown() > 0) {
+            set_indicator_max_value(ability->get_max_cooldown());
+        }
+
         set_indicator_current_value(ability->get_current_cooldown());
     }
 }
@@ -56,6 +63,8 @@ void ActiveAbilityButton::set_indicator_max_value(float max_value) {
 void ActiveAbilityButton::set_indicator_current_value(float current_value) {
     if(current_value == 0) {
         value_indicator->set_text("");
+    } else if(current_value > 0 && current_value < 1) {
+        value_indicator->set_text(vformat("%.1f", current_value));
     } else {
         value_indicator->set_text(vformat("%.f", current_value));
     }

@@ -30,6 +30,8 @@ private:
     Control *victory_screen = nullptr;
     Control *defeat_screen = nullptr;
 
+    ActiveAbilityButton *basic_attack_button = nullptr;
+    ActiveAbilityButton *passive_ability_button = nullptr;
     ActiveAbilityButton *first_ability_button = nullptr;
     ActiveAbilityButton *second_ability_button = nullptr;
     ActiveAbilityButton *third_ability_button = nullptr;
@@ -77,6 +79,10 @@ public:
     void show_victory_screen();
     void show_defeat_screen();
 
+    ActiveAbilityButton *get_basic_attack_button();
+    void set_basic_attack_button(ActiveAbilityButton *new_ability_button);
+    ActiveAbilityButton *get_passive_ability_button();
+    void set_passive_ability_button(ActiveAbilityButton *new_ability_button);
     ActiveAbilityButton *get_first_ability_button();
     void set_first_ability_button(ActiveAbilityButton *new_ability_button);
     ActiveAbilityButton *get_second_ability_button();
