@@ -6,6 +6,13 @@
 
 void ProjectileEntity::_tickv() {
     if(!target) return;
+
+    DamageableComponent *damageable = target->get_damageable_component();
+    if(damageable && damageable->is_dead()) {
+        // Invalidate projectiles aimed at already dead entities
+        queue_free();
+    }
+
     // It definitely goes somewhere, but I'm not sure If it stops in the right place
     float delta = SceneTree::get_singleton()->get_physics_process_time();
 

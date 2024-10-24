@@ -287,7 +287,7 @@ void Turret::_on_attack_cooldown_expire() {
     }
 }
 
-void Turret::_on_target_death() {
+void Turret::_on_target_death(const Ref<DamageObject> &damage_object) {
     change_target(find_new_target());
 }
 

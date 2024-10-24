@@ -3,18 +3,6 @@
 #include <shared/entities/components/damage/damageable_component.h>
 #include <scene/main/timer.h>
 
-void OrcResolve::_tick() {
-    float heal_value = 1;
-
-    Entity *owner = Object::cast_to<Entity>(get_node_or_null(NodePath("../..")));
-    ERR_FAIL_NULL(owner);
-
-    //DamageableComponent *damageable_component = ComponentManager::get_component<DamageableComponent>(owner);
-    DamageableComponent *damageable = owner->get_damageable_component();
-    if(!damageable) return;
-    damageable->heal(heal_value);
-}
-
 void OrcResolve::_notification(int p_notification) {
     DISABLE_IN_EDITOR();
     switch (p_notification)

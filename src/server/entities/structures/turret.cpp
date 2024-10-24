@@ -21,4 +21,7 @@ void Turret::_on_recharge_finished() {
     attack_window_timer->start();
     rpc("server_rpc_recharge_finished");
     emit_signal("recharge_finished");
+    if(has_target() && ready_to_attack && can_attack()) {
+        attack_current_target();
+    }
 }
