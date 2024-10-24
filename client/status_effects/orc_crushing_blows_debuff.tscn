@@ -1,10 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbc17hxbb0kl3"]
+[gd_scene load_steps=3 format=3 uid="uid://cbc17hxbb0kl3"]
 
 [ext_resource type="PackedScene" uid="uid://bxu3k5nox6u5b" path="res://vfx/orc/orc_crushed_indicator.tscn" id="1_df6tq"]
+[ext_resource type="Texture2D" uid="uid://bxxql8bxjc2tl" path="res://textures/icons/status_effects/orc/orc_crushing_blows_debuff.png" id="1_t1xgy"]
 
 [node name="OrcCrushingBlowsDebuff" type="OrcCrushingBlowsDebuff"]
 permament = false
 displayed_name = "Crushed"
 displayed_description = "This unit is crushed and have reduced defenses"
+icon = ExtResource("1_t1xgy")
 
 [node name="VFX" parent="." instance=ExtResource("1_df6tq")]

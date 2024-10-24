@@ -3,6 +3,7 @@
 
 #include <shared/entities/entity.h>
 #include <shared/core/advanced_area_3d.h>
+#include <shared/data_holders/damage_object.hpp>
 
 class Timer;
 
@@ -41,7 +42,7 @@ private:
     void _on_attack_window_expire();
     void _on_recharge_finished();
     void _on_attack_cooldown_expire();
-    void _on_target_death();
+    void _on_target_death(const Ref<DamageObject> &damage_object);
 
     void server_rpc_recharge_started();
     void server_rpc_recharge_finished();
