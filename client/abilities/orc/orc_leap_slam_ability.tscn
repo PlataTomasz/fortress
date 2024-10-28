@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bchj5fpygqquo"]
+[gd_scene load_steps=5 format=3 uid="uid://bchj5fpygqquo"]
 
 [ext_resource type="Texture2D" uid="uid://bs83lch2wqge7" path="res://textures/icons/abilities/screen-impact.png" id="1_doann"]
 [ext_resource type="PackedScene" uid="uid://bxqsim756leev" path="res://vfx/orc/orc_slam_aftershock.tscn" id="2_l4ncx"]
+[ext_resource type="PackedScene" uid="uid://bp32vubdt6b1m" path="res://vfx/orc/orc_leap_slam_hit_vfx.tscn" id="3_7vgtx"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_w8uog"]
 radius = 0.8
@@ -15,6 +16,7 @@ where_to_look_at = 1
 use_time = 0.1
 leap_slam_area = NodePath("Area3D")
 slam_vfx = ExtResource("2_l4ncx")
+slam_hit_vfx = ExtResource("3_7vgtx")
 
 [node name="Area3D" type="Area3D" parent="."]
 

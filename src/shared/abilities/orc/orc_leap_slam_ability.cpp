@@ -18,6 +18,10 @@ void OrcLeapSlamAbility::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_slam_vfx"), &OrcLeapSlamAbility::get_slam_vfx);
     ClassDB::bind_method(D_METHOD("set_slam_vfx", "slam_vfx"), &OrcLeapSlamAbility::set_slam_vfx);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "slam_vfx", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_slam_vfx", "get_slam_vfx");
+
+    ClassDB::bind_method(D_METHOD("get_slam_hit_vfx"), &OrcLeapSlamAbility::get_slam_hit_vfx);
+    ClassDB::bind_method(D_METHOD("set_slam_hit_vfx", "slam_hit_vfx"), &OrcLeapSlamAbility::set_slam_hit_vfx);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "slam_hit_vfx", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_slam_hit_vfx", "get_slam_hit_vfx");
 }
 
 void OrcLeapSlamAbility::set_slam_vfx(const Ref<PackedScene> &new_slam_vfx) {
@@ -26,4 +30,12 @@ void OrcLeapSlamAbility::set_slam_vfx(const Ref<PackedScene> &new_slam_vfx) {
 
 Ref<PackedScene> OrcLeapSlamAbility::get_slam_vfx() {
     return slam_vfx;
+}
+
+void OrcLeapSlamAbility::set_slam_hit_vfx(const Ref<PackedScene> &new_slam_hit_vfx) {
+    slam_hit_vfx = new_slam_hit_vfx;
+}
+
+Ref<PackedScene> OrcLeapSlamAbility::get_slam_hit_vfx() {
+    return slam_hit_vfx;
 }

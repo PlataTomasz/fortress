@@ -16,22 +16,10 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0.4, 0.4)]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="Animation" id="Animation_qlcx4"]
 resource_name = "play"
-length = 0.15
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -39,22 +27,24 @@ tracks/0/path = NodePath("MeshInstance3D:mesh:size")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(0.4, 0.4), Vector2(1.6, 0.4)]
 }
-tracks/1/type = "value"
+tracks/1/type = "method"
 tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:visible")
+tracks/1/enabled = false
+tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u3w43"]
@@ -65,6 +55,7 @@ _data = {
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cxug"]
 transparency = 1
+no_depth_test = true
 albedo_color = Color(0.801263, 4.23551e-06, 2.88785e-07, 1)
 albedo_texture = ExtResource("1_3qbfn")
 emission_enabled = true
@@ -81,6 +72,7 @@ size = Vector2(0.4, 0.4)
 libraries = {
 "": SubResource("AnimationLibrary_u3w43")
 }
+autoplay = "play"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.304673, 0)
