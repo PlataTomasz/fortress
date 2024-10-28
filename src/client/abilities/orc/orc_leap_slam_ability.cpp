@@ -3,6 +3,7 @@
 #include <scene/animation/tween.h>
 #include <scene/main/timer.h>
 #include <shared/core/game_level.h>
+#include <shared/collisions/ability_hitbox_helper.h>
 
 void OrcLeapSlamAbility::_use(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(action_context->get_user());
@@ -23,4 +24,15 @@ void OrcLeapSlamAbility::_slam(const Ref<ActionContext>& action_context, const V
     action_context->get_user()->get_gamelevel()->add_child(vfx_instance);
 
     vfx_instance->set_global_position(slam_position);
+
+    AbilityHitboxHelper area_helper = AbilityHitboxHelper(leap_slam_area);
+    for(Entity *potential_target_entity : area_helper.get_entities_in_area()) {
+        _slam_hit_entity(potential_target_entity);
+    }
+}
+
+void OrcLeapSlamAbility::_slam_hit_entity(Entity *ent) {
+    // Spawn hit VFX on entity
+    ERR_FAIL_NULL(ent);
+    play_vfx_at_position(slam_hit_vfx, ent->get_global_position());
 }

@@ -6,6 +6,7 @@
 #include <shared/entities/components/audio/audio_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
 #include <shared/entities/components/damage/damageable_component.h>
+#include <shared/core/game_level.h>
 
 #ifdef SERVER
 void Ability::use(const Ref<ActionContext>& action_context)
@@ -315,4 +316,22 @@ void Ability::set_useable_while_dead(bool new_useable_while_dead) {
 bool Ability::is_useable_while_dead() {
     
     return useable_while_dead;
+}
+
+void Ability::play_vfx_at_position(const Ref<PackedScene> &vfx_scene, const Vector3 &vfx_position) {
+    ERR_FAIL_NULL(vfx_scene);
+    Node3D *vfx_instance = Object::cast_to<Node3D>(vfx_scene->instantiate());
+    ERR_FAIL_NULL(vfx_instance);
+
+    ERR_FAIL_NULL(get_ability_caster());
+    ERR_FAIL_NULL(get_ability_caster()->get_owning_entity());
+    ERR_FAIL_NULL(get_ability_caster()->get_owning_entity()->get_gamelevel());
+    
+    GameLevel *level = get_ability_caster()->get_owning_entity()->get_gamelevel();
+    if(level) {
+        level->add_child(vfx_instance);
+    } else {
+        add_child(vfx_instance);
+    }
+    vfx_instance->set_global_position(vfx_position);
 }

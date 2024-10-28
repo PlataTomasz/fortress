@@ -11,8 +11,10 @@ GDCLASS(OrcLeapSlamAbility, Ability);
 private:
     Area3D *leap_slam_area = nullptr;
     Ref<PackedScene> slam_vfx;
+    Ref<PackedScene> slam_hit_vfx;
 
     void _slam(const Ref<ActionContext>& action_context, const Vector3 &slam_position);
+    void _slam_hit_entity(Entity *ent);
 protected:
     void _use(const Ref<ActionContext>& action_context) override;
     static void _bind_methods();
@@ -22,6 +24,9 @@ public:
 
     void set_slam_vfx(const Ref<PackedScene> &new_slam_vfx);
     Ref<PackedScene> get_slam_vfx();
+
+    void set_slam_hit_vfx(const Ref<PackedScene> &new_slam_hit_vfx);
+    Ref<PackedScene> get_slam_hit_vfx();
 };
 
 #endif // ORC_LEAP_SLAM_ABILITY_INCLUDED

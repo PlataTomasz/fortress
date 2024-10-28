@@ -33,6 +33,7 @@ protected:
     void play_animation(const Ref<ActionContext> &action_context, const String &animation_name);
     void play_vfx(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene);
     void play_vfx_at_position(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene, const Vector3 &vfx_position);
+    void play_vfx_at_position(const Ref<PackedScene> &vfx_scene, const Vector3 &vfx_position);
 private:
     bool useable_while_dead = false;
 
