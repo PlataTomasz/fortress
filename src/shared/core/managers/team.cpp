@@ -41,11 +41,13 @@ void Team::remove_entity_member(Entity *member) {
 
     if(elem) {
         elem->erase();
+        emit_signal("entity_left", member);
     }
 };
 
 void Team::add_entity_member(Entity *new_entity_member) {
     entity_members.push_back(new_entity_member);
+    emit_signal("entity_joined", new_entity_member);
     print_line(new_entity_member, "asigned to team", this);
 };
 
@@ -76,6 +78,9 @@ void Team::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_respawn_position"), &Team::get_respawn_position);
     ClassDB::bind_method(D_METHOD("set_respawn_position", "respawn_position"), &Team::set_respawn_position);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "respawn_position"), "set_respawn_position", "get_respawn_position");
+
+    ADD_SIGNAL(MethodInfo("entity_joined", PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())));
+    ADD_SIGNAL(MethodInfo("entity_left", PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())));
 }
 
 bool Team::has_player_member(const Ref<Player> &player) {

@@ -1,5 +1,15 @@
 [gd_scene load_steps=6 format=3 uid="uid://bp32vubdt6b1m"]
 
+[sub_resource type="Animation" id="Animation_dgi44"]
+length = 0.001
+tracks/0/type = "scale_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 1, 1, 1)
+
 [sub_resource type="Animation" id="Animation_f452y"]
 resource_name = "play"
 length = 0.3
@@ -24,16 +34,6 @@ tracks/1/keys = {
 "method": &"queue_free"
 }]
 }
-
-[sub_resource type="Animation" id="Animation_dgi44"]
-length = 0.001
-tracks/0/type = "scale_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1i84l"]
 _data = {

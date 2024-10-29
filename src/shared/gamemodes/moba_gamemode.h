@@ -5,9 +5,11 @@
 
 #include <shared/core/managers/team.h>
 #include <shared/data_holders/damage_object.hpp>
+#include <core/variant/dictionary.h>
 
 class Entity;
 class Timer;
+class GameLevel;
 
 class MobaGamemode : public Gamemode {
 GDCLASS(MobaGamemode, Gamemode);
@@ -48,11 +50,29 @@ private:
     void _on_entity_death(Entity *entity, const Ref<DamageObject> &damage_object);
     void _on_death_timer_expire(Entity *entity);
     void _death_timer_cleanup(Timer *timer);
+
+
+    void client_rpc_request_team_data();
+    void server_rpc_entity_team_join(const String &entity_name, const String &team_name);
+    void server_rpc_entity_team_left(const String &entity_name, const String &team_name);
+    void server_rpc_teams_full_data(Dictionary teams_data);
+
+    void _on_entity_joined_team_first(Entity *entity);
+    void _on_entity_joined_team_second(Entity *entity);
+    void _on_entity_left_team_first(Entity *entity);
+    void _on_entity_left_team_second(Entity *entity);
+
+    void _level_ready();
+    void _on_player_connected(const Ref<Player> &player);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
     static void _bind_shared_methods();
 public:
+    virtual Dictionary get_gamemode_data() override;
+    virtual void parse_gamemode_data(Dictionary gamemode_data) override;
+    Dictionary get_teams_data();
+    GameLevel *get_gamelevel();
     void respawn_entity(Entity *entity);
     void respawn_entity_at_position(Entity *entity, const Vector3 &position);
     bool are_entities_same_team(Entity *first_entity, Entity *second_entity);

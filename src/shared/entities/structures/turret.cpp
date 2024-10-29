@@ -12,6 +12,8 @@
 #include <shared/networking/rpc/rpc_config_builder.h>
 #include <shared/networking/rpc/rpc_registerer.h>
 
+#include <shared/gamemodes/moba_gamemode.h>
+
 #ifdef SERVER
 void Turret::_initv() {
     attack_cooldown_counter = memnew(Timer);
@@ -46,6 +48,15 @@ void Turret::attack_current_target() {
     projectile_instance->set_name(itos(projectile_instance->get_instance_id()));
     game_level->add_entity(projectile_instance);
 
+    // FIXME: Temporary using hard reference to asign team to projectile instance - Replace with event "when entity is spawned by other entity"
+    MobaGamemode *moba_gamemode = Object::cast_to<MobaGamemode>(game_level->get_gamemode());
+    ERR_FAIL_NULL(moba_gamemode);
+
+    Ref<Team> team = moba_gamemode->get_team_of_entity(this);
+    ERR_FAIL_NULL(team);
+
+    team->add_entity_member(projectile_instance);
+    
     EntityAttributesComponent *attributes = get_attributes_component();
     ERR_FAIL_NULL_MSG(attributes, "Missing attributes! Used default value insted!");
 

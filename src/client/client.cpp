@@ -162,6 +162,7 @@ void Client::enter_tree()
 void Client::_on_server_connect()
 {
     print_line("Player", player->get_nickname(), "joined the server!");
+    emit_signal("player_connected", player);
 }
 
 void Client::_on_server_disconnect()
@@ -245,6 +246,8 @@ void Client::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_user_interface"), &Client::get_user_interface);
     ClassDB::bind_method(D_METHOD("set_user_interface", "user_interface"), &Client::set_user_interface);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "user_interface", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_user_interface", "get_user_interface");
+
+    ADD_SIGNAL(MethodInfo("player_connected", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, Player::get_class_static())));
 }
 
 void Client::set_user_interface(UserInterface *new_user_interface) {
