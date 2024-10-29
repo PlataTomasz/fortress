@@ -94,9 +94,10 @@ void Server::_on_peer_connect(int peer_id)
         } else {
             mercenary = ply->get_controlled_entity();
         }
+
+        rpc_id(peer_id, "server_rpc_set_controlled_entity", mercenary->get_name());
+        emit_signal("player_connected", ply);
     }
-    
-    rpc_id(peer_id, "server_rpc_set_controlled_entity", mercenary->get_name());
 }
 
 /*
@@ -313,6 +314,7 @@ void Server::_bind_methods() {
     ClassDB::bind_method(D_METHOD("server_rpc_set_controlled_entity", "entity_name"), &Server::server_rpc_set_controlled_entity);
 
     ADD_SIGNAL(MethodInfo("new_player_join", PropertyInfo(Variant::OBJECT, "player")));
+    ADD_SIGNAL(MethodInfo("player_connected", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, Player::get_class_static())));
 }
 
 Server::Server()

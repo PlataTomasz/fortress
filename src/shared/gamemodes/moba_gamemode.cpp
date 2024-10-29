@@ -7,6 +7,10 @@
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/mercenaries/mercenary.hpp>
 #include <scene/main/timer.h>
+#include <core/io/json.h>
+#include <shared/core/game_level.h>
+#include <shared/networking/rpc/rpc_config_builder.h>
+#include <shared/networking/rpc/rpc_registerer.h>
 
 bool MobaGamemode::is_entity_enemy_of(Entity *first_entity, Entity *second_entity) {
     return !are_entities_same_team(first_entity, second_entity);
@@ -57,6 +61,11 @@ void MobaGamemode::_bind_shared_methods() {
     ClassDB::bind_method(D_METHOD("server_rpc_victory"), &MobaGamemode::server_rpc_victory);
 
     ADD_SIGNAL(MethodInfo("game_over"));
+
+    ClassDB::bind_method(D_METHOD("server_rpc_entity_team_join", "entity_name", "team_name"), &MobaGamemode::server_rpc_entity_team_join);
+    ClassDB::bind_method(D_METHOD("server_rpc_entity_team_left", "entity_name", "team_name"), &MobaGamemode::server_rpc_entity_team_left);
+    ClassDB::bind_method(D_METHOD("server_rpc_teams_full_data", "team_data"), &MobaGamemode::server_rpc_teams_full_data);
+    ClassDB::bind_method(D_METHOD("client_rpc_request_team_data"), &MobaGamemode::client_rpc_request_team_data);
 }
 
 Ref<Team> MobaGamemode::get_first_team() {
@@ -270,10 +279,52 @@ void MobaGamemode::_register_rpcs() {
         0,
         false
     );
+    
+    RPCRegisterer(this, "server_rpc_teams_full_data", RPCConfigBuilder()
+        .call_local(false)
+        .channel(0)
+        .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+        .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+        .build()
+    );
+
+    RPCRegisterer(this, "client_rpc_request_team_data", RPCConfigBuilder()
+        .call_local(true)
+        .channel(0)
+        .rpc_mode(MultiplayerAPI::RPC_MODE_ANY_PEER)
+        .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+        .build()
+    );
+
+    RPCRegisterer(this, "server_rpc_entity_team_join", RPCConfigBuilder()
+        .call_local(false)
+        .channel(0)
+        .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+        .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+        .build()
+    );
+
+    RPCRegisterer(this, "server_rpc_entity_team_left", RPCConfigBuilder()
+        .call_local(false)
+        .channel(0)
+        .rpc_mode(MultiplayerAPI::RPC_MODE_AUTHORITY)
+        .transfer_mode(MultiplayerPeer::TRANSFER_MODE_RELIABLE)
+        .build()
+    );
 }
 
 void MobaGamemode::_shared_ready() {
     _register_rpcs();
+
+    if(first_team.is_valid()) {
+        first_team->connect("entity_joined", callable_mp(this, &MobaGamemode::_on_entity_joined_team_first));
+        first_team->connect("entity_left", callable_mp(this, &MobaGamemode::_on_entity_left_team_first));
+    }
+
+    if(second_team.is_valid()) {
+        second_team->connect("entity_joined", callable_mp(this, &MobaGamemode::_on_entity_joined_team_second));
+        second_team->connect("entity_left", callable_mp(this, &MobaGamemode::_on_entity_left_team_second));
+    }
 }
 
 #ifdef CLIENT
@@ -283,10 +334,6 @@ void MobaGamemode::_enter_tree() {
 
 void MobaGamemode::_init() {
     
-}
-
-void MobaGamemode::_ready() {
-    _shared_ready();
 }
 
 void MobaGamemode::server_rpc_defeat() {
@@ -307,10 +354,6 @@ void MobaGamemode::_bind_methods() {
 #endif
 
 #ifdef SERVER
-void MobaGamemode::_ready() {
-    _shared_ready();
-}
-
 void MobaGamemode::_post_level_load() {
     if(first_team_nexus) {
         DamageableComponent *nexus_damageable = first_team_nexus->get_damageable_component();
@@ -408,3 +451,78 @@ void MobaGamemode::_on_second_nexus_destroyed(const Ref<DamageObject>& damage_ob
     emit_signal("game_over");
 }
 #endif
+
+GameLevel *MobaGamemode::get_gamelevel() {
+    return Object::cast_to<GameLevel>(get_parent());
+}
+
+Dictionary MobaGamemode::get_gamemode_data() {
+    Dictionary gamemode_data;
+    gamemode_data["teams"] = get_teams_data();
+
+    return gamemode_data;
+}
+
+Dictionary MobaGamemode::get_teams_data() {
+    Dictionary teams_data;
+    ERR_FAIL_NULL_V(first_team, teams_data);
+    ERR_FAIL_NULL_V(second_team, teams_data);
+
+    Dictionary first_team_data;
+    PackedStringArray first_team_entities;
+    for(Entity *ent : first_team->get_entity_members()) {
+        if(!ent) continue;
+        first_team_entities.push_back(ent->get_name());
+    }
+    PackedStringArray first_team_players;
+    for(Ref<Player> ply : first_team->get_player_members()) {
+        if(ply.is_null()) continue;
+        first_team_players.push_back(ply->get_nickname());
+    }
+    first_team_data["entities"] = first_team_entities;
+    first_team_data["players"] = first_team_players;
+
+    Dictionary second_team_data;
+    PackedStringArray second_team_entities;
+    for(Entity *ent : second_team->get_entity_members()) {
+        if(!ent) continue;
+        second_team_entities.push_back(ent->get_name());
+    }
+    PackedStringArray second_team_players;
+    for(Ref<Player> ply : second_team->get_player_members()) {
+        if(ply.is_null()) continue;
+        second_team_players.push_back(ply->get_nickname());
+    }
+    second_team_data["entities"] = second_team_entities;
+    second_team_data["players"] = second_team_players;
+
+    teams_data[first_team->get_team_name()] = first_team_data;
+    teams_data[second_team->get_team_name()] = second_team_data;
+
+    return teams_data;
+}
+
+void MobaGamemode::parse_gamemode_data(Dictionary gamemode_data) {
+    ERR_FAIL_NULL(get_gamelevel());
+    ERR_FAIL_NULL(first_team);
+    ERR_FAIL_NULL(second_team);
+
+    Dictionary teams_data = gamemode_data["teams"];
+    Dictionary first_team_data = teams_data[first_team->get_team_name()];
+    Array first_team_entities = first_team_data["entities"];
+
+    Dictionary second_team_data = teams_data[second_team->get_team_name()];
+    Array second_team_entities = second_team_data["entities"];
+
+    for(Variant array_entry : first_team_entities) {
+        Entity *ent = get_gamelevel()->get_entity(array_entry.operator String());
+        ERR_CONTINUE(!ent);
+        first_team->add_entity_member(ent);
+    }
+    
+    for(Variant array_entry : second_team_entities) {
+        Entity *ent = get_gamelevel()->get_entity(array_entry.operator String());
+        ERR_CONTINUE(!ent);
+        second_team->add_entity_member(ent);
+    }
+}

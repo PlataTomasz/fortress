@@ -17,6 +17,9 @@ public:
         return false;
     };
 
+    virtual Dictionary get_gamemode_data() = 0;
+    virtual void parse_gamemode_data(Dictionary gamemode_data) = 0;
+
 #ifdef CLIENT
 private:
 protected:
