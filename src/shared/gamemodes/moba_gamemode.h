@@ -33,6 +33,8 @@ private:
 
     float death_time = 15;
 
+    Ref<PackedScene> team_ground_indicator;
+
     //Players in teams
 
     void _on_entity_enter_level(Entity *entity_that_entered_level);
@@ -64,6 +66,7 @@ private:
 
     void _level_ready();
     void _on_player_connected(const Ref<Player> &player);
+    void _on_entity_join_team(Entity *entity, const Ref<Team> &team);
 protected:
     void _notification(int p_notification);
     static void _bind_methods();
@@ -97,6 +100,9 @@ public:
     void asign_to_random_team_balanced(Entity *entity_to_asign);
     Ref<Team> asign_player_to_random_team(const Ref<Player>& player);
 
+    void set_team_ground_indicator_vfx(const Ref<PackedScene> &new_team_ground_indicator_vfx);
+    Ref<PackedScene> get_team_ground_indicator_vfx();
+
 #ifdef CLIENT
 private:
 protected:
@@ -113,6 +119,7 @@ public:
     virtual void make_player_lose(const Ref<Player> &player) override;
     virtual void make_player_win(const Ref<Player> &player) override;
 #endif
+
 };
 
 #endif // MOBA_GAMEMODE_INCLUDED

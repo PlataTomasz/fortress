@@ -57,6 +57,10 @@ void MobaGamemode::_bind_shared_methods() {
     ClassDB::bind_method(D_METHOD("set_second_team_nexus", "second_team_nexus"), &MobaGamemode::set_second_team_nexus);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "second_team_nexus", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static()), "set_second_team_nexus", "get_second_team_nexus");
 
+    ClassDB::bind_method(D_METHOD("get_team_ground_indicator_vfx"), &MobaGamemode::get_team_ground_indicator_vfx);
+    ClassDB::bind_method(D_METHOD("set_team_ground_indicator_vfx", "team_ground_indicator_vfx"), &MobaGamemode::set_team_ground_indicator_vfx);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "team_ground_indicator_vfx", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_team_ground_indicator_vfx", "get_team_ground_indicator_vfx");
+
     ClassDB::bind_method(D_METHOD("server_rpc_defeat"), &MobaGamemode::server_rpc_defeat);
     ClassDB::bind_method(D_METHOD("server_rpc_victory"), &MobaGamemode::server_rpc_victory);
 
@@ -525,4 +529,12 @@ void MobaGamemode::parse_gamemode_data(Dictionary gamemode_data) {
         ERR_CONTINUE(!ent);
         second_team->add_entity_member(ent);
     }
+}
+
+void MobaGamemode::set_team_ground_indicator_vfx(const Ref<PackedScene> &new_team_ground_indicator_vfx) {
+    team_ground_indicator = new_team_ground_indicator_vfx;
+}
+
+Ref<PackedScene> MobaGamemode::get_team_ground_indicator_vfx() {
+    return team_ground_indicator;
 }

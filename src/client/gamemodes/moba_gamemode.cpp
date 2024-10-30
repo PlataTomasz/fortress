@@ -10,10 +10,18 @@ void MobaGamemode::_ready() {
     Client *client_instance = Client::get_instance();
     ERR_FAIL_NULL(client_instance);
     client_instance->connect("player_connected", callable_mp(this, &MobaGamemode::_on_player_connected));
+
+    if(first_team.is_valid()) {
+        first_team->connect("entity_joined", callable_mp(this, &MobaGamemode::_on_entity_join_team).bind(first_team));
+    }
+
+    if(second_team.is_valid()) {
+        second_team->connect("entity_joined", callable_mp(this, &MobaGamemode::_on_entity_join_team).bind(second_team));
+    }
 }
 
 void MobaGamemode::_level_ready() {
-
+    
 }
 
 void MobaGamemode::client_rpc_request_team_data() {
@@ -83,4 +91,18 @@ void MobaGamemode::_on_entity_left_team_second(Entity *entity) {
 
 void MobaGamemode::_on_player_connected(const Ref<Player> &player) {
     rpc_id(MultiplayerPeer::TARGET_PEER_SERVER, "client_rpc_request_team_data");
+}
+
+void MobaGamemode::_on_entity_join_team(Entity *entity, const Ref<Team> &team) {
+    ERR_FAIL_NULL(entity);
+    ERR_FAIL_NULL(team);
+    ERR_FAIL_NULL(team_ground_indicator);
+
+    Node *team_ground_indicator_instance = team_ground_indicator->instantiate();
+    ERR_FAIL_NULL(team_ground_indicator_instance);
+    team_ground_indicator_instance->set("color", team->get_color());
+
+    // Add visual indicator to know which entity belongs to what team
+    entity->add_child(team_ground_indicator_instance);
+    
 }

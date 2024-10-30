@@ -5,6 +5,8 @@
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/data_holders/builders/damage_object_builder.h>
 #include <shared/collisions/ability_hitbox_helper.h>
+#include <shared/gamemodes/gamemode.h>
+#include <shared/core/game_level.h>
 
 void OrcLeapSlamAbility::_use(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(action_context->get_user());
@@ -20,9 +22,12 @@ void OrcLeapSlamAbility::_use(const Ref<ActionContext>& action_context) {
 
 void OrcLeapSlamAbility::_slam(const Ref<ActionContext>& action_context, const Vector3 &slam_position) {
     AbilityHitboxHelper area_helper = AbilityHitboxHelper(leap_slam_area);
+    ERR_FAIL_NULL(action_context->get_user()->get_gamelevel());
+    Gamemode *gamemode = action_context->get_user()->get_gamelevel()->get_gamemode();
+
     for(Entity *ent : area_helper.get_entities_in_area() ) {
         DamageableComponent *damageable = ent->get_damageable_component();
-        if(damageable) {
+        if(damageable && gamemode && gamemode->is_entity_enemy_of(action_context->get_user(), ent)) {
             damageable->take_damage(
                 DamageObjectBuilder()
                     .attacker(action_context->get_user())

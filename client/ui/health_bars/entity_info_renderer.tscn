@@ -50,6 +50,12 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="ColorRect" type="ColorRect" parent="EntityHealthBar/SubViewport/VSplitContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
 [node name="EntityNameDisplay" type="EntityNameDisplay" parent="EntityHealthBar/SubViewport/VSplitContainer"]
 layout_mode = 2
 horizontal_alignment = 1
