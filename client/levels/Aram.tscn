@@ -1,5 +1,6 @@
-[gd_scene load_steps=51 format=4 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=52 format=4 uid="uid://8tv1es2vlr8m"]
 
+[ext_resource type="PackedScene" uid="uid://bnhjkhgnmmxlc" path="res://vfx/moba/team_indicator_vfx.tscn" id="1_5htjc"]
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
 [ext_resource type="Texture2D" uid="uid://bo71cbws7jmsi" path="res://textures/skybox/BlueSkySkybox.png" id="2_cq1ar"]
@@ -8,13 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://p0n6q2bliu2b" path="res://entities/structures/default_nexus.tscn" id="6_pk64u"]
 
 [sub_resource type="Team" id="Team_4qvpv"]
-team_name = "Blue"
-color = Color(0, 0.2, 0.72549, 1)
+team_name = "Red"
+color = Color(0.768627, 0.0392157, 0, 1)
 respawn_position = Vector3(-37, 0, 0)
 
 [sub_resource type="Team" id="Team_7bxgj"]
-team_name = "Red"
-color = Color(0.768627, 0.0392157, 0, 1)
+team_name = "Blue"
+color = Color(0, 0.2, 0.72549, 1)
 respawn_position = Vector3(37, 0, 0)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0gg1w"]
@@ -270,6 +271,7 @@ first_team = SubResource("Team_4qvpv")
 second_team = SubResource("Team_7bxgj")
 first_team_nexus = NodePath("../Entities/RedNexus")
 second_team_nexus = NodePath("../Entities/BlueNexus")
+team_ground_indicator_vfx = ExtResource("1_5htjc")
 
 [node name="Background" type="MeshInstance3D" parent="."]
 

@@ -4,6 +4,7 @@
 #include <scene/main/timer.h>
 #include <shared/core/game_level.h>
 #include <shared/collisions/ability_hitbox_helper.h>
+#include <shared/gamemodes/gamemode.h>
 
 void OrcLeapSlamAbility::_use(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(action_context->get_user());
@@ -25,9 +26,14 @@ void OrcLeapSlamAbility::_slam(const Ref<ActionContext>& action_context, const V
 
     vfx_instance->set_global_position(slam_position);
 
+    ERR_FAIL_NULL(action_context->get_user()->get_gamelevel());
+    Gamemode *gamemode = action_context->get_user()->get_gamelevel()->get_gamemode();
+
     AbilityHitboxHelper area_helper = AbilityHitboxHelper(leap_slam_area);
     for(Entity *potential_target_entity : area_helper.get_entities_in_area()) {
-        _slam_hit_entity(potential_target_entity);
+        if(gamemode && gamemode->is_entity_enemy_of(action_context->get_user(), potential_target_entity)) {
+            _slam_hit_entity(potential_target_entity);
+        }
     }
 }
 
