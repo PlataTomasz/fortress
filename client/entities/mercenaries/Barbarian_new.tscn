@@ -34,7 +34,7 @@ resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_rcjpl"]
 resource_local_to_scene = true
-base = 300.0
+base = 1800.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_oyix2"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
@@ -6482,7 +6482,6 @@ icon = ExtResource("7_ot3p7")
 where_to_look_at = 109053018
 
 [node name="BasicAttack01" parent="AbilityCasterComponent" index="5" node_paths=PackedStringArray("hitbox") instance=ExtResource("5_77pm2")]
-max_cooldown = nan
 hitbox = NodePath("../../HitboxComponent2")
 hit_visual_effect = ExtResource("9_428v0")
 
@@ -6491,6 +6490,12 @@ where_to_look_at = 32
 
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_oyix2")
+
+[node name="ColorRect" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
 
 [node name="AudioComponent" parent="." index="7"]
 audio_entries = Array[AudioEntry]([SubResource("AudioEntry_b271i")])
@@ -6626,7 +6631,7 @@ mesh = SubResource("ArrayMesh_brhx1")
 skin = SubResource("Skin_cjs0c")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian2/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.997886, -0.027534, -0.0588776, 0.0276974, -0.999615, -0.00196509, -0.0588008, -0.00359172, 0.998263, -0.990648, 0.794929, -0.061733)
+transform = Transform3D(-0.997885, -0.0275338, -0.0588776, 0.0276975, -0.999614, -0.00196511, -0.0588008, -0.00359173, 0.998263, -0.990648, 0.794929, -0.0617331)
 bone_name = "Hand_R"
 bone_idx = 9
 

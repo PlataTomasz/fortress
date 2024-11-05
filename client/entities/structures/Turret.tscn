@@ -132,13 +132,19 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ncy44")
 theme_override_styles/fill = SubResource("StyleBoxFlat_gnmwe")
 value = 50.0
 
-[node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+[node name="ColorRect" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+[node name="EntityHealthBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="3" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
-[node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="3" node_paths=PackedStringArray("entity")]
+[node name="EntityStatusBar" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="4" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
 [node name="VisualComponent3D" type="VisualComponent3D" parent="." node_paths=PackedStringArray("animation_player")]

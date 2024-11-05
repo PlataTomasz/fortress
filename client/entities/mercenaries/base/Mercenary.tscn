@@ -91,6 +91,12 @@ replication_config = SubResource("SceneReplicationConfig_fyyhi")
 [node name="Sprite3D" parent="EntityInfoRenderer/EntityHealthBar" index="0"]
 texture = SubResource("ViewportTexture_fpm2n")
 
+[node name="ColorRect" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
 [node name="EntityNameDisplay" parent="EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
 entity = NodePath("../../../../..")
 
