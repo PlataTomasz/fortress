@@ -88,7 +88,11 @@ HitboxComponent *BarbarianBasicAttack::get_hitbox() {
 
 #ifdef CLIENT
 void BarbarianBasicAttack::_entity_hit_with_attack(Entity *entity, const Ref<ActionContext>& use_context) {
-    play_vfx_at_position(hit_visual_effect, entity->get_global_position());
+    Node3D *visual_effect = Object::cast_to<Node3D>(hit_visual_effect->instantiate());
+    if(visual_effect) {
+        // Tell clients that ent got hit by this ability
+        entity->add_child(visual_effect);
+    }
 }
 
 void BarbarianBasicAttack::_use(const Ref<ActionContext>& action_context) {

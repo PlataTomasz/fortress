@@ -6,7 +6,6 @@
 [sub_resource type="PackedScene" id="PackedScene_7yjb7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6n2vo"]
-size = Vector3(1.99927, 1, 1.28613)
 
 [node name="BasicAttack01" type="BarbarianBasicAttack" node_paths=PackedStringArray("slash_vfx_origin")]
 displayed_name = "Basic attack"
@@ -24,5 +23,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.339477, 0)
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 0, 0.375488)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 shape = SubResource("BoxShape3D_6n2vo")

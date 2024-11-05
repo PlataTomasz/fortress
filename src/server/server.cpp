@@ -114,7 +114,6 @@ void Server::_init() {
     //Setup networking
     server_peer.instantiate(); //Same as using memnew
 
-    // TODO: Dependency injection instead
     game = memnew(Game);
     game->set_name("Game");
     add_child(game);
