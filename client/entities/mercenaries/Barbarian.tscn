@@ -86,10 +86,24 @@ ultimate_ability = NodePath("BarbarianDanceWithDeath")
 displayed_name = "Dance with death"
 displayed_description = "Barbarian focuses, pushing his body to the limits, causing him to lose health over time, but healing when enemy is hit by his basic attacks."
 icon = ExtResource("1_f2r1n")
+<<<<<<< Updated upstream
 where_to_look_at = 1700945768
 
 [node name="BarbarianBasicAttack" type="BarbarianBasicAttack" parent="AbilityCasterComponent" node_paths=PackedStringArray("hitbox")]
 where_to_look_at = 429
+=======
+<<<<<<< Updated upstream
+
+[node name="BarbarianBasicAttack" type="BarbarianBasicAttack" parent="AbilityCasterComponent" node_paths=PackedStringArray("hitbox")]
+=======
+max_cooldown = -11.8987
+where_to_look_at = 1700945768
+
+[node name="BarbarianBasicAttack" type="BarbarianBasicAttack" parent="AbilityCasterComponent" node_paths=PackedStringArray("hitbox")]
+max_cooldown = 1.41531e-43
+where_to_look_at = 429
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 hitbox = NodePath("../../HitboxComponent")
 
 [node name="BarbarianBleedingPassive" type="BarbarianBleedingPassive" parent="AbilityCasterComponent"]
