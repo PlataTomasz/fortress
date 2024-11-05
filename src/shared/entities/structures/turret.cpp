@@ -303,7 +303,12 @@ void Turret::_on_target_death(const Ref<DamageObject> &damage_object) {
 }
 
 bool Turret::can_attack() {
-    return !recharging;
+    DamageableComponent *damageable = get_damageable_component();
+    if(damageable) {
+        return !recharging && !damageable->is_dead();
+    } else {
+        return !recharging;
+    }
 }
 
 float Turret::get_max_recharge_time() {
