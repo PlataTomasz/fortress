@@ -2,6 +2,7 @@
 read -p 'Build target[Client/Server]: ' build_target
 read -p 'Editor build?[Yes/No]: ' is_editor_build
 read -p 'Build type[Debug/Release]: ' build_type
+read -p 'Platform[Linux/Windows]: ' platform
 
 build_append_options=""
 
@@ -23,6 +24,17 @@ then
 elif [[ "Server" == "$build_target"* ]];
 then
 	build_append_options="extra_suffix=server game_target=server"
+else
+	echo "Error: Invalid build target! Exiting."
+	exit 1
+fi
+
+if [[ "Linux" == "$platform"* ]] || [[ -z "$platform" ]];
+then
+	build_append_options="$build_append_options platform=linuxbsd"
+elif [[ "Windows" == "$platform"* ]];
+then
+	build_append_options="$build_append_options platform=windows"
 else
 	echo "Error: Invalid build target! Exiting."
 	exit 1
