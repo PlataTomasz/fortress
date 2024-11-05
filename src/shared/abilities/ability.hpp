@@ -83,7 +83,7 @@ public:
 protected:
     void _notification(int p_notification);
 
-    float max_cooldown;
+    float max_cooldown = 0.1;
 
     Ref<Texture2D> icon;
 

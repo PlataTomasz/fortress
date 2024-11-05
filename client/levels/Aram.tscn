@@ -1,12 +1,16 @@
-[gd_scene load_steps=52 format=4 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=88 format=4 uid="uid://8tv1es2vlr8m"]
 
 [ext_resource type="PackedScene" uid="uid://bnhjkhgnmmxlc" path="res://vfx/moba/team_indicator_vfx.tscn" id="1_5htjc"]
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
 [ext_resource type="Texture2D" uid="uid://bo71cbws7jmsi" path="res://textures/skybox/BlueSkySkybox.png" id="2_cq1ar"]
+[ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="4_20rje"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="5_3bms1"]
-[ext_resource type="PackedScene" uid="uid://7453g6ydtekb" path="res://entities/structures/Turret.tscn" id="6_on3wb"]
-[ext_resource type="PackedScene" uid="uid://p0n6q2bliu2b" path="res://entities/structures/default_nexus.tscn" id="6_pk64u"]
+[ext_resource type="PackedScene" uid="uid://c2he3w6626a2a" path="res://models/nexus_mesh.tscn" id="6_vln8i"]
+[ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="8_upuso"]
+[ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="10_gkt3i"]
+[ext_resource type="Texture2D" uid="uid://caqcenx4yld48" path="res://textures/icons/misc/lightning-spanner.png" id="11_mpaeb"]
+[ext_resource type="PackedScene" uid="uid://bg4atg03uyc65" path="res://models/tower-top.glb" id="12_imaq0"]
 
 [sub_resource type="Team" id="Team_4qvpv"]
 team_name = "Red"
@@ -30,29 +34,37 @@ sky = SubResource("Sky_2msnm")
 ambient_light_source = 2
 ambient_light_color = Color(0.665883, 0.896065, 1, 1)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_dtngh"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_k2x3s"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
 
-[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_i0uew"]
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_fboaj"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_3sgeq"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_vbjon"]
 resource_local_to_scene = true
 base = 30.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_55mdg"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_ox56n"]
 resource_local_to_scene = true
 base = 75.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_ce2gt"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_igmtl"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_3q184"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_rmgq4"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_uonnc"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_21238"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_r238w"]
 resource_local_to_scene = true
 base = 300.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gotr4"]
+properties/0/path = NodePath("EntityAttributesComponent:health:current")
+properties/0/spawn = false
+properties/0/replication_mode = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ddly6"]
 resource_name = "wall"
@@ -87,27 +99,33 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
 }]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_6dse2"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xm3c4"]
+radius = 2.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_1gwd4"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
 
-[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_xgu5u"]
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_v8vyn"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_6m5f4"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_g8yga"]
 resource_local_to_scene = true
 base = 30.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_prx6p"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_7y0ew"]
 resource_local_to_scene = true
 base = 75.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_f6go3"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_qj54h"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_xg88x"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_5uww5"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_fmm2e"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_pf0yo"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_on26l"]
 resource_local_to_scene = true
 base = 300.0
 
@@ -139,8 +157,31 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
 }]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_8qsh6"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_it1gh"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="GDScript" id="GDScript_p23v7"]
+script/source = "extends Sprite3D
+
+@export var viewport: SubViewport
+
+# This script is a band-aid fix for a godot bug
+# Bug causes NodePath to be invalid if it was set in parent scene
+
+func _ready() -> void:
+	var texture_ref: ViewportTexture = texture
+	texture_ref.viewport_path = viewport.get_path()
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncy44"]
+bg_color = Color(0.563283, 0.647901, 0.145389, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnmwe"]
+bg_color = Color(0.353018, 0.700631, 1.34766e-06, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wplee"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tn0xi"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ewv87"]
 _surfaces = [{
@@ -173,28 +214,59 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ewv87")
 
-[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_m1dll"]
-resource_local_to_scene = true
+[sub_resource type="Animation" id="Animation_75x5r"]
+resource_name = "floating"
+length = 3.33333
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.0333333, 1, 0, 0.000860277, 0, 0.0666667, 1, 0, 0.00296723, 0, 0.1, 1, 0, 0.00627711, 0, 0.133333, 1, 0, 0.0107462, 0, 0.166667, 1, 0, 0.0163307, 0, 0.2, 1, 0, 0.023315, 0, 0.233333, 1, 0, 0.0312835, 0, 0.266667, 1, 0, 0.0401924, 0, 0.3, 1, 0, 0.0499981, 0, 0.333333, 1, 0, 0.0606568, 0, 0.366667, 1, 0, 0.0723653, 0, 0.4, 1, 0, 0.0847956, 0, 0.433333, 1, 0, 0.0979039, 0, 0.466667, 1, 0, 0.111646, 0, 0.5, 1, 0, 0.12598, 0, 0.533333, 1, 0, 0.141013, 0, 0.566667, 1, 0, 0.156505, 0, 0.6, 1, 0, 0.172413, 0, 0.633333, 1, 0, 0.188692, 0, 0.666667, 1, 0, 0.2053, 0, 0.7, 1, 0, 0.222258, 0, 0.766667, 1, 0, 0.25672, 0, 0.933333, 1, 0, 0.343826, 0, 0.966667, 1, 0, 0.360981, 0, 1, 1, 0, 0.377939, 0, 1.03333, 1, 0, 0.394546, 0, 1.06667, 1, 0, 0.410826, 0, 1.1, 1, 0, 0.426734, 0, 1.13333, 1, 0, 0.442226, 0, 1.16667, 1, 0, 0.457259, 0, 1.2, 1, 0, 0.471592, 0, 1.23333, 1, 0, 0.485335, 0, 1.26667, 1, 0, 0.498443, 0, 1.3, 1, 0, 0.510873, 0, 1.33333, 1, 0, 0.522582, 0, 1.36667, 1, 0, 0.53324, 0, 1.4, 1, 0, 0.543046, 0, 1.43333, 1, 0, 0.551955, 0, 1.46667, 1, 0, 0.559924, 0, 1.5, 1, 0, 0.566908, 0, 1.53333, 1, 0, 0.572492, 0, 1.56667, 1, 0, 0.576962, 0, 1.6, 1, 0, 0.580271, 0, 1.63333, 1, 0, 0.582378, 0, 1.7, 1, 0, 0.582378, 0, 1.73333, 1, 0, 0.580271, 0, 1.76667, 1, 0, 0.576962, 0, 1.8, 1, 0, 0.572492, 0, 1.83333, 1, 0, 0.566908, 0, 1.86667, 1, 0, 0.559924, 0, 1.9, 1, 0, 0.551955, 0, 1.93333, 1, 0, 0.543046, 0, 1.96667, 1, 0, 0.53324, 0, 2, 1, 0, 0.522582, 0, 2.03333, 1, 0, 0.510873, 0, 2.06667, 1, 0, 0.498443, 0, 2.1, 1, 0, 0.485335, 0, 2.13333, 1, 0, 0.471592, 0, 2.16667, 1, 0, 0.457259, 0, 2.2, 1, 0, 0.442226, 0, 2.23333, 1, 0, 0.426734, 0, 2.26667, 1, 0, 0.410826, 0, 2.3, 1, 0, 0.394546, 0, 2.33333, 1, 0, 0.377939, 0, 2.36667, 1, 0, 0.360981, 0, 2.43333, 1, 0, 0.326519, 0, 2.6, 1, 0, 0.239412, 0, 2.63333, 1, 0, 0.222258, 0, 2.66667, 1, 0, 0.2053, 0, 2.7, 1, 0, 0.188692, 0, 2.73333, 1, 0, 0.172413, 0, 2.76667, 1, 0, 0.156505, 0, 2.8, 1, 0, 0.141013, 0, 2.83333, 1, 0, 0.12598, 0, 2.86667, 1, 0, 0.111646, 0, 2.9, 1, 0, 0.0979038, 0, 2.93333, 1, 0, 0.0847956, 0, 2.96667, 1, 0, 0.0723653, 0, 3, 1, 0, 0.0606567, 0, 3.03333, 1, 0, 0.0499982, 0, 3.06667, 1, 0, 0.0401925, 0, 3.1, 1, 0, 0.0312835, 0, 3.13333, 1, 0, 0.0233149, 0, 3.16667, 1, 0, 0.0163307, 0, 3.2, 1, 0, 0.0107462, 0, 3.23333, 1, 0, 0.00627713, 0, 3.26667, 1, 0, 0.00296724, 0, 3.3, 1, 0, 0.000860312, 0, 3.33333, 1, 0, 0, 0)
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_e43t2"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_45rbh"]
+_data = {
+"floating": SubResource("Animation_75x5r")
+}
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_tvbb7"]
+resource_local_to_scene = true
+max = 1.0
+current = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_its8q"]
 resource_local_to_scene = true
 base = 30.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_u0ija"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_18rgk"]
 resource_local_to_scene = true
 base = 75.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_noqvh"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_lbhhq"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_sg72n"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_ei0nv"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_j2135"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_qy3my"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_4eqmr"]
 resource_local_to_scene = true
 base = 300.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_mwgso"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_ecfb6"]
+height = 0.5
+radial_segments = 12
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ogbw3"]
+radius = 2.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vbos0"]
+radius = 3.091
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3uao2"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lwv6k"]
@@ -215,24 +287,81 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ewv87")
 
-[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_mmx7i"]
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_dhu4d"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_rlrjc"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_u16s2"]
 resource_local_to_scene = true
 base = 30.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_4dnjp"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_flq7v"]
 resource_local_to_scene = true
 base = 75.0
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_ikfb4"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_yk4vw"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_31esl"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_7ouus"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_vhv5p"]
 resource_local_to_scene = true
 
-[sub_resource type="FloatAttribute" id="FloatAttribute_rmdhb"]
+[sub_resource type="FloatAttribute" id="FloatAttribute_7xjly"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_l8vyd"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_wmsr7"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_157a8"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_thujv"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_35w40"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_q43r8"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_p52c1"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_a2ejx"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ar46v"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_fmk5p"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_qhhpo"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_i74bc"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_mng5r"]
+base = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_g5s08"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_ttyrk"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_c5000"]
 resource_local_to_scene = true
 base = 300.0
 
@@ -305,109 +434,539 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 14, -17)
 
 [node name="Entities" type="Node" parent="."]
 
-[node name="BlueNexus" parent="Entities" groups=["default_team_second"] instance=ExtResource("6_pk64u")]
+[node name="BlueNexus" type="Entity" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component") groups=["default_team_second"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+
+[node name="EntityInfoRenderer" parent="Entities/BlueNexus" instance=ExtResource("4_20rje")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Sprite3D" parent="Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_dtngh")
+texture = SubResource("ViewportTexture_k2x3s")
 
-[node name="EntityAttributesComponent" parent="Entities/BlueNexus" index="1"]
-health = SubResource("CappedResourceAttribute_i0uew")
-global_defense = SubResource("FloatAttribute_3sgeq")
-attack_damage = SubResource("FloatAttribute_55mdg")
-magic_power = SubResource("FloatAttribute_ce2gt")
-cooldown_reduction = SubResource("FloatAttribute_rmgq4")
-movement_speed = SubResource("FloatAttribute_21238")
+[node name="EntityNameDisplay" parent="Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
 
-[node name="NexusMesh" parent="Entities/BlueNexus/VisualComponent3D" index="0"]
+[node name="EntityHealthBar" parent="Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityStatusBar" parent="Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="Entities/BlueNexus"]
+health = SubResource("CappedResourceAttribute_fboaj")
+global_defense = SubResource("FloatAttribute_vbjon")
+attack_damage = SubResource("FloatAttribute_ox56n")
+attack_speed = SubResource("FloatAttribute_igmtl")
+magic_power = SubResource("FloatAttribute_3q184")
+cooldown_reduction = SubResource("FloatAttribute_uonnc")
+movement_speed = SubResource("FloatAttribute_r238w")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="Entities/BlueNexus/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="Entities/BlueNexus"]
+
+[node name="NexusMesh" parent="Entities/BlueNexus/VisualComponent3D" instance=ExtResource("6_vln8i")]
 mesh = SubResource("ArrayMesh_ytm08")
+skeleton = NodePath("../..")
 
-[node name="RedNexus" parent="Entities" groups=["default_team_first"] instance=ExtResource("6_pk64u")]
+[node name="StatusEffectVictimComponent" parent="Entities/BlueNexus" instance=ExtResource("8_upuso")]
+
+[node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueNexus"]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueNexus"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueNexus/HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_xm3c4")
+
+[node name="RedNexus" type="Entity" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component") groups=["default_team_first"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+
+[node name="EntityInfoRenderer" parent="Entities/RedNexus" instance=ExtResource("4_20rje")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Sprite3D" parent="Entities/RedNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_6dse2")
+texture = SubResource("ViewportTexture_1gwd4")
 
-[node name="EntityAttributesComponent" parent="Entities/RedNexus" index="1"]
-health = SubResource("CappedResourceAttribute_xgu5u")
-global_defense = SubResource("FloatAttribute_6m5f4")
-attack_damage = SubResource("FloatAttribute_prx6p")
-magic_power = SubResource("FloatAttribute_f6go3")
-cooldown_reduction = SubResource("FloatAttribute_5uww5")
-movement_speed = SubResource("FloatAttribute_pf0yo")
+[node name="EntityNameDisplay" parent="Entities/RedNexus/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
 
-[node name="NexusMesh" parent="Entities/RedNexus/VisualComponent3D" index="0"]
+[node name="EntityHealthBar" parent="Entities/RedNexus/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityStatusBar" parent="Entities/RedNexus/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="Entities/RedNexus"]
+health = SubResource("CappedResourceAttribute_v8vyn")
+global_defense = SubResource("FloatAttribute_g8yga")
+attack_damage = SubResource("FloatAttribute_7y0ew")
+attack_speed = SubResource("FloatAttribute_qj54h")
+magic_power = SubResource("FloatAttribute_xg88x")
+cooldown_reduction = SubResource("FloatAttribute_fmm2e")
+movement_speed = SubResource("FloatAttribute_on26l")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="Entities/RedNexus/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="Entities/RedNexus"]
+
+[node name="NexusMesh" parent="Entities/RedNexus/VisualComponent3D" instance=ExtResource("6_vln8i")]
 mesh = SubResource("ArrayMesh_mtq6m")
+skeleton = NodePath("../..")
 
-[node name="BlueTurretOuter" parent="Entities" groups=["default_team_second"] instance=ExtResource("6_on3wb")]
+[node name="StatusEffectVictimComponent" parent="Entities/RedNexus" instance=ExtResource("8_upuso")]
+
+[node name="DamageableComponent" type="DamageableComponent" parent="Entities/RedNexus"]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedNexus"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedNexus/HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_xm3c4")
+
+[node name="BlueTurretOuter" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_second"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("10_gkt3i")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
 
-[node name="Sprite3D" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_8qsh6")
+[node name="EntityInfoRenderer" type="Node3D" parent="Entities/BlueTurretOuter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
-[node name="Cube" parent="Entities/BlueTurretOuter/VisualComponent3D/crystal" index="0"]
+[node name="EntityHealthBar" type="Node3D" parent="Entities/BlueTurretOuter/EntityInfoRenderer"]
+
+[node name="Sprite3D" type="Sprite3D" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar" node_paths=PackedStringArray("viewport")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_it1gh")
+script = SubResource("GDScript_p23v7")
+viewport = NodePath("../SubViewport")
+
+[node name="SubViewport" type="SubViewport" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar"]
+disable_3d = true
+transparent_bg = true
+
+[node name="VSplitContainer" type="VBoxContainer" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -19.5
+offset_right = 6.0
+offset_bottom = 19.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HFlowContainer" type="TurretRechargeIndicator" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("turret", "progress_bar")]
+layout_mode = 2
+turret = NodePath("../../../../..")
+progress_bar = NodePath("ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_mpaeb")
+expand_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ncy44")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gnmwe")
+value = 50.0
+
+[node name="EntityNameDisplay" type="EntityNameDisplay" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
+layout_mode = 2
+horizontal_alignment = 1
+entity = NodePath("../../../../..")
+
+[node name="EntityHealthBar" type="EntityHealthBar" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("value_indicator", "entity")]
+custom_minimum_size = Vector2(192, 24)
+layout_mode = 2
+value = 100.0
+nine_patch_stretch = true
+texture_under = SubResource("PlaceholderTexture2D_wplee")
+texture_progress = SubResource("PlaceholderTexture2D_tn0xi")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0.6, 0, 0, 1)
+value_indicator = NodePath("Label")
+entity = NodePath("../../../../..")
+
+[node name="Label" type="Label" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/EntityHealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "null"
+horizontal_alignment = 1
+
+[node name="EntityStatusBar" type="EntityStatusBar" parent="Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" node_paths=PackedStringArray("entity")]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+entity = NodePath("../../../../..")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="Entities/BlueTurretOuter" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="Entities/BlueTurretOuter/VisualComponent3D" instance=ExtResource("12_imaq0")]
+
+[node name="crystal" type="Node3D" parent="Entities/BlueTurretOuter/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="Entities/BlueTurretOuter/VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, -1.5, 0)
 mesh = SubResource("ArrayMesh_m75iv")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="Entities/BlueTurretOuter" index="2"]
-health = SubResource("CappedResourceAttribute_m1dll")
-global_defense = SubResource("FloatAttribute_e43t2")
-attack_damage = SubResource("FloatAttribute_u0ija")
-magic_power = SubResource("FloatAttribute_noqvh")
-cooldown_reduction = SubResource("FloatAttribute_ei0nv")
-movement_speed = SubResource("FloatAttribute_qy3my")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Entities/BlueTurretOuter/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
 
-[node name="RedTurretInner" parent="Entities" groups=["default_team_first"] instance=ExtResource("6_on3wb")]
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="Entities/BlueTurretOuter"]
+health = SubResource("CappedResourceAttribute_tvbb7")
+global_defense = SubResource("FloatAttribute_its8q")
+attack_damage = SubResource("FloatAttribute_18rgk")
+attack_speed = SubResource("FloatAttribute_lbhhq")
+magic_power = SubResource("FloatAttribute_sg72n")
+cooldown_reduction = SubResource("FloatAttribute_j2135")
+movement_speed = SubResource("FloatAttribute_4eqmr")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="Entities/BlueTurretOuter/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="StatusEffectVictimComponent" parent="Entities/BlueTurretOuter" instance=ExtResource("8_upuso")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Entities/BlueTurretOuter" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="Entities/BlueTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretOuter/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretOuter/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueTurretOuter"]
+
+[node name="RedTurretInner" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_first"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("10_gkt3i")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="EntityInfoRenderer" parent="Entities/RedTurretInner" instance=ExtResource("4_20rje")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="Sprite3D" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_mwgso")
+texture = SubResource("ViewportTexture_3uao2")
 
-[node name="Cube" parent="Entities/RedTurretInner/VisualComponent3D/crystal" index="0"]
+[node name="HFlowContainer" type="TurretRechargeIndicator" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("turret", "progress_bar")]
+layout_mode = 2
+turret = NodePath("../../../../..")
+progress_bar = NodePath("ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_mpaeb")
+expand_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ncy44")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gnmwe")
+value = 50.0
+
+[node name="EntityNameDisplay" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityHealthBar" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityStatusBar" parent="Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="3" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="Entities/RedTurretInner" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="Entities/RedTurretInner/VisualComponent3D" instance=ExtResource("12_imaq0")]
+
+[node name="crystal" type="Node3D" parent="Entities/RedTurretInner/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="Entities/RedTurretInner/VisualComponent3D/crystal"]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 mesh = SubResource("ArrayMesh_lwv6k")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="Entities/RedTurretInner" index="2"]
-health = SubResource("CappedResourceAttribute_mmx7i")
-global_defense = SubResource("FloatAttribute_rlrjc")
-attack_damage = SubResource("FloatAttribute_4dnjp")
-magic_power = SubResource("FloatAttribute_ikfb4")
-cooldown_reduction = SubResource("FloatAttribute_7ouus")
-movement_speed = SubResource("FloatAttribute_rmdhb")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Entities/RedTurretInner/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
 
-[node name="RedTurretOuter" parent="Entities" groups=["default_team_first"] instance=ExtResource("6_on3wb")]
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="Entities/RedTurretInner"]
+health = SubResource("CappedResourceAttribute_dhu4d")
+global_defense = SubResource("FloatAttribute_u16s2")
+attack_damage = SubResource("FloatAttribute_flq7v")
+attack_speed = SubResource("FloatAttribute_yk4vw")
+magic_power = SubResource("FloatAttribute_31esl")
+cooldown_reduction = SubResource("FloatAttribute_vhv5p")
+movement_speed = SubResource("FloatAttribute_7xjly")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="Entities/RedTurretInner/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="StatusEffectVictimComponent" parent="Entities/RedTurretInner" instance=ExtResource("8_upuso")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Entities/RedTurretInner" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="Entities/RedTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretInner/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretInner/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="Entities/RedTurretInner"]
+
+[node name="RedTurretOuter" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_first"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("10_gkt3i")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="EntityInfoRenderer" parent="Entities/RedTurretOuter" instance=ExtResource("4_20rje")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="Sprite3D" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_mwgso")
+texture = SubResource("ViewportTexture_l8vyd")
 
-[node name="Cube" parent="Entities/RedTurretOuter/VisualComponent3D/crystal" index="0"]
+[node name="HFlowContainer" type="TurretRechargeIndicator" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("turret", "progress_bar")]
+layout_mode = 2
+turret = NodePath("../../../../..")
+progress_bar = NodePath("ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_mpaeb")
+expand_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ncy44")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gnmwe")
+value = 50.0
+
+[node name="EntityNameDisplay" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityHealthBar" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityStatusBar" parent="Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="3" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="Entities/RedTurretOuter" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="Entities/RedTurretOuter/VisualComponent3D" instance=ExtResource("12_imaq0")]
+
+[node name="crystal" type="Node3D" parent="Entities/RedTurretOuter/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="Entities/RedTurretOuter/VisualComponent3D/crystal"]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 mesh = SubResource("ArrayMesh_lwv6k")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="Entities/RedTurretOuter" index="2"]
-health = SubResource("CappedResourceAttribute_mmx7i")
-global_defense = SubResource("FloatAttribute_rlrjc")
-attack_damage = SubResource("FloatAttribute_4dnjp")
-magic_power = SubResource("FloatAttribute_ikfb4")
-cooldown_reduction = SubResource("FloatAttribute_7ouus")
-movement_speed = SubResource("FloatAttribute_rmdhb")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Entities/RedTurretOuter/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
 
-[node name="BlueTurretInner" parent="Entities" groups=["default_team_second"] instance=ExtResource("6_on3wb")]
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="Entities/RedTurretOuter"]
+health = SubResource("CappedResourceAttribute_wmsr7")
+global_defense = SubResource("FloatAttribute_157a8")
+attack_damage = SubResource("FloatAttribute_thujv")
+attack_speed = SubResource("FloatAttribute_35w40")
+magic_power = SubResource("FloatAttribute_q43r8")
+cooldown_reduction = SubResource("FloatAttribute_p52c1")
+movement_speed = SubResource("FloatAttribute_a2ejx")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="Entities/RedTurretOuter/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="StatusEffectVictimComponent" parent="Entities/RedTurretOuter" instance=ExtResource("8_upuso")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Entities/RedTurretOuter" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="Entities/RedTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretOuter/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretOuter/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="Entities/RedTurretOuter"]
+
+[node name="BlueTurretInner" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_second"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("10_gkt3i")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="EntityInfoRenderer" parent="Entities/BlueTurretInner" instance=ExtResource("4_20rje")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="Sprite3D" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_8qsh6")
+texture = SubResource("ViewportTexture_ar46v")
 
-[node name="Cube" parent="Entities/BlueTurretInner/VisualComponent3D/crystal" index="0"]
+[node name="HFlowContainer" type="TurretRechargeIndicator" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="0" node_paths=PackedStringArray("turret", "progress_bar")]
+layout_mode = 2
+turret = NodePath("../../../../..")
+progress_bar = NodePath("ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_mpaeb")
+expand_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer/HFlowContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ncy44")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gnmwe")
+value = 50.0
+
+[node name="EntityNameDisplay" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="1" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityHealthBar" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="2" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="EntityStatusBar" parent="Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar/SubViewport/VSplitContainer" index="3" node_paths=PackedStringArray("entity")]
+entity = NodePath("../../../../..")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="Entities/BlueTurretInner" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="Entities/BlueTurretInner/VisualComponent3D" instance=ExtResource("12_imaq0")]
+
+[node name="crystal" type="Node3D" parent="Entities/BlueTurretInner/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="Entities/BlueTurretInner/VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, -1.5, 0)
 mesh = SubResource("ArrayMesh_m75iv")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="Entities/BlueTurretInner" index="2"]
-health = SubResource("CappedResourceAttribute_m1dll")
-global_defense = SubResource("FloatAttribute_e43t2")
-attack_damage = SubResource("FloatAttribute_u0ija")
-magic_power = SubResource("FloatAttribute_noqvh")
-cooldown_reduction = SubResource("FloatAttribute_ei0nv")
-movement_speed = SubResource("FloatAttribute_qy3my")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Entities/BlueTurretInner/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="Entities/BlueTurretInner"]
+health = SubResource("CappedResourceAttribute_fmk5p")
+global_defense = SubResource("FloatAttribute_qhhpo")
+attack_damage = SubResource("FloatAttribute_i74bc")
+attack_speed = SubResource("FloatAttribute_mng5r")
+magic_power = SubResource("FloatAttribute_g5s08")
+cooldown_reduction = SubResource("FloatAttribute_ttyrk")
+movement_speed = SubResource("FloatAttribute_c5000")
+
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="Entities/BlueTurretInner/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="StatusEffectVictimComponent" parent="Entities/BlueTurretInner" instance=ExtResource("8_upuso")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Entities/BlueTurretInner" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="Entities/BlueTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretInner/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretInner/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueTurretInner"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn")
@@ -523,16 +1082,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 0, 0)
 [node name="SpawnPointBlue" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 0)
 
-[editable path="Entities/BlueNexus"]
 [editable path="Entities/BlueNexus/EntityInfoRenderer"]
 [editable path="Entities/BlueNexus/VisualComponent3D/NexusMesh"]
-[editable path="Entities/RedNexus"]
 [editable path="Entities/RedNexus/EntityInfoRenderer"]
-[editable path="Entities/BlueTurretOuter"]
-[editable path="Entities/BlueTurretOuter/EntityInfoRenderer"]
-[editable path="Entities/RedTurretInner"]
 [editable path="Entities/RedTurretInner/EntityInfoRenderer"]
-[editable path="Entities/RedTurretOuter"]
 [editable path="Entities/RedTurretOuter/EntityInfoRenderer"]
-[editable path="Entities/BlueTurretInner"]
 [editable path="Entities/BlueTurretInner/EntityInfoRenderer"]
