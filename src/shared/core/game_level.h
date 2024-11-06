@@ -9,6 +9,8 @@
 #include <shared/data_holders/damage_object.hpp>
 #include <shared/entities/entity.h>
 
+class BasicAttack;
+class Ability;
 class Gamemode;
 
 //Maybe It would be better if GameLevel was entity aswell?(It could store synchronized global variables)
@@ -26,6 +28,11 @@ private:
 	void _on_entity_hit(Entity *attacker, Entity *inflictor, Entity *ent);
 	void _on_entity_damage_taken(const Ref<DamageObject>& damage_object, Entity *ent);
 	void _on_entity_death(const Ref<DamageObject> &damage_object, Entity *entity);
+
+	void _on_entity_ability_use_started(Ability *ability, Entity *ent);
+	void _on_entity_ability_use_finished(Ability *ability, Entity *ent);
+	void _on_entity_basic_attack_use_started(Ability *basic_attack, Entity *ent);
+	void _on_entity_basic_attack_use_finished(Ability *basic_attack, Entity *ent);
 protected:
 	static void _bind_methods();
 public:

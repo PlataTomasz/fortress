@@ -107,7 +107,7 @@ bones/14/rotation = Quaternion(-0.782854, -1.48345e-07, 1.86647e-07, 0.622206)
 layers = 2
 
 [node name="BoneAttachment3D2" type="BoneAttachment3D" parent="VisualComponent3D/orc/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.686319, 0.701991, -0.190199, -0.591413, -0.690877, -0.415836, -0.423317, -0.17291, 0.889328, 1.25301, 0.888337, -0.303488)
+transform = Transform3D(-0.686319, 0.70199, -0.190199, -0.591412, -0.690878, -0.415837, -0.423318, -0.172911, 0.889327, 1.253, 0.888338, -0.303489)
 bone_name = "Hand_L"
 bone_idx = 4
 
@@ -118,7 +118,7 @@ transform = Transform3D(-0.321603, -0.158675, -0.254939, -0.153341, 0.407957, -0
 layers = 2
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/orc/Armature/Skeleton3D" index="2"]
-transform = Transform3D(-0.686318, -0.701991, 0.190199, 0.561962, -0.345831, 0.751399, -0.461698, 0.622583, 0.631842, -1.25301, 1.03436, 0.328655)
+transform = Transform3D(-0.686319, -0.701991, 0.190199, 0.561963, -0.345831, 0.751398, -0.461698, 0.622584, 0.631842, -1.25301, 1.03436, 0.328655)
 bone_name = "Hand_R"
 bone_idx = 9
 

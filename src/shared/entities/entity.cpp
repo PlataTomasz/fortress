@@ -12,6 +12,7 @@
 #include <shared/entities/components/movement/movement_component.h>
 #include <shared/entities/components/visual/visual_component_3d.h>
 #include <shared/entities/components/audio/audio_component.h>
+#include <shared/abilities/basic_attack.h>
 
 bool Entity::has_tag(const String& tag) {
 	return is_in_group(tag);
@@ -60,6 +61,14 @@ void Entity::_bind_methods() {
 	::ClassDB::bind_method(D_METHOD("get_audio_component"), &Entity::get_audio_component);
     ::ClassDB::bind_method(D_METHOD("set_audio_component"), &Entity::set_audio_component);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "audio_component", PROPERTY_HINT_NODE_TYPE, AudioComponent::get_class_static()), "set_audio_component", "get_audio_component");
+
+	ADD_SIGNAL(MethodInfo("basic_attack_use_started", 
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static()), 
+		PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())
+	));
+	ADD_SIGNAL(MethodInfo("basic_attack_use_finished", 
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static())
+	));
 }
 
 Node *Entity::_get_component(const String& component_typename) {
@@ -160,3 +169,4 @@ AudioComponent *Entity::get_audio_component() {
 void Entity::set_audio_component(AudioComponent *new_audio_component) {
 	audio_component = new_audio_component;
 }
+

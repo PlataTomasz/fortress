@@ -3,7 +3,7 @@
 #include <shared/core/game_level.h>
 #include <shared/entities/entity.h>
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
-
+#include <shared/abilities/basic_attack.h>
 #include <shared/registries/status_effect_registry.h>
 
 void OrcCrushingBlowsBuff::_on_apply() {
@@ -11,6 +11,7 @@ void OrcCrushingBlowsBuff::_on_apply() {
     ERR_FAIL_NULL(get_victim_entity());
     ERR_FAIL_NULL(get_victim_entity()->get_gamelevel());
 	get_victim_entity()->get_gamelevel()->connect("entity_damage_taken", callable_mp(this, &OrcCrushingBlowsBuff::_on_basic_attack_damage_dealt));
+    get_victim_entity()->get_gamelevel()->connect("basic_attack_use_finished", callable_mp(this, &OrcCrushingBlowsBuff::_on_basic_attack_finish));
 }
 
 void OrcCrushingBlowsBuff::_on_remove() {
@@ -18,6 +19,7 @@ void OrcCrushingBlowsBuff::_on_remove() {
     ERR_FAIL_NULL(get_victim_entity());
     ERR_FAIL_NULL(get_victim_entity()->get_gamelevel());
 	get_victim_entity()->get_gamelevel()->disconnect("entity_damage_taken", callable_mp(this, &OrcCrushingBlowsBuff::_on_basic_attack_damage_dealt));
+    get_victim_entity()->get_gamelevel()->connect("basic_attack_use_finished", callable_mp(this, &OrcCrushingBlowsBuff::_on_basic_attack_finish));
 }
 
 void OrcCrushingBlowsBuff::_on_basic_attack_damage_dealt(const Ref<DamageObject> damage_object, Entity *target) {
@@ -39,5 +41,8 @@ void OrcCrushingBlowsBuff::_on_basic_attack_damage_dealt(const Ref<DamageObject>
     ERR_FAIL_NULL(status_effect);
 
 	status_effect_component->apply_status_effect(status_effect);
+}
+
+void OrcCrushingBlowsBuff::_on_basic_attack_finish(BasicAttack *attack, Entity *user) {
     this->expire();
 }

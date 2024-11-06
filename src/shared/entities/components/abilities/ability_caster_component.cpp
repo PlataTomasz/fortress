@@ -34,6 +34,8 @@ void AbilityCasterComponent::_notification(int p_notification) {
 		case NOTIFICATION_READY: {
 			ADD_RPC_CONFIG(server_rpc_ability_used, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
             ADD_RPC_CONFIG(server_rpc_attack_used, MultiplayerAPI::RPC_MODE_AUTHORITY, MultiplayerPeer::TRANSFER_MODE_RELIABLE, 0, false);
+
+            _ready();
 		} break;
 
 		default:
@@ -69,6 +71,22 @@ void AbilityCasterComponent::_bind_methods()
 
     ::ClassDB::bind_method(D_METHOD("server_rpc_ability_used", "ability_index", "networked_action_context"), &AbilityCasterComponent::server_rpc_ability_used);
     ::ClassDB::bind_method(D_METHOD("server_rpc_attack_used", "networked_action_context"), &AbilityCasterComponent::server_rpc_attack_used);
+
+    ADD_SIGNAL(MethodInfo("basic_attack_use_started",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static())
+	));
+
+    ADD_SIGNAL(MethodInfo("basic_attack_use_finished",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static())
+	));
+
+    ADD_SIGNAL(MethodInfo("ability_use_started",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, Ability::get_class_static())
+	));
+
+    ADD_SIGNAL(MethodInfo("ability_use_finished",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, Ability::get_class_static())
+	));
 }
 
 void AbilityCasterComponent::server_rpc_attack_used(Dictionary networked_action_data) {
@@ -230,4 +248,35 @@ void AbilityCasterComponent::use_ability(int index, const Ref<ActionContext>& ac
     } else {
         print_error(ability_to_use->to_string() + " couldn't be used!");
     }
+}
+
+void AbilityCasterComponent::_ready() {
+    if(attack) {
+        attack->connect("use_started", callable_mp(this, &AbilityCasterComponent::_on_basic_attack_use_started).bind(attack));
+        attack->connect("use_finished", callable_mp(this, &AbilityCasterComponent::_on_basic_attack_use_finished).bind(attack));
+    }
+
+    for(int i = 1;i<AbilityCasterComponent::ABILITY_MAX;i++) {
+        Ability *ability = get_ability_by_index(i);
+        ERR_CONTINUE(!ability);
+
+        ability->connect("use_started", callable_mp(this, &AbilityCasterComponent::_on_ability_use_started).bind(ability));
+        ability->connect("use_finished", callable_mp(this, &AbilityCasterComponent::_on_ability_use_finished).bind(ability));
+    }
+}
+
+void AbilityCasterComponent::_on_ability_use_started(Ability *ability) {
+    emit_signal("ability_use_started", ability);
+}
+
+void AbilityCasterComponent::_on_ability_use_finished(Ability *ability) {
+    emit_signal("ability_use_finished", ability);
+}
+
+void AbilityCasterComponent::_on_basic_attack_use_started(Ability *basic_attack) {
+    emit_signal("basic_attack_use_started", basic_attack);
+}
+
+void AbilityCasterComponent::_on_basic_attack_use_finished(Ability *basic_attack) {
+    emit_signal("basic_attack_use_finished", basic_attack);
 }
