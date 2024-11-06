@@ -1,0 +1,91 @@
+[gd_scene load_steps=8 format=3 uid="uid://kt73myhe1sky"]
+
+[ext_resource type="Texture2D" uid="uid://djxe44nwoq1uq" path="res://textures/vfx/border_01_trans.png" id="1_dx2in"]
+[ext_resource type="PackedScene" uid="uid://bgngxpo7tj7nh" path="res://vfx/generic/attack_arc.tscn" id="2_af55j"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_db2dd"]
+size = Vector2(20, 20)
+
+[sub_resource type="Animation" id="Animation_4302j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Decal:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0.0166664, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_v6im2"]
+resource_name = "play"
+length = 0.25
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 0.0166664, 0), Color(1, 0, 0.0166664, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tnjrm"]
+_data = {
+"RESET": SubResource("Animation_4302j"),
+"play": SubResource("Animation_v6im2")
+}
+
+[sub_resource type="BoxMesh" id="BoxMesh_rfldj"]
+
+[node name="BarbarianLaceratingSlashArea" type="Node3D"]
+
+[node name="debug" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("PlaneMesh_db2dd")
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+size = Vector3(1, 2, 2.7)
+texture_albedo = ExtResource("1_dx2in")
+modulate = Color(1, 0, 0.0166664, 1)
+cull_mask = 1048573
+
+[node name="VFX" parent="." instance=ExtResource("2_af55j")]
+transform = Transform3D(4.37114e-08, 1, -8.74228e-08, -0.179472, 9.38483e-08, 0.983763, 0.983763, -2.73117e-08, 0.179472, 0, 0, 0.578365)
+
+[node name="MeshInstance3D" parent="VFX" index="0"]
+transform = Transform3D(-0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tnjrm")
+}
+autoplay = "play"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+layers = 0
+mesh = SubResource("BoxMesh_rfldj")
+
+[editable path="VFX"]

@@ -42,6 +42,8 @@ void BarbarianDanceWithDeath::_use(const Ref<ActionContext>& action_context) {
         print_error("Failed to play sound! Missing AudioComponent!");
     }
 
+    play_vfx(action_context, use_vfx);
+
     // Play animation
     VisualComponent3D *visual_component = action_context->get_user()->get_visual_component();
     if(visual_component)  {
@@ -56,3 +58,17 @@ void BarbarianDanceWithDeath::_use(const Ref<ActionContext>& action_context) {
 }
 
 #endif
+
+void BarbarianDanceWithDeath::set_use_vfx(const Ref<PackedScene> &new_use_vfx) {
+    use_vfx = new_use_vfx;
+}
+
+Ref<PackedScene> BarbarianDanceWithDeath::get_use_vfx() {
+    return use_vfx;
+}
+
+void BarbarianDanceWithDeath::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("get_use_vfx"), &BarbarianDanceWithDeath::get_use_vfx);
+    ClassDB::bind_method(D_METHOD("set_use_vfx", "use_vfx"), &BarbarianDanceWithDeath::set_use_vfx);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "use_vfx", PROPERTY_HINT_RESOURCE_TYPE, PackedScene::get_class_static()), "set_use_vfx", "get_use_vfx");
+}
