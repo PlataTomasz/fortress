@@ -31,6 +31,13 @@ private:
 
     void server_rpc_ability_used(int which_ability, Dictionary networked_action_data);
     void server_rpc_attack_used(Dictionary networked_action_data);
+
+    void _on_ability_use_started(Ability *ability);
+    void _on_ability_use_finished(Ability *ability);
+    void _on_basic_attack_use_started(Ability *basic_attack);
+    void _on_basic_attack_use_finished(Ability *basic_attack);
+
+    void _ready();
 public:
     enum AbilitySetIndex  : int
     {

@@ -2,8 +2,11 @@
 
 #include <shared/entities/components/hitbox/hitbox_component.h>
 #include <shared/entities/components/damage/damageable_component.h>
-
+#include <shared/abilities/basic_attack.h>
+#include <shared/entities/entity.h>
 #include <shared/gamemodes/gamemode.h>
+#include <shared/entities/components/abilities/ability_caster_component.h>
+#include <shared/abilities/basic_attack.h>
 
 Node *GameLevel::get_entities_node() {
     return entities_node;
@@ -37,7 +40,25 @@ void GameLevel::_bind_methods() {
     ADD_SIGNAL(MethodInfo("entity_death", PropertyInfo(Variant::OBJECT, "entity"), 
         PropertyInfo(Variant::OBJECT, "damage_object", PROPERTY_HINT_RESOURCE_TYPE, DamageObject::get_class_static())));
 
-    
+    ADD_SIGNAL(MethodInfo("basic_attack_use_started",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, BasicAttack::get_class_static()), 
+		PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())
+	));
+
+    ADD_SIGNAL(MethodInfo("basic_attack_use_finished",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, Ability::get_class_static()), 
+		PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())
+	));
+
+    ADD_SIGNAL(MethodInfo("ability_use_started",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, Ability::get_class_static()), 
+		PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())
+	));
+
+    ADD_SIGNAL(MethodInfo("ability_use_finished",
+		PropertyInfo(Variant::OBJECT, "basic_attack", PROPERTY_HINT_NODE_TYPE, Ability::get_class_static()), 
+		PropertyInfo(Variant::OBJECT, "entity", PROPERTY_HINT_NODE_TYPE, Entity::get_class_static())
+	));
 }
 
 // Order is weird to correctly bind callable arguments
@@ -62,6 +83,15 @@ void GameLevel::add_entity(Entity *ent) {
         damageable->connect("death", callable_mp(this, &GameLevel::_on_entity_death).bind(ent));
     }
 
+    AbilityCasterComponent *ability_caster = ent->get_ability_caster_component();
+    if(ability_caster) {
+        ability_caster->connect("ability_use_finished", callable_mp(this, &GameLevel::_on_entity_ability_use_finished).bind(ent));
+        ability_caster->connect("ability_use_started", callable_mp(this, &GameLevel::_on_entity_ability_use_started).bind(ent));
+
+        ability_caster->connect("basic_attack_use_finished", callable_mp(this, &GameLevel::_on_entity_basic_attack_use_finished).bind(ent));
+        ability_caster->connect("basic_attack_use_started", callable_mp(this, &GameLevel::_on_entity_basic_attack_use_started).bind(ent));
+    }
+
 	entities_node->add_child(ent);
     emit_signal("entity_added", ent);
 }
@@ -81,4 +111,20 @@ void GameLevel::set_gamemode(Gamemode *new_gamemode) {
 
 Gamemode *GameLevel::get_gamemode() {
     return gamemode;
+}
+
+void GameLevel::_on_entity_ability_use_started(Ability *ability, Entity *ent) {
+    emit_signal("ability_use_started", ability, ent);
+}
+
+void GameLevel::_on_entity_ability_use_finished(Ability *ability, Entity *ent) {
+    emit_signal("ability_use_finished", ability, ent);
+}
+
+void GameLevel::_on_entity_basic_attack_use_started(Ability *basic_attack, Entity *ent) {
+    emit_signal("basic_attack_use_started", basic_attack, ent);
+}
+
+void GameLevel::_on_entity_basic_attack_use_finished(Ability *basic_attack, Entity *ent) {
+    emit_signal("basic_attack_use_finished", basic_attack, ent);
 }

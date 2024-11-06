@@ -163,7 +163,7 @@ Ability::Ability()
 
 void Ability::_bind_methods() {
     ADD_SIGNAL(MethodInfo("use_started"));
-    ADD_SIGNAL(MethodInfo("use_finished", PropertyInfo(Variant::BOOL, "was_interrupted")));
+    ADD_SIGNAL(MethodInfo("use_finished"));
 
     ClassDB::bind_method(D_METHOD("use", "action_context"), &Ability::use);
 
@@ -254,7 +254,7 @@ void Ability::_deferred_use_handler(const Ref<ActionContext>& action_context) {
 
     // TODO: Check if ability can still be used
     _use(action_context);
-    emit_signal("use_finished", false);
+    emit_signal("use_finished");
 }
 
 void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
@@ -277,7 +277,7 @@ void Ability::_deferred_use(const Ref<ActionContext>& action_context) {
 
 void Ability::_instant_use(const Ref<ActionContext>& action_context) {
     _use(action_context);
-    emit_signal("use_finished", false);
+    emit_signal("use_finished");
 }
 
 void Ability::play_sound(const Ref<ActionContext> &action_context, const Ref<AudioStream> &sound_resource) {
