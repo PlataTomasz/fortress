@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://e4u8omqdpbhr"]
+[gd_scene load_steps=3 format=3 uid="uid://e4u8omqdpbhr"]
 
 [ext_resource type="Texture2D" uid="uid://bcyr6po2fkwls" path="res://textures/icons/abilities/barbarian/dance_with_death.png" id="1_1fe3d"]
+[ext_resource type="PackedScene" uid="uid://b18ypmoudi2q8" path="res://vfx/barbarian/barbarian_dance_with_death_buff_vfx.tscn" id="2_nh1tj"]
 
 [node name="BarbarianDanceWithDeath" type="DanceWithDeathStatus"]
 permament = false
@@ -8,3 +9,5 @@ displayed_name = "Dance with Death"
 displayed_description = "You are losing health over time, but heal when you hit enemy with basic attack"
 icon = ExtResource("1_1fe3d")
 new_type = 1
+
+[node name="BarbarianDanceWithDeathBuffVfx" parent="." instance=ExtResource("2_nh1tj")]

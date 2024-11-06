@@ -25,6 +25,7 @@ decal = NodePath("Decal")
 size = Vector3(1, 2, 1)
 texture_albedo = ExtResource("1_70b10")
 texture_emission = ExtResource("1_70b10")
+cull_mask = 1048573
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 visible = false

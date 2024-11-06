@@ -111,6 +111,7 @@
 #include <shared/status_effects/barbarian/barbarian_intimidating_cry_debuff.h>
 #include <shared/status_effects/barbarian/barbarian_barbaric_might_buff.h>
 #include <shared/abilities/barbarian/barbarian_barbaric_might_ability.h>
+#include <shared/abilities/barbarian/barbarian_lacerating_slash_ability.h>
 #include <shared/abilities/orc/orc_leap_slam_ability.h>
 
 void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
@@ -239,6 +240,7 @@ void initialize_artifact_seekers_module(ModuleInitializationLevel p_level)
     ClassDB::register_class<OrcBruteForce>();
     ClassDB::register_class<OrcLeapSlamAbility>();
 
+    ClassDB::register_class<BarbarianLaceratingSlashAbility>();
     ClassDB::register_class<BarbarianBarbaricMightAbility>();
     ClassDB::register_class<BarbarianBarbaricMightBuff>();
     ClassDB::register_class<BarbarianIntimidatingCryAbility>();

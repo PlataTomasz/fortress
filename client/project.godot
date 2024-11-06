@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="artifact-seekers-client"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://scenes/Client.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -74,6 +74,7 @@ camera_reset={
 
 3d_render/layer_1="Terrain"
 3d_render/layer_2="Characters"
+3d_render/layer_3="VFX"
 avoidance/layer_1="Red"
 avoidance/layer_2="Blue"
 

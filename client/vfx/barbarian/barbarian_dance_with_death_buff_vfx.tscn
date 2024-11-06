@@ -1,0 +1,41 @@
+[gd_scene load_steps=9 format=3 uid="uid://b18ypmoudi2q8"]
+
+[ext_resource type="Texture2D" uid="uid://cemkhrgnitdmi" path="res://textures/vfx/circle_alpha.png" id="1_iiah3"]
+
+[sub_resource type="Gradient" id="Gradient_cqi0w"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0.180392, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ot1qf"]
+gradient = SubResource("Gradient_cqi0w")
+
+[sub_resource type="Curve" id="Curve_75hqo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.37475), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p5wyk"]
+curve = SubResource("Curve_75hqo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x2nh1"]
+gravity = Vector3(0, 3.51, 0)
+scale_curve = SubResource("CurveTexture_p5wyk")
+color_ramp = SubResource("GradientTexture1D_ot1qf")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dsutw"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_iiah3")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_xdipj"]
+material = SubResource("StandardMaterial3D_dsutw")
+
+[node name="BarbarianDanceWithDeathBuffVfx" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+draw_order = 2
+process_material = SubResource("ParticleProcessMaterial_x2nh1")
+draw_pass_1 = SubResource("QuadMesh_xdipj")

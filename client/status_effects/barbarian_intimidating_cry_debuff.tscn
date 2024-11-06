@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://2wa1p2mltdhj"]
+[gd_scene load_steps=3 format=3 uid="uid://2wa1p2mltdhj"]
 
 [ext_resource type="Texture2D" uid="uid://dwofxv6xbpra4" path="res://textures/icons/abilities/barbarian/intimidating_cry.png" id="1_ljno5"]
+[ext_resource type="PackedScene" uid="uid://bye327cuvpn3x" path="res://vfx/barbarian/intimidating_cry_debuff_vfx.tscn" id="2_dui4p"]
 
 [node name="BarbarianIntimidatingCryDebuff" type="BarbarianIntimidatingCryDebuff"]
 permament = false
@@ -9,3 +10,5 @@ displayed_description = "This unit is intimidated and it's movement is slowed."
 icon = ExtResource("1_ljno5")
 new_type = 2
 new_max_duration = 30.0
+
+[node name="IntimidatingCryDebuffVfx" parent="." instance=ExtResource("2_dui4p")]
