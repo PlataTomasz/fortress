@@ -3,13 +3,14 @@
 
 #include <scene/gui/control.h>
 #include <scene/gui/center_container.h>
+#include <scene/gui/panel_container.h>
 #include <scene/gui/button.h>
 
 class LineEdit;
 
 // Class encapsulating behaviour for a GUI, which is displayed when a client is started
-class MainMenu : public CenterContainer {
-GDCLASS(MainMenu, CenterContainer);
+class MainMenu : public PanelContainer {
+GDCLASS(MainMenu, PanelContainer);
 private:
     LineEdit *ip_input = nullptr;
     LineEdit *nickname_input = nullptr;

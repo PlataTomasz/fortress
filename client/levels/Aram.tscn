@@ -1,9 +1,9 @@
-[gd_scene load_steps=88 format=4 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=85 format=4 uid="uid://8tv1es2vlr8m"]
 
 [ext_resource type="PackedScene" uid="uid://bnhjkhgnmmxlc" path="res://vfx/moba/team_indicator_vfx.tscn" id="1_5htjc"]
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
-[ext_resource type="Texture2D" uid="uid://bo71cbws7jmsi" path="res://textures/skybox/BlueSkySkybox.png" id="2_cq1ar"]
+[ext_resource type="Environment" uid="uid://djpbcri88gy7b" path="res://levels/default_enviroment.tres" id="3_kg22x"]
 [ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="4_20rje"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="5_3bms1"]
 [ext_resource type="PackedScene" uid="uid://c2he3w6626a2a" path="res://models/nexus_mesh.tscn" id="6_vln8i"]
@@ -21,18 +21,6 @@ respawn_position = Vector3(-37, 0, 0)
 team_name = "Blue"
 color = Color(0, 0.2, 0.72549, 1)
 respawn_position = Vector3(37, 0, 0)
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0gg1w"]
-panorama = ExtResource("2_cq1ar")
-
-[sub_resource type="Sky" id="Sky_2msnm"]
-sky_material = SubResource("PanoramaSkyMaterial_0gg1w")
-
-[sub_resource type="Environment" id="Environment_s4h7m"]
-background_mode = 2
-sky = SubResource("Sky_2msnm")
-ambient_light_source = 2
-ambient_light_color = Color(0.665883, 0.896065, 1, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_k2x3s"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
@@ -427,7 +415,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 0)
 [node name="BlueTurrets2" type="Node3D" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_s4h7m")
+environment = ExtResource("3_kg22x")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 14, -17)

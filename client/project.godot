@@ -27,6 +27,10 @@ window/stretch/aspect="ignore"
 default_team_first=""
 default_team_second=""
 
+[gui]
+
+theme/custom="res://ui/ui_overhaul/theme.tres"
+
 [input]
 
 basic_attack={

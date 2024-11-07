@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cpfwt8w1avna1"]
+[gd_scene load_steps=6 format=3 uid="uid://c4ggatgqtouh8"]
 
 [ext_resource type="Script" path="res://scenes/ui/JoinBtn.gd" id="1_8etp1"]
 [ext_resource type="PackedScene" uid="uid://x3b3wxhlpsi2" path="res://scenes/ui/CharacterListElement.tscn" id="1_66p24"]
@@ -8,7 +8,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_6a5qc"]
 font_size = 66
 
-[node name="CharacterSelection" type="CenterContainer"]
+[node name="CharacterSelection" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
