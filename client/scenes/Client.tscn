@@ -1,15 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bjomyg22ywtfl"]
+[gd_scene load_steps=5 format=3 uid="uid://bjomyg22ywtfl"]
 
 [ext_resource type="PackedScene" uid="uid://dwr1mgxijjv32" path="res://scenes/ui/UserInterface.tscn" id="1_u8w0t"]
 [ext_resource type="AudioStream" uid="uid://coyc7xjcg78xh" path="res://audio/bgm.mp3" id="2_ch10y"]
+[ext_resource type="PackedScene" uid="uid://d0khn1uw56sxd" path="res://ui/ui_overhaul/character_info_panel.tscn" id="3_u1n3r"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_lxud0"]
+viewport_path = NodePath("PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport")
 
 [node name="Client" type="Client" node_paths=PackedStringArray("user_interface")]
 user_interface = NodePath("UserInterface")
 
 [node name="UserInterface" parent="." instance=ExtResource("1_u8w0t")]
-
-[node name="IconBtn" parent="UserInterface/CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer/Barbarian/Element/TextureRect" index="0"]
-button_pressed = true
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_ch10y")
@@ -17,5 +18,13 @@ volume_db = -19.594
 autoplay = true
 parameters/looping = true
 
+[node name="CharacterSelection" parent="." instance=ExtResource("3_u1n3r")]
+visible = false
+
+[node name="TextureRect" parent="CharacterSelection/PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview" index="0"]
+texture = SubResource("ViewportTexture_lxud0")
+
 [editable path="UserInterface"]
 [editable path="UserInterface/CenterContainer/CharacterArea/MarginContainer/ScrollContainer/GridContainer/Barbarian"]
+[editable path="CharacterSelection"]
+[editable path="CharacterSelection/PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer/Barbarian"]

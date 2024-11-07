@@ -136,14 +136,14 @@ death_animation_name = &"death"
 [node name="barbarian" parent="VisualComponent3D" index="0" instance=ExtResource("12_5048s")]
 
 [node name="Skeleton3D" parent="VisualComponent3D/barbarian/Armature" index="0"]
-bones/0/position = Vector3(0, 1.35878, -0.0825693)
+bones/0/position = Vector3(0, 1.28962, -0.0825693)
 bones/1/rotation = Quaternion(1.29201e-07, -4.62833e-08, -0.811242, 0.58471)
 bones/2/rotation = Quaternion(0.0425803, -0.0390563, -0.208464, 0.976322)
 bones/3/rotation = Quaternion(-0.0907047, -0.0100988, -0.386335, 0.917832)
-bones/6/rotation = Quaternion(-0.271514, 0.376705, 0.718476, 0.517848)
-bones/7/rotation = Quaternion(0.0787074, 0.100503, 0.205923, 0.970206)
-bones/8/rotation = Quaternion(0.440511, 0.244986, 0.342, 0.793075)
-bones/9/rotation = Quaternion(0.106604, 0.00233299, 0.00633953, 0.994279)
+bones/6/rotation = Quaternion(-6.42146e-08, -9.31225e-08, 0.811242, 0.58471)
+bones/7/rotation = Quaternion(0.0425803, 0.0390563, 0.208464, 0.976322)
+bones/8/rotation = Quaternion(-0.0907047, 0.0100988, 0.386335, 0.917832)
+bones/9/rotation = Quaternion(0.022137, 1.84586e-07, 0.00130393, 0.999754)
 bones/11/position = Vector3(0.36807, 0.414078, 0)
 bones/13/position = Vector3(-0.36807, 0.414078, 0)
 
@@ -151,7 +151,7 @@ bones/13/position = Vector3(-0.36807, 0.414078, 0)
 layers = 2
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="VisualComponent3D/barbarian/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.997885, -0.0275348, -0.0588777, -0.0577273, 0.791744, 0.608119, 0.0298719, 0.610232, -0.791659, -0.990649, 1.70591, 0.654167)
+transform = Transform3D(-0.997885, -0.0275347, -0.0588776, 0.0276981, -0.999614, -0.00196507, -0.0588007, -0.0035917, 0.998263, -0.990649, 0.725767, -0.0617329)
 bone_name = "Hand_R"
 bone_idx = 9
 

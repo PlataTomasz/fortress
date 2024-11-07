@@ -1,0 +1,578 @@
+[gd_scene load_steps=68 format=4 uid="uid://bt6lcyicofw75"]
+
+[ext_resource type="Script" path="res://scripts/ui/right_sliding_panel.gd" id="1_tk4kw"]
+[ext_resource type="Texture2D" uid="uid://h0tc6regjan4" path="res://textures/game_logo.png" id="2_r3eqd"]
+[ext_resource type="Texture2D" uid="uid://vpjt6dh5bwdm" path="res://ui/ui_overhaul/icons/gamepad.svg" id="3_mw6ni"]
+[ext_resource type="Texture2D" uid="uid://cgglhwb45gi0y" path="res://ui/ui_overhaul/icons/read.svg" id="4_cwc34"]
+[ext_resource type="Texture2D" uid="uid://dspt7seih1q62" path="res://ui/ui_overhaul/icons/cog.svg" id="5_n2jlb"]
+[ext_resource type="Texture2D" uid="uid://ts48118b1qmu" path="res://ui/ui_overhaul/icons/exit-door.svg" id="6_e15m0"]
+[ext_resource type="PackedScene" uid="uid://d0khn1uw56sxd" path="res://ui/ui_overhaul/character_info_panel.tscn" id="7_1qnqh"]
+[ext_resource type="PackedScene" uid="uid://8tv1es2vlr8m" path="res://levels/Aram.tscn" id="8_35ykd"]
+[ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="9_kg5fj"]
+[ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="10_43bvd"]
+
+[sub_resource type="Gradient" id="Gradient_w8w6y"]
+colors = PackedColorArray(0.36, 0.2568, 0.0504, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_b04op"]
+gradient = SubResource("Gradient_w8w6y")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mneai"]
+texture = SubResource("GradientTexture2D_b04op")
+
+[sub_resource type="LabelSettings" id="LabelSettings_e1t5a"]
+font_size = 121
+font_color = Color(1, 0.666667, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xld7m"]
+font_size = 28
+font_color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bk2r0"]
+size = Vector2(64, 64)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xn7am"]
+font_size = 64
+font_color = Color(0.184314, 0.184314, 0.184314, 1)
+
+[sub_resource type="GDScript" id="GDScript_ty533"]
+script/source = "extends Button
+
+func _on_click() -> void:
+	get_tree().quit()
+	
+"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_sdq2g"]
+viewport_path = NodePath("SideViews/PanelContainer2/TextureRect/SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_va5yf"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_fq12c"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_r3twi"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_af7rm"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_wbm6s"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_silo4"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_vefuf"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ddly6"]
+resource_name = "wall"
+albedo_color = Color(0.901961, 0.862745, 0.733333, 1)
+metallic = 0.33
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ytm08"]
+resource_local_to_scene = true
+_surfaces = [{
+"aabb": AABB(-10, 0, 0, 10, 3, 10),
+"attribute_data": PackedByteArray("/3+NS///jUt6hHdZhPt3Wf9/8HaEe9qEAADwdnoE2oT/H+9b/x/YYQAA71sAADN2/1/YYf9/M3b/X+9b/3/vW4R7d1l6BHdZ/3+NSwAAjUv/fzN2AAAzdv9/71v/X9hh/1/vW/8f2GEAAO9b/x/vW4T72oR6hNqE///wdv9/8Hb/f4Bi/3/VINiKgGLYitUg/58hC/+fAAD/3yEL/98AACX1gGIl9dUg//+AYv//1SD/f4Bi2IozeP9/VYP/n1WD/58zeNiKgGL/f9Ug/38AANiK1SDYiiEL/58AAP+fIQsl9dUgJfUhC///1SD//wAA/98AAP/fIQv//9hhJfXYYf//71sl9e9b/3/YYSZ12GH/f+9bJnXvWyX12GEl9e9b///YYf//71v/f9hh/3/vW9iK2GHYiu9b/59Vg/+fM3j/31WD/98zeNiK2GH/f9hh2IrvW/9/71vZCu9b2QrYYQAA71sAANhhhHuYBIR7vH56BJgEegS8fv//M3b/fzN2///vW//f2GH/3+9b/5/YYf9/71v/n+9b/99Vg//fM3j//1WDJfUzeCX1gGL//4Bi2QrYYQAA2GHZCu9bAADvW/9/71v/f9hhJnXvWyZ12GH/fzN2/3/vW///M3b/n9hh/9/YYf/f71v//+9b/5/vWw=="),
+"format": 34896613399,
+"index_count": 222,
+"index_data": PackedByteArray("AAABAAIAAwACAAEABAAFAAYABwAGAAUACAAJAAoACgAJAAsACQAMAAsACwAMAA0ADAAOAA0ADwANAA4AEAARABIAEwASABEAFAAVABYAFwAWABUAGAAWABcAFwAVABkAGgAZABUAGwAZABoAHAAdAB4AHwAeAB0AIAAhACIAIwAiACEAJAAlACYAJwAmACUAKAApACoAKwAqACkALAAtAC4ALwAuAC0AMAAvAC0ALQAsADEAMgAzADQANQA0ADMANgA1ADMANwA1ADYAOAA5ADoAOgA5ADsAOwA5ADwAPQA8ADkAPgA/AEAAQQBAAD8AQgBDAEQARQBEAEMARgBHAEgASQBIAEcASgBLAEwATQBMAEsATgBPAFAAUQBQAE8AUgBTAFQAVQBUAFMAVgBXAFgAWQBYAFcAWgBbAFwAXQBcAFsAXgBfAGAAYQBgAF8AYgBgAGEAYQBfAGMAZABjAF8AZQBjAGQAZgBnAGgAaQBoAGcAagBoAGkAawBoAGoAbABtAG4AbwBuAG0AcABxAHIAcwByAHEAdAB1AHYAdwB2AHUAeAB2AHcAeQB2AHgAegB2AHkAdwB1AHsA"),
+"material": SubResource("StandardMaterial3D_ddly6"),
+"name": "wall",
+"primitive": 3,
+"uv_scale": Vector4(78.7402, 76.7402, 0, 0),
+"vertex_count": 124,
+"vertex_data": PackedByteArray("AABVVQAAJMEAAFVV//8kwfUIAAD1CCTB9QgAAAn3JMH//1VVAAAkwQn3AAD1CCTB//9VVf//JMEJ9wAACfckwf//////v/+///+Y2f+//7//////////v///VVX///+///+Y2f8//7///1VVAAD/v///////P/+//////wAA/78J9wAACfe3jfUIAAAJ97eN//9VVf//t40AAFVV//+3jf//VVX///9/AABVVf///3//////////f/+/mNn///9//7///////3//P5jZ////fwAA//////9//z///////3/1CAAA9Qj//wn3AAD1CP//AABVVQAA/////1VVAAD/////mNn/P/////+Y2f+///9M6pjZ/z///0zqmNn/v////7+Y2Uzq////v5jZ//////8/mNlM6v///z+Y2f////+yFZjZ/z///7IVmNn/v///AACY2f8///8AAJjZ/7//////////P///TOr//7IV////////AAD///+///8AAP///7///7IV//9M6v///z//////////v/////////////9M6v///7///0zq//9M6v///7//////////v///TOr//7IV////v///shX//0zq//8AAP///7///wAA/////////z//////////P///TOr//wAAmNn/v///shWY2f+///8AAP///7///7IV////v/////+Y2f8//39M6pjZ/z//f///////P/9/TOr///8//3//v5jZTOr/v/+///9M6v+//7+Y2f///7//v///////v/+/mNkAAP+//7///wAA/7//v5jZshX/v/+///+yFf+//7+Y2QAA////v5jZshX///8/mNkAAP///z+Y2bIV//9M6pjZ/7//////mNn/v///TOr///+//////////7////8///9M6v+//z+Y2Uzq/7//P///////v/8/mNn///+/CfcAAAn3/78J9wAA9Qj/v/UIAAAJ9/+/9QgAAPUI/78AAFVVAAD/////VVUAAP//AAD//wAA////P5jZAAD///8///8AAP///7+Y2QAA////////AAD///+///8AAP///z///wAA////P///shX//wAA//8AAP//shX//7IV//+yFf///z///wAA////P///shWY2f8//38AAJjZ/z//f7IV////P/9/AAD///8//3//P///AAD/v/8/mNkAAP+//z///7IV/7//P5jZshX/vwAAVVUAAP+/AAD//wAA/78AAFVV////vwAAmNn/P/+/AACY2f+//78AAP///7//vwAA//////+/AAD///8//7+HX8Lvh1/C74dfwu+HX8Lvw294IMNveCDDb3ggw294IP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAAAAD/fwAA/38AAP9/AAD/f/9/////f////3////9/////f////3////9/////f///l5L//5eS//+Xkv//l5L///9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f/+//3//v/9//7//f/+//3////9/////f////3////9/AAD/fwAA/38AAP9/AAAAAP9/AAD/fwAA/38AAP9//3////9//v//f////3/+//9/////f////3/+//9/////f/+//3//v/9//7//f/+//3//v/9//7//f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/////f////3////9//v//f/7//3/+//9/////f///")
+}, {
+"aabb": AABB(-9.15248, 2.55, 0.847525, 8.30496, 10.95, 8.30496),
+"attribute_data": PackedByteArray("JXTWZgld1mYldFdhAABXYQAA1mYcF9ZmHBf1agld9WoldFdhJXTWZgAAV2EJXdZmCV31ahwX1mYAANZmHBf1avzAv1f8wEdR3Mq/V9zKR1H//9Zm4ujWZv//V2H1otZm2YvWZtmLV2H1ovVq4uj1avWi9Wr1otZm4uj1auLo1mb//1dh2YtXYdmL1mb//9Zm9eIpQeOoKUHcygAA/MAAAOOoXVf8wDMW9eJdV9zKMxYbVylBCR0pQQI/AAAiNQAAG1ddVwkdXVcCPzMWIjUzFgAA7JYJHX91JXTslhtXf3X//8hi2YvIYvXiWkHjqFpB2YvsluOof3X//+yW9eJ/dSV0yGIAAMhiG1daQQkdWkE="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAwABAAQABAABAAUABQABAAYABwAGAAEACAAJAAoACwAKAAkADAAKAAsADQAKAAwADgAKAA0ADQAMAA8AEAARABIAEwASABEAFAAVABYAFwAWABUAGAAWABcAGQAWABgAFwAVABoAGwAaABUAHAAdAB4AHgAdAB8AHwAdACAAIAAdACEAIgAhAB0AIwAfACAAJAAlACYAJwAmACUAKAApACoAKwAqACkALAAtAC4ALwAuAC0AMAAxADIAMwAyADEANAA1ADYANwA2ADUAOAA5ADoAOwA6ADkAPAA9AD4APwA+AD0AQABBAEIAQwBCAEEA"),
+"material": ExtResource("9_kg5fj"),
+"name": "roof",
+"primitive": 3,
+"uv_scale": Vector4(72.0667, 109.998, 0, 0),
+"vertex_count": 68,
+"vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
+}]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vr4ng"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_xyfhn"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_5nkxd"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_0q71k"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_rge2g"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_jvq0i"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_0bqp4"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_mtq6m"]
+resource_local_to_scene = true
+_surfaces = [{
+"aabb": AABB(-10, 0, 0, 10, 3, 10),
+"attribute_data": PackedByteArray("/3+NS///jUt6hHdZhPt3Wf9/8HaEe9qEAADwdnoE2oT/H+9b/x/YYQAA71sAADN2/1/YYf9/M3b/X+9b/3/vW4R7d1l6BHdZ/3+NSwAAjUv/fzN2AAAzdv9/71v/X9hh/1/vW/8f2GEAAO9b/x/vW4T72oR6hNqE///wdv9/8Hb/f4Bi/3/VINiKgGLYitUg/58hC/+fAAD/3yEL/98AACX1gGIl9dUg//+AYv//1SD/f4Bi2IozeP9/VYP/n1WD/58zeNiKgGL/f9Ug/38AANiK1SDYiiEL/58AAP+fIQsl9dUgJfUhC///1SD//wAA/98AAP/fIQv//9hhJfXYYf//71sl9e9b/3/YYSZ12GH/f+9bJnXvWyX12GEl9e9b///YYf//71v/f9hh/3/vW9iK2GHYiu9b/59Vg/+fM3j/31WD/98zeNiK2GH/f9hh2IrvW/9/71vZCu9b2QrYYQAA71sAANhhhHuYBIR7vH56BJgEegS8fv//M3b/fzN2///vW//f2GH/3+9b/5/YYf9/71v/n+9b/99Vg//fM3j//1WDJfUzeCX1gGL//4Bi2QrYYQAA2GHZCu9bAADvW/9/71v/f9hhJnXvWyZ12GH/fzN2/3/vW///M3b/n9hh/9/YYf/f71v//+9b/5/vWw=="),
+"format": 34896613399,
+"index_count": 222,
+"index_data": PackedByteArray("AAABAAIAAwACAAEABAAFAAYABwAGAAUACAAJAAoACgAJAAsACQAMAAsACwAMAA0ADAAOAA0ADwANAA4AEAARABIAEwASABEAFAAVABYAFwAWABUAGAAWABcAFwAVABkAGgAZABUAGwAZABoAHAAdAB4AHwAeAB0AIAAhACIAIwAiACEAJAAlACYAJwAmACUAKAApACoAKwAqACkALAAtAC4ALwAuAC0AMAAvAC0ALQAsADEAMgAzADQANQA0ADMANgA1ADMANwA1ADYAOAA5ADoAOgA5ADsAOwA5ADwAPQA8ADkAPgA/AEAAQQBAAD8AQgBDAEQARQBEAEMARgBHAEgASQBIAEcASgBLAEwATQBMAEsATgBPAFAAUQBQAE8AUgBTAFQAVQBUAFMAVgBXAFgAWQBYAFcAWgBbAFwAXQBcAFsAXgBfAGAAYQBgAF8AYgBgAGEAYQBfAGMAZABjAF8AZQBjAGQAZgBnAGgAaQBoAGcAagBoAGkAawBoAGoAbABtAG4AbwBuAG0AcABxAHIAcwByAHEAdAB1AHYAdwB2AHUAeAB2AHcAeQB2AHgAegB2AHkAdwB1AHsA"),
+"material": SubResource("StandardMaterial3D_ddly6"),
+"name": "wall",
+"primitive": 3,
+"uv_scale": Vector4(78.7402, 76.7402, 0, 0),
+"vertex_count": 124,
+"vertex_data": PackedByteArray("AABVVQAAJMEAAFVV//8kwfUIAAD1CCTB9QgAAAn3JMH//1VVAAAkwQn3AAD1CCTB//9VVf//JMEJ9wAACfckwf//////v/+///+Y2f+//7//////////v///VVX///+///+Y2f8//7///1VVAAD/v///////P/+//////wAA/78J9wAACfe3jfUIAAAJ97eN//9VVf//t40AAFVV//+3jf//VVX///9/AABVVf///3//////////f/+/mNn///9//7///////3//P5jZ////fwAA//////9//z///////3/1CAAA9Qj//wn3AAD1CP//AABVVQAA/////1VVAAD/////mNn/P/////+Y2f+///9M6pjZ/z///0zqmNn/v////7+Y2Uzq////v5jZ//////8/mNlM6v///z+Y2f////+yFZjZ/z///7IVmNn/v///AACY2f8///8AAJjZ/7//////////P///TOr//7IV////////AAD///+///8AAP///7///7IV//9M6v///z//////////v/////////////9M6v///7///0zq//9M6v///7//////////v///TOr//7IV////v///shX//0zq//8AAP///7///wAA/////////z//////////P///TOr//wAAmNn/v///shWY2f+///8AAP///7///7IV////v/////+Y2f8//39M6pjZ/z//f///////P/9/TOr///8//3//v5jZTOr/v/+///9M6v+//7+Y2f///7//v///////v/+/mNkAAP+//7///wAA/7//v5jZshX/v/+///+yFf+//7+Y2QAA////v5jZshX///8/mNkAAP///z+Y2bIV//9M6pjZ/7//////mNn/v///TOr///+//////////7////8///9M6v+//z+Y2Uzq/7//P///////v/8/mNn///+/CfcAAAn3/78J9wAA9Qj/v/UIAAAJ9/+/9QgAAPUI/78AAFVVAAD/////VVUAAP//AAD//wAA////P5jZAAD///8///8AAP///7+Y2QAA////////AAD///+///8AAP///z///wAA////P///shX//wAA//8AAP//shX//7IV//+yFf///z///wAA////P///shWY2f8//38AAJjZ/z//f7IV////P/9/AAD///8//3//P///AAD/v/8/mNkAAP+//z///7IV/7//P5jZshX/vwAAVVUAAP+/AAD//wAA/78AAFVV////vwAAmNn/P/+/AACY2f+//78AAP///7//vwAA//////+/AAD///8//7+HX8Lvh1/C74dfwu+HX8Lvw294IMNveCDDb3ggw294IP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAAAAD/fwAA/38AAP9/AAD/f/9/////f////3////9/////f////3////9/////f///l5L//5eS//+Xkv//l5L///9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f/+//3//v/9//7//f/+//3////9/////f////3////9/AAD/fwAA/38AAP9/AAAAAP9/AAD/fwAA/38AAP9//3////9//v//f////3/+//9/////f////3/+//9/////f/+//3//v/9//7//f/+//3//v/9//7//f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/////f////3////9//v//f/7//3/+//9/////f///")
+}, {
+"aabb": AABB(-9.15248, 2.55, 0.847525, 8.30496, 10.95, 8.30496),
+"attribute_data": PackedByteArray("JXTWZgld1mYldFdhAABXYQAA1mYcF9ZmHBf1agld9WoldFdhJXTWZgAAV2EJXdZmCV31ahwX1mYAANZmHBf1avzAv1f8wEdR3Mq/V9zKR1H//9Zm4ujWZv//V2H1otZm2YvWZtmLV2H1ovVq4uj1avWi9Wr1otZm4uj1auLo1mb//1dh2YtXYdmL1mb//9Zm9eIpQeOoKUHcygAA/MAAAOOoXVf8wDMW9eJdV9zKMxYbVylBCR0pQQI/AAAiNQAAG1ddVwkdXVcCPzMWIjUzFgAA7JYJHX91JXTslhtXf3X//8hi2YvIYvXiWkHjqFpB2YvsluOof3X//+yW9eJ/dSV0yGIAAMhiG1daQQkdWkE="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAwABAAQABAABAAUABQABAAYABwAGAAEACAAJAAoACwAKAAkADAAKAAsADQAKAAwADgAKAA0ADQAMAA8AEAARABIAEwASABEAFAAVABYAFwAWABUAGAAWABcAGQAWABgAFwAVABoAGwAaABUAHAAdAB4AHgAdAB8AHwAdACAAIAAdACEAIgAhAB0AIwAfACAAJAAlACYAJwAmACUAKAApACoAKwAqACkALAAtAC4ALwAuAC0AMAAxADIAMwAyADEANAA1ADYANwA2ADUAOAA5ADoAOwA6ADkAPAA9AD4APwA+AD0AQABBAEIAQwBCAEEA"),
+"material": ExtResource("10_43bvd"),
+"name": "roof",
+"primitive": 3,
+"uv_scale": Vector4(72.0667, 109.998, 0, 0),
+"vertex_count": 68,
+"vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
+}]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_77o68"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ewv87"]
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAACAAEAAQACAAMAAAAEAAIAAwACAAQAAAABAAUAAwAFAAEAAAAFAAQAAwAEAAUA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("838AAAuAAADzf/d///8AAAAA938LgAAA83///wuAAADzf/d/AAAAAP//938LgAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_sdse0"]
+resource_local_to_scene = true
+resource_name = "crystal_Cube_001"
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"attribute_data": PackedByteArray("/D8CYPw//F8CQPxfAkACYAKA///8P/8/AkD/PwKAAiD/HwJgAoD83wKAAuD/H/xf/5/83/+fAuD/nwIg/5/8n/w//38CgP+/AkD/fwKA/J//X/xfAoD/P/9fAmACgP9/"),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AQALAAUABAAKAA0AAAAQAAgADAAJABEAAgAGABQADgAVAAcAAwAWABIADwATABcA"),
+"material": ExtResource("9_kg5fj"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("838AAAuA1ODzfwAAC4DFtPN/AAALgMG0838AAAuA1eDzf/d////GtPN/93///8W083/3f///wbTzf/d///8gwAAA938LgNTgAAD3fwuA1eAAAPd/C4DGtAAA938LgMW083///wuA1eDzf///C4DGtPN///8LgCDA83///wuAwPzzf/d/AADU4PN/938AANXg83/3fwAA1eDzf/d/AADA/P//938LgMG0///3fwuAIMD///d/C4DV4P//938LgMD8gzh+pmhQoJmeGZcvfCaAR13matBoUKCZnhmXL3M09ASDOH6mftmEuF3matBoUKCZftmEuF3matBzNPQE1ypNNYM4fqZ+2YS4fCaAR9cqTTWeGZcvczT0BHwmgEfXKk01")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ewv87")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_17emm"]
+resource_local_to_scene = true
+max = 1.0
+current = 1.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_0nfdb"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_go2ox"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_4tv8r"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_gwr1f"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_hi5vl"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hd00p"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_q5jn3"]
+resource_local_to_scene = true
+resource_name = "crystal_Cube_001"
+_surfaces = [{
+"aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
+"attribute_data": PackedByteArray("/D8CYPw//F8CQPxfAkACYAKA///8P/8/AkD/PwKAAiD/HwJgAoD83wKAAuD/H/xf/5/83/+fAuD/nwIg/5/8n/w//38CgP+/AkD/fwKA/J//X/xfAoD/P/9fAmACgP9/"),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AQALAAUABAAKAA0AAAAQAAgADAAJABEAAgAGABQADgAVAAcAAwAWABIADwATABcA"),
+"material": ExtResource("10_43bvd"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("838AAAuA1ODzfwAAC4DFtPN/AAALgMG0838AAAuA1eDzf/d////GtPN/93///8W083/3f///wbTzf/d///8gwAAA938LgNTgAAD3fwuA1eAAAPd/C4DGtAAA938LgMW083///wuA1eDzf///C4DGtPN///8LgCDA83///wuAwPzzf/d/AADU4PN/938AANXg83/3fwAA1eDzf/d/AADA/P//938LgMG0///3fwuAIMD///d/C4DV4P//938LgMD8gzh+pmhQoJmeGZcvfCaAR13matBoUKCZnhmXL3M09ASDOH6mftmEuF3matBoUKCZftmEuF3matBzNPQE1ypNNYM4fqZ+2YS4fCaAR9cqTTWeGZcvczT0BHwmgEfXKk01")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ewv87")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_txo0u"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_bn8wo"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_0jaks"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_isuql"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_f5ngn"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_vh1gk"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_y2in6"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_ce4ps"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_6ucmk"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_su67g"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_5il4j"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_8iarp"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_twbwx"]
+resource_local_to_scene = true
+base = 300.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_613d5"]
+viewport_path = NodePath("EntityHealthBar/SubViewport")
+
+[sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_gctmb"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_ngdcq"]
+resource_local_to_scene = true
+base = 30.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_o2est"]
+resource_local_to_scene = true
+base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_pud3a"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_pdgrt"]
+resource_local_to_scene = true
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_k4tm4"]
+resource_local_to_scene = true
+base = 300.0
+
+[node name="PanelContainer2" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+collapsed = true
+dragger_visibility = 2
+
+[node name="HowToPlayScreen" type="PanelContainer" parent="."]
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+script = ExtResource("1_tk4kw")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HowToPlayScreen"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_mneai")
+
+[node name="MarginContainer" type="MarginContainer" parent="HowToPlayScreen/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HowToPlayScreen/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "How to play?"
+label_settings = SubResource("LabelSettings_e1t5a")
+
+[node name="PanelContainer" type="VSplitContainer" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+text = "Controls"
+label_settings = SubResource("LabelSettings_xld7m")
+
+[node name="Controls" type="Label" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer/PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(880, 0)
+layout_mode = 2
+text = "Q/W/E/R - Use character's ability first/second/third/fourth
+"
+autowrap_mode = 2
+
+[node name="PanelContainer2" type="VSplitContainer" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2"]
+visible = false
+layout_mode = 2
+text = "Gameplay"
+label_settings = SubResource("LabelSettings_xld7m")
+
+[node name="Objective" type="Label" parent="HowToPlayScreen/ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2"]
+custom_minimum_size = Vector2(1500, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 41
+text = "When you join a game, you are placed randomly in one of the two teams. Your goal is to destroy oponent base. Whatever team destroys enemy base first - it wins."
+autowrap_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HowToPlayScreen"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+
+[node name="Control" type="TextureRect" parent="HowToPlayScreen/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture = SubResource("PlaceholderTexture2D_bk2r0")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="MenuEntries" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/MenuEntries"]
+layout_mode = 2
+texture = ExtResource("2_r3eqd")
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/MenuEntries"]
+visible = false
+layout_mode = 2
+text = "LOGO GRY"
+label_settings = SubResource("LabelSettings_xn7am")
+
+[node name="ConnectToServerBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Join game"
+icon = ExtResource("3_mw6ni")
+flat = true
+alignment = 0
+expand_icon = true
+
+[node name="HowToPlayBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "How to play?"
+icon = ExtResource("4_cwc34")
+flat = true
+alignment = 0
+expand_icon = true
+
+[node name="SettingsBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Settings"
+icon = ExtResource("5_n2jlb")
+flat = true
+alignment = 0
+expand_icon = true
+
+[node name="ExitBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Exit"
+icon = ExtResource("6_e15m0")
+flat = true
+alignment = 0
+expand_icon = true
+script = SubResource("GDScript_ty533")
+
+[node name="SideViews" type="Control" parent="."]
+layout_mode = 2
+
+[node name="CharacterSelection" parent="SideViews" instance=ExtResource("7_1qnqh")]
+layout_mode = 2
+offset_right = 1552.0
+
+[node name="CharacterSelection2" parent="SideViews" instance=ExtResource("7_1qnqh")]
+visible = false
+layout_mode = 2
+offset_right = 1552.0
+
+[node name="PanelContainer2" type="PanelContainer" parent="SideViews"]
+visible = false
+layout_mode = 2
+offset_right = 1552.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="SideViews/PanelContainer2"]
+layout_mode = 2
+texture = SubResource("ViewportTexture_sdq2g")
+
+[node name="SubViewport" type="SubViewport" parent="SideViews/PanelContainer2/TextureRect"]
+size = Vector2i(1024, 512)
+
+[node name="Aram" parent="SideViews/PanelContainer2/TextureRect/SubViewport" instance=ExtResource("8_35ykd")]
+
+[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_va5yf")
+
+[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus" index="1"]
+health = SubResource("CappedResourceAttribute_fq12c")
+global_defense = SubResource("FloatAttribute_r3twi")
+attack_damage = SubResource("FloatAttribute_af7rm")
+magic_power = SubResource("FloatAttribute_wbm6s")
+cooldown_reduction = SubResource("FloatAttribute_silo4")
+movement_speed = SubResource("FloatAttribute_vefuf")
+
+[node name="NexusMesh" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D" index="0"]
+mesh = SubResource("ArrayMesh_ytm08")
+
+[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_vr4ng")
+
+[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus" index="1"]
+health = SubResource("CappedResourceAttribute_xyfhn")
+global_defense = SubResource("FloatAttribute_5nkxd")
+attack_damage = SubResource("FloatAttribute_0q71k")
+magic_power = SubResource("FloatAttribute_rge2g")
+cooldown_reduction = SubResource("FloatAttribute_jvq0i")
+movement_speed = SubResource("FloatAttribute_0bqp4")
+
+[node name="NexusMesh" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus/VisualComponent3D" index="0"]
+mesh = SubResource("ArrayMesh_mtq6m")
+
+[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_77o68")
+
+[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/VisualComponent3D/crystal" index="0"]
+mesh = SubResource("ArrayMesh_sdse0")
+
+[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter" index="2"]
+health = SubResource("CappedResourceAttribute_17emm")
+global_defense = SubResource("FloatAttribute_0nfdb")
+attack_damage = SubResource("FloatAttribute_go2ox")
+magic_power = SubResource("FloatAttribute_4tv8r")
+cooldown_reduction = SubResource("FloatAttribute_gwr1f")
+movement_speed = SubResource("FloatAttribute_hi5vl")
+
+[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_hd00p")
+
+[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner/VisualComponent3D/crystal" index="0"]
+mesh = SubResource("ArrayMesh_q5jn3")
+
+[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner" index="2"]
+health = SubResource("CappedResourceAttribute_txo0u")
+global_defense = SubResource("FloatAttribute_bn8wo")
+attack_damage = SubResource("FloatAttribute_0jaks")
+magic_power = SubResource("FloatAttribute_isuql")
+cooldown_reduction = SubResource("FloatAttribute_f5ngn")
+movement_speed = SubResource("FloatAttribute_vh1gk")
+
+[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_y2in6")
+
+[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/VisualComponent3D/crystal" index="0"]
+mesh = SubResource("ArrayMesh_q5jn3")
+
+[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter" index="2"]
+health = SubResource("CappedResourceAttribute_ce4ps")
+global_defense = SubResource("FloatAttribute_6ucmk")
+attack_damage = SubResource("FloatAttribute_su67g")
+magic_power = SubResource("FloatAttribute_5il4j")
+cooldown_reduction = SubResource("FloatAttribute_8iarp")
+movement_speed = SubResource("FloatAttribute_twbwx")
+
+[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
+texture = SubResource("ViewportTexture_613d5")
+
+[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/VisualComponent3D/crystal" index="0"]
+mesh = SubResource("ArrayMesh_sdse0")
+
+[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner" index="2"]
+health = SubResource("CappedResourceAttribute_gctmb")
+global_defense = SubResource("FloatAttribute_ngdcq")
+attack_damage = SubResource("FloatAttribute_o2est")
+magic_power = SubResource("FloatAttribute_pud3a")
+cooldown_reduction = SubResource("FloatAttribute_pdgrt")
+movement_speed = SubResource("FloatAttribute_k4tm4")
+
+[node name="Camera3D" type="Camera3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport"]
+transform = Transform3D(0.845169, 0.239527, -0.477825, 0, 0.893967, 0.448134, 0.5345, -0.378748, 0.755552, -8, 3, 7)
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ExitBtn" to="PanelContainer/MarginContainer/MenuEntries/ExitBtn" method="_on_click"]
+
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram"]
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/EntityInfoRenderer"]
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D/NexusMesh"]
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus/EntityInfoRenderer"]
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner/EntityInfoRenderer"]
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/EntityInfoRenderer"]
+[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/EntityInfoRenderer"]

@@ -1,0 +1,250 @@
+[gd_scene load_steps=15 format=3 uid="uid://d0khn1uw56sxd"]
+
+[ext_resource type="ButtonGroup" uid="uid://dcoayub2mcste" path="res://scenes/ui/CharacterSelectionBtnGroup.tres" id="1_dx5ol"]
+[ext_resource type="PackedScene" uid="uid://x3b3wxhlpsi2" path="res://scenes/ui/CharacterListElement.tscn" id="1_qnof2"]
+[ext_resource type="PackedScene" uid="uid://cgco77hqkmtwl" path="res://entities/mercenaries/Barbarian_new.tscn" id="1_r83m7"]
+[ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="2_rqdck"]
+[ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="3_261bc"]
+[ext_resource type="Script" path="res://scenes/ui/JoinBtn.gd" id="4_gvno4"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ejegn"]
+viewport_path = NodePath("PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport")
+
+[sub_resource type="GDScript" id="GDScript_ibdfi"]
+script/source = "extends TextureRect
+
+@export var viewport: SubViewport
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	(texture as ViewportTexture).viewport_path = viewport.get_path()
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_3tod5"]
+script/source = "extends SubViewport
+
+@export var rotation_deg_per_second: float = 6
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	# Rotate character
+	$\"Mercenary\".rotate_y(deg_to_rad(rotation_deg_per_second*delta))
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvj0c"]
+albedo_color = Color(0.37, 0.2405, 0.0592, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_byhk6"]
+material = SubResource("StandardMaterial3D_fvj0c")
+top_radius = 1.0
+bottom_radius = 1.2
+height = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gek44"]
+material = SubResource("StandardMaterial3D_fvj0c")
+top_radius = 1.2
+bottom_radius = 1.2
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_uuyfi"]
+size = Vector2(48, 48)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7dlhw"]
+size = Vector2(64, 64)
+
+[node name="CharacterSelection" type="UserInterface" node_paths=PackedStringArray("main_menu")]
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+main_menu = NodePath("PanelContainer")
+
+[node name="PanelContainer" type="MainMenu" parent="." node_paths=PackedStringArray("ip_input", "nickname_input", "join_button", "character_select_area")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ip_input = NodePath("HSplitContainer/CharacterArea/CenterContainer/VBoxContainer/IpInput")
+nickname_input = NodePath("HSplitContainer/CharacterArea/CenterContainer/VBoxContainer/NicknameInput")
+join_button = NodePath("HSplitContainer/CharacterArea/CenterContainer/VBoxContainer/JoinBtn")
+character_button_group = ExtResource("1_dx5ol")
+character_select_area = NodePath("HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="PanelContainer"]
+layout_mode = 2
+collapsed = true
+dragger_visibility = 2
+
+[node name="CharacterArea" type="VBoxContainer" parent="PanelContainer/HSplitContainer"]
+custom_minimum_size = Vector2(1280, 0)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Header" type="Label" parent="PanelContainer/HSplitContainer/CharacterArea"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 66
+text = "Pick your character!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HSplitContainer/CharacterArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="MarginContainer" type="HSplitContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer"]
+custom_minimum_size = Vector2(0, 800)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 8
+
+[node name="Barbarian" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_qnof2")]
+layout_mode = 2
+character_index = "Barbarian_new"
+title = "Barbarian"
+icon = ExtResource("2_rqdck")
+
+[node name="Orc" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_qnof2")]
+layout_mode = 2
+character_index = "Orc_new"
+title = "Orc"
+icon = ExtResource("3_261bc")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="AbilitySetPreview" type="VBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CharacterModelPreview" type="AspectRatioContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview" node_paths=PackedStringArray("viewport")]
+layout_mode = 2
+texture = SubResource("ViewportTexture_ejegn")
+expand_mode = 4
+script = SubResource("GDScript_ibdfi")
+viewport = NodePath("../SubViewport")
+
+[node name="SubViewport" type="SubViewport" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview"]
+own_world_3d = true
+transparent_bg = true
+size = Vector2i(768, 512)
+script = SubResource("GDScript_3tod5")
+rotation_deg_per_second = 12.0
+
+[node name="Camera3D" type="Camera3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.958417, 0.285371, 0, -0.285371, 0.958417, 0, 1.14789, 1.90204)
+v_offset = -0.235
+current = true
+fov = 28.125
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+visible = false
+mesh = SubResource("CylinderMesh_byhk6")
+
+[node name="Mercenary" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport" instance=ExtResource("1_r83m7")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_gek44")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+
+[node name="HoverableIcons" type="VSplitContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="GridContainer" type="HBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons"]
+layout_mode = 2
+alignment = 1
+
+[node name="ActiveAbilityIcon5" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("PlaceholderTexture2D_uuyfi")
+
+[node name="ActiveAbilityIcon6" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("PlaceholderTexture2D_uuyfi")
+
+[node name="ActiveAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_7dlhw")
+
+[node name="ActiveAbilityIcon2" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_7dlhw")
+
+[node name="ActiveAbilityIcon3" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_7dlhw")
+
+[node name="ActiveAbilityIcon4" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_7dlhw")
+
+[node name="Description" type="Label" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Hover over ability icon to view It's description."
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/HSplitContainer/CharacterArea"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/CenterContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+
+[node name="NicknameInput" type="LineEdit" parent="PanelContainer/HSplitContainer/CharacterArea/CenterContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Nickname..."
+
+[node name="IpInput" type="LineEdit" parent="PanelContainer/HSplitContainer/CharacterArea/CenterContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Server address..."
+
+[node name="JoinBtn" type="Button" parent="PanelContainer/HSplitContainer/CharacterArea/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join game"
+script = ExtResource("4_gvno4")
+
+[connection signal="pressed" from="PanelContainer/HSplitContainer/CharacterArea/CenterContainer/VBoxContainer/JoinBtn" to="PanelContainer/HSplitContainer/CharacterArea/CenterContainer/VBoxContainer/JoinBtn" method="_on_pressed"]
+
+[editable path="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer/Barbarian"]
