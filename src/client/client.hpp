@@ -69,6 +69,8 @@ public:
     void set_user_interface(UserInterface *new_user_interface);
     UserInterface *get_user_interface();
 
+    void quit();
+
     Client();
     ~Client(){};
 };

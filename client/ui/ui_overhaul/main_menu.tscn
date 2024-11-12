@@ -1,15 +1,25 @@
-[gd_scene load_steps=68 format=4 uid="uid://bt6lcyicofw75"]
+[gd_scene load_steps=91 format=4 uid="uid://bt6lcyicofw75"]
 
 [ext_resource type="Script" path="res://scripts/ui/right_sliding_panel.gd" id="1_tk4kw"]
 [ext_resource type="Texture2D" uid="uid://h0tc6regjan4" path="res://textures/game_logo.png" id="2_r3eqd"]
 [ext_resource type="Texture2D" uid="uid://vpjt6dh5bwdm" path="res://ui/ui_overhaul/icons/gamepad.svg" id="3_mw6ni"]
+[ext_resource type="Script" path="res://scripts/ui/main_menu/connect_to_server_btn.gd" id="4_7imgi"]
 [ext_resource type="Texture2D" uid="uid://cgglhwb45gi0y" path="res://ui/ui_overhaul/icons/read.svg" id="4_cwc34"]
 [ext_resource type="Texture2D" uid="uid://dspt7seih1q62" path="res://ui/ui_overhaul/icons/cog.svg" id="5_n2jlb"]
 [ext_resource type="Texture2D" uid="uid://ts48118b1qmu" path="res://ui/ui_overhaul/icons/exit-door.svg" id="6_e15m0"]
 [ext_resource type="PackedScene" uid="uid://d0khn1uw56sxd" path="res://ui/ui_overhaul/character_info_panel.tscn" id="7_1qnqh"]
-[ext_resource type="PackedScene" uid="uid://8tv1es2vlr8m" path="res://levels/Aram.tscn" id="8_35ykd"]
+[ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="8_xk82w"]
+[ext_resource type="Texture2D" uid="uid://b2nqaadp4gtif" path="res://textures/ui/how_to_play_screenshots/nexus_preview.png" id="9_4q0jm"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="9_kg5fj"]
+[ext_resource type="Environment" uid="uid://djpbcri88gy7b" path="res://levels/default_enviroment.tres" id="9_wu0bo"]
+[ext_resource type="Texture2D" uid="uid://dq7py1migm1rc" path="res://textures/ui/how_to_play_screenshots/active_turret.png" id="10_3dxw3"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="10_43bvd"]
+[ext_resource type="Texture2D" uid="uid://4ig6xsl6ieur" path="res://textures/ui/how_to_play_screenshots/recharging_turret.png" id="11_763dj"]
+[ext_resource type="PackedScene" uid="uid://c2he3w6626a2a" path="res://models/nexus_mesh.tscn" id="11_ca2eo"]
+[ext_resource type="Texture2D" uid="uid://bxvpqutf7efo5" path="res://textures/ui/how_to_play_screenshots/example_mercenary.png" id="12_xyi2f"]
+[ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="13_2d0cc"]
+[ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="15_q0p04"]
+[ext_resource type="PackedScene" uid="uid://bg4atg03uyc65" path="res://models/tower-top.glb" id="17_f5lsm"]
 
 [sub_resource type="Gradient" id="Gradient_w8w6y"]
 colors = PackedColorArray(0.36, 0.2568, 0.0504, 1, 0, 0, 0, 1)
@@ -36,23 +46,39 @@ font_color = Color(0.227451, 0.227451, 0.227451, 1)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bk2r0"]
 size = Vector2(64, 64)
 
-[sub_resource type="LabelSettings" id="LabelSettings_xn7am"]
-font_size = 64
-font_color = Color(0.184314, 0.184314, 0.184314, 1)
-
-[sub_resource type="GDScript" id="GDScript_ty533"]
+[sub_resource type="GDScript" id="GDScript_wgn5k"]
 script/source = "extends Button
 
-func _on_click() -> void:
-	get_tree().quit()
+@export var client: Client 
+
+func _on_pressed():
+	# Access injected \"Client\" class dependency of MainMenu 
+	var client: Client = null
+	if client != null:
+		client.quit()
+"
+
+[sub_resource type="GDScript" id="GDScript_u8ll8"]
+script/source = "extends Control
+
+func change_currently_visible_element(element_to_show: Control) -> void:
+	if element_to_show.get_parent() != self: return
 	
+	for child in get_children():
+		child.visible = false
+	element_to_show.visible = true
 "
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_sdq2g"]
-viewport_path = NodePath("SideViews/PanelContainer2/TextureRect/SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_va5yf"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
+[sub_resource type="GDScript" id="GDScript_so5tk"]
+script/source = "extends TextureRect
+
+@export var subviewport: SubViewport
+
+func _ready() -> void:
+	(texture as ViewportTexture).viewport_path = subviewport.get_path()
+"
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_fq12c"]
 resource_local_to_scene = true
@@ -65,6 +91,9 @@ base = 30.0
 resource_local_to_scene = true
 base = 75.0
 
+[sub_resource type="FloatAttribute" id="FloatAttribute_igmtl"]
+base = 1.0
+
 [sub_resource type="FloatAttribute" id="FloatAttribute_wbm6s"]
 resource_local_to_scene = true
 
@@ -74,6 +103,11 @@ resource_local_to_scene = true
 [sub_resource type="FloatAttribute" id="FloatAttribute_vefuf"]
 resource_local_to_scene = true
 base = 300.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gotr4"]
+properties/0/path = NodePath("EntityAttributesComponent:health:current")
+properties/0/spawn = false
+properties/0/replication_mode = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ddly6"]
 resource_name = "wall"
@@ -108,8 +142,8 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
 }]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_vr4ng"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xm3c4"]
+radius = 2.0
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_xyfhn"]
 resource_local_to_scene = true
@@ -121,6 +155,9 @@ base = 30.0
 [sub_resource type="FloatAttribute" id="FloatAttribute_0q71k"]
 resource_local_to_scene = true
 base = 75.0
+
+[sub_resource type="FloatAttribute" id="FloatAttribute_qj54h"]
+base = 1.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_rge2g"]
 resource_local_to_scene = true
@@ -160,9 +197,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/v+FCv7//38PzYUK/v//f/7/jBj+//9/AACMGP7//38AAIUK/v//f+8yhQr+//9/7zIAAP7//38PzQAA/v//f/7/jBgAAP+//v+FCgAA/7/+/4wY/v//v/7/hQrvMv+//v8AAO8y/7/+/4UKD83/v/7/hQr+//+//v8AAA/N/7/giv//HnX//+CK///giv//HnX//x51//8edf//4Ir//wAAhQoAAP//7zKFCgAA//8AAIwYAAD//w/NhQoAAP///v+FCgAA///+/4wYAAD//w/NAAAAAP//7zIAAAAA//8AAAAA7zL/vwAAhQrvMv+/AAAAAA/N/78AAIUKD83/vwAAjBj+//+/AACMGAAA/78AAIUKAAD/vwAAhQr+//+//z+uXv8/////v65e/z///x51//8edf//4Ir//x51////P65e/z+awB51//8edZrA/z+uXv+/msAedf//4IqawP+/rl7/P5rA/7+uXv+/msDgiv//HnWawOCK///giprA/7+uXv+/+In/P65e/7/4ieCK///giviJHnX//+CK+IkAAIwY/v+pmP8/rl7/v6mY/v+MGP7/qZj/v65e/7+pmAAAjBgAAP///v+MGAAA////P65e/z////+/rl7/P///AACMGAAAn8P/P65e/z+fwwAAjBj+/5/D/z+uXv+/n8P+/4wYAACfw/7/jBj+/5/D/7+uXv8/n8P/v65e/7+fw/9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f/+//3//v/9//7//f/+//3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/+vH/f/rx/3/68f9/+vGhjLrmoYy65qGMuuahjLrmRJmiDESZogxEmaIMRJmiDP///3////9/////f////3////9/////f////3////9//3+J4f9/ieH/f4nh/3+J4ZqYyc6amMnOmpjJzpqYyc41sZoYNbGaGDWxmhg1sZoY")
 }]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_77o68"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_ewv87"]
 _surfaces = [{
 "aabb": AABB(-0.999815, -1.51648, -1.00018, 2, 3.03333, 2),
@@ -194,6 +228,22 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ewv87")
 
+[sub_resource type="Animation" id="Animation_75x5r"]
+resource_name = "floating"
+length = 3.33333
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.0333333, 1, 0, 0.000860277, 0, 0.0666667, 1, 0, 0.00296723, 0, 0.1, 1, 0, 0.00627711, 0, 0.133333, 1, 0, 0.0107462, 0, 0.166667, 1, 0, 0.0163307, 0, 0.2, 1, 0, 0.023315, 0, 0.233333, 1, 0, 0.0312835, 0, 0.266667, 1, 0, 0.0401924, 0, 0.3, 1, 0, 0.0499981, 0, 0.333333, 1, 0, 0.0606568, 0, 0.366667, 1, 0, 0.0723653, 0, 0.4, 1, 0, 0.0847956, 0, 0.433333, 1, 0, 0.0979039, 0, 0.466667, 1, 0, 0.111646, 0, 0.5, 1, 0, 0.12598, 0, 0.533333, 1, 0, 0.141013, 0, 0.566667, 1, 0, 0.156505, 0, 0.6, 1, 0, 0.172413, 0, 0.633333, 1, 0, 0.188692, 0, 0.666667, 1, 0, 0.2053, 0, 0.7, 1, 0, 0.222258, 0, 0.766667, 1, 0, 0.25672, 0, 0.933333, 1, 0, 0.343826, 0, 0.966667, 1, 0, 0.360981, 0, 1, 1, 0, 0.377939, 0, 1.03333, 1, 0, 0.394546, 0, 1.06667, 1, 0, 0.410826, 0, 1.1, 1, 0, 0.426734, 0, 1.13333, 1, 0, 0.442226, 0, 1.16667, 1, 0, 0.457259, 0, 1.2, 1, 0, 0.471592, 0, 1.23333, 1, 0, 0.485335, 0, 1.26667, 1, 0, 0.498443, 0, 1.3, 1, 0, 0.510873, 0, 1.33333, 1, 0, 0.522582, 0, 1.36667, 1, 0, 0.53324, 0, 1.4, 1, 0, 0.543046, 0, 1.43333, 1, 0, 0.551955, 0, 1.46667, 1, 0, 0.559924, 0, 1.5, 1, 0, 0.566908, 0, 1.53333, 1, 0, 0.572492, 0, 1.56667, 1, 0, 0.576962, 0, 1.6, 1, 0, 0.580271, 0, 1.63333, 1, 0, 0.582378, 0, 1.7, 1, 0, 0.582378, 0, 1.73333, 1, 0, 0.580271, 0, 1.76667, 1, 0, 0.576962, 0, 1.8, 1, 0, 0.572492, 0, 1.83333, 1, 0, 0.566908, 0, 1.86667, 1, 0, 0.559924, 0, 1.9, 1, 0, 0.551955, 0, 1.93333, 1, 0, 0.543046, 0, 1.96667, 1, 0, 0.53324, 0, 2, 1, 0, 0.522582, 0, 2.03333, 1, 0, 0.510873, 0, 2.06667, 1, 0, 0.498443, 0, 2.1, 1, 0, 0.485335, 0, 2.13333, 1, 0, 0.471592, 0, 2.16667, 1, 0, 0.457259, 0, 2.2, 1, 0, 0.442226, 0, 2.23333, 1, 0, 0.426734, 0, 2.26667, 1, 0, 0.410826, 0, 2.3, 1, 0, 0.394546, 0, 2.33333, 1, 0, 0.377939, 0, 2.36667, 1, 0, 0.360981, 0, 2.43333, 1, 0, 0.326519, 0, 2.6, 1, 0, 0.239412, 0, 2.63333, 1, 0, 0.222258, 0, 2.66667, 1, 0, 0.2053, 0, 2.7, 1, 0, 0.188692, 0, 2.73333, 1, 0, 0.172413, 0, 2.76667, 1, 0, 0.156505, 0, 2.8, 1, 0, 0.141013, 0, 2.83333, 1, 0, 0.12598, 0, 2.86667, 1, 0, 0.111646, 0, 2.9, 1, 0, 0.0979038, 0, 2.93333, 1, 0, 0.0847956, 0, 2.96667, 1, 0, 0.0723653, 0, 3, 1, 0, 0.0606567, 0, 3.03333, 1, 0, 0.0499982, 0, 3.06667, 1, 0, 0.0401925, 0, 3.1, 1, 0, 0.0312835, 0, 3.13333, 1, 0, 0.0233149, 0, 3.16667, 1, 0, 0.0163307, 0, 3.2, 1, 0, 0.0107462, 0, 3.23333, 1, 0, 0.00627713, 0, 3.26667, 1, 0, 0.00296724, 0, 3.3, 1, 0, 0.000860312, 0, 3.33333, 1, 0, 0, 0)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_45rbh"]
+_data = {
+"floating": SubResource("Animation_75x5r")
+}
+
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_17emm"]
 resource_local_to_scene = true
 max = 1.0
@@ -207,6 +257,9 @@ base = 30.0
 resource_local_to_scene = true
 base = 75.0
 
+[sub_resource type="FloatAttribute" id="FloatAttribute_lbhhq"]
+base = 1.0
+
 [sub_resource type="FloatAttribute" id="FloatAttribute_4tv8r"]
 resource_local_to_scene = true
 
@@ -217,8 +270,15 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 base = 300.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_hd00p"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
+[sub_resource type="CylinderMesh" id="CylinderMesh_ecfb6"]
+height = 0.5
+radial_segments = 12
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ogbw3"]
+radius = 2.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vbos0"]
+radius = 3.091
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_q5jn3"]
 resource_local_to_scene = true
@@ -249,6 +309,9 @@ base = 30.0
 resource_local_to_scene = true
 base = 75.0
 
+[sub_resource type="FloatAttribute" id="FloatAttribute_yk4vw"]
+base = 1.0
+
 [sub_resource type="FloatAttribute" id="FloatAttribute_isuql"]
 resource_local_to_scene = true
 
@@ -258,9 +321,6 @@ resource_local_to_scene = true
 [sub_resource type="FloatAttribute" id="FloatAttribute_vh1gk"]
 resource_local_to_scene = true
 base = 300.0
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_y2in6"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_ce4ps"]
 resource_local_to_scene = true
@@ -273,6 +333,9 @@ base = 30.0
 resource_local_to_scene = true
 base = 75.0
 
+[sub_resource type="FloatAttribute" id="FloatAttribute_35w40"]
+base = 1.0
+
 [sub_resource type="FloatAttribute" id="FloatAttribute_5il4j"]
 resource_local_to_scene = true
 
@@ -282,9 +345,6 @@ resource_local_to_scene = true
 [sub_resource type="FloatAttribute" id="FloatAttribute_twbwx"]
 resource_local_to_scene = true
 base = 300.0
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_613d5"]
-viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_gctmb"]
 resource_local_to_scene = true
@@ -297,6 +357,9 @@ base = 30.0
 resource_local_to_scene = true
 base = 75.0
 
+[sub_resource type="FloatAttribute" id="FloatAttribute_mng5r"]
+base = 1.0
+
 [sub_resource type="FloatAttribute" id="FloatAttribute_pud3a"]
 resource_local_to_scene = true
 
@@ -307,7 +370,32 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 base = 300.0
 
-[node name="PanelContainer2" type="HSplitContainer"]
+[sub_resource type="AudioStreamOggVorbis" id="AudioStreamOggVorbis_vreua"]
+loop = true
+
+[sub_resource type="Curve3D" id="Curve3D_kkowv"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -32, -0.399806, 0, 0, 0, 0, 0, 0, 0, 32, -0.399806, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_p1vv5"]
+vertices = PackedVector3Array(-30.98, 0.449817, -1.5, -25.03, 0.449817, -1.5, -25.34, 0.449817, -1.66, -25.5, 0.449817, -1.98, -33.01, 0.449817, -1.5, -39.5, 0.449817, -7, -39.5, 0.449817, -1.5, -25.5, 0.449817, -7, -23.98, 0.449817, -1.49, -9.01, 0.449817, -1.49, -9.34, 0.449817, -1.66, -23.66, 0.449817, -1.65, -9.5, 0.449817, -1.98, -9.5, 0.449817, -7, -23.49, 0.449817, -7, -23.49, 0.449817, -1.98, -7.98, 0.449817, -1.49, 7.99, 0.449817, -1.49, 7.66, 0.449817, -1.66, -7.66, 0.449817, -1.65, 7.5, 0.449817, -1.98, 7.5, 0.449817, -7, -7.49, 0.449817, -7, -7.49, 0.449817, -1.98, 9.02, 0.449817, -1.49, 23.99, 0.449817, -1.49, 23.66, 0.449817, -1.66, 9.34, 0.449817, -1.65, 23.5, 0.449817, -1.98, 23.5, 0.449817, -7, 9.51, 0.449817, -7, 9.51, 0.449817, -1.98, 25.35, 0.449817, -1.66, 25.04, 0.449817, -1.5, 30.99, 0.449817, -1.5, 25.51, 0.449817, -1.98, 33.02, 0.449817, -1.5, 39.5, 0.449817, -1.5, 39.5, 0.449817, -7, 25.51, 0.449817, -7, -39.5, 0.449817, 1.51, -33.01, 0.449817, 1.51, -33.34, 0.449817, 1.34, -33.5, 0.449817, 1.02, -33.34, 0.449817, -1.33, -33.5, 0.449817, -1.01, -30.96, 0.449817, -1.49, -25.01, 0.449817, -1.49, 30.97, 0.449817, -1.49, 25.02, 0.449817, -1.49, 33.34, 0.449817, -1.34, 33.51, 0.449817, -1.01, 33.34, 0.449817, 1.35, 33.02, 0.449817, 1.51, 39.5, 0.449817, 1.51, 33.51, 0.449817, 1.02, -30.65, 0.449817, -1.33, -30.49, 0.449817, -1, -26.05, 0.449817, -1, 26.05, 0.449817, -1, 30.5, 0.449817, -1, 30.66, 0.449817, -1.33, -25.95, 0.449817, -1, 25.95, 0.449817, -1, -9.95, 0.449817, -1, -10.05, 0.449817, -1, 9.95, 0.449817, -1, 10.05, 0.449817, -1, -26.27, 0.449817, -0.94, -26.59, 0.449817, -0.78, -26.78, 0.449817, -0.59, -26.94, 0.449817, -0.27, -27, 0.449817, -0.0500002, -27, 0.449817, 0.0500002, -30.49, 0.449817, 1.01, -26.27, 0.449817, 0.94, -26.59, 0.449817, 0.78, -26.94, 0.449817, 0.27, -26.78, 0.449817, 0.59, -26.01, 0.449817, 1.01, -10.27, 0.449817, -0.94, -10.59, 0.449817, -0.78, -25.73, 0.449817, -0.94, -25.98, 0.449817, 1.01, -10.01, 0.449817, 1.01, -25.73, 0.449817, 0.94, -25.41, 0.449817, -0.78, -10.78, 0.449817, -0.59, -10.27, 0.449817, 0.94, -25.41, 0.449817, 0.78, -25.22, 0.449817, -0.59, -10.94, 0.449817, -0.27, -10.59, 0.449817, 0.78, -25.22, 0.449817, 0.59, -25.06, 0.449817, -0.27, -24.99, 0.449817, 0.0199995, -11, 0.449817, -0.0500002, -10.78, 0.449817, 0.59, -25.06, 0.449817, 0.27, -11, 0.449817, 0.0500002, -10.94, 0.449817, 0.27, 9.73, 0.449817, -0.94, 9.41, 0.449817, -0.78, -9.73, 0.449817, -0.94, -9.98, 0.449817, 1.01, 9.99, 0.449817, 1.01, -9.73, 0.449817, 0.94, -9.41, 0.449817, -0.78, 9.22, 0.449817, -0.59, 9.73, 0.449817, 0.94, -9.41, 0.449817, 0.78, -9.22, 0.449817, -0.59, 9.06, 0.449817, -0.27, 9.41, 0.449817, 0.78, -9.22, 0.449817, 0.59, -9.06, 0.449817, -0.27, -8.99, 0.449817, 0.0199995, 9, 0.449817, -0.0500002, 9.22, 0.449817, 0.59, -9.06, 0.449817, 0.27, 9, 0.449817, 0.0500002, 9.06, 0.449817, 0.27, 25.73, 0.449817, -0.94, 25.41, 0.449817, -0.78, 10.27, 0.449817, -0.94, 10.02, 0.449817, 1.01, 25.99, 0.449817, 1.01, 10.27, 0.449817, 0.94, 10.59, 0.449817, -0.78, 25.22, 0.449817, -0.59, 25.73, 0.449817, 0.94, 10.59, 0.449817, 0.78, 10.78, 0.449817, -0.59, 25.06, 0.449817, -0.27, 25.41, 0.449817, 0.78, 10.78, 0.449817, 0.59, 10.94, 0.449817, -0.27, 11.01, 0.449817, 0.0199995, 25, 0.449817, -0.0500002, 25.22, 0.449817, 0.59, 10.94, 0.449817, 0.27, 25, 0.449817, 0.0500002, 25.06, 0.449817, 0.27, 26.27, 0.449817, -0.94, 26.59, 0.449817, -0.78, 26.78, 0.449817, -0.59, 26.94, 0.449817, -0.27, 27.01, 0.449817, 0.0199995, 30.5, 0.449817, 1.01, 26.02, 0.449817, 1.01, 26.27, 0.449817, 0.94, 26.94, 0.449817, 0.27, 26.78, 0.449817, 0.59, 26.59, 0.449817, 0.78, 30.66, 0.449817, 1.34, -30.65, 0.449817, 1.34, 25.02, 0.449817, 1.5, 30.97, 0.449817, 1.5, -30.96, 0.449817, 1.5, -25.01, 0.449817, 1.5, -23.98, 0.449817, 1.5, -9.01, 0.449817, 1.5, -7.98, 0.449817, 1.5, 23.99, 0.449817, 1.5, 7.99, 0.449817, 1.5, 9.02, 0.449817, 1.5, -25.03, 0.449817, 1.51, -30.98, 0.449817, 1.51, -9.34, 0.449817, 1.67, -23.66, 0.449817, 1.66, -23.49, 0.449817, 1.99, -23.49, 0.449817, 7, -9.5, 0.449817, 7, -9.5, 0.449817, 1.99, 7.66, 0.449817, 1.67, -7.66, 0.449817, 1.66, -7.49, 0.449817, 1.99, -7.49, 0.449817, 7, 7.5, 0.449817, 7, 7.5, 0.449817, 1.99, 23.66, 0.449817, 1.67, 9.34, 0.449817, 1.66, 9.51, 0.449817, 1.99, 9.51, 0.449817, 7, 23.5, 0.449817, 7, 23.5, 0.449817, 1.99, 25.04, 0.449817, 1.51, 30.99, 0.449817, 1.51, -25.34, 0.449817, 1.67, -25.5, 0.449817, 1.99, -39.5, 0.449817, 7, -25.5, 0.449817, 7, 25.35, 0.449817, 1.67, 25.51, 0.449817, 1.99, 39.5, 0.449817, 7, 25.51, 0.449817, 7)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4), PackedInt32Array(6, 5, 4), PackedInt32Array(4, 5, 3), PackedInt32Array(3, 5, 7), PackedInt32Array(11, 10, 8), PackedInt32Array(8, 10, 9), PackedInt32Array(15, 14, 12), PackedInt32Array(12, 14, 13), PackedInt32Array(12, 10, 15), PackedInt32Array(15, 10, 11), PackedInt32Array(19, 18, 16), PackedInt32Array(16, 18, 17), PackedInt32Array(23, 22, 20), PackedInt32Array(20, 22, 21), PackedInt32Array(20, 18, 23), PackedInt32Array(23, 18, 19), PackedInt32Array(27, 26, 24), PackedInt32Array(24, 26, 25), PackedInt32Array(31, 30, 28), PackedInt32Array(28, 30, 29), PackedInt32Array(28, 26, 31), PackedInt32Array(31, 26, 27), PackedInt32Array(32, 34, 33), PackedInt32Array(32, 35, 34), PackedInt32Array(34, 35, 36), PackedInt32Array(37, 36, 38), PackedInt32Array(38, 36, 35), PackedInt32Array(38, 35, 39), PackedInt32Array(42, 41, 40), PackedInt32Array(43, 42, 40), PackedInt32Array(6, 4, 44), PackedInt32Array(45, 6, 44), PackedInt32Array(43, 40, 45), PackedInt32Array(45, 40, 6), PackedInt32Array(0, 1, 46), PackedInt32Array(46, 1, 47), PackedInt32Array(34, 48, 33), PackedInt32Array(33, 48, 49), PackedInt32Array(50, 36, 37), PackedInt32Array(51, 50, 37), PackedInt32Array(54, 53, 52), PackedInt32Array(54, 52, 55), PackedInt32Array(51, 37, 55), PackedInt32Array(55, 37, 54), PackedInt32Array(56, 58, 57), PackedInt32Array(61, 60, 59), PackedInt32Array(62, 58, 47), PackedInt32Array(47, 58, 56), PackedInt32Array(47, 56, 46), PackedInt32Array(63, 49, 59), PackedInt32Array(59, 49, 61), PackedInt32Array(61, 49, 48), PackedInt32Array(65, 9, 64), PackedInt32Array(64, 9, 16), PackedInt32Array(17, 66, 16), PackedInt32Array(16, 66, 64), PackedInt32Array(62, 47, 8), PackedInt32Array(24, 25, 67), PackedInt32Array(67, 25, 63), PackedInt32Array(67, 66, 24), PackedInt32Array(24, 66, 17), PackedInt32Array(25, 49, 63), PackedInt32Array(9, 65, 8), PackedInt32Array(8, 65, 62), PackedInt32Array(57, 58, 68), PackedInt32Array(57, 68, 69), PackedInt32Array(57, 69, 70), PackedInt32Array(57, 70, 71), PackedInt32Array(57, 71, 72), PackedInt32Array(72, 73, 57), PackedInt32Array(57, 73, 74), PackedInt32Array(76, 75, 74), PackedInt32Array(74, 73, 77), PackedInt32Array(74, 77, 78), PackedInt32Array(74, 78, 76), PackedInt32Array(75, 79, 74), PackedInt32Array(80, 62, 65), PackedInt32Array(82, 62, 81), PackedInt32Array(81, 62, 80), PackedInt32Array(84, 83, 85), PackedInt32Array(87, 86, 81), PackedInt32Array(81, 86, 82), PackedInt32Array(88, 84, 89), PackedInt32Array(89, 84, 85), PackedInt32Array(90, 86, 91), PackedInt32Array(91, 86, 87), PackedInt32Array(93, 92, 89), PackedInt32Array(89, 92, 88), PackedInt32Array(91, 94, 90), PackedInt32Array(96, 95, 91), PackedInt32Array(91, 95, 94), PackedInt32Array(97, 92, 98), PackedInt32Array(98, 92, 93), PackedInt32Array(95, 96, 99), PackedInt32Array(100, 95, 99), PackedInt32Array(95, 100, 98), PackedInt32Array(98, 100, 97), PackedInt32Array(64, 66, 101), PackedInt32Array(103, 64, 102), PackedInt32Array(102, 64, 101), PackedInt32Array(106, 105, 104), PackedInt32Array(108, 107, 102), PackedInt32Array(102, 107, 103), PackedInt32Array(109, 105, 110), PackedInt32Array(110, 105, 106), PackedInt32Array(111, 107, 112), PackedInt32Array(112, 107, 108), PackedInt32Array(114, 113, 110), PackedInt32Array(110, 113, 109), PackedInt32Array(115, 111, 112), PackedInt32Array(117, 116, 112), PackedInt32Array(112, 116, 115), PackedInt32Array(118, 113, 119), PackedInt32Array(119, 113, 114), PackedInt32Array(116, 117, 120), PackedInt32Array(121, 116, 120), PackedInt32Array(116, 121, 119), PackedInt32Array(119, 121, 118), PackedInt32Array(122, 67, 63), PackedInt32Array(124, 67, 123), PackedInt32Array(123, 67, 122), PackedInt32Array(127, 126, 125), PackedInt32Array(129, 128, 123), PackedInt32Array(123, 128, 124), PackedInt32Array(130, 126, 131), PackedInt32Array(131, 126, 127), PackedInt32Array(132, 128, 133), PackedInt32Array(133, 128, 129), PackedInt32Array(135, 134, 131), PackedInt32Array(131, 134, 130), PackedInt32Array(136, 132, 133), PackedInt32Array(138, 137, 133), PackedInt32Array(133, 137, 136), PackedInt32Array(139, 134, 140), PackedInt32Array(140, 134, 135), PackedInt32Array(137, 138, 141), PackedInt32Array(137, 141, 142), PackedInt32Array(137, 142, 140), PackedInt32Array(140, 142, 139), PackedInt32Array(60, 143, 59), PackedInt32Array(144, 143, 60), PackedInt32Array(145, 144, 60), PackedInt32Array(60, 146, 145), PackedInt32Array(146, 60, 147), PackedInt32Array(147, 60, 148), PackedInt32Array(150, 148, 149), PackedInt32Array(148, 151, 147), PackedInt32Array(148, 152, 151), PackedInt32Array(153, 152, 148), PackedInt32Array(150, 153, 148), PackedInt32Array(149, 148, 154), PackedInt32Array(155, 74, 79), PackedInt32Array(126, 149, 156), PackedInt32Array(156, 149, 154), PackedInt32Array(156, 154, 157), PackedInt32Array(83, 159, 79), PackedInt32Array(79, 159, 155), PackedInt32Array(155, 159, 158), PackedInt32Array(161, 160, 84), PackedInt32Array(84, 160, 83), PackedInt32Array(84, 104, 161), PackedInt32Array(161, 104, 162), PackedInt32Array(126, 156, 163), PackedInt32Array(125, 165, 105), PackedInt32Array(105, 165, 164), PackedInt32Array(164, 162, 105), PackedInt32Array(105, 162, 104), PackedInt32Array(160, 159, 83), PackedInt32Array(165, 125, 163), PackedInt32Array(163, 125, 126), PackedInt32Array(167, 158, 166), PackedInt32Array(166, 158, 159), PackedInt32Array(169, 160, 168), PackedInt32Array(168, 160, 161), PackedInt32Array(173, 172, 170), PackedInt32Array(170, 172, 171), PackedInt32Array(173, 170, 168), PackedInt32Array(168, 170, 169), PackedInt32Array(175, 162, 174), PackedInt32Array(174, 162, 164), PackedInt32Array(179, 178, 176), PackedInt32Array(176, 178, 177), PackedInt32Array(179, 176, 174), PackedInt32Array(174, 176, 175), PackedInt32Array(181, 165, 180), PackedInt32Array(180, 165, 163), PackedInt32Array(185, 184, 182), PackedInt32Array(182, 184, 183), PackedInt32Array(185, 182, 180), PackedInt32Array(180, 182, 181), PackedInt32Array(187, 186, 157), PackedInt32Array(157, 186, 156), PackedInt32Array(188, 167, 166), PackedInt32Array(188, 189, 167), PackedInt32Array(167, 189, 41), PackedInt32Array(40, 41, 190), PackedInt32Array(190, 41, 189), PackedInt32Array(190, 189, 191), PackedInt32Array(192, 186, 187), PackedInt32Array(192, 187, 193), PackedInt32Array(193, 187, 53), PackedInt32Array(54, 194, 53), PackedInt32Array(53, 194, 193), PackedInt32Array(193, 194, 195)]
+sample_partition_type = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_mesh"
+cell_size = 0.01
+agent_max_climb = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nd5dc"]
+size = Vector2(80, 15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4qnwa"]
+size = Vector3(1, 1, 6)
+
+[node name="MainMenu" type="HSplitContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -405,17 +493,11 @@ custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/MenuEntries"]
+[node name="Logo" type="TextureRect" parent="PanelContainer/MarginContainer/MenuEntries"]
 layout_mode = 2
 texture = ExtResource("2_r3eqd")
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/MenuEntries"]
-visible = false
-layout_mode = 2
-text = "LOGO GRY"
-label_settings = SubResource("LabelSettings_xn7am")
-
-[node name="ConnectToServerBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+[node name="ConnectToServerBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries" node_paths=PackedStringArray("content_area", "panel_to_display")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Join game"
@@ -423,6 +505,9 @@ icon = ExtResource("3_mw6ni")
 flat = true
 alignment = 0
 expand_icon = true
+script = ExtResource("4_7imgi")
+content_area = NodePath("../../../../ContentArea")
+panel_to_display = NodePath("../../../../ContentArea/CharacterSelection")
 
 [node name="HowToPlayBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
 layout_mode = 2
@@ -433,14 +518,52 @@ flat = true
 alignment = 0
 expand_icon = true
 
-[node name="SettingsBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/MenuEntries"]
 layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/margin_left = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/MenuEntries/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HowToPlayControlsBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer" node_paths=PackedStringArray("content_area", "panel_to_display")]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 28
+text = "Controls"
+icon = ExtResource("4_cwc34")
+flat = true
+alignment = 0
+expand_icon = true
+script = ExtResource("4_7imgi")
+content_area = NodePath("../../../../../../ContentArea")
+panel_to_display = NodePath("../../../../../../ContentArea/HowToPlayControlsPanel")
+
+[node name="HowToPlayGameplayBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer" node_paths=PackedStringArray("content_area", "panel_to_display")]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 28
+text = "Gameplay"
+icon = ExtResource("4_cwc34")
+flat = true
+alignment = 0
+expand_icon = true
+script = ExtResource("4_7imgi")
+content_area = NodePath("../../../../../../ContentArea")
+panel_to_display = NodePath("../../../../../../ContentArea/HowToPlayControlsPanel2")
+
+[node name="SettingsBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 28
 text = "Settings"
 icon = ExtResource("5_n2jlb")
 flat = true
 alignment = 0
 expand_icon = true
+script = ExtResource("4_7imgi")
 
 [node name="ExitBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
 layout_mode = 2
@@ -450,129 +573,686 @@ icon = ExtResource("6_e15m0")
 flat = true
 alignment = 0
 expand_icon = true
-script = SubResource("GDScript_ty533")
+script = SubResource("GDScript_wgn5k")
 
-[node name="SideViews" type="Control" parent="."]
+[node name="ContentArea" type="Control" parent="."]
 layout_mode = 2
+script = SubResource("GDScript_u8ll8")
 
-[node name="CharacterSelection" parent="SideViews" instance=ExtResource("7_1qnqh")]
+[node name="CharacterSelection" parent="ContentArea" groups=["sidebar_panels"] instance=ExtResource("7_1qnqh")]
 layout_mode = 2
 offset_right = 1552.0
 
-[node name="CharacterSelection2" parent="SideViews" instance=ExtResource("7_1qnqh")]
+[node name="HowToPlayControlsPanel" type="PanelContainer" parent="ContentArea"]
 visible = false
-layout_mode = 2
-offset_right = 1552.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="PanelContainer2" type="PanelContainer" parent="SideViews"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ContentArea/HowToPlayControlsPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="HFlowContainer" type="VBoxContainer" parent="ContentArea/HowToPlayControlsPanel/ScrollContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentArea/HowToPlayControlsPanel/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 72
+text = "Controls"
+
+[node name="Label" type="Label" parent="ContentArea/HowToPlayControlsPanel/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+text = "Left Mouse Button - Use basic attack
+Right Mouse Button - Order character to move to position
+Q - Use first ability
+W - Use second ability
+E - Use third ability
+R - Use ultimate ability
+Space - Center camera to character
+Middle mouse button - Move camera around freely"
+
+[node name="TextureRect" type="TextureRect" parent="ContentArea/HowToPlayControlsPanel/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+
+[node name="HowToPlayControlsPanel2" type="PanelContainer" parent="ContentArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ContentArea/HowToPlayControlsPanel2"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="HFlowContainer" type="VBoxContainer" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 72
+text = "Gameplay"
+
+[node name="Label" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Game is about two teams competing and using any necessary means to destroy enemy nexus. What is nexus you ask?"
+
+[node name="TextureRect" type="TextureRect" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("9_4q0jm")
+
+[node name="Label2" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "This is nexus"
+
+[node name="Label3" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "It only serves one purpose: To be destroyed by enemy team."
+autowrap_mode = 2
+
+[node name="Label7" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "However, destroying the nexus is not an easy task. Those who want to destroy it must face it's defenders - which are turrets and other players."
+autowrap_mode = 2
+
+[node name="Label4" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Turrets are structures, which are attacking and dealing damage to any enemies that walk into their range, until that enemy either dies or leaves It's range. However, turrets have a key weakness - They need to recharge every few seconds, which can be taken to your advantage, so you can access the enemy nexus."
+autowrap_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+collapsed = true
+dragger_visibility = 1
+
+[node name="VSplitContainer" type="VSplitContainer" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/HSplitContainer"]
+layout_mode = 2
+collapsed = true
+dragger_visibility = 2
+
+[node name="TextureRect2" type="TextureRect" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_3dxw3")
+stretch_mode = 5
+
+[node name="Label4" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "Active turret"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="VSplitContainer2" type="VSplitContainer" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/HSplitContainer"]
+layout_mode = 2
+collapsed = true
+dragger_visibility = 2
+
+[node name="TextureRect3" type="TextureRect" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/HSplitContainer/VSplitContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("11_763dj")
+stretch_mode = 5
+
+[node name="Label4" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/HSplitContainer/VSplitContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Inactive turret with recharge indicator"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Label5" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "You have probably noticed colorful tint over turrets - They indicate which team every entity belongs to. What are teams?: Every entity that interacts with player might belong to one of the teams. The team the entity is in is indicated via colored circle, which is displayed beneath them. Allies cannot hurt or only apply negative effects."
+autowrap_mode = 2
+
+[node name="Label8" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Other kind of entities that often are asinged to a team, are mercenaries controlled by every player. What is mercenary? Mercenaries are special entities, which can: Move freely around the level, use abilities or perform attacks.
+Every time a new player joins, a new mercenary appears on level. What mercenary appears depends on what player declared when It joined the server. Every mercenary has a different set of abilities and attack, which won't be covered here. To read about every mercenary abilities in detail, head into \"Join game\" and select a mercenary you wish to know more about.
+
+Most abilities have a cooldown - A timeout during which they cannot be used again until it passes. 
+
+There are also status effects - They fulfill a different roles, which are but not limited to:
+- Provide attribute changes to entities
+- Dealing damage over certain time in regular intervals
+- Act as a marker to indicate a certain property
+- And many more
+
+This effects qualify as either: Buff, debuff or misc. Most of the time, buffs are applied on allies, debuffs on enemies and misc effects on any."
+autowrap_mode = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer"]
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("12_xyi2f")
+
+[node name="Label8" type="Label" parent="ContentArea/HowToPlayControlsPanel2/ScrollContainer/HFlowContainer/VSplitContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Example mercenary - It has nickname of player, which controlls it above It's head."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="PanelWhenNothingIsActive" type="PanelContainer" parent="ContentArea" groups=["sidebar_panels"]]
 visible = false
 layout_mode = 2
 offset_right = 1552.0
 offset_bottom = 1080.0
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="SideViews/PanelContainer2"]
+[node name="TextureRect" type="TextureRect" parent="ContentArea/PanelWhenNothingIsActive" node_paths=PackedStringArray("subviewport")]
 layout_mode = 2
 texture = SubResource("ViewportTexture_sdq2g")
+script = SubResource("GDScript_so5tk")
+subviewport = NodePath("SubViewport")
 
-[node name="SubViewport" type="SubViewport" parent="SideViews/PanelContainer2/TextureRect"]
+[node name="SubViewport" type="SubViewport" parent="ContentArea/PanelWhenNothingIsActive/TextureRect"]
+own_world_3d = true
 size = Vector2i(1024, 512)
 
-[node name="Aram" parent="SideViews/PanelContainer2/TextureRect/SubViewport" instance=ExtResource("8_35ykd")]
+[node name="Aram" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport"]
 
-[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_va5yf")
+[node name="Background" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
 
-[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus" index="1"]
+[node name="GridMap" type="GridMap" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh_library = ExtResource("8_xk82w")
+cell_size = Vector3(1, 1, 1)
+bake_navigation = true
+data = {
+"cells": PackedInt32Array(65496, 7, 15, 65496, 6, 1048588, 65496, 5, 1048588, 65496, 4, 1048588, 65496, 3, 1048588, 65496, 2, 1048588, 65496, 1, 1048588, 65496, 0, 1048588, 65496, 65535, 1048588, 65496, 65534, 1048588, 65496, 65533, 1048588, 65496, 65532, 1048588, 65496, 65531, 1048588, 65496, 65530, 1048588, 65496, 65529, 1048588, 65497, 65528, 12, 65498, 65528, 12, 65499, 65528, 12, 65500, 65528, 12, 65501, 65528, 12, 65502, 65528, 12, 65503, 65528, 12, 65504, 65528, 12, 65505, 65528, 12, 65506, 65528, 12, 65507, 65528, 12, 65508, 65528, 12, 65509, 65528, 12, 65510, 65528, 12, 65511, 65528, 15, 65512, 65528, 12, 65513, 65528, 12, 65514, 65528, 12, 65515, 65528, 12, 65516, 65528, 12, 65517, 65528, 12, 65518, 65528, 12, 65520, 65528, 12, 65521, 65528, 12, 65522, 65528, 12, 65523, 65528, 12, 65524, 65528, 12, 65525, 65528, 12, 65526, 65528, 12, 65527, 65528, 15, 65528, 65528, 12, 65529, 65528, 12, 65530, 65528, 12, 65531, 65528, 12, 65532, 65528, 12, 65533, 65528, 12, 65534, 65528, 12, 65535, 65528, 12, 0, 65528, 12, 1, 65528, 12, 2, 65528, 12, 3, 65528, 12, 4, 65528, 12, 5, 65528, 12, 65519, 65528, 12, 7, 65528, 12, 18, 65528, 12, 17, 65528, 12, 16, 65528, 12, 15, 65528, 12, 14, 65528, 12, 13, 65528, 12, 12, 65528, 12, 11, 65528, 12, 10, 65528, 12, 9, 65528, 12, 8, 65528, 15, 6, 65528, 12, 19, 65528, 12, 20, 65528, 12, 21, 65528, 12, 22, 65528, 12, 23, 65528, 12, 24, 65528, 15, 25, 65528, 12, 26, 65528, 12, 27, 65528, 12, 28, 65528, 12, 29, 65528, 12, 30, 65528, 12, 31, 65528, 12, 32, 65528, 12, 33, 65528, 12, 34, 65528, 12, 35, 65528, 12, 36, 65528, 12, 37, 65528, 12, 38, 65528, 12, 39, 65528, 15, 39, 65529, 1441804, 39, 65530, 1441804, 39, 65531, 1441804, 39, 65532, 1441804, 39, 65533, 1441804, 39, 65534, 1441804, 39, 65535, 1441804, 39, 0, 1441804, 39, 1, 1441804, 39, 2, 1441804, 39, 3, 1441804, 39, 4, 1441804, 39, 5, 1441804, 39, 6, 1441804, 39, 7, 1441807, 65497, 65529, 1441799, 65497, 65530, 1441799, 65497, 65531, 1441799, 65497, 65532, 1441799, 65497, 65533, 1441799, 65497, 65534, 1441799, 65497, 65535, 1441799, 65497, 0, 1441799, 65497, 1, 1441799, 65497, 2, 1441799, 65497, 3, 1441799, 65497, 4, 1441799, 65497, 5, 1441799, 65497, 6, 1441799, 65498, 65529, 1441799, 65498, 65530, 1441799, 65498, 65531, 1441799, 65498, 65532, 1441799, 65498, 65533, 1441799, 65498, 65534, 1441799, 65498, 65535, 1441799, 65498, 0, 1441799, 65498, 1, 1441799, 65498, 2, 1441799, 65498, 3, 1441799, 65498, 4, 1441799, 65498, 5, 1441799, 65498, 6, 1441799, 65499, 65529, 1441799, 65499, 65530, 1441799, 65499, 65531, 1441799, 65499, 65532, 1441799, 65499, 65533, 1441799, 65499, 65534, 1441799, 65499, 65535, 1441799, 65499, 0, 1441799, 65499, 1, 1441799, 65499, 2, 1441799, 65499, 3, 1441799, 65499, 4, 1441799, 65499, 5, 1441799, 65499, 6, 1441799, 65500, 65529, 1441799, 65500, 65530, 1441799, 65500, 65531, 1441799, 65500, 65532, 1441799, 65500, 65533, 1441799, 65500, 65534, 1441799, 65500, 65535, 1441799, 65500, 0, 1441799, 65500, 1, 1441799, 65500, 2, 1441799, 65500, 3, 1441799, 65500, 4, 1441799, 65500, 5, 1441799, 65500, 6, 1441799, 65501, 65529, 1441799, 65501, 65530, 1441799, 65501, 65531, 1441799, 65501, 65532, 1441799, 65501, 65533, 1441799, 65501, 65534, 1441799, 65501, 65535, 1441799, 65501, 0, 1441799, 65501, 1, 1441799, 65501, 2, 1441799, 65501, 3, 1441799, 65501, 4, 1441799, 65501, 5, 1441799, 65501, 6, 1441799, 65502, 65529, 1441799, 65502, 65530, 1441799, 65502, 65531, 1441799, 65502, 65532, 1441799, 65502, 65533, 1441799, 65502, 65534, 1441799, 65502, 65535, 1441799, 65502, 0, 1441799, 65502, 1, 1441799, 65502, 2, 1441799, 65502, 3, 1441799, 65502, 4, 1441799, 65502, 5, 1441799, 65502, 6, 1441799, 65503, 65529, 1441799, 65503, 65530, 1441799, 65503, 65531, 1441799, 65503, 65532, 1441799, 65503, 65533, 1441799, 65503, 65534, 1441799, 65503, 65535, 1441799, 65503, 0, 1441799, 65503, 1, 1441799, 65503, 2, 1441799, 65503, 3, 1441799, 65503, 4, 1441799, 65503, 5, 1441799, 65503, 6, 1441799, 65504, 65529, 1441799, 65504, 65530, 1441799, 65504, 65531, 1441799, 65504, 65532, 1441799, 65504, 65533, 1441799, 65504, 65534, 1441799, 65504, 65535, 1441799, 65504, 0, 1441799, 65504, 1, 1441799, 65504, 2, 1441799, 65504, 3, 1441799, 65504, 4, 1441799, 65504, 5, 1441799, 65504, 6, 1441799, 65505, 65529, 1441799, 65505, 65530, 1441799, 65505, 65531, 1441799, 65505, 65532, 1441799, 65505, 65533, 1441799, 65505, 65534, 1441799, 65505, 65535, 1441799, 65505, 0, 1441799, 65505, 1, 1441799, 65505, 2, 1441799, 65505, 3, 1441799, 65505, 4, 1441799, 65505, 5, 1441799, 65505, 6, 1441799, 65506, 65529, 1441799, 65506, 65530, 1441799, 65506, 65531, 1441799, 65506, 65532, 1441799, 65506, 65533, 1441799, 65506, 65534, 1441799, 65506, 65535, 1441799, 65506, 0, 1441799, 65506, 1, 1441799, 65506, 2, 1441799, 65506, 3, 1441799, 65506, 4, 1441799, 65506, 5, 1441799, 65506, 6, 1441799, 65507, 65529, 1441799, 65507, 65530, 1441798, 65507, 65531, 1441799, 65507, 65532, 1441799, 65507, 65533, 1441799, 65507, 65534, 1441799, 65507, 65535, 1441799, 65507, 0, 1441799, 65507, 1, 1441799, 65507, 2, 1441799, 65507, 3, 1441799, 65507, 4, 1441798, 65507, 5, 1441799, 65507, 6, 1441799, 65508, 65529, 1441799, 65508, 65530, 1441799, 65508, 65531, 1441799, 65508, 65532, 1441799, 65508, 65533, 1441799, 65508, 65534, 1441799, 65508, 65535, 1441799, 65508, 0, 1441799, 65508, 1, 1441799, 65508, 2, 1441799, 65508, 3, 1441799, 65508, 4, 1441799, 65508, 5, 1441799, 65508, 6, 1441799, 65509, 65529, 1441799, 65509, 65530, 1441799, 65509, 65531, 1441799, 65509, 65532, 1441799, 65509, 65533, 1441799, 65509, 65534, 1441799, 65509, 65535, 1441799, 65509, 0, 1441799, 65509, 1, 1441799, 65509, 2, 1441799, 65509, 3, 1441799, 65509, 4, 1441799, 65509, 5, 1441799, 65509, 6, 1441799, 65510, 65529, 1441799, 65510, 65530, 1441799, 65510, 65531, 1441799, 65510, 65532, 1441799, 65510, 65533, 1441799, 65510, 65534, 1441799, 65510, 65535, 1441799, 65510, 0, 1441799, 65510, 1, 1441799, 65510, 2, 1441799, 65510, 3, 1441799, 65510, 4, 1441799, 65510, 5, 1441799, 65510, 6, 1441799, 65511, 65529, 1441805, 65511, 65530, 1441805, 65511, 65531, 1441805, 65511, 65532, 1441805, 65511, 65533, 1441807, 65511, 65534, 1179655, 65511, 1, 1179655, 65511, 2, 1441807, 65511, 3, 1441805, 65511, 4, 1441805, 65511, 5, 1441805, 65511, 6, 1441805, 65512, 65529, 1441799, 65512, 65530, 1441799, 65512, 65531, 1441799, 65512, 65532, 1441799, 65512, 65533, 1441799, 65512, 65534, 1441799, 65512, 65535, 1441799, 65512, 0, 1441799, 65512, 1, 1179655, 65512, 2, 1441799, 65512, 3, 1441798, 65512, 4, 1441799, 65512, 5, 1441799, 65512, 6, 1441799, 65513, 65529, 1441799, 65513, 65530, 1441799, 65513, 65531, 1441799, 65513, 65532, 1441799, 65513, 65533, 1441799, 65513, 65534, 1441799, 65513, 65535, 1441799, 65513, 0, 1441799, 65513, 1, 1179655, 65513, 2, 1441799, 65513, 3, 1441799, 65513, 4, 1441799, 65513, 5, 1441799, 65513, 6, 1441799, 65514, 65529, 1441799, 65514, 65530, 1441799, 65514, 65531, 1441799, 65514, 65532, 1441799, 65514, 65533, 1441799, 65514, 65534, 1441799, 65514, 65535, 1441799, 65514, 0, 1441799, 65514, 1, 1441799, 65514, 2, 1441799, 65514, 3, 1441799, 65514, 4, 1441799, 65514, 5, 1441799, 65514, 6, 1441799, 65515, 65529, 1441799, 65515, 65530, 1441799, 65515, 65531, 1441799, 65515, 65532, 1441799, 65515, 65533, 1441799, 65515, 65534, 1441799, 65515, 65535, 1441799, 65515, 0, 1441799, 65515, 1, 1441799, 65515, 2, 1441799, 65515, 3, 1441799, 65515, 4, 1441799, 65515, 5, 1441799, 65515, 6, 1441799, 65516, 65529, 1441799, 65516, 65530, 1441799, 65516, 65531, 1441799, 65516, 65532, 1441799, 65516, 65533, 1441799, 65516, 65534, 1441799, 65516, 65535, 1441799, 65516, 0, 1441799, 65516, 1, 1441799, 65516, 2, 1441799, 65516, 3, 1441799, 65516, 4, 1441799, 65516, 5, 1441799, 65516, 6, 1441799, 65517, 65529, 1441799, 65517, 65530, 1441799, 65517, 65531, 1441799, 65517, 65532, 1441799, 65517, 65533, 1441799, 65517, 65534, 1441799, 65517, 65535, 1441799, 65517, 0, 1441799, 65517, 1, 1441799, 65517, 2, 1441799, 65517, 3, 1441799, 65517, 4, 1441799, 65517, 5, 1441799, 65517, 6, 1441799, 65518, 65529, 1441799, 65518, 65530, 1441799, 65518, 65531, 1441799, 65518, 65532, 1441799, 65518, 65533, 1441799, 65518, 65534, 1441799, 65518, 65535, 1441799, 65518, 0, 1441799, 65518, 1, 1441799, 65518, 2, 1441799, 65518, 3, 1441799, 65518, 4, 1441799, 65518, 5, 1441798, 65518, 6, 1441799, 65519, 65529, 1441799, 65519, 65530, 1441799, 65519, 65531, 1441799, 65519, 65532, 1441799, 65519, 65533, 1441799, 65519, 65534, 1441799, 65519, 65535, 1441799, 65519, 0, 1441799, 65519, 1, 1441799, 65519, 2, 1441799, 65519, 3, 1441799, 65519, 4, 1441799, 65519, 5, 1441799, 65519, 6, 1441799, 65520, 65529, 1441799, 65520, 65530, 1441799, 65520, 65531, 1441799, 65520, 65532, 1441799, 65520, 65533, 1441799, 65520, 65534, 1441799, 65520, 65535, 1441799, 65520, 0, 1441799, 65520, 1, 1441799, 65520, 2, 1441799, 65520, 3, 1441799, 65520, 4, 1441799, 65520, 5, 1441799, 65520, 6, 1441799, 65521, 65529, 1441799, 65521, 65530, 1441799, 65521, 65531, 1441799, 65521, 65532, 1441799, 65521, 65533, 1441799, 65521, 65534, 1441799, 65521, 65535, 1441799, 65521, 0, 1441799, 65521, 1, 1441799, 65521, 2, 1441799, 65521, 3, 1441799, 65521, 4, 1441799, 65521, 5, 1441799, 65521, 6, 1441799, 65522, 65529, 1441799, 65522, 65530, 1441799, 65522, 65531, 1441799, 65522, 65532, 1441798, 65522, 65533, 1441799, 65522, 65534, 1441799, 65522, 65535, 1441799, 65522, 0, 1441799, 65522, 1, 1441799, 65522, 2, 1441799, 65522, 3, 1441799, 65522, 4, 1441799, 65522, 5, 1441799, 65522, 6, 1441799, 65523, 65529, 1441799, 65523, 65530, 1441799, 65523, 65531, 1441799, 65523, 65532, 1441799, 65523, 65533, 1441799, 65523, 65534, 1441799, 65523, 65535, 1441799, 65523, 0, 1441799, 65523, 1, 1441799, 65523, 2, 1441799, 65523, 3, 1441799, 65523, 4, 1441799, 65523, 5, 1441799, 65523, 6, 1441799, 65524, 65529, 1441799, 65524, 65530, 1441799, 65524, 65531, 1441799, 65524, 65532, 1441799, 65524, 65533, 1441799, 65524, 65534, 1441799, 65524, 65535, 1441799, 65524, 0, 1441799, 65524, 1, 1441799, 65524, 2, 1441799, 65524, 3, 1441799, 65524, 4, 1441799, 65524, 5, 1441799, 65524, 6, 1441799, 65525, 65529, 1441799, 65525, 65530, 1441799, 65525, 65531, 1441799, 65525, 65532, 1441799, 65525, 65533, 1441799, 65525, 65534, 1441799, 65525, 65535, 1441799, 65525, 0, 1441799, 65525, 1, 1441799, 65525, 2, 1441799, 65525, 3, 1441799, 65525, 4, 1441799, 65525, 5, 1441799, 65525, 6, 1441799, 65526, 65529, 1441799, 65526, 65530, 1441799, 65526, 65531, 1441799, 65526, 65532, 1441799, 65526, 65533, 1441799, 65526, 65534, 1441799, 65526, 65535, 1441799, 65526, 0, 1441799, 65526, 1, 1441799, 65526, 2, 1441799, 65526, 3, 1441798, 65526, 4, 1441799, 65526, 5, 1441799, 65526, 6, 1441799, 65527, 65529, 1441805, 65527, 65530, 1441805, 65527, 65531, 1441805, 65527, 65532, 1441805, 65527, 65533, 1441807, 65527, 65534, 1179655, 65527, 65535, 1179655, 65527, 0, 1179655, 65527, 1, 1179655, 65527, 2, 1441807, 65527, 3, 1441805, 65527, 4, 1441805, 65527, 5, 1441805, 65527, 6, 1441805, 65528, 65529, 1441799, 65528, 65530, 1441799, 65528, 65531, 1441799, 65528, 65532, 1441799, 65528, 65533, 1441799, 65528, 65534, 1441799, 65528, 65535, 1441799, 65528, 0, 1441799, 65528, 1, 1441799, 65528, 2, 1441799, 65528, 3, 1441799, 65528, 4, 1441799, 65528, 5, 1441799, 65528, 6, 1441799, 65529, 65529, 1441799, 65529, 65530, 1441799, 65529, 65531, 1441799, 65529, 65532, 1441799, 65529, 65533, 1441799, 65529, 65534, 1441799, 65529, 65535, 1441799, 65529, 0, 1441799, 65529, 1, 1441799, 65529, 2, 1441799, 65529, 3, 1441799, 65529, 4, 1441799, 65529, 5, 1441799, 65529, 6, 1441799, 65530, 65529, 1441799, 65530, 65530, 1441799, 65530, 65531, 1441799, 65530, 65532, 1441799, 65530, 65533, 1441799, 65530, 65534, 1441799, 65530, 65535, 1441799, 65530, 0, 1441799, 65530, 1, 1441799, 65530, 2, 1441799, 65530, 3, 1441799, 65530, 4, 1441799, 65530, 5, 1441799, 65530, 6, 1441799, 65531, 65529, 1441799, 65531, 65530, 1441799, 65531, 65531, 1441799, 65531, 65532, 1441799, 65531, 65533, 1441799, 65531, 65534, 1441799, 65531, 65535, 1441799, 65531, 0, 1441799, 65531, 1, 1441799, 65531, 2, 1441799, 65531, 3, 1441799, 65531, 4, 1441799, 65531, 5, 1441799, 65531, 6, 1441799, 65532, 65529, 1441799, 65532, 65530, 1441799, 65532, 65531, 1441799, 65532, 65532, 1441799, 65532, 65533, 1441799, 65532, 65534, 1441799, 65532, 65535, 1441799, 65532, 0, 1441799, 65532, 1, 1441799, 65532, 2, 1441799, 65532, 3, 1441799, 65532, 4, 1441799, 65532, 5, 1441799, 65532, 6, 1441799, 65533, 65529, 1441799, 65533, 65530, 1441799, 65533, 65531, 1441799, 65533, 65532, 1441799, 65533, 65533, 1441799, 65533, 65534, 1441799, 65533, 65535, 1441799, 65533, 0, 1441799, 65533, 1, 1441799, 65533, 2, 1441799, 65533, 3, 1441799, 65533, 4, 1441799, 65533, 5, 1441799, 65533, 6, 1441799, 65534, 65529, 1441799, 65534, 65530, 1441799, 65534, 65531, 1441799, 65534, 65532, 1441799, 65534, 65533, 1441799, 65534, 65534, 1441799, 65534, 65535, 1441799, 65534, 0, 1441799, 65534, 1, 1441799, 65534, 2, 1441799, 65534, 3, 1441799, 65534, 4, 1441799, 65534, 5, 1441799, 65534, 6, 1441799, 65535, 65529, 1441799, 65535, 65530, 1441799, 65535, 65531, 1441799, 65535, 65532, 1441799, 65535, 65533, 1441799, 65535, 65534, 1441799, 65535, 65535, 1441799, 65535, 0, 1441799, 65535, 1, 1441799, 65535, 2, 1441799, 65535, 3, 1441799, 65535, 4, 1441799, 65535, 5, 1441799, 65535, 6, 1441799, 0, 65529, 1441799, 0, 65530, 1441799, 0, 65531, 1441799, 0, 65532, 1441799, 0, 65533, 1441799, 0, 65534, 1441799, 0, 65535, 1441799, 0, 0, 1441799, 0, 1, 1441799, 0, 2, 1441799, 0, 3, 1441799, 0, 4, 1441799, 0, 5, 1441799, 0, 6, 1441799, 1, 65529, 1441799, 1, 65530, 1441799, 1, 65531, 1441799, 1, 65532, 1441799, 1, 65533, 1441799, 1, 65534, 1441799, 1, 65535, 1441799, 1, 0, 1441799, 1, 1, 1441799, 1, 2, 1441799, 1, 3, 1441799, 1, 4, 1441799, 1, 5, 1441799, 1, 6, 1441799, 2, 65529, 1441799, 2, 65530, 1441799, 2, 65531, 1441799, 2, 65532, 1441799, 2, 65533, 1441799, 2, 65534, 1441799, 2, 65535, 1441799, 2, 0, 1441799, 2, 1, 1441799, 2, 2, 1441799, 2, 3, 1441799, 2, 4, 1441799, 2, 5, 1441799, 2, 6, 1441799, 3, 65529, 1441799, 3, 65530, 1441799, 3, 65531, 1441799, 3, 65532, 1441799, 3, 65533, 1441799, 3, 65534, 1441799, 3, 65535, 1441799, 3, 0, 1441799, 3, 1, 1441799, 3, 2, 1441799, 3, 3, 1441799, 3, 4, 1441799, 3, 5, 1441798, 3, 6, 1441799, 4, 65529, 1441799, 4, 65530, 1441799, 4, 65531, 1441799, 4, 65532, 1441799, 4, 65533, 1441799, 4, 65534, 1441799, 4, 65535, 1441799, 4, 0, 1441799, 4, 1, 1441799, 4, 2, 1441799, 4, 3, 1441799, 4, 4, 1441799, 4, 5, 1441799, 4, 6, 1441799, 5, 65529, 1441799, 5, 65530, 1441799, 5, 65531, 1441799, 5, 65532, 1441799, 5, 65533, 1441799, 5, 65534, 1441799, 5, 65535, 1441799, 5, 0, 1441799, 5, 1, 1441799, 5, 2, 1441799, 5, 3, 1441799, 5, 4, 1441799, 5, 5, 1441799, 5, 6, 1441799, 6, 65529, 1441799, 6, 65530, 1441799, 6, 65531, 1441799, 6, 65532, 1441799, 6, 65533, 1441799, 6, 65534, 1441799, 6, 65535, 1441799, 6, 0, 1441799, 6, 1, 1441799, 6, 2, 1441799, 6, 3, 1441799, 6, 4, 1441799, 6, 5, 1441799, 6, 6, 1441799, 7, 65529, 1441799, 7, 65530, 1441799, 7, 65531, 1441799, 7, 65532, 1441799, 7, 65533, 1441799, 7, 65534, 1179655, 7, 65535, 1179655, 7, 0, 1179655, 7, 1, 1179655, 7, 2, 1441799, 7, 3, 1441799, 7, 4, 1441799, 7, 5, 1441799, 7, 6, 1441799, 8, 65529, 1441805, 8, 65530, 1441805, 8, 65531, 1441805, 8, 65532, 1441805, 8, 65533, 1441807, 8, 65534, 1179655, 8, 65535, 1179655, 8, 0, 1441799, 8, 1, 1179655, 8, 2, 1441807, 8, 3, 1441805, 8, 4, 1441805, 8, 5, 1441805, 8, 6, 1441805, 9, 65529, 1441799, 9, 65530, 1441799, 9, 65531, 1441799, 9, 65532, 1441799, 9, 65533, 1441799, 9, 65534, 1441799, 9, 65535, 1441799, 9, 0, 1441799, 9, 1, 1179655, 9, 2, 1441799, 9, 3, 1441799, 9, 4, 1441799, 9, 5, 1441799, 9, 6, 1441799, 10, 65529, 1441799, 10, 65530, 1441799, 10, 65531, 1441799, 10, 65532, 1441799, 10, 65533, 1441799, 10, 65534, 1441799, 10, 65535, 1441799, 10, 0, 1441799, 10, 1, 1441799, 10, 2, 1441799, 10, 3, 1441799, 10, 4, 1441799, 10, 5, 1441799, 10, 6, 1441799, 11, 65529, 1441799, 11, 65530, 1441799, 11, 65531, 1441799, 11, 65532, 1441799, 11, 65533, 1441799, 11, 65534, 1441799, 11, 65535, 1441799, 11, 0, 1441799, 11, 1, 1441799, 11, 2, 1441799, 11, 3, 1441799, 11, 4, 1441799, 11, 5, 1441799, 11, 6, 1441799, 12, 65529, 1441799, 12, 65530, 1441799, 12, 65531, 1441799, 12, 65532, 1441799, 12, 65533, 1441799, 12, 65534, 1441799, 12, 65535, 1441799, 12, 0, 1441799, 12, 1, 1441799, 12, 2, 1441799, 12, 3, 1441799, 12, 4, 1441799, 12, 5, 1441799, 12, 6, 1441799, 13, 65529, 1441799, 13, 65530, 1441799, 13, 65531, 1441799, 13, 65532, 1441799, 13, 65533, 1441799, 13, 65534, 1441799, 13, 65535, 1441799, 13, 0, 1441799, 13, 1, 1441799, 13, 2, 1441799, 13, 3, 1441799, 13, 4, 1441799, 13, 5, 1441799, 13, 6, 1441799, 14, 65529, 1441799, 14, 65530, 1441799, 14, 65531, 1441799, 14, 65532, 1441799, 14, 65533, 1441799, 14, 65534, 1441799, 14, 65535, 1441799, 14, 0, 1441799, 14, 1, 1441799, 14, 2, 1441799, 14, 3, 1441799, 14, 4, 1441799, 14, 5, 1441799, 14, 6, 1441799, 15, 65529, 1441799, 15, 65530, 1441799, 15, 65531, 1441799, 15, 65532, 1441799, 15, 65533, 1441799, 15, 65534, 1441799, 15, 65535, 1441799, 15, 0, 1441799, 15, 1, 1441799, 15, 2, 1441799, 15, 3, 1441799, 15, 4, 1441799, 15, 5, 1441799, 15, 6, 1441799, 16, 65529, 1441799, 16, 65530, 1441799, 16, 65531, 1441799, 16, 65532, 1441799, 16, 65533, 1441799, 16, 65534, 1441799, 16, 65535, 1441799, 16, 0, 1441799, 16, 1, 1441799, 16, 2, 1441799, 16, 3, 1441799, 16, 4, 1441798, 16, 5, 1441799, 16, 6, 1441799, 17, 65529, 1441799, 17, 65530, 1441799, 17, 65531, 1441799, 17, 65532, 1441799, 17, 65533, 1441799, 17, 65534, 1441799, 17, 65535, 1441799, 17, 0, 1441799, 17, 1, 1441799, 17, 2, 1441799, 17, 3, 1441799, 17, 4, 1441799, 17, 5, 1441799, 17, 6, 1441799, 18, 65529, 1441799, 18, 65530, 1441799, 18, 65531, 1441799, 18, 65532, 1441799, 18, 65533, 1441799, 18, 65534, 1441799, 18, 65535, 1441799, 18, 0, 1441799, 18, 1, 1441799, 18, 2, 1441799, 18, 3, 1441799, 18, 4, 1441799, 18, 5, 1441799, 18, 6, 1441799, 19, 65529, 1441799, 19, 65530, 1441799, 19, 65531, 1441799, 19, 65532, 1441799, 19, 65533, 1441799, 19, 65534, 1441799, 19, 65535, 1441799, 19, 0, 1441799, 19, 1, 1441799, 19, 2, 1441799, 19, 3, 1441799, 19, 4, 1441799, 19, 5, 1441799, 19, 6, 1441799, 20, 65529, 1441799, 20, 65530, 1441799, 20, 65531, 1441799, 20, 65532, 1441799, 20, 65533, 1441799, 20, 65534, 1441799, 20, 65535, 1441799, 20, 0, 1441799, 20, 1, 1441799, 20, 2, 1441799, 20, 3, 1441799, 20, 4, 1441799, 20, 5, 1441799, 20, 6, 1441799, 21, 65529, 1441799, 21, 65530, 1441799, 21, 65531, 1441799, 21, 65532, 1441799, 21, 65533, 1441799, 21, 65534, 1441799, 21, 65535, 1441799, 21, 0, 1441799, 21, 1, 1441799, 21, 2, 1441799, 21, 3, 1441799, 21, 4, 1441799, 21, 5, 1441799, 21, 6, 1441799, 22, 65529, 1441799, 22, 65530, 1441799, 22, 65531, 1441799, 22, 65532, 1441798, 22, 65533, 1441799, 22, 65534, 1441799, 22, 65535, 1441799, 22, 0, 1441799, 22, 1, 1441799, 22, 2, 1441799, 22, 3, 1441799, 22, 4, 1441799, 22, 5, 1441799, 22, 6, 1441799, 23, 65529, 1441799, 23, 65530, 1441799, 23, 65531, 1441799, 23, 65532, 1441799, 23, 65533, 1441799, 23, 65534, 1441799, 23, 65535, 1441799, 23, 0, 1441799, 23, 1, 1441799, 23, 2, 1441799, 23, 3, 1441799, 23, 4, 1441799, 23, 5, 1441799, 23, 6, 1441799, 24, 65529, 1441805, 24, 65530, 1441805, 24, 65531, 1441805, 24, 65532, 1441805, 24, 65533, 1441807, 24, 65534, 1179655, 24, 65535, 1441799, 24, 0, 1441799, 24, 1, 1179655, 24, 2, 1441807, 24, 3, 1441805, 24, 4, 1441805, 24, 5, 1441805, 24, 6, 1441805, 25, 65529, 1441799, 25, 65530, 1441799, 25, 65531, 1441799, 25, 65532, 1441799, 25, 65533, 1441799, 25, 65534, 1179655, 25, 65535, 1441799, 25, 0, 1441799, 25, 1, 1179655, 25, 2, 1441799, 25, 3, 1441799, 25, 4, 1441799, 25, 5, 1441799, 25, 6, 1441799, 26, 65529, 1441799, 26, 65530, 1441799, 26, 65531, 1441799, 26, 65532, 1441799, 26, 65533, 1441799, 26, 65534, 1179655, 26, 65535, 1441799, 26, 0, 1441799, 26, 1, 1441799, 26, 2, 1441799, 26, 3, 1441799, 26, 4, 1441799, 26, 5, 1441798, 26, 6, 1441799, 27, 65529, 1441799, 27, 65530, 1441799, 27, 65531, 1441799, 27, 65532, 1441799, 27, 65533, 1441799, 27, 65534, 1441799, 27, 65535, 1441799, 27, 0, 1441799, 27, 1, 1441799, 27, 2, 1441799, 27, 3, 1441799, 27, 4, 1441799, 27, 5, 1441799, 27, 6, 1441799, 28, 65529, 1441799, 28, 65530, 1441799, 28, 65531, 1441799, 28, 65532, 1441799, 28, 65533, 1441798, 28, 65534, 1441799, 28, 65535, 1441799, 28, 0, 1441799, 28, 1, 1441799, 28, 2, 1441799, 28, 3, 1441799, 28, 4, 1441799, 28, 5, 1441799, 28, 6, 1441799, 29, 65529, 1441799, 29, 65530, 1441799, 29, 65531, 1441799, 29, 65532, 1441799, 29, 65533, 1441799, 29, 65534, 1441799, 29, 65535, 1441799, 29, 0, 1441799, 29, 1, 1441799, 29, 2, 1441799, 29, 3, 1441799, 29, 4, 1441799, 29, 5, 1441799, 29, 6, 1441799, 30, 65529, 1441799, 30, 65530, 1441799, 30, 65531, 1441799, 30, 65532, 1441799, 30, 65533, 1441799, 30, 65534, 1441799, 30, 65535, 1441799, 30, 0, 1441799, 30, 1, 1441799, 30, 2, 1441799, 30, 3, 1441799, 30, 4, 1441799, 30, 5, 1441799, 30, 6, 1441799, 31, 65529, 1441799, 31, 65530, 1441799, 31, 65531, 1441799, 31, 65532, 1441799, 31, 65533, 1441799, 31, 65534, 1441799, 31, 65535, 1441799, 31, 0, 1441799, 31, 1, 1441799, 31, 2, 1441799, 31, 3, 1441799, 31, 4, 1441799, 31, 5, 1441799, 31, 6, 1441799, 32, 65529, 1441799, 32, 65530, 1441799, 32, 65531, 1441799, 32, 65532, 1441799, 32, 65533, 1441799, 32, 65534, 1441799, 32, 65535, 1441799, 32, 0, 1441799, 32, 1, 1441799, 32, 2, 1441799, 32, 3, 1441799, 32, 4, 1441799, 32, 5, 1441799, 32, 6, 1441799, 33, 65529, 1441799, 33, 65530, 1441799, 33, 65531, 1441799, 33, 65532, 1441799, 33, 65533, 1441799, 33, 65534, 1441799, 33, 65535, 1441799, 33, 0, 1441799, 33, 1, 1441799, 33, 2, 1441799, 33, 3, 1441799, 33, 4, 1441799, 33, 5, 1441799, 33, 6, 1441799, 34, 65529, 1441799, 34, 65530, 1441799, 34, 65531, 1441799, 34, 65532, 1441799, 34, 65533, 1441799, 34, 65534, 1441799, 34, 65535, 1441799, 34, 0, 1441799, 34, 1, 1441799, 34, 2, 1441799, 34, 3, 1441799, 34, 4, 1441799, 34, 5, 1441799, 34, 6, 1441799, 35, 65529, 1441799, 35, 65530, 1441799, 35, 65531, 1441799, 35, 65532, 1441799, 35, 65533, 1441799, 35, 65534, 1441799, 35, 65535, 1441799, 35, 0, 1441799, 35, 1, 1441799, 35, 2, 1441799, 35, 3, 1441799, 35, 4, 1441799, 35, 5, 1441799, 35, 6, 1441799, 36, 65529, 1441799, 36, 65530, 1441799, 36, 65531, 1441799, 36, 65532, 1441799, 36, 65533, 1441799, 36, 65534, 1441799, 36, 65535, 1441799, 36, 0, 1441799, 36, 1, 1441799, 36, 2, 1441799, 36, 3, 1441799, 36, 4, 1441799, 36, 5, 1441799, 36, 6, 1441799, 37, 65529, 1441799, 37, 65530, 1441799, 37, 65531, 1441799, 37, 65532, 1441799, 37, 65533, 1441799, 37, 65534, 1441799, 37, 65535, 1441799, 37, 0, 1441799, 37, 1, 1441799, 37, 2, 1441799, 37, 3, 1441799, 37, 4, 1441799, 37, 5, 1441799, 37, 6, 1441799, 38, 65529, 1441799, 38, 65530, 1441799, 38, 65531, 1441799, 38, 65532, 1441799, 38, 65533, 1441799, 38, 65534, 1441799, 38, 65535, 1441799, 38, 0, 1441799, 38, 1, 1441799, 38, 2, 1441799, 38, 3, 1441799, 38, 4, 1441799, 38, 5, 1441799, 38, 6, 1441799, 65497, 7, 655372, 65498, 7, 655372, 65499, 7, 655372, 65500, 7, 655372, 65501, 7, 655372, 65502, 7, 655372, 65503, 7, 655372, 65504, 7, 655372, 65505, 7, 655372, 65506, 7, 655372, 65507, 7, 655372, 65508, 7, 655372, 65509, 7, 655372, 65510, 7, 655372, 65511, 7, 15, 65512, 7, 655372, 65513, 7, 655372, 65514, 7, 655372, 65515, 7, 655372, 65516, 7, 655372, 65517, 7, 655372, 65518, 7, 655372, 65519, 7, 655372, 65520, 7, 655372, 65521, 7, 655372, 65522, 7, 655372, 65523, 7, 655372, 65524, 7, 655372, 65525, 7, 655372, 65526, 7, 655372, 65527, 7, 15, 65528, 7, 655372, 65529, 7, 655372, 65530, 7, 655372, 65531, 7, 655372, 65532, 7, 655372, 65533, 7, 655372, 65534, 7, 655372, 65535, 7, 655372, 0, 7, 655372, 1, 7, 655372, 2, 7, 655372, 3, 7, 655372, 4, 7, 655372, 5, 7, 655372, 6, 7, 655372, 7, 7, 655372, 8, 7, 15, 9, 7, 655372, 10, 7, 655372, 11, 7, 655372, 12, 7, 655372, 13, 7, 655372, 14, 7, 655372, 15, 7, 655372, 16, 7, 655372, 17, 7, 655372, 18, 7, 655372, 19, 7, 655372, 20, 7, 655372, 21, 7, 655372, 22, 7, 655372, 23, 7, 655372, 24, 7, 15, 25, 7, 655372, 26, 7, 655372, 27, 7, 655372, 28, 7, 655372, 29, 7, 655372, 30, 7, 655372, 31, 7, 655372, 32, 7, 655372, 33, 7, 655372, 34, 7, 655372, 35, 7, 655372, 36, 7, 655372, 37, 7, 655372, 38, 7, 655372, 65511, 65535, 1179655, 65511, 0, 1179655, 65496, 65528, 1441807)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="BlueTurrets2" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+environment = ExtResource("9_wu0bo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 14, -17)
+
+[node name="Entities" type="Node" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+
+[node name="BlueNexus" type="Entity" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component") groups=["default_team_second"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus"]
 health = SubResource("CappedResourceAttribute_fq12c")
 global_defense = SubResource("FloatAttribute_r3twi")
 attack_damage = SubResource("FloatAttribute_af7rm")
+attack_speed = SubResource("FloatAttribute_igmtl")
 magic_power = SubResource("FloatAttribute_wbm6s")
 cooldown_reduction = SubResource("FloatAttribute_silo4")
 movement_speed = SubResource("FloatAttribute_vefuf")
 
-[node name="NexusMesh" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D" index="0"]
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus"]
+
+[node name="NexusMesh" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D" instance=ExtResource("11_ca2eo")]
 mesh = SubResource("ArrayMesh_ytm08")
+skeleton = NodePath("../..")
 
-[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_vr4ng")
+[node name="StatusEffectVictimComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus" instance=ExtResource("13_2d0cc")]
 
-[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus" index="1"]
+[node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus"]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus/HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_xm3c4")
+
+[node name="RedNexus" type="Entity" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component") groups=["default_team_first"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus"]
 health = SubResource("CappedResourceAttribute_xyfhn")
 global_defense = SubResource("FloatAttribute_5nkxd")
 attack_damage = SubResource("FloatAttribute_0q71k")
+attack_speed = SubResource("FloatAttribute_qj54h")
 magic_power = SubResource("FloatAttribute_rge2g")
 cooldown_reduction = SubResource("FloatAttribute_jvq0i")
 movement_speed = SubResource("FloatAttribute_0bqp4")
 
-[node name="NexusMesh" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus/VisualComponent3D" index="0"]
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus"]
+
+[node name="NexusMesh" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus/VisualComponent3D" instance=ExtResource("11_ca2eo")]
 mesh = SubResource("ArrayMesh_mtq6m")
+skeleton = NodePath("../..")
 
-[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_77o68")
+[node name="StatusEffectVictimComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus" instance=ExtResource("13_2d0cc")]
 
-[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/VisualComponent3D/crystal" index="0"]
+[node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus"]
+
+[node name="HitboxComponent" type="HitboxComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedNexus/HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_xm3c4")
+
+[node name="BlueTurretOuter" type="Turret" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_second"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("15_q0p04")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/VisualComponent3D" instance=ExtResource("17_f5lsm")]
+
+[node name="crystal" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, -1.5, 0)
 mesh = SubResource("ArrayMesh_sdse0")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter" index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter"]
 health = SubResource("CappedResourceAttribute_17emm")
 global_defense = SubResource("FloatAttribute_0nfdb")
 attack_damage = SubResource("FloatAttribute_go2ox")
+attack_speed = SubResource("FloatAttribute_lbhhq")
 magic_power = SubResource("FloatAttribute_4tv8r")
 cooldown_reduction = SubResource("FloatAttribute_gwr1f")
 movement_speed = SubResource("FloatAttribute_hi5vl")
 
-[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_hd00p")
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
 
-[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner/VisualComponent3D/crystal" index="0"]
+[node name="StatusEffectVictimComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter" instance=ExtResource("13_2d0cc")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretOuter"]
+
+[node name="RedTurretInner" type="Turret" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_first"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("15_q0p04")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/VisualComponent3D" instance=ExtResource("17_f5lsm")]
+
+[node name="crystal" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 mesh = SubResource("ArrayMesh_q5jn3")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner" index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner"]
 health = SubResource("CappedResourceAttribute_txo0u")
 global_defense = SubResource("FloatAttribute_bn8wo")
 attack_damage = SubResource("FloatAttribute_0jaks")
+attack_speed = SubResource("FloatAttribute_yk4vw")
 magic_power = SubResource("FloatAttribute_isuql")
 cooldown_reduction = SubResource("FloatAttribute_f5ngn")
 movement_speed = SubResource("FloatAttribute_vh1gk")
 
-[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_y2in6")
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
 
-[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/VisualComponent3D/crystal" index="0"]
+[node name="StatusEffectVictimComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner" instance=ExtResource("13_2d0cc")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretInner"]
+
+[node name="RedTurretOuter" type="Turret" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_first"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("15_q0p04")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/VisualComponent3D" instance=ExtResource("17_f5lsm")]
+
+[node name="crystal" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 mesh = SubResource("ArrayMesh_q5jn3")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter" index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter"]
 health = SubResource("CappedResourceAttribute_ce4ps")
 global_defense = SubResource("FloatAttribute_6ucmk")
 attack_damage = SubResource("FloatAttribute_su67g")
+attack_speed = SubResource("FloatAttribute_35w40")
 magic_power = SubResource("FloatAttribute_5il4j")
 cooldown_reduction = SubResource("FloatAttribute_8iarp")
 movement_speed = SubResource("FloatAttribute_twbwx")
 
-[node name="Sprite3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/EntityInfoRenderer/EntityHealthBar" index="0"]
-texture = SubResource("ViewportTexture_613d5")
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
 
-[node name="Cube" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/VisualComponent3D/crystal" index="0"]
+[node name="StatusEffectVictimComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter" instance=ExtResource("13_2d0cc")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/RedTurretOuter"]
+
+[node name="BlueTurretInner" type="Turret" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_second"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 0)
+status_effect_victim_component = NodePath("StatusEffectVictimComponent")
+damageable_component = NodePath("DamageableComponent")
+attributes_component = NodePath("EntityAttributesComponent")
+visual_component = NodePath("VisualComponent3D")
+aggro_area = NodePath("Area3D")
+cooldown_between_attacks = 0.5
+projectile_template = ExtResource("15_q0p04")
+turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+
+[node name="VisualComponent3D" type="VisualComponent3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("crystal/AnimationPlayer")
+idle_animation_name = &"floating"
+
+[node name="tower-top2" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/VisualComponent3D" instance=ExtResource("17_f5lsm")]
+
+[node name="crystal" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/VisualComponent3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cube" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/VisualComponent3D/crystal"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, -1.5, 0)
 mesh = SubResource("ArrayMesh_sdse0")
+skeleton = NodePath("")
 
-[node name="EntityAttributesComponent" parent="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner" index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/VisualComponent3D/crystal"]
+libraries = {
+"": SubResource("AnimationLibrary_45rbh")
+}
+autoplay = "floating"
+
+[node name="EntityAttributesComponent" type="EntityAttributesComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner"]
 health = SubResource("CappedResourceAttribute_gctmb")
 global_defense = SubResource("FloatAttribute_ngdcq")
 attack_damage = SubResource("FloatAttribute_o2est")
+attack_speed = SubResource("FloatAttribute_mng5r")
 magic_power = SubResource("FloatAttribute_pud3a")
 cooldown_reduction = SubResource("FloatAttribute_pdgrt")
 movement_speed = SubResource("FloatAttribute_k4tm4")
 
-[node name="Camera3D" type="Camera3D" parent="SideViews/PanelContainer2/TextureRect/SubViewport"]
+[node name="AttributeSynchronizer" type="MultiplayerSynchronizer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/EntityAttributesComponent"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_gotr4")
+
+[node name="StatusEffectVictimComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner" instance=ExtResource("13_2d0cc")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ecfb6")
+
+[node name="Area3D" type="AdvancedArea3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/Area3D"]
+shape = SubResource("CylinderShape3D_ogbw3")
+
+[node name="HitboxComponent" type="HitboxComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/HitboxComponent"]
+shape = SubResource("CylinderShape3D_vbos0")
+
+[node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn")
+spawn_path = NodePath("../Entities")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+stream = SubResource("AudioStreamOggVorbis_vreua")
+
+[node name="Path3D" type="Path3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.399806, 0)
+curve = SubResource("Curve3D_kkowv")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+navigation_mesh = SubResource("NavigationMesh_p1vv5")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+visible = false
+mesh = SubResource("PlaneMesh_nd5dc")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 1, 5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8.5, 1, -5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.5, 1, 5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -24.5, 1, -5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 1, 5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 8.5, 1, -5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.5, 1, 5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D" groups=["navigation_mesh"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 24.5, 1, -5)
+visible = false
+mesh = SubResource("BoxMesh_4qnwa")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/NavigationRegion3D/MeshInstance3D9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+vertices = PackedVector3Array(-1, 0, -2, 1, 0, -2, 1, 0, 4, -1, 0, 4)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="SpawnPointRed" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 0, 0)
+
+[node name="SpawnPointBlue" type="Node3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport"]
 transform = Transform3D(0.845169, 0.239527, -0.477825, 0, 0.893967, 0.448134, 0.5345, -0.378748, 0.755552, -8, 3, 7)
 
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ConnectToServerBtn" to="PanelContainer/MarginContainer/MenuEntries/ConnectToServerBtn" method="_on_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayControlsBtn" to="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayControlsBtn" method="_on_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayGameplayBtn" to="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayGameplayBtn" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ExitBtn" to="PanelContainer/MarginContainer/MenuEntries/ExitBtn" method="_on_click"]
 
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram"]
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/EntityInfoRenderer"]
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D/NexusMesh"]
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedNexus/EntityInfoRenderer"]
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretInner/EntityInfoRenderer"]
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/RedTurretOuter/EntityInfoRenderer"]
-[editable path="SideViews/PanelContainer2/TextureRect/SubViewport/Aram/Entities/BlueTurretInner/EntityInfoRenderer"]
+[editable path="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D/NexusMesh"]

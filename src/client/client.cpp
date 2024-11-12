@@ -248,6 +248,8 @@ void Client::_bind_methods()
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "user_interface", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_user_interface", "get_user_interface");
 
     ADD_SIGNAL(MethodInfo("player_connected", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, Player::get_class_static())));
+
+    ClassDB::bind_method(D_METHOD("quit"), &Client::quit);
 }
 
 void Client::set_user_interface(UserInterface *new_user_interface) {
@@ -276,4 +278,9 @@ Client *Client::get_instance() {
 void Client::disconnect_from_server() {
     ERR_FAIL_NULL(scene_multiplayer);
     scene_multiplayer->disconnect_peer(1);
+}
+
+void Client::quit() {
+    ERR_FAIL_NULL(get_tree());
+    get_tree()->quit();
 }
