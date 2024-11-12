@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=4 uid="uid://bt6lcyicofw75"]
+[gd_scene load_steps=92 format=4 uid="uid://bt6lcyicofw75"]
 
 [ext_resource type="Script" path="res://scripts/ui/right_sliding_panel.gd" id="1_tk4kw"]
 [ext_resource type="Texture2D" uid="uid://h0tc6regjan4" path="res://textures/game_logo.png" id="2_r3eqd"]
@@ -20,6 +20,34 @@
 [ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="13_2d0cc"]
 [ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="15_q0p04"]
 [ext_resource type="PackedScene" uid="uid://bg4atg03uyc65" path="res://models/tower-top.glb" id="17_f5lsm"]
+
+[sub_resource type="GDScript" id="GDScript_k1sn3"]
+script/source = "extends HSplitContainer
+
+@export var client: Client
+
+func _on_connection_success(ply: Player):
+	# Hide menu
+	visible = false
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	client.player_connected.connect(_on_connection_success)
+	(get_parent() as Client).child_entered_tree.connect(_bandaid_reparent_when_new_node_enters)
+
+func _bandaid_reparent_when_new_node_enters(node: Node):
+	get_parent().move_child(self, -1)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+	
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.keycode == KEY_ESCAPE && event.pressed:
+			if multiplayer.get_peers().size() > 0:
+				visible = !visible
+"
 
 [sub_resource type="Gradient" id="Gradient_w8w6y"]
 colors = PackedColorArray(0.36, 0.2568, 0.0504, 1, 0, 0, 0, 1)
@@ -52,10 +80,7 @@ script/source = "extends Button
 @export var client: Client 
 
 func _on_pressed():
-	# Access injected \"Client\" class dependency of MainMenu 
-	var client: Client = null
-	if client != null:
-		client.quit()
+	client.quit()
 "
 
 [sub_resource type="GDScript" id="GDScript_u8ll8"]
@@ -403,6 +428,7 @@ grow_horizontal = 2
 grow_vertical = 2
 collapsed = true
 dragger_visibility = 2
+script = SubResource("GDScript_k1sn3")
 
 [node name="HowToPlayScreen" type="PanelContainer" parent="."]
 visible = false
@@ -582,6 +608,7 @@ script = SubResource("GDScript_u8ll8")
 [node name="CharacterSelection" parent="ContentArea" groups=["sidebar_panels"] instance=ExtResource("7_1qnqh")]
 layout_mode = 2
 offset_right = 1552.0
+mouse_filter = 1
 
 [node name="HowToPlayControlsPanel" type="PanelContainer" parent="ContentArea"]
 visible = false
@@ -1253,6 +1280,6 @@ transform = Transform3D(0.845169, 0.239527, -0.477825, 0, 0.893967, 0.448134, 0.
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ConnectToServerBtn" to="PanelContainer/MarginContainer/MenuEntries/ConnectToServerBtn" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayControlsBtn" to="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayControlsBtn" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayGameplayBtn" to="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayGameplayBtn" method="_on_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ExitBtn" to="PanelContainer/MarginContainer/MenuEntries/ExitBtn" method="_on_click"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ExitBtn" to="PanelContainer/MarginContainer/MenuEntries/ExitBtn" method="_on_pressed"]
 
 [editable path="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D/NexusMesh"]
