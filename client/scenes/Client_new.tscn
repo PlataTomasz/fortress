@@ -249,7 +249,8 @@ base = 300.0
 [node name="Client" type="Client" node_paths=PackedStringArray("user_interface")]
 user_interface = NodePath("MainMenu/ContentArea/CharacterSelection")
 
-[node name="MainMenu" parent="." instance=ExtResource("1_w0wkj")]
+[node name="MainMenu" parent="." node_paths=PackedStringArray("client") instance=ExtResource("1_w0wkj")]
+client = NodePath("..")
 
 [node name="ExitBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="5" node_paths=PackedStringArray("client")]
 client = NodePath("../../../../..")

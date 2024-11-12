@@ -1,19 +1,31 @@
-[gd_scene load_steps=23 format=3 uid="uid://d0khn1uw56sxd"]
+[gd_scene load_steps=24 format=3 uid="uid://d0khn1uw56sxd"]
 
 [ext_resource type="ButtonGroup" uid="uid://dcoayub2mcste" path="res://scenes/ui/CharacterSelectionBtnGroup.tres" id="1_dx5ol"]
 [ext_resource type="PackedScene" uid="uid://x3b3wxhlpsi2" path="res://scenes/ui/CharacterListElement.tscn" id="1_qnof2"]
 [ext_resource type="PackedScene" uid="uid://cgco77hqkmtwl" path="res://entities/mercenaries/Barbarian_new.tscn" id="1_r83m7"]
 [ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="2_rqdck"]
 [ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="3_261bc"]
+[ext_resource type="Script" path="res://scripts/ui/character_selection/hover_change_tooltip.gd" id="6_uwql8"]
 
 [sub_resource type="GDScript" id="GDScript_hgcf2"]
 script/source = "extends VBoxContainer
 
+@export var basic_attack_icon: TextureRect
+@export var passive_ability_icon: TextureRect
+@export var first_ability_icon: TextureRect
+@export var second_ability_icon: TextureRect
+@export var third_ability_icon: TextureRect
+@export var ultimate_ability_icon: TextureRect
+
 @export var where_to_put_mercenary: Node3D
 var current_mercenary_model: Mercenary
 
+@export var mercenary_select_button_group: ButtonGroup
+
 func _change_mercenary_render(mercenary: Mercenary):
-	current_mercenary_model.queue_free()
+	if current_mercenary_model != null:
+		current_mercenary_model.queue_free()
+	
 	where_to_put_mercenary.add_child(mercenary)
 	current_mercenary_model = mercenary
 	
@@ -25,19 +37,40 @@ func _reintitialize_tooltips(mercenary: Mercenary):
 	mercenary.ability_caster_component.third_ability
 	mercenary.ability_caster_component.ultimate_ability
 
+func _reinitialize_hoverable_icons(mercenary: Mercenary):
+	passive_ability_icon.texture = mercenary.ability_caster_component.passive_ability.icon
+	basic_attack_icon.texture = mercenary.ability_caster_component.basic_attack.icon
+	first_ability_icon.texture = mercenary.ability_caster_component.first_ability.icon
+	second_ability_icon.texture = mercenary.ability_caster_component.second_ability.icon
+	third_ability_icon.texture = mercenary.ability_caster_component.third_ability.icon
+	ultimate_ability_icon.texture = mercenary.ability_caster_component.ultimate_ability.icon
+	
+	passive_ability_icon.ability = mercenary.ability_caster_component.passive_ability
+	basic_attack_icon.ability = mercenary.ability_caster_component.basic_attack
+	first_ability_icon.ability = mercenary.ability_caster_component.first_ability
+	second_ability_icon.ability = mercenary.ability_caster_component.second_ability
+	third_ability_icon.ability = mercenary.ability_caster_component.third_ability
+	ultimate_ability_icon.ability = mercenary.ability_caster_component.ultimate_ability
+
 func change_preview(mercenary: Mercenary) -> void:
 	_change_mercenary_render(mercenary)
-	_reintitialize_tooltips(mercenary)
+	_reinitialize_hoverable_icons(mercenary)
 	
 func change_preview_to_named(mercenary_name: StringName):
 	#change_preview(MercenaryRegistry.get_singleton())
 	pass
+	
+func _get_selected_mercenary_name(btn: BaseButton):
+	return (btn.get_node(\"../../../\") as CharacterSelectElem).character_index
+	
+func _on_mercenary_select_btn_pressed(btn: BaseButton):
+	var mercenary: Mercenary = MercenaryRegistry.get_singleton().create_instance(_get_selected_mercenary_name(btn))
+	change_preview(mercenary)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
-
+	mercenary_select_button_group.pressed.connect(_on_mercenary_select_btn_pressed)
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -58,21 +91,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-"
-
-[sub_resource type="GDScript" id="GDScript_3tod5"]
-script/source = "extends SubViewport
-
-@export var rotation_deg_per_second: float = 6
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	# Rotate character
-	$\"Mercenary\".rotate_y(deg_to_rad(rotation_deg_per_second*delta))
 "
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvj0c"]
@@ -113,8 +131,18 @@ material = SubResource("StandardMaterial3D_fvj0c")
 top_radius = 1.2
 bottom_radius = 1.2
 
+[sub_resource type="GDScript" id="GDScript_e06o8"]
+script/source = "extends Node3D
+
+@export var rotation_deg_per_second: float = 6
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	rotate_y(deg_to_rad(rotation_deg_per_second*delta))
+"
+
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_uuyfi"]
-size = Vector2(48, 48)
+size = Vector2(64, 64)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7dlhw"]
 size = Vector2(64, 64)
@@ -205,10 +233,18 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="AbilitySetPreview" type="VBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer"]
+[node name="AbilitySetPreview" type="VBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer" node_paths=PackedStringArray("basic_attack_icon", "passive_ability_icon", "first_ability_icon", "second_ability_icon", "third_ability_icon", "ultimate_ability_icon", "where_to_put_mercenary")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = SubResource("GDScript_hgcf2")
+basic_attack_icon = NodePath("GridContainer/BasicAttackIcon")
+passive_ability_icon = NodePath("GridContainer/PassiveAbilityIcon")
+first_ability_icon = NodePath("GridContainer/FirstAbilityIcon")
+second_ability_icon = NodePath("GridContainer/SecondAbilityIcon")
+third_ability_icon = NodePath("GridContainer/ThirdAbilityIcon")
+ultimate_ability_icon = NodePath("GridContainer/FourthAbilityIcon")
+where_to_put_mercenary = NodePath("CharacterModelPreview/SubViewport/RotatingNode3D")
+mercenary_select_button_group = ExtResource("1_dx5ol")
 
 [node name="CharacterModelPreview" type="AspectRatioContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
 layout_mode = 2
@@ -225,8 +261,6 @@ viewport = NodePath("../SubViewport")
 own_world_3d = true
 transparent_bg = true
 size = Vector2i(768, 512)
-script = SubResource("GDScript_3tod5")
-rotation_deg_per_second = 12.0
 
 [node name="Camera3D" type="Camera3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.958417, 0.285371, 0, -0.285371, 0.958417, 0, 1.14789, 1.90204)
@@ -240,6 +274,7 @@ visible = false
 mesh = SubResource("CylinderMesh_byhk6")
 
 [node name="Mercenary" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport" instance=ExtResource("1_r83m7")]
+visible = false
 
 [node name="EntityAttributesComponent" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport/Mercenary" index="1"]
 health = SubResource("CappedResourceAttribute_s11qg")
@@ -266,41 +301,71 @@ mesh = SubResource("CylinderMesh_gek44")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
 
-[node name="HoverableIcons" type="VSplitContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
-layout_mode = 2
-size_flags_vertical = 8
+[node name="RotatingNode3D" type="Node3D" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/CharacterModelPreview/SubViewport"]
+script = SubResource("GDScript_e06o8")
+rotation_deg_per_second = 12.0
 
-[node name="GridContainer" type="HBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons"]
+[node name="GridContainer" type="HBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
 layout_mode = 2
 alignment = 1
 
-[node name="ActiveAbilityIcon5" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+[node name="BasicAttackIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/GridContainer" node_paths=PackedStringArray("tooltip")]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = SubResource("PlaceholderTexture2D_uuyfi")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("6_uwql8")
+tooltip = NodePath("../../AbilityTooltip1")
 
-[node name="ActiveAbilityIcon6" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+[node name="PassiveAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/GridContainer" node_paths=PackedStringArray("tooltip")]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = SubResource("PlaceholderTexture2D_uuyfi")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("6_uwql8")
+tooltip = NodePath("../../AbilityTooltip1")
 
-[node name="ActiveAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+[node name="FirstAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/GridContainer" node_paths=PackedStringArray("tooltip")]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_7dlhw")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("6_uwql8")
+tooltip = NodePath("../../AbilityTooltip1")
 
-[node name="ActiveAbilityIcon2" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+[node name="SecondAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/GridContainer" node_paths=PackedStringArray("tooltip")]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_7dlhw")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("6_uwql8")
+tooltip = NodePath("../../AbilityTooltip1")
 
-[node name="ActiveAbilityIcon3" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+[node name="ThirdAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/GridContainer" node_paths=PackedStringArray("tooltip")]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_7dlhw")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("6_uwql8")
+tooltip = NodePath("../../AbilityTooltip1")
 
-[node name="ActiveAbilityIcon4" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/HoverableIcons/GridContainer"]
+[node name="FourthAbilityIcon" type="TextureRect" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/GridContainer" node_paths=PackedStringArray("tooltip")]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_7dlhw")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("6_uwql8")
+tooltip = NodePath("../../AbilityTooltip1")
 
 [node name="AbilityTooltip1" type="AbilityTooltip" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview" node_paths=PackedStringArray("ability_icon_display", "ability_name_display", "ability_description_display")]
 custom_minimum_size = Vector2(512, 0)
@@ -334,13 +399,10 @@ expand_mode = 3
 
 [node name="AbilityName" type="Label" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/AbilityTooltip1/MarginContainer/VBoxContainer/FlowContainer"]
 layout_mode = 2
-text = "Ability name here"
+text = "Select character and hover over ability icon to display info"
 
 [node name="AbilityText" type="Label" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/AbilityTooltip1/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Basic attacks apply bleeding to hit target dealing {x} damage, every 0.5s for 4s.
-
-Total damage: {x*8}"
 autowrap_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HSplitContainer/CharacterArea"]
