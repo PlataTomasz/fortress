@@ -9,5 +9,6 @@ displayed_name = "Warhorn"
 displayed_description = "This unit has increased attack speed"
 icon = ExtResource("1_53igy")
 new_type = 1
+metadata/identifier = &"orc_warhorn_buff"
 
 [node name="WarhornEffectVFX" parent="." instance=ExtResource("2_yxtnm")]

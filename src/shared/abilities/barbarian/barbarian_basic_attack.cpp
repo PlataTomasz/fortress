@@ -24,6 +24,10 @@ void BarbarianBasicAttack::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_slash_vfx_origin"), &BarbarianBasicAttack::get_slash_vfx_origin);
     ::ClassDB::bind_method(D_METHOD("set_slash_vfx_origin"), &BarbarianBasicAttack::set_slash_vfx_origin);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "slash_vfx_origin", PROPERTY_HINT_NODE_TYPE, Node3D::get_class_static()), "set_slash_vfx_origin", "get_slash_vfx_origin");
+
+    ::ClassDB::bind_method(D_METHOD("get_attack_sound"), &BarbarianBasicAttack::get_attack_sound);
+    ::ClassDB::bind_method(D_METHOD("set_attack_sound"), &BarbarianBasicAttack::set_attack_sound);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "attack_sound", PROPERTY_HINT_RESOURCE_TYPE, AudioStream::get_class_static()), "set_attack_sound", "get_attack_sound");
 }
 
 void BarbarianBasicAttack::_reparent_hitbox() {
@@ -106,6 +110,7 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& action_context) {
         print_error("Failed to play animation! Missing VisualComponent3D!");
     }
 
+    play_sound(action_context, attack_sound);
     play_animation(action_context, "Attack01");
 
     // Spawn slash VFX
@@ -161,4 +166,12 @@ void BarbarianBasicAttack::set_slash_vfx_origin(Node3D *new_slash_vfx_origin) {
 
 Node3D *BarbarianBasicAttack::get_slash_vfx_origin() {
     return slash_vfx_origin;
+}
+
+void BarbarianBasicAttack::set_attack_sound(const Ref<AudioStream> &new_attack_sound) {
+    attack_sound = new_attack_sound;
+}
+
+Ref<AudioStream> BarbarianBasicAttack::get_attack_sound() {
+    return attack_sound;
 }

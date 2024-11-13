@@ -4,6 +4,7 @@
 #include <shared/entities/components/component.h>
 #include <shared/helpers/object_ptr.h>
 #include <shared/status_effects/status_effect.hpp>
+#include <shared/data_holders/damage_object.hpp>
 
 //Class representing target of status effects
 class StatusEffectVictimComponent : public Component
@@ -12,10 +13,15 @@ GDCLASS(StatusEffectVictimComponent, Component);
 private:
     void _on_child_added(Node *p_child);
     void _on_child_removed(Node *p_child);
+    void _on_death(const Ref<DamageObject> &damage_object);
 protected:
     static void _bind_methods();
     void _notification(int p_notification);
 public:
+    void clear();
+
+    bool already_has_other_instance(StatusEffect *status_effect);
+
     //NOTE: Error codes would be better in this case
     //Remove status effect from entity if it have it: Return true on success, false on fail
     bool remove_status_effect(StringName status_effect_name);

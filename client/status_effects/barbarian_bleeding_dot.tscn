@@ -27,6 +27,7 @@ permament = false
 displayed_name = "Bleeding"
 displayed_description = "You are taking damage over time"
 icon = ExtResource("1_wbf3l")
+metadata/identifier = &"barbarian_bleeding_debuff"
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 process_material = SubResource("ParticleProcessMaterial_grfmh")

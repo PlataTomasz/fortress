@@ -3,8 +3,8 @@ extends LineEdit
 @export var regex_string: String
 var regex = RegEx.new()
 
-func _init() -> void:
-	var regex_compile_error = regex.compile("^[A-Za-z0-9_]{3,16}$")
+func _ready() -> void:
+	var regex_compile_error = regex.compile(regex_string)
 
 func is_valid() -> bool:
 	var regex_result: RegExMatch = regex.search(text)
