@@ -1,9 +1,11 @@
-[gd_scene load_steps=48 format=4 uid="uid://cqomdo5bsl7q6"]
+[gd_scene load_steps=49 format=4 uid="uid://cqomdo5bsl7q6"]
 
 [ext_resource type="PackedScene" uid="uid://bt6lcyicofw75" path="res://ui/ui_overhaul/main_menu.tscn" id="1_w0wkj"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="2_os5v2"]
 [ext_resource type="AudioStream" uid="uid://coyc7xjcg78xh" path="res://audio/bgm.mp3" id="2_se5dm"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="3_blx5f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_23t26"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_r3oe8"]
 viewport_path = NodePath("ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport")
@@ -252,7 +254,22 @@ user_interface = NodePath("MainMenu/ContentArea/CharacterSelection")
 [node name="MainMenu" parent="." node_paths=PackedStringArray("client") instance=ExtResource("1_w0wkj")]
 client = NodePath("..")
 
-[node name="ExitBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="5" node_paths=PackedStringArray("client")]
+[node name="ConnectToServerBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="1" node_paths=PackedStringArray("client")]
+client = NodePath("../../../../..")
+
+[node name="BackToGameBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="2" node_paths=PackedStringArray("client")]
+visible = false
+client = NodePath("../../../../..")
+
+[node name="HowToPlayBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="3"]
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_23t26")
+button_mask = 0
+
+[node name="DisconnectBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="6" node_paths=PackedStringArray("client")]
+visible = false
+client = NodePath("../../../../..")
+
+[node name="ExitBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="7" node_paths=PackedStringArray("client")]
 client = NodePath("../../../../..")
 
 [node name="TextureRect" parent="MainMenu/ContentArea/PanelWhenNothingIsActive" index="0"]

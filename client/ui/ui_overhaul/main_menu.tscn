@@ -1,13 +1,16 @@
-[gd_scene load_steps=92 format=4 uid="uid://bt6lcyicofw75"]
+[gd_scene load_steps=101 format=4 uid="uid://bt6lcyicofw75"]
 
 [ext_resource type="Script" path="res://scripts/ui/right_sliding_panel.gd" id="1_tk4kw"]
 [ext_resource type="Texture2D" uid="uid://h0tc6regjan4" path="res://textures/game_logo.png" id="2_r3eqd"]
+[ext_resource type="Texture2D" uid="uid://chpaubms2dso8" path="res://textures/ui/connect.png" id="3_m64k8"]
 [ext_resource type="Texture2D" uid="uid://vpjt6dh5bwdm" path="res://ui/ui_overhaul/icons/gamepad.svg" id="3_mw6ni"]
-[ext_resource type="Script" path="res://scripts/ui/main_menu/connect_to_server_btn.gd" id="4_7imgi"]
 [ext_resource type="Texture2D" uid="uid://cgglhwb45gi0y" path="res://ui/ui_overhaul/icons/read.svg" id="4_cwc34"]
 [ext_resource type="Texture2D" uid="uid://dspt7seih1q62" path="res://ui/ui_overhaul/icons/cog.svg" id="5_n2jlb"]
 [ext_resource type="Texture2D" uid="uid://ts48118b1qmu" path="res://ui/ui_overhaul/icons/exit-door.svg" id="6_e15m0"]
 [ext_resource type="PackedScene" uid="uid://d0khn1uw56sxd" path="res://ui/ui_overhaul/character_info_panel.tscn" id="7_1qnqh"]
+[ext_resource type="Texture2D" uid="uid://dc7tsmuxqth7a" path="res://textures/ui/gamepad.svg" id="7_6q3vf"]
+[ext_resource type="Texture2D" uid="uid://c1xbsjlkbopna" path="res://textures/ui/disconnect_icon.png" id="7_xbxmm"]
+[ext_resource type="Texture2D" uid="uid://df5lqhh30ex40" path="res://textures/ui/gameplay.png" id="8_1ym64"]
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="8_xk82w"]
 [ext_resource type="Texture2D" uid="uid://b2nqaadp4gtif" path="res://textures/ui/how_to_play_screenshots/nexus_preview.png" id="9_4q0jm"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="9_kg5fj"]
@@ -74,10 +77,101 @@ font_color = Color(0.227451, 0.227451, 0.227451, 1)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bk2r0"]
 size = Vector2(64, 64)
 
+[sub_resource type="GDScript" id="GDScript_x8dqs"]
+script/source = "extends Button
+
+@export var content_area: Control
+@export var panel_to_display: Control
+@export var client: Client
+
+func _on_pressed() -> void:
+	content_area.change_currently_visible_element(panel_to_display)
+
+func _on_player_disconnected(player: Player) -> void:
+	visible = true
+	
+func _on_player_connected(player: Player) -> void:
+	visible = false
+	
+func _ready() -> void:
+	client.player_connected.connect(_on_player_connected)
+	client.player_disconnected.connect(_on_player_disconnected)
+"
+
+[sub_resource type="GDScript" id="GDScript_qke1g"]
+script/source = "extends Button
+
+@export var main_menu: Control
+@export var client: Client
+
+func _on_pressed() -> void:
+	main_menu.visible = false
+
+func _on_player_disconnected(player: Player) -> void:
+	visible = false
+	
+func _on_player_connected(player: Player) -> void:
+	visible = true
+	
+func _ready() -> void:
+	client.player_connected.connect(_on_player_connected)
+	client.player_disconnected.connect(_on_player_disconnected)
+"
+
+[sub_resource type="GDScript" id="GDScript_8ya6c"]
+script/source = "extends Button
+
+@export var content_area: Control
+@export var panel_to_display: Control
+
+func _on_pressed() -> void:
+	content_area.change_currently_visible_element(panel_to_display)
+"
+
+[sub_resource type="GDScript" id="GDScript_2dnqy"]
+script/source = "extends Button
+
+@export var content_area: Control
+@export var panel_to_display: Control
+
+func _on_pressed() -> void:
+	content_area.change_currently_visible_element(panel_to_display)
+"
+
+[sub_resource type="GDScript" id="GDScript_g0tbj"]
+script/source = "extends Button
+
+@export var content_area: Control
+@export var panel_to_display: Control
+@export var client: Client
+
+func _on_pressed() -> void:
+	content_area.change_currently_visible_element(panel_to_display)
+"
+
 [sub_resource type="GDScript" id="GDScript_wgn5k"]
 script/source = "extends Button
 
-@export var client: Client 
+@export var client: Client
+
+func _on_pressed():
+	client.disconnect_from_server()
+
+func _on_player_disconnected(player: Player) -> void:
+	visible = false
+	
+func _on_player_connected(player: Player) -> void:
+	visible = true
+	
+func _ready() -> void:
+	client.player_connected.connect(_on_player_connected)
+	client.player_disconnected.connect(_on_player_disconnected)
+"
+
+[sub_resource type="GDScript" id="GDScript_ddwcj"]
+script/source = "extends Button
+
+@export var client: Client
 
 func _on_pressed():
 	client.quit()
@@ -527,17 +621,32 @@ texture = ExtResource("2_r3eqd")
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Join game"
+icon = ExtResource("3_m64k8")
+flat = true
+alignment = 0
+expand_icon = true
+script = SubResource("GDScript_x8dqs")
+content_area = NodePath("../../../../ContentArea")
+panel_to_display = NodePath("../../../../ContentArea/CharacterSelection")
+
+[node name="BackToGameBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries" node_paths=PackedStringArray("main_menu")]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 28
+text = "Back to game"
 icon = ExtResource("3_mw6ni")
 flat = true
 alignment = 0
 expand_icon = true
-script = ExtResource("4_7imgi")
-content_area = NodePath("../../../../ContentArea")
-panel_to_display = NodePath("../../../../ContentArea/CharacterSelection")
+script = SubResource("GDScript_qke1g")
+main_menu = NodePath("../../../..")
 
 [node name="HowToPlayBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
 layout_mode = 2
+theme_override_colors/font_disabled_color = Color(1, 0.666667, 0, 1)
+theme_override_colors/icon_disabled_color = Color(1, 0.666667, 0, 1)
 theme_override_font_sizes/font_size = 28
+disabled = true
 text = "How to play?"
 icon = ExtResource("4_cwc34")
 flat = true
@@ -558,11 +667,11 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 28
 text = "Controls"
-icon = ExtResource("4_cwc34")
+icon = ExtResource("7_6q3vf")
 flat = true
 alignment = 0
 expand_icon = true
-script = ExtResource("4_7imgi")
+script = SubResource("GDScript_8ya6c")
 content_area = NodePath("../../../../../../ContentArea")
 panel_to_display = NodePath("../../../../../../ContentArea/HowToPlayControlsPanel")
 
@@ -571,11 +680,11 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 28
 text = "Gameplay"
-icon = ExtResource("4_cwc34")
+icon = ExtResource("8_1ym64")
 flat = true
 alignment = 0
 expand_icon = true
-script = ExtResource("4_7imgi")
+script = SubResource("GDScript_2dnqy")
 content_area = NodePath("../../../../../../ContentArea")
 panel_to_display = NodePath("../../../../../../ContentArea/HowToPlayControlsPanel2")
 
@@ -589,7 +698,17 @@ icon = ExtResource("5_n2jlb")
 flat = true
 alignment = 0
 expand_icon = true
-script = ExtResource("4_7imgi")
+script = SubResource("GDScript_g0tbj")
+
+[node name="DisconnectBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Disconnect"
+icon = ExtResource("7_xbxmm")
+flat = true
+alignment = 0
+expand_icon = true
+script = SubResource("GDScript_wgn5k")
 
 [node name="ExitBtn" type="Button" parent="PanelContainer/MarginContainer/MenuEntries"]
 layout_mode = 2
@@ -599,7 +718,7 @@ icon = ExtResource("6_e15m0")
 flat = true
 alignment = 0
 expand_icon = true
-script = SubResource("GDScript_wgn5k")
+script = SubResource("GDScript_ddwcj")
 
 [node name="ContentArea" type="Control" parent="."]
 layout_mode = 2
@@ -1278,8 +1397,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 0, 0)
 transform = Transform3D(0.845169, 0.239527, -0.477825, 0, 0.893967, 0.448134, 0.5345, -0.378748, 0.755552, -8, 3, 7)
 
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ConnectToServerBtn" to="PanelContainer/MarginContainer/MenuEntries/ConnectToServerBtn" method="_on_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/BackToGameBtn" to="PanelContainer/MarginContainer/MenuEntries/BackToGameBtn" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayControlsBtn" to="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayControlsBtn" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayGameplayBtn" to="PanelContainer/MarginContainer/MenuEntries/MarginContainer/VBoxContainer/HowToPlayGameplayBtn" method="_on_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/DisconnectBtn" to="PanelContainer/MarginContainer/MenuEntries/DisconnectBtn" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/MenuEntries/ExitBtn" to="PanelContainer/MarginContainer/MenuEntries/ExitBtn" method="_on_pressed"]
 
 [editable path="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueNexus/VisualComponent3D/NexusMesh"]
