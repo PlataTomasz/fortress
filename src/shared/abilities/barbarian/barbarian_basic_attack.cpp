@@ -106,6 +106,8 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& action_context) {
         print_error("Failed to play animation! Missing VisualComponent3D!");
     }
 
+    play_animation(action_context, "Attack01");
+
     // Spawn slash VFX
     if(attack_area_vfx.is_null()) return;
     Node3D *attack_area_vfx_instance = Object::cast_to<Node3D>(attack_area_vfx->instantiate());

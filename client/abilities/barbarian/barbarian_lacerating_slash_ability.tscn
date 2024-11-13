@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bhn3jfg175r5v"]
+[gd_scene load_steps=7 format=3 uid="uid://bhn3jfg175r5v"]
 
+[ext_resource type="Texture2D" uid="uid://cqlfwocbpsu5l" path="res://textures/icons/abilities/barbarian/lacerating_slash.png" id="1_clx48"]
 [ext_resource type="AudioStream" uid="uid://y3r1mdx6eaxt" path="res://audio/swing3.wav" id="1_sshun"]
 [ext_resource type="AudioStream" uid="uid://btuwp551irgqs" path="res://audio/sword-unsheathe.wav" id="2_055mi"]
 [ext_resource type="PackedScene" uid="uid://co8on0eucrvgw" path="res://vfx/generic/attack_hit_indicator.tscn" id="3_r6whv"]
@@ -9,6 +10,9 @@
 size = Vector3(1, 1, 2.7)
 
 [node name="BarbarianLaceratingSlashAbility" type="BarbarianLaceratingSlashAbility" node_paths=PackedStringArray("slash_area")]
+displayed_name = "Lacerating slash"
+displayed_description = "Barbarian slashes with his sword forward, dealing damage to enemies hit in rectangular area."
+icon = ExtResource("1_clx48")
 max_cooldown = 9.0
 where_to_look_at = 1
 use_time = 0.3

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dsqcm25nbbc55"]
+[gd_scene load_steps=5 format=3 uid="uid://dsqcm25nbbc55"]
 
 [ext_resource type="Texture2D" uid="uid://dwofxv6xbpra4" path="res://textures/icons/abilities/barbarian/intimidating_cry.png" id="1_ghvo5"]
 [ext_resource type="PackedScene" uid="uid://c0e1wux8xx8b8" path="res://vfx/barbarian/intimidating_cry_area.tscn" id="2_gjl58"]
+[ext_resource type="AudioStream" uid="uid://j8lay2qc84xu" path="res://audio/warcry.wav" id="3_oglow"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_l2xle"]
 radius = 2.0
@@ -15,6 +16,7 @@ where_to_look_at = -2076805702
 use_time = 0.5
 warcry_area = NodePath("Area3D")
 warcry_vfx = ExtResource("2_gjl58")
+intimidating_cry_use_sound = ExtResource("3_oglow")
 
 [node name="Area3D" type="Area3D" parent="."]
 

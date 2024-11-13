@@ -291,7 +291,7 @@ void Ability::play_animation(const Ref<ActionContext> &action_context, const Str
     ERR_FAIL_NULL(action_context->get_user());
     ERR_FAIL_NULL_MSG(action_context->get_user()->get_visual_component(), "Failed to play animation! Missing VisualComponent3D!");
 
-    action_context->get_user()->get_visual_component()->play_animation_override("WarhornUse");
+    action_context->get_user()->get_visual_component()->play_animation_override(animation_name);
 }
 
 void Ability::play_vfx(const Ref<ActionContext> &action_context, const Ref<PackedScene> &vfx_scene) {
