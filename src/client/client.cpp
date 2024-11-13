@@ -182,6 +182,8 @@ void Client::_on_server_disconnect()
     }
 
     player->cleanup_after_disconnect();
+
+    emit_signal("player_disconnected", player);
 }
 
 void Client::process()
@@ -248,8 +250,10 @@ void Client::_bind_methods()
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "user_interface", PROPERTY_HINT_NODE_TYPE, Control::get_class_static()), "set_user_interface", "get_user_interface");
 
     ADD_SIGNAL(MethodInfo("player_connected", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, Player::get_class_static())));
+    ADD_SIGNAL(MethodInfo("player_disconnected", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, Player::get_class_static())));
 
     ClassDB::bind_method(D_METHOD("quit"), &Client::quit);
+    ClassDB::bind_method(D_METHOD("disconnect_from_server"), &Client::disconnect_from_server);
 }
 
 void Client::set_user_interface(UserInterface *new_user_interface) {
