@@ -8,5 +8,6 @@ permament = false
 displayed_name = "Crushed"
 displayed_description = "This unit is crushed and have reduced defenses"
 icon = ExtResource("1_t1xgy")
+metadata/identifier = &"orc_crushing_blow_debuff"
 
 [node name="VFX" parent="." instance=ExtResource("1_df6tq")]

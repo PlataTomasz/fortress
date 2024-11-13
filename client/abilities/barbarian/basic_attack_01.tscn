@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://q8aaqb40m1sm"]
+[gd_scene load_steps=6 format=3 uid="uid://q8aaqb40m1sm"]
 
 [ext_resource type="PackedScene" uid="uid://bgngxpo7tj7nh" path="res://vfx/generic/attack_arc.tscn" id="1_ohgui"]
 [ext_resource type="Texture2D" uid="uid://d3hcpbgbhuas6" path="res://textures/icons/abilities/generic/basic_attack.png" id="1_umnry"]
+[ext_resource type="AudioStream" uid="uid://y3r1mdx6eaxt" path="res://audio/swing3.wav" id="3_kmjva"]
 
 [sub_resource type="PackedScene" id="PackedScene_7yjb7"]
 
@@ -17,6 +18,7 @@ use_time = 0.5
 hit_visual_effect = SubResource("PackedScene_7yjb7")
 attack_area_vfx = ExtResource("1_ohgui")
 slash_vfx_origin = NodePath("Node3D")
+attack_sound = ExtResource("3_kmjva")
 
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.339477, 0)

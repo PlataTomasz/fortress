@@ -3,7 +3,7 @@
 #include <scene/resources/packed_scene.h>
 #include <shared/core/sh_game.h>
 #include <shared/gamemodes/gamemode.h>
-
+#include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/entity.h>
 
 bool StatusEffectVictimComponent::remove_status_effect(StringName status_effect_name) {
@@ -41,6 +41,16 @@ void StatusEffectVictimComponent::_notification(int p_notification) {
 		case NOTIFICATION_POSTINITIALIZE: {
 			connect("child_exiting_tree", callable_mp(this, &StatusEffectVictimComponent::_on_child_removed));
 			connect("child_entered_tree", callable_mp(this, &StatusEffectVictimComponent::_on_child_added));
+		} break;
+
+		case NOTIFICATION_READY: {
+			Entity *ent = get_owning_entity();
+			ERR_FAIL_NULL(ent);
+			DamageableComponent *damageable = ent->get_damageable_component();
+			if(damageable) {
+				damageable->connect("death", callable_mp(this, &StatusEffectVictimComponent::_on_death));
+			}
+
 		} break;
 
 		default:
@@ -85,6 +95,33 @@ List<StatusEffect *> StatusEffectVictimComponent::get_status_effects() {
 	return status_effect_list;
 }
 
+bool StatusEffectVictimComponent::already_has_other_instance(StatusEffect *status_effect) {
+	TypedArray<Node> children = get_children();
+	for(int i = 0;i<children.size();i++) {
+		StatusEffect *already_present_effect = Object::cast_to<StatusEffect>(children[i].operator Object *());
+		if(!already_present_effect) continue;
+		
+		if(already_present_effect->get_meta("identifier") == status_effect->get_meta("identifier")) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void StatusEffectVictimComponent::clear() {
+	TypedArray<Node> status_effects = get_children();
+	for(int i = 0;i<status_effects.size();i++) {
+		StatusEffect *status_effect = Object::cast_to<StatusEffect>(status_effects[i].operator Object*());
+		if(!status_effect) continue;
+
+		status_effect->queue_free();
+	}
+}
+
+void StatusEffectVictimComponent::_on_death(const Ref<DamageObject> &damage_object) {
+	clear();
+}
+
 bool StatusEffectVictimComponent::can_effect_be_applied(StatusEffect *status_effect) {
 	ERR_FAIL_NULL_V(status_effect, false);
 
@@ -95,6 +132,11 @@ bool StatusEffectVictimComponent::can_effect_be_applied(StatusEffect *status_eff
 	ERR_FAIL_NULL_V(gamemode, false);
 
 	bool is_inflictor_enemy = gamemode->is_entity_enemy_of(status_effect->get_inflictor(), get_owning_entity());
+
+	// TODO: Consider stackable effects
+	if(already_has_other_instance(status_effect)) {
+		return false;
+	}
 
 	if(status_effect->get_type() == StatusEffect::Type::BUFF && !is_inflictor_enemy) {
 		return true;

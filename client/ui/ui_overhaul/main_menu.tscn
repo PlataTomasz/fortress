@@ -728,6 +728,7 @@ layout_mode = 2
 script = SubResource("GDScript_u8ll8")
 
 [node name="CharacterSelection" parent="ContentArea" groups=["sidebar_panels"] instance=ExtResource("7_1qnqh")]
+visible = false
 layout_mode = 2
 offset_right = 1552.0
 mouse_filter = 1
@@ -918,7 +919,6 @@ horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="PanelWhenNothingIsActive" type="PanelContainer" parent="ContentArea" groups=["sidebar_panels"]]
-visible = false
 layout_mode = 2
 offset_right = 1552.0
 offset_bottom = 1080.0

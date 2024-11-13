@@ -21,6 +21,7 @@ private:
     Ref<PackedScene> attack_area_vfx;
 
     Node3D *slash_vfx_origin = nullptr;
+    Ref<AudioStream> attack_sound;
 
     float range = 2;
 
@@ -47,6 +48,9 @@ public:
 
     void set_slash_vfx_origin(Node3D *new_slash_vfx_origin);
     Node3D *get_slash_vfx_origin();
+
+    void set_attack_sound(const Ref<AudioStream> &new_attack_sound);
+    Ref<AudioStream> get_attack_sound();
 };
 
 #endif // BARBARIAN_BASIC_ATTACK_INCLUDED
