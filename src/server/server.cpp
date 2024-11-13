@@ -138,6 +138,7 @@ void Server::change_player_peer_id(const Ref<Player>& player_to_alter, int new_p
 
         if(player == player_to_alter) {
             connected_players.replace_key(kv.key, new_peer_id);
+            player->set_owner_peer_id(new_peer_id);
             break;
         }
     }
@@ -221,6 +222,7 @@ Error Server::auth_callback(int peer_id, PackedByteArray data) {
         player_to_add.instantiate();
         player_to_add->change_nickname(String(var_nickname));
         player_to_add->set_choosen_mercenary(mercenary_name_str);
+        player_to_add->set_owner_peer_id(peer_id);
         add_player(peer_id, player_to_add);
     }
 

@@ -4,7 +4,7 @@
 
 void OrcBruteForce::_use(const Ref<ActionContext> &action_context) {
     // Play punch animation
-    play_animation(action_context, "Attack002");
+    play_animation(action_context, "Punch");
 
     ERR_FAIL_NULL(brute_force_area);
     play_vfx_at_position(action_context, brute_force_vfx, brute_force_area->get_position());

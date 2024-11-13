@@ -253,6 +253,7 @@ user_interface = NodePath("MainMenu/ContentArea/CharacterSelection")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("client") instance=ExtResource("1_w0wkj")]
 client = NodePath("..")
+metadata/_edit_use_anchors_ = true
 
 [node name="ConnectToServerBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="1" node_paths=PackedStringArray("client")]
 client = NodePath("../../../../..")

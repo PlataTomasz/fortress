@@ -401,12 +401,10 @@ void MobaGamemode::_bind_methods() {
 }
 
 void MobaGamemode::make_player_lose(const Ref<Player> &player) {
-    // TODO: Register this RPC
     rpc_id(player->get_owner_peer_id(), "server_rpc_defeat");
 }
 
 void MobaGamemode::make_player_win(const Ref<Player> &player) {
-    // TODO: Register this RPC
     rpc_id(player->get_owner_peer_id(), "server_rpc_victory");
 }
 

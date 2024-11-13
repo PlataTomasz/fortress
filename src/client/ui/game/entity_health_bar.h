@@ -18,9 +18,9 @@ private:
     Label *_value_indicator = nullptr;
 
     void _on_current_health_changed(float new_value) {
-        set_value(new_value);
+        set_value(Math::ceil(new_value));
         ERR_FAIL_NULL(_value_indicator);
-        String value_indicator_text = vformat("%d/%d", new_value, get_max());
+        String value_indicator_text = vformat("%d/%d", get_value(), get_max());
         _value_indicator->set_text(value_indicator_text);
     }
 

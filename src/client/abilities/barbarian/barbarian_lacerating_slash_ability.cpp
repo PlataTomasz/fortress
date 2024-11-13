@@ -8,6 +8,8 @@ void BarbarianLaceratingSlashAbility::_use(const Ref<ActionContext> &use_context
     // Play VFX matching area
     play_vfx(use_context, slash_area_vfx);
 
+    play_animation(use_context, "Attack002");
+
     // Play sound on use
     play_sound(use_context, sword_swing_sound);
     

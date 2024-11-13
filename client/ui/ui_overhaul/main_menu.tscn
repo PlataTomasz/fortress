@@ -29,13 +29,16 @@ script/source = "extends HSplitContainer
 
 @export var client: Client
 
-func _on_connection_success(ply: Player):
-	# Hide menu
+func _on_player_connected(ply: Player):
 	visible = false
+	
+func _on_player_disconnected(ply: Player):
+	visible = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	client.player_connected.connect(_on_connection_success)
+	client.player_connected.connect(_on_player_connected)
+	client.player_disconnected.connect(_on_player_disconnected)
 	(get_parent() as Client).child_entered_tree.connect(_bandaid_reparent_when_new_node_enters)
 
 func _bandaid_reparent_when_new_node_enters(node: Node):
