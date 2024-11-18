@@ -51,12 +51,15 @@ else
 	exit 2
 fi
 
-if [[ "Yes" == "$is_editor_build"* ]] || [[ -z "$build_type" ]];
+if [[ "Yes" == "$is_editor_build"* ]] || [[ -z "$is_editor_build" ]];
 then
 	build_append_options="$build_append_options target=editor"
 elif [[ "No" == "$is_editor_build"* ]];
 then
 	build_append_options="$build_append_options target=release"
+elif [[ "Template" == "$is_editor_build"* ]];
+then
+    build_append_options="$build_append_options target=template_release"
 else
 	exit 3
 fi
