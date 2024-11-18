@@ -9,5 +9,6 @@ displayed_name = "Dance with Death"
 displayed_description = "You are losing health over time, but heal when you hit enemy with basic attack"
 icon = ExtResource("1_1fe3d")
 new_type = 1
+metadata/identifier = &"barbariarn_dance_with_death_buff"
 
 [node name="BarbarianDanceWithDeathBuffVfx" parent="." instance=ExtResource("2_nh1tj")]
