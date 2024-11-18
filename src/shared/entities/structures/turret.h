@@ -17,7 +17,7 @@ private:
     Timer *recharge_timer = nullptr;
     Node3D *turret_attack_origin_node = nullptr;
 
-    AdvancedArea3D *aggro_area = nullptr;
+    Area3D *aggro_area = nullptr;
 
     float cooldown_between_attacks = 0;
     float attack_time_window = 7;
@@ -32,7 +32,7 @@ private:
 
     Ref<PackedScene> projectile_template;
 
-    void _on_death();
+    void _on_death(const Ref<DamageObject> &damage_object);
     void _on_attack_speed_changed(float new_final_attack_speed);
     void _on_recharge_start();
     void _on_recharge_end();
@@ -46,6 +46,9 @@ private:
 
     void server_rpc_recharge_started();
     void server_rpc_recharge_finished();
+
+    void _on_aggro_area_entered(Area3D *area_that_entered);
+    void _on_aggro_area_exited(Area3D *area_that_exited);
 protected:
     void _initv() override;
     void _readyv() override;
@@ -56,14 +59,14 @@ public:
     bool has_target();
     bool is_entity_valid_target(Entity *potential_target);
     Entity *get_higher_priority_target(Entity *first_entity, Entity *second_entity);
-    Entity *get_closest_entity(const Vector<Entity *>& entities);
+    Entity *get_closest_entity(const List<Entity *>& entities);
 
     Entity *find_new_target();
     int get_aggro_priority_for_entity(Entity *entity);
     void change_target(Entity *new_target);
 
-    void set_aggro_area(AdvancedArea3D *new_aggro_area);
-    AdvancedArea3D *get_aggro_area();
+    void set_aggro_area(Area3D *new_aggro_area);
+    Area3D *get_aggro_area();
 
     void set_cooldown_between_attacks(float new_cooldown);
     float get_cooldown_between_attacks();

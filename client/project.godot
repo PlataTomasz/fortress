@@ -15,6 +15,10 @@ run/main_scene="res://scenes/Client_new.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[debug]
+
+shapes/collision/shape_color=Color(0.0506666, 0.76, 0, 0.843137)
+
 [display]
 
 window/size/viewport_width=1920
@@ -26,6 +30,7 @@ window/stretch/aspect="ignore"
 
 default_team_first=""
 default_team_second=""
+hurtbox="Used for marking areas that are considered hurtboxes of something"
 
 [gui]
 

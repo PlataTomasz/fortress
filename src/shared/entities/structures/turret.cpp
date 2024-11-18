@@ -11,6 +11,7 @@
 #include <shared/entities/components/entity_stats/entity_attributes_component.h>
 #include <shared/networking/rpc/rpc_config_builder.h>
 #include <shared/networking/rpc/rpc_registerer.h>
+#include <shared/collisions/ability_hitbox_helper.h>
 
 #include <shared/gamemodes/moba_gamemode.h>
 
@@ -104,10 +105,11 @@ Entity *Turret::find_new_target() {
     5. Return potential target
     */
 
-    return get_closest_entity(aggro_area->get_entities_in_area());
+    AbilityHitboxHelper hitbox_helper(aggro_area);
+    return get_closest_entity(hitbox_helper.get_entities_in_area());
 }
 
-Entity *Turret::get_closest_entity(const Vector<Entity *> &potential_closest_entities) {
+Entity *Turret::get_closest_entity(const List<Entity *> &potential_closest_entities) {
 	ERR_FAIL_COND_V(!(potential_closest_entities.size() > 0), nullptr);
 
     struct ClosestEntityData {
@@ -118,7 +120,7 @@ Entity *Turret::get_closest_entity(const Vector<Entity *> &potential_closest_ent
     // TODO: Create GameCordinates class to store position of entity with possible ignore of y axis, to make easier messing with coordinates
 
 	for (int potential_closest_index = 0; potential_closest_index < potential_closest_entities.size(); potential_closest_index++) {
-        Entity *potential_closest_entity = potential_closest_entities[potential_closest_index];
+        Entity *potential_closest_entity = potential_closest_entities.get(potential_closest_index);
         float potential_closest_entity_distance = potential_closest_entity->get_position_2d().distance_squared_to(this->get_position_2d());
 
 		if (potential_closest_entity_distance < closest_entity_data.squared_distance_to && is_entity_valid_target(potential_closest_entity)) {
@@ -166,7 +168,7 @@ void Turret::_on_entity_left_aggro_area(Entity *entity_that_left) {
     }
 }
 
-void Turret::_on_death() {
+void Turret::_on_death(const Ref<DamageObject> &damage_object) {
     // Prevent firing and change color to indicate
     set_displayed_name("[DESTROYED]");
 }
@@ -231,15 +233,15 @@ void Turret::_on_entity_enter_aggro_area(Entity *entity_that_entered) {
     }
 }
 
-void Turret::set_aggro_area(AdvancedArea3D *new_aggro_area) {
+void Turret::set_aggro_area(Area3D *new_aggro_area) {
     aggro_area = new_aggro_area;
     if(aggro_area) {
-        aggro_area->connect("entity_entered", callable_mp(this, &Turret::_on_entity_enter_aggro_area));
-        aggro_area->connect("entity_exited", callable_mp(this, &Turret::_on_entity_left_aggro_area));
+        aggro_area->connect("area_entered", callable_mp(this, &Turret::_on_aggro_area_entered));
+        aggro_area->connect("area_exited", callable_mp(this, &Turret::_on_aggro_area_exited));
     }
 }
 
-AdvancedArea3D *Turret::get_aggro_area() {
+Area3D *Turret::get_aggro_area() {
     return aggro_area;
 }
 
@@ -319,4 +321,20 @@ float Turret::get_max_recharge_time() {
 float Turret::get_current_recharge_time() {
     ERR_FAIL_NULL_V(recharge_timer, 0);
     return recharge_timer->get_wait_time() - recharge_timer->get_time_left();
+}
+
+void Turret::_on_aggro_area_entered(Area3D *area_that_entered) {
+    if(area_that_entered->is_in_group("hurtbox")) {
+        if(Entity *ent = Object::cast_to<Entity>(area_that_entered->get_parent())) {
+            _on_entity_enter_aggro_area(ent);
+        }
+    }
+}
+
+void Turret::_on_aggro_area_exited(Area3D *area_that_exited) {
+    if(area_that_exited->is_in_group("hurtbox")) {
+        if(Entity *ent = Object::cast_to<Entity>(area_that_exited->get_parent())) {
+            _on_entity_left_aggro_area(ent);
+        }
+    }
 }

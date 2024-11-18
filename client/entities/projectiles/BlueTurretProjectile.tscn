@@ -1,0 +1,56 @@
+[gd_scene load_steps=11 format=3 uid="uid://bsbn5von20y7b"]
+
+[ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="1_7twld"]
+[ext_resource type="Shader" uid="uid://c7kodwxilvnmp" path="res://vfx/vfx_01.tres" id="2_3sj1y"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jeowf"]
+radius = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_46d54"]
+material = ExtResource("1_7twld")
+radius = 0.1
+height = 0.2
+
+[sub_resource type="Curve" id="Curve_2jncl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6dnnv"]
+curve = SubResource("Curve_2jncl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c8u2t"]
+gravity = Vector3(0, 0, 0)
+color = Color(0, 0.0166669, 1, 1)
+alpha_curve = SubResource("CurveTexture_6dnnv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kd7yt"]
+render_priority = 0
+shader = ExtResource("2_3sj1y")
+
+[sub_resource type="QuadMesh" id="QuadMesh_cjd32"]
+material = SubResource("ShaderMaterial_kd7yt")
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_r0p2u"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="TurretProjectile" type="ProjectileEntity" node_paths=PackedStringArray("hitbox")]
+hitbox = NodePath("Area3D")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_jeowf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_46d54")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="MeshInstance3D"]
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_c8u2t")
+draw_pass_1 = SubResource("QuadMesh_cjd32")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_r0p2u")

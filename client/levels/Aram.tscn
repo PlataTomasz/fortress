@@ -1,14 +1,17 @@
-[gd_scene load_steps=85 format=4 uid="uid://8tv1es2vlr8m"]
+[gd_scene load_steps=88 format=4 uid="uid://8tv1es2vlr8m"]
 
 [ext_resource type="PackedScene" uid="uid://bnhjkhgnmmxlc" path="res://vfx/moba/team_indicator_vfx.tscn" id="1_5htjc"]
 [ext_resource type="MeshLibrary" uid="uid://cwji47jovsga2" path="res://levels/Dungeon_meshlib.tres" id="1_jvri1"]
 [ext_resource type="Material" uid="uid://bia8ydfpr2pxi" path="res://materials/red.tres" id="2_7tmpn"]
 [ext_resource type="Environment" uid="uid://djpbcri88gy7b" path="res://levels/default_enviroment.tres" id="3_kg22x"]
 [ext_resource type="PackedScene" uid="uid://bu3htpf72ijji" path="res://ui/health_bars/entity_info_renderer.tscn" id="4_20rje"]
+[ext_resource type="Script" path="res://scripts/level/nexus_glue.gd" id="4_yhl6k"]
 [ext_resource type="Material" uid="uid://cp2qi5xur1yhj" path="res://materials/blue.tres" id="5_3bms1"]
 [ext_resource type="PackedScene" uid="uid://c2he3w6626a2a" path="res://models/nexus_mesh.tscn" id="6_vln8i"]
 [ext_resource type="PackedScene" uid="uid://dcmi4gsru0sa4" path="res://entities/components/status_effect_victim_component.tscn" id="8_upuso"]
+[ext_resource type="PackedScene" uid="uid://bsbn5von20y7b" path="res://entities/projectiles/BlueTurretProjectile.tscn" id="9_xd1wh"]
 [ext_resource type="PackedScene" uid="uid://d2myowwucmslt" path="res://entities/projectiles/TurretProjectile.tscn" id="10_gkt3i"]
+[ext_resource type="Script" path="res://scripts/level/turret_glue.gd" id="10_vaalm"]
 [ext_resource type="Texture2D" uid="uid://caqcenx4yld48" path="res://textures/icons/misc/lightning-spanner.png" id="11_mpaeb"]
 [ext_resource type="PackedScene" uid="uid://bg4atg03uyc65" path="res://models/tower-top.glb" id="12_imaq0"]
 
@@ -252,7 +255,6 @@ radial_segments = 12
 radius = 2.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vbos0"]
-radius = 3.091
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_3uao2"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")
@@ -428,6 +430,7 @@ status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
 attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
+script = ExtResource("4_yhl6k")
 
 [node name="EntityInfoRenderer" parent="Entities/BlueNexus" instance=ExtResource("4_20rje")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -467,7 +470,7 @@ skeleton = NodePath("../..")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueNexus"]
 
-[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueNexus"]
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueNexus" groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueNexus/HitboxComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -479,6 +482,7 @@ status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
 attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
+script = ExtResource("4_yhl6k")
 
 [node name="EntityInfoRenderer" parent="Entities/RedNexus" instance=ExtResource("4_20rje")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -518,13 +522,13 @@ skeleton = NodePath("../..")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/RedNexus"]
 
-[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedNexus"]
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedNexus" groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedNexus/HitboxComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CylinderShape3D_xm3c4")
 
-[node name="BlueTurretOuter" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_second"]]
+[node name="BlueTurretOuter" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node", "turret_crystal") groups=["default_team_second"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
@@ -532,8 +536,10 @@ attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
 aggro_area = NodePath("Area3D")
 cooldown_between_attacks = 0.5
-projectile_template = ExtResource("10_gkt3i")
+projectile_template = ExtResource("9_xd1wh")
 turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+script = ExtResource("10_vaalm")
+turret_crystal = NodePath("VisualComponent3D/crystal")
 
 [node name="EntityInfoRenderer" type="Node3D" parent="Entities/BlueTurretOuter"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -661,14 +667,14 @@ mesh = SubResource("CylinderMesh_ecfb6")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretOuter/Area3D"]
 shape = SubResource("CylinderShape3D_ogbw3")
 
-[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueTurretOuter"]
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueTurretOuter" groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretOuter/HitboxComponent"]
 shape = SubResource("CylinderShape3D_vbos0")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueTurretOuter"]
 
-[node name="RedTurretInner" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_first"]]
+[node name="RedTurretInner" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node", "turret_crystal") groups=["default_team_first"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
@@ -678,6 +684,8 @@ aggro_area = NodePath("Area3D")
 cooldown_between_attacks = 0.5
 projectile_template = ExtResource("10_gkt3i")
 turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+script = ExtResource("10_vaalm")
+turret_crystal = NodePath("VisualComponent3D/crystal")
 
 [node name="EntityInfoRenderer" parent="Entities/RedTurretInner" instance=ExtResource("4_20rje")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -757,14 +765,14 @@ mesh = SubResource("CylinderMesh_ecfb6")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretInner/Area3D"]
 shape = SubResource("CylinderShape3D_ogbw3")
 
-[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedTurretInner"]
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedTurretInner" groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretInner/HitboxComponent"]
 shape = SubResource("CylinderShape3D_vbos0")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/RedTurretInner"]
 
-[node name="RedTurretOuter" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_first"]]
+[node name="RedTurretOuter" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node", "turret_crystal") groups=["default_team_first"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
@@ -774,6 +782,8 @@ aggro_area = NodePath("Area3D")
 cooldown_between_attacks = 0.5
 projectile_template = ExtResource("10_gkt3i")
 turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+script = ExtResource("10_vaalm")
+turret_crystal = NodePath("VisualComponent3D/crystal")
 
 [node name="EntityInfoRenderer" parent="Entities/RedTurretOuter" instance=ExtResource("4_20rje")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -853,14 +863,14 @@ mesh = SubResource("CylinderMesh_ecfb6")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretOuter/Area3D"]
 shape = SubResource("CylinderShape3D_ogbw3")
 
-[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedTurretOuter"]
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/RedTurretOuter" groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/RedTurretOuter/HitboxComponent"]
 shape = SubResource("CylinderShape3D_vbos0")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/RedTurretOuter"]
 
-[node name="BlueTurretInner" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node") groups=["default_team_second"]]
+[node name="BlueTurretInner" type="Turret" parent="Entities" node_paths=PackedStringArray("status_effect_victim_component", "damageable_component", "attributes_component", "visual_component", "aggro_area", "turret_attack_origin_node", "turret_crystal") groups=["default_team_second"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 0)
 status_effect_victim_component = NodePath("StatusEffectVictimComponent")
 damageable_component = NodePath("DamageableComponent")
@@ -868,8 +878,10 @@ attributes_component = NodePath("EntityAttributesComponent")
 visual_component = NodePath("VisualComponent3D")
 aggro_area = NodePath("Area3D")
 cooldown_between_attacks = 0.5
-projectile_template = ExtResource("10_gkt3i")
+projectile_template = ExtResource("9_xd1wh")
 turret_attack_origin_node = NodePath("VisualComponent3D/crystal/Cube")
+script = ExtResource("10_vaalm")
+turret_crystal = NodePath("VisualComponent3D/crystal")
 
 [node name="EntityInfoRenderer" parent="Entities/BlueTurretInner" instance=ExtResource("4_20rje")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -949,7 +961,7 @@ mesh = SubResource("CylinderMesh_ecfb6")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretInner/Area3D"]
 shape = SubResource("CylinderShape3D_ogbw3")
 
-[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueTurretInner"]
+[node name="HitboxComponent" type="HitboxComponent" parent="Entities/BlueTurretInner" groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Entities/BlueTurretInner/HitboxComponent"]
 shape = SubResource("CylinderShape3D_vbos0")
@@ -957,7 +969,7 @@ shape = SubResource("CylinderShape3D_vbos0")
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueTurretInner"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn")
+_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn", "res://entities/projectiles/BlueTurretProjectile.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

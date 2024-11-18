@@ -9,12 +9,13 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_6n2vo"]
 size = Vector3(1.99927, 1, 1.28613)
 
-[node name="BasicAttack01" type="BarbarianBasicAttack" node_paths=PackedStringArray("slash_vfx_origin")]
+[node name="BasicAttack01" type="BarbarianBasicAttack" node_paths=PackedStringArray("hitbox", "slash_vfx_origin")]
 displayed_name = "Basic attack"
 displayed_description = "Slash in a rectangular area in front of you, dealing damage to enemies."
 icon = ExtResource("1_umnry")
 where_to_look_at = 1
 use_time = 0.5
+hitbox = NodePath("Area3D")
 hit_visual_effect = SubResource("PackedScene_7yjb7")
 attack_area_vfx = ExtResource("1_ohgui")
 slash_vfx_origin = NodePath("Node3D")

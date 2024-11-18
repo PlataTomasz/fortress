@@ -7,11 +7,12 @@
 #include <scene/main/timer.h>
 #include <shared/core/game_level.h>
 #include <shared/gamemodes/gamemode.h>
+#include <shared/collisions/ability_hitbox_helper.h>
 
 void BarbarianBasicAttack::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_hitbox"), &BarbarianBasicAttack::get_hitbox);
     ::ClassDB::bind_method(D_METHOD("set_hitbox"), &BarbarianBasicAttack::set_hitbox);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "hitbox", PROPERTY_HINT_NODE_TYPE, HitboxComponent::get_class_static()), "set_hitbox", "get_hitbox");
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "hitbox", PROPERTY_HINT_NODE_TYPE, Area3D::get_class_static()), "set_hitbox", "get_hitbox");
 
     ::ClassDB::bind_method(D_METHOD("get_hit_visual_effect"), &BarbarianBasicAttack::get_hit_visual_effect);
     ::ClassDB::bind_method(D_METHOD("set_hit_visual_effect"), &BarbarianBasicAttack::set_hit_visual_effect);
@@ -50,17 +51,11 @@ void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
 
     ERR_FAIL_NULL(use_context->get_user());
     ERR_FAIL_NULL(use_context->get_user()->get_gamelevel());
+    AbilityHitboxHelper area_helper(hitbox);
 
-    List<HitboxComponent *> hitboxes = hitbox->get_overlapping_hitboxes();
-
-    for(HitboxComponent *detected_hitbox : hitboxes) {
-        Entity *ent = detected_hitbox->get_owning_entity();
-        ERR_CONTINUE(!ent);
-
+    for(Entity *ent : area_helper.get_entities_in_area()) {
         if(ent == use_context->get_user()) continue; // Prevent hitting yourself
         if(!use_context->get_user()->get_gamelevel()->get_gamemode()->is_entity_enemy_of(use_context->get_user(), ent)) return; // Prevent hitting allies
-
-        print_line(use_context->get_user(), "attacked", ent);
 
         _entity_hit_with_attack(ent, use_context);
     }
@@ -82,11 +77,11 @@ Ref<PackedScene> BarbarianBasicAttack::get_attack_area_vfx() {
     return attack_area_vfx;
 }
 
-void BarbarianBasicAttack::set_hitbox(HitboxComponent *p_hitbox) {
-    hitbox = p_hitbox;
+void BarbarianBasicAttack::set_hitbox(Area3D *new_hitbox) {
+    hitbox = new_hitbox;
 }
 
-HitboxComponent *BarbarianBasicAttack::get_hitbox() {
+Area3D *BarbarianBasicAttack::get_hitbox() {
     return hitbox;
 }
 

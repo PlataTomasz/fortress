@@ -66,9 +66,8 @@ where_to_look_at = -911486723
 
 [node name="OrcWarhornAbility2" parent="AbilityCasterComponent" index="2" instance=ExtResource("3_ir8n4")]
 
-[node name="BasicAttack01" parent="AbilityCasterComponent" index="3" node_paths=PackedStringArray("hitbox") instance=ExtResource("4_bknsa")]
+[node name="BasicAttack01" parent="AbilityCasterComponent" index="3" instance=ExtResource("4_bknsa")]
 max_cooldown = -1.20862e+26
-hitbox = NodePath("../../HitboxComponent")
 
 [node name="OrcCrushingBlows" parent="AbilityCasterComponent" index="4" instance=ExtResource("5_2lqjj")]
 where_to_look_at = 7274608
