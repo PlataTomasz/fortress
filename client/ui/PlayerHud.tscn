@@ -1,10 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://r74sdo7qqa4i"]
+[gd_scene load_steps=15 format=3 uid="uid://r74sdo7qqa4i"]
 
 [ext_resource type="PackedScene" uid="uid://f2fdn3fvi163" path="res://ui/active_ability_button.tscn" id="1_12gq1"]
 [ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="1_50r8y"]
 [ext_resource type="PackedScene" uid="uid://c1ttpyf5y3rxj" path="res://ui/ability_tooltip_01.tscn" id="1_85kqk"]
 [ext_resource type="PackedScene" uid="uid://cmjrwl8j6sa0r" path="res://ui/passive_ability_button.tscn" id="2_gxf0t"]
 [ext_resource type="StyleBox" uid="uid://db3ejfwdx7hyb" path="res://ui/health_bars/DefaultMercenaryHealthBarFill.tres" id="2_kpe8t"]
+[ext_resource type="Texture2D" uid="uid://j3kpc8exokuk" path="res://ui/tattered-banner.png" id="6_uqkyr"]
+[ext_resource type="Texture2D" uid="uid://og3r8uq1dml7" path="res://ui/winged-shield.png" id="7_emt7x"]
 
 [sub_resource type="Gradient" id="Gradient_3nsy2"]
 offsets = PackedFloat32Array(0.367347, 1)
@@ -241,10 +243,24 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="DefeatScreen/VSplitContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="DefeatScreen/VSplitContainer"]
+layout_mode = 2
+
+[node name="DefeatIcon" type="TextureRect" parent="DefeatScreen/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_uqkyr")
+expand_mode = 2
+flip_h = true
+
+[node name="Label" type="Label" parent="DefeatScreen/VSplitContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 224
 text = "You've lost!"
+
+[node name="DefeatIcon2" type="TextureRect" parent="DefeatScreen/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_uqkyr")
+expand_mode = 2
 
 [node name="DisconnectButton" type="DisconnectFromServerButton" parent="DefeatScreen/VSplitContainer"]
 custom_minimum_size = Vector2(128, 0)
@@ -263,10 +279,25 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="VictoryScreen/VSplitContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VictoryScreen/VSplitContainer"]
+layout_mode = 2
+
+[node name="VictoryIcon" type="TextureRect" parent="VictoryScreen/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("7_emt7x")
+expand_mode = 2
+flip_h = true
+
+[node name="Label" type="Label" parent="VictoryScreen/VSplitContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 224
 text = "You've won!"
+
+[node name="VictoryIcon2" type="TextureRect" parent="VictoryScreen/VSplitContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("7_emt7x")
+expand_mode = 2
+flip_h = true
 
 [node name="DisconnectButton" type="DisconnectFromServerButton" parent="VictoryScreen/VSplitContainer"]
 custom_minimum_size = Vector2(128, 0)
