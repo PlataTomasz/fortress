@@ -9,3 +9,4 @@ displayed_description = "Basic attacks deal additional damage."
 icon = ExtResource("1_pn1eg")
 new_type = 1
 new_max_duration = 4.0
+metadata/identifier = &"barbariarn_barbaric_might_buff"

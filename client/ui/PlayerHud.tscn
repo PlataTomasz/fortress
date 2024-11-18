@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://r74sdo7qqa4i"]
+[gd_scene load_steps=13 format=3 uid="uid://r74sdo7qqa4i"]
 
 [ext_resource type="PackedScene" uid="uid://f2fdn3fvi163" path="res://ui/active_ability_button.tscn" id="1_12gq1"]
 [ext_resource type="StyleBox" uid="uid://3p7xhfgn1tr4" path="res://ui/health_bars/DefaultMercenaryHealthBarBG.tres" id="1_50r8y"]
@@ -30,9 +30,6 @@ bg_color = Color(0.917647, 0.823529, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qrt2k"]
 bg_color = Color(0.325441, 0.325441, 0.325441, 0.443137)
-
-[sub_resource type="LabelSettings" id="LabelSettings_6kus0"]
-font_size = 224
 
 [node name="PlayerHud" type="PlayerHUD" node_paths=PackedStringArray("health_bar", "status_effect_area", "character_portrait", "victory_screen", "defeat_screen", "basic_attack_button", "passive_ability_button", "first_ability_button", "second_ability_button", "third_ability_button", "ultimate_ability_button")]
 anchors_preset = 15
@@ -237,7 +234,6 @@ color = Color(0.458717, 0.329259, 0.0625162, 1)
 visible = false
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 0
-mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_qrt2k")
 
 [node name="VSplitContainer" type="VSplitContainer" parent="DefeatScreen"]
@@ -247,8 +243,8 @@ size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="DefeatScreen/VSplitContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 224
 text = "You've lost!"
-label_settings = SubResource("LabelSettings_6kus0")
 
 [node name="DisconnectButton" type="DisconnectFromServerButton" parent="DefeatScreen/VSplitContainer"]
 custom_minimum_size = Vector2(128, 0)
@@ -260,7 +256,6 @@ text = "Disconnect"
 visible = false
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 0
-mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_qrt2k")
 
 [node name="VSplitContainer" type="VSplitContainer" parent="VictoryScreen"]
@@ -270,8 +265,8 @@ size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="VictoryScreen/VSplitContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 224
 text = "You've won!"
-label_settings = SubResource("LabelSettings_6kus0")
 
 [node name="DisconnectButton" type="DisconnectFromServerButton" parent="VictoryScreen/VSplitContainer"]
 custom_minimum_size = Vector2(128, 0)

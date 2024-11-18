@@ -34,8 +34,10 @@ void ProjectileEntity::_readyv() {
 }
 
 void ProjectileEntity::_on_hit_detect(Area3D *detected_area) {
-    if(Entity *ent = Object::cast_to<Entity>(detected_area->get_parent())) {
-        _on_hit_entity(ent);
+    if(detected_area->is_in_group("hurtbox")) {
+        if(Entity *ent = Object::cast_to<Entity>(detected_area->get_parent())) {
+            _on_hit_entity(ent);
+        }
     }
 }
 
@@ -46,10 +48,7 @@ void ProjectileEntity::_on_hit_entity(Entity *hit_entity) {
             //damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, DamageObject::BASIC_ATTACK_DAMAGE, 15, creator)));
             damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, DamageObject::BASIC_ATTACK_DAMAGE, 15, creator)));
         }
-        print_line(this->to_string(), "hit entity", hit_entity, ". Now It will disappear");
         queue_free();
-    } else {
-        print_line("Projectile: Ignored entity!");
     }
 }
 

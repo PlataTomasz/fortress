@@ -7,3 +7,4 @@ permament = false
 displayed_name = "Crushing blows"
 displayed_description = "Next basic attacks applies Crushed debuff on enemy, causing reduced defense"
 icon = ExtResource("1_yt1hl")
+metadata/identifier = &"orc_crushing_blow_buff"
