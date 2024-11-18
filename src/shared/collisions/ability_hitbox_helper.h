@@ -37,6 +37,8 @@ public:
             Area3D *caught_area = Object::cast_to<Area3D>(areas.get(i).operator Object *());
             ERR_CONTINUE(!caught_area);
 
+            if(!caught_area->is_in_group("hurtbox")) continue; // Catch only hurtboxes
+
             Entity *ent = Object::cast_to<Entity>(caught_area->get_parent());
             if(!ent) continue;
 

@@ -112,8 +112,7 @@ icon = ExtResource("4_w0xr7")
 max_cooldown = nan
 where_to_look_at = -125896061
 
-[node name="BasicAttack01" parent="AbilityCasterComponent" index="3" node_paths=PackedStringArray("hitbox") instance=ExtResource("5_77pm2")]
-hitbox = NodePath("../../HitboxComponent2")
+[node name="BasicAttack01" parent="AbilityCasterComponent" index="3" instance=ExtResource("5_77pm2")]
 hit_visual_effect = ExtResource("9_428v0")
 
 [node name="BarbarianBarbaricMightAbility" parent="AbilityCasterComponent" index="4" instance=ExtResource("10_5p5r7")]

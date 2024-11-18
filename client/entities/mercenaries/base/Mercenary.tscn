@@ -78,7 +78,7 @@ replication_config = SubResource("SceneReplicationConfig_1r6fr")
 
 [node name="DamageableComponent" type="DamageableComponent" parent="."]
 
-[node name="HitboxComponent" type="HitboxComponent" parent="."]
+[node name="HitboxComponent" type="HitboxComponent" parent="." groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
 shape = SubResource("CylinderShape3D_giigm")

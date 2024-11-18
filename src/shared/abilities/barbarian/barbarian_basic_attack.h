@@ -13,7 +13,7 @@ class BarbarianBasicAttack : public BasicAttack {
 GDCLASS(BarbarianBasicAttack, BasicAttack);
 private:
     float damage = 0;
-    HitboxComponent *hitbox = nullptr;
+    Area3D *hitbox = nullptr;
 
     void _reparent_hitbox();
 
@@ -34,8 +34,8 @@ protected:
     static void _bind_methods();
 public:
 
-    void set_hitbox(HitboxComponent *p_hitbox);
-    HitboxComponent *get_hitbox();
+    void set_hitbox(Area3D *new_hitbox);
+    Area3D *get_hitbox();
 
     void set_hit_visual_effect(const Ref<PackedScene> &new_hit_visual_effect);
     Ref<PackedScene> get_hit_visual_effect();
