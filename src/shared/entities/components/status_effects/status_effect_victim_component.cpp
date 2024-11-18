@@ -100,8 +100,11 @@ bool StatusEffectVictimComponent::already_has_other_instance(StatusEffect *statu
 	for(int i = 0;i<children.size();i++) {
 		StatusEffect *already_present_effect = Object::cast_to<StatusEffect>(children[i].operator Object *());
 		if(!already_present_effect) continue;
-		
-		if(already_present_effect->get_meta("identifier") == status_effect->get_meta("identifier")) {
+
+		Variant already_present_meta = already_present_effect->get_meta("identifier");
+		Variant status_effect_meta = status_effect->get_meta("identifier");
+
+		if(already_present_effect != Variant() && already_present_meta != status_effect_meta) {
 			return true;
 		}
 	}
