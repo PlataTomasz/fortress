@@ -62,6 +62,9 @@ protected:
 
     Ref<ENetMultiplayerPeer> get_peer();
 public:
+    Dictionary get_playerdata();
+    void set_playerdata(Dictionary new_playerdata);
+
     void disconnect_from_server();
 
     static Client *get_instance();
