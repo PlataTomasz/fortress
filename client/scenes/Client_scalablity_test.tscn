@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bovxm6hglvflj"]
+
+[sub_resource type="GDScript" id="GDScript_nwkfe"]
+script/source = "extends Client
+
+func _ready() -> void:
+		playerdata[\"nickname\"] = str(Time.get_unix_time_from_system()*1000000)
+		playerdata[\"mercenary\"] = \"Orc_new\"
+		connect_to_game_server(\"localhost\", 7654)
+		player_connected.connect(_on_ply_connect)
+
+func _on_ply_connect(ply):
+	get_tree().quit()
+"
+
+[node name="ClientScalablityTest" type="Client"]
+script = SubResource("GDScript_nwkfe")

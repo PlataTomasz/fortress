@@ -254,6 +254,10 @@ void Client::_bind_methods()
 
     ClassDB::bind_method(D_METHOD("quit"), &Client::quit);
     ClassDB::bind_method(D_METHOD("disconnect_from_server"), &Client::disconnect_from_server);
+
+    ClassDB::bind_method(D_METHOD("get_playerdata"), &Client::get_playerdata);
+    ClassDB::bind_method(D_METHOD("set_playerdata", "playerdata"), &Client::set_playerdata);
+    ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "playerdata"), "set_playerdata", "get_playerdata");
 }
 
 void Client::set_user_interface(UserInterface *new_user_interface) {
@@ -287,4 +291,12 @@ void Client::disconnect_from_server() {
 void Client::quit() {
     ERR_FAIL_NULL(get_tree());
     get_tree()->quit();
+}
+
+Dictionary Client::get_playerdata() {
+    return playerdata;
+}
+
+void Client::set_playerdata(Dictionary new_playerdata) {
+    playerdata = new_playerdata;
 }
