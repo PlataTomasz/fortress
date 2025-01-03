@@ -15,7 +15,7 @@ void Ability::use(const Ref<ActionContext>& action_context)
     {
         _handle_look_at(action_context);
         emit_signal("use_started");
-        start_ability_cooldown();
+        start_ability_cooldown(action_context);
         //Ability cast
         if(_use_time > 0) {
             _deferred_use(action_context);
@@ -44,12 +44,12 @@ void Ability::use(const Ref<ActionContext>& action_context) {
     //TODO: Show indicator first if needed
     // Call RPC to server on client builds
     //rpc("ability_use_request", action_context);
-    start_ability_cooldown();
+    start_ability_cooldown(action_context);
     _use(action_context);
 }
 #endif
 
-void Ability::start_ability_cooldown() {
+void Ability::start_ability_cooldown(const Ref<ActionContext> &action_context) {
     cooldown_timer->start();
 }
 

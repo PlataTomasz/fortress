@@ -23,14 +23,15 @@ def recursive_glob(dir):
 env_zip = env_modules.Clone()
 env_zip.Append(CPPPATH=["src/", sv_src_dir, cl_src_dir])
 
-if methods.get_cmdline_bool("quality_game_code", True):
-    env_zip.Append(CCFLAGS=["-Werror=return-type"])
+# Temporary commented out to compile with MSVC
+# if methods.get_cmdline_bool("quality_game_code", True):
+    # env_zip.Append(CCFLAGS=["-Werror=return-type"])
 
-if methods.get_cmdline_bool("debug_game", False):
-    env_zip.Append(CPPDEFINES=["DEBUG_ARTSKR"])
-    env_zip.Append(CCFLAGS=["-g"])
-    # Disable optimization to make debugging easier
-    env_zip.Append(CCFLAGS=["-O0"])
+# if methods.get_cmdline_bool("debug_game", False):
+    # env_zip.Append(CPPDEFINES=["DEBUG_ARTSKR"])
+    # env_zip.Append(CCFLAGS=["-g"])
+    # # Disable optimization to make debugging easier
+    # env_zip.Append(CCFLAGS=["-O0"])
 
 # Non-elegant but without this project won't build with networking headers
 env_zip.Prepend(CPPPATH=["#thirdparty/enet/"])

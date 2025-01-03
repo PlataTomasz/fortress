@@ -11,25 +11,24 @@
 #include <shared/networking/rpc/rpc_config_builder.h>
 #include <shared/networking/rpc/rpc_registerer.h>
 
-void DamageableComponent::take_damage(Ref<DamageObject> damage_object)
-{
+void DamageableComponent::take_damage(Ref<DamageObject> damage_object) {
     if(!is_damageable_by(damage_object)) return;
     if(is_dead()) return;
 
-    Entity *parent_entity = Object::cast_to<Entity>(this->get_parent());
-    ERR_FAIL_NULL(parent_entity);
+    Entity *owning_entity = get_owning_entity();
+    ERR_FAIL_NULL(owning_entity);
 
-    EntityAttributesComponent *attributes_component = parent_entity->get_attributes_component();
+    EntityAttributesComponent *attributes_component = owning_entity->get_attributes_component();
     if(!attributes_component) return;
 
-	float global_defense_val = attributes_component->get_global_defense()->get_current();
+	float global_defense_value = attributes_component->get_global_defense()->get_current();
 
     Ref<CappedResourceAttribute> health_atr = attributes_component->get_health();
 	float health_value = health_atr->get_current();
 
 	//Reduce incoming damage with global defense - Damage reduction equation
-	float damage_multiplier = 100 / (100 + global_defense_val);
-	float incoming_damage = damage_multiplier * damage_object->get_value();
+	float damage_taken_multiplier = 100 / (100 + global_defense_value);
+	float incoming_damage = damage_taken_multiplier * damage_object->get_value();
 
     health_atr->set_current(health_value - incoming_damage);
 

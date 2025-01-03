@@ -61,7 +61,7 @@ private:
             ERR_FAIL_NULL(action_context->get_target_entity());
             ERR_FAIL_NULL(action_context->get_user());
             action_context->get_user()->look_at(action_context->get_target_entity()->get_global_position(), Vector3(0,1,0), true);
-        } 
+        }
     } _at_target_entity_look_at_behaviour;
 
     class LookAtTargetPositionBehaviour : public LookAtBehaviour {
@@ -94,7 +94,7 @@ protected:
 
     void _on_ability_cooldown_finished();
 
-    void start_ability_cooldown();
+    virtual void start_ability_cooldown(const Ref<ActionContext> &action_context);
     void _handle_look_at(const Ref<ActionContext>& action_context);
 
     void _deferred_use(const Ref<ActionContext>& action_context);

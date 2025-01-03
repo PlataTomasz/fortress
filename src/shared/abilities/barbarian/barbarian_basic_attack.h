@@ -32,6 +32,8 @@ protected:
 
     void _notification(int p_notification);
     static void _bind_methods();
+
+    virtual void start_ability_cooldown(const Ref<ActionContext> &action_context) override;
 public:
 
     void set_hitbox(Area3D *new_hitbox);
