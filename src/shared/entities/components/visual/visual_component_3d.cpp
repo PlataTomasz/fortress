@@ -44,13 +44,16 @@ void VisualComponent3D::_notification(int p_notification) {
 }
 
 void VisualComponent3D::_on_movement_start() {
+	AnimationState *old_animation_state = animation_state;
 	animation_state = animation_state->on_start_walking();
 	animation_state->play_animation();
+	delete old_animation_state;
 }
 
 void VisualComponent3D::_on_movement_finish() {
 	animation_state = animation_state->on_stop_walking();
 	animation_state->play_animation();
+	delete old_animation_state;
 }
 
 Entity *VisualComponent3D::get_owning_entity() {
@@ -76,9 +79,10 @@ void VisualComponent3D::_on_animation_finish(const String& animation_name) {
 	ERR_FAIL_NULL(owning_entity);
 	MovementComponent *movement_component = owning_entity->get_movement_component();
 	bool is_currently_walking = movement_component && movement_component->is_currently_moving() ? true : false;
-
+	AnimationState *old_animation_state = animation_state;
 	animation_state = animation_state->on_animation_finish(is_currently_walking);
 	animation_state->play_animation();
+	delete old_animation_state;
 }
 
 bool VisualComponent3D::is_currently_playing_death_animation() {
@@ -93,8 +97,10 @@ void VisualComponent3D::play_death_animation() {
 }
 
 void VisualComponent3D::_on_entity_death(const Ref<DamageObject>& damage_object) {
+	AnimationState *old_animation_state = animation_state;
 	animation_state = animation_state->on_death();
 	animation_state->play_animation();
+	delete old_animation_state;
 }
 
 void VisualComponent3D::set_idle_animation_name(const StringName& new_idle_animation_name) {
@@ -145,8 +151,10 @@ void VisualComponent3D::_bind_methods() {
 }
 
 void VisualComponent3D::play_animation_override(const String& animation_name) {
+	AnimationState *old_animation_state = animation_state;
 	animation_state = animation_state->on_animation_override(animation_name);
 	animation_state->play_animation();
+	delete old_animation_state;
 }
 
 void VisualComponent3D::play_named_animation(const StringName& animation_name) {
@@ -162,6 +170,8 @@ AnimationPlayer *VisualComponent3D::get_animation_player() {
 }
 
 void VisualComponent3D::_on_entity_revive() {
+	AnimationState *old_animation_state = animation_state;
 	animation_state = animation_state->on_respawn();
 	animation_state->play_animation();
+	delete old_animation_state;
 }

@@ -8,6 +8,7 @@
 #include <shared/core/game_level.h>
 #include <shared/gamemodes/gamemode.h>
 #include <shared/collisions/ability_hitbox_helper.h>
+#include <shared/entities/components/entity_stats/entity_attributes_component.h>
 
 void BarbarianBasicAttack::_bind_methods() {
     ::ClassDB::bind_method(D_METHOD("get_hitbox"), &BarbarianBasicAttack::get_hitbox);
@@ -47,7 +48,6 @@ void BarbarianBasicAttack::_notification(int p_notification) {
 }
 #ifdef SERVER
 void BarbarianBasicAttack::_use(const Ref<ActionContext>& use_context) {
-    _prepare_attack(use_context);
 
     ERR_FAIL_NULL(use_context->get_user());
     ERR_FAIL_NULL(use_context->get_user()->get_gamelevel());
@@ -85,6 +85,19 @@ Area3D *BarbarianBasicAttack::get_hitbox() {
     return hitbox;
 }
 
+void BarbarianBasicAttack::start_ability_cooldown(const Ref<ActionContext> &action_context) {
+    if(action_context->get_user()) {
+        EntityAttributesComponent *attributes = action_context->get_user()->get_attributes_component();
+        if(attributes) {
+            float attack_speed = attributes->get_attack_speed()->get_current();
+            float time_between_attacks = 1/attack_speed;
+
+            // Attack speed scaling
+            cooldown_timer->start(time_between_attacks);
+        }
+    }
+}
+
 #ifdef CLIENT
 void BarbarianBasicAttack::_entity_hit_with_attack(Entity *entity, const Ref<ActionContext>& use_context) {
     play_vfx_at_position(hit_visual_effect, entity->get_global_position());
@@ -93,19 +106,8 @@ void BarbarianBasicAttack::_entity_hit_with_attack(Entity *entity, const Ref<Act
 void BarbarianBasicAttack::_use(const Ref<ActionContext>& action_context) {
     ERR_FAIL_NULL(action_context->get_user());
     // Play swing sound
-    
-    // Play animation
-    // TODO: Move to sandboxed method
-    VisualComponent3D *visual_component = action_context->get_user()->get_visual_component();
-    _prepare_attack(action_context);
-    if(visual_component)  {
-        visual_component->play_animation_override("Attack002");
-    }
-    else {
-        print_error("Failed to play animation! Missing VisualComponent3D!");
-    }
-
     play_sound(action_context, attack_sound);
+    // Play animation
     play_animation(action_context, "Attack01");
 
     // Spawn slash VFX

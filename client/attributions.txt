@@ -1,7 +1,62 @@
-The following files are licensed as CC-BY 3.0
-
-https://opengameart.org/content/osare-10-sound-pack
+The following files are licensed as CC-BY 3.0(https://creativecommons.org/licenses/by/3.0/)
 - audio/warcry.wav
+ - Source: https://opengameart.org/content/osare-10-sound-pack
+ - Author: Augmentality (Brandon Morris)
+ - Changes: None
 
-https://crystallotus.itch.io/skybox-textures
+The following files are licensed under CC BY 4.0 license(https://creativecommons.org/licenses/by/4.0/):
+- audio/Massive Horn.wav 
+ - Source: https://opengameart.org/content/scary-echoey-horn-esque-sound
+ - Author: https://opengameart.org/users/kat
+ - Changes: Shortened
+
+The following files are licensed as CC0(https://creativecommons.org/public-domain/cc0/):
+- audio/swing3.wav
+ - Source: https://opengameart.org/content/rpg-sound-pack
+- audio/sword-unseathe.wav
+ - Source: https://opengameart.org/content/rpg-sound-pack
+- levels/Dungeon_meshlib.tres - Tileset generated from content
+ - Source: https://kenney.nl/assets/mini-dungeon
+- Files under "models" directory, with exception of sword.*, orc_club.* and crystal.*
+ - Source: https://kenney.nl/assets/mini-dungeon
+ - Source: https://www.kenney.nl/assets/castle-kit
+- Files under "textures/vfx" directory. Source: https://www.kenney.nl/assets/particle-pack
+ - flare_01.png
+ - light_02.png
+ - smoke_04.png
+ - spark_05.png
+ - spark_06.png
+ - twirl_02.png
+- Files under "textures/vfx" directory. Source: https://screamingbrainstudios.itch.io/noise-texture-pack
+ - Milky_12-512x512.png
+ - Circular_05-512x512.png
+- Files under "textures/vfx" directory. Source: https://polyhaven.com/a/stone_tiles_02
+ - stone_tiles_02_disp_4k.png
+
+The following files were created at https://game-icons.net/ using it's built-in editor and are licensed under CC-BY 3.0(https://creativecommons.org/licenses/by/3.0/). Authors are: Lorc, Delapouite & contributors. Changes are mostly colors of certain elements and no changes outside web editor were made.
+- textures/icons/*
+- textures/ui/controls/mouse-middle-btn.png
+- textures/ui/cog.svg
+- textures/ui/connect.svg
+- textures/ui/disconnect_icon.svg
+- textures/ui/exit-door.svg
+- textures/ui/gamepad.svg
+- textures/ui/gameplay.svg
+- textures/ui/read.svg
+- textures/vfx/cracked-shield.png
+- textures/vfx/dance_with_death_vfx.png
+- ui/cog.svg
+- ui/exit-door.svg
+- ui/gamepad.svg
+- ui/read.svg
+- ui/tattered-banner.png
+- ui/winged-shield.png
+
+
+Other attributions:
 - textures/skybox/BlueSkySkybox.png
+ - Source: https://crystallotus.itch.io/skybox-textures
+- Files under "textures/vfx" directory. Source: https://jellyfish0.itch.io/textures-for-particles-2
+ - 8.png
+ - 9.png
+ - 30.png

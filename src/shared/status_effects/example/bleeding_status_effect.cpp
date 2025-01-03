@@ -3,6 +3,7 @@
 #include <shared/entities/components/damage/damageable_component.h>
 #include <shared/entities/components/status_effects/status_effect_victim_component.h>
 #include <shared/core/managers/component_manager.h>
+#include <shared/data_holders/builders/damage_object_builder.h>
 
 #include <scene/main/timer.h>
 
@@ -32,8 +33,16 @@ void BleedingStatusEffect::_on_bleed_tick() {
     Entity *ent = get_victim_component()->get_owning_entity();
     ERR_FAIL_NULL(ent);
 
-    DamageableComponent *damageable = ent->get_component<DamageableComponent>();
-    ERR_FAIL_NULL(damageable);
+    DamageableComponent *damageable = ent->get_damageable_component();
+    if(!damageable) return;
 
-    damageable->take_damage(memnew(DamageObject(DamageObject::DAMAGE_PHYSICAL, (DamageObject::ABILITY_DAMAGE & DamageObject::OVER_TIME_DAMAGE), damage, get_inflictor())));
+    damageable->take_damage(
+        DamageObjectBuilder()
+            .damage_type(DamageObject::DAMAGE_PHYSICAL)
+            .damage_subtype_ability()
+            .damage_subtype_over_time()
+            .value(damage)
+            .attacker(get_inflictor())
+            .build()
+    );
 }

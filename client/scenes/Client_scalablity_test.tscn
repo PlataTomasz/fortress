@@ -6,7 +6,7 @@ script/source = "extends Client
 func _ready() -> void:
 		playerdata[\"nickname\"] = str(Time.get_unix_time_from_system()*1000000)
 		playerdata[\"mercenary\"] = \"Orc_new\"
-		connect_to_game_server(\"localhost\", 7654)
+		connect_to_game_server(\"192.168.1.109\", 7654)
 		player_connected.connect(_on_ply_connect)
 
 func _on_ply_connect(ply):

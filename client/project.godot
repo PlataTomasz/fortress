@@ -13,6 +13,7 @@ config_version=5
 config/name="artifact-seekers-client"
 run/main_scene="res://scenes/Client_new.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
+run/max_fps=60
 config/icon="res://icon.svg"
 
 [debug]
@@ -23,8 +24,13 @@ shapes/collision/shape_color=Color(0.0506666, 0.76, 0, 0.843137)
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="ignore"
+
+[editor]
+
+run/main_run_args="--headless"
 
 [global_group]
 
