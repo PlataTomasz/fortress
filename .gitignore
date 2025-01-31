@@ -1,3 +1,6 @@
+# Game
+client/
+
 # Godot auto generated files
 *.gen.*
 .import/
@@ -7,6 +10,8 @@
 # Godot 3.x ignores
 include/gen
 src/gen
+*.pck
+*.tmp
 
 # Build configuarion.
 /custom.py

@@ -1,12 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://bbhigaegup74j"]
 
 [sub_resource type="GDScript" id="GDScript_l7mgo"]
-script/source = "extends Server
+script/source = "@tool
+extends Server
 
 var player_count: int = 0
 
 func retrieve_player_count() -> int:
 	return player_count
+
+
 
 func _on_player_connect(ply: Player):
 	player_count = player_count + 1
@@ -14,11 +17,26 @@ func _on_player_connect(ply: Player):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	player_connected.connect(_on_player_connect)
-	Performance.add_custom_monitor(\"game_server/players\", retrieve_player_count)
+	Performance.add_custom_monitor(\"game_server/Gracze\", retrieve_player_count)
+	Performance.add_custom_monitor(\"time/srednie_przetwarzanie\", retrieve_average_process_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
+func average(numbers: Array) -> float:
+	var sum := 0.0
+	for n in numbers:
+		sum += n
+	return sum / numbers.size()
+
+var avg_process_times: Array
+
+func retrieve_average_process_time() -> float:
+	if avg_process_times.size() > 20:
+		avg_process_times.pop_front()
+	avg_process_times.push_back(Performance.get_monitor(Performance.TIME_PROCESS))
+	return snappedf(average(avg_process_times)*1000, 0.01)
 "
 
 [node name="Server" type="Server"]

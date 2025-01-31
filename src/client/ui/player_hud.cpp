@@ -21,7 +21,7 @@
 
 void PlayerHUD::_ready() {
     // Setup signals
-    Client *client = static_cast<Client *>(get_node(NodePath("/root/Client")));
+    Client *client = Client::get_instance();
     ERR_FAIL_NULL(client);
 
     SH_Game *game = client->get_shared_game();

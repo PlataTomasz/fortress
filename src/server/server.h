@@ -38,6 +38,8 @@ private:
 
     Node *players = nullptr;
 
+    static Server *instance;
+
     void _await_console_command();
     void _setup_console_commands();
 protected:

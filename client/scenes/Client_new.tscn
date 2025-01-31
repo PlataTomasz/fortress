@@ -273,6 +273,9 @@ client = NodePath("../../../../..")
 [node name="ExitBtn" parent="MainMenu/PanelContainer/MarginContainer/MenuEntries" index="7" node_paths=PackedStringArray("client")]
 client = NodePath("../../../../..")
 
+[node name="CharacterSelection" parent="MainMenu/ContentArea" index="0"]
+layout_mode = 0
+
 [node name="TextureRect" parent="MainMenu/ContentArea/PanelWhenNothingIsActive" index="0"]
 texture = SubResource("ViewportTexture_r3oe8")
 

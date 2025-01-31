@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="artifact-seekers-client"
-run/main_scene="res://scenes/Client_new.tscn"
+config/name="fortress"
+run/main_scene="res://scenes/launcher.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
@@ -27,10 +27,6 @@ window/size/viewport_height=1080
 window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="ignore"
-
-[editor]
-
-run/main_run_args="--headless"
 
 [global_group]
 

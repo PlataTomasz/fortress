@@ -8,8 +8,7 @@
 
 Server *get_game_server()
 {
-    SceneTree* sceneTreeSingleton = (SceneTree*)SceneTree::get_singleton();
-    return reinterpret_cast<Server *>(sceneTreeSingleton->get_root()->get_node(NodePath("Server")));
+    return Server::get_instance();
 }
 
 #endif // COMMON_NODES_INCLUDED

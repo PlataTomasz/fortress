@@ -30,6 +30,8 @@ viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_fboaj"]
 resource_local_to_scene = true
+max = 500.0
+current = 500.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_vbjon"]
 resource_local_to_scene = true
@@ -333,6 +335,8 @@ viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_fmk5p"]
 resource_local_to_scene = true
+max = 250.0
+current = 250.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_qhhpo"]
 resource_local_to_scene = true
@@ -969,7 +973,7 @@ shape = SubResource("CylinderShape3D_vbos0")
 [node name="DamageableComponent" type="DamageableComponent" parent="Entities/BlueTurretInner"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn", "res://entities/projectiles/BlueTurretProjectile.tscn")
+_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn", "res://entities/projectiles/BlueTurretProjectile.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

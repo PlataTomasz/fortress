@@ -728,10 +728,7 @@ layout_mode = 2
 script = SubResource("GDScript_u8ll8")
 
 [node name="CharacterSelection" parent="ContentArea" groups=["sidebar_panels"] instance=ExtResource("7_1qnqh")]
-visible = false
-layout_mode = 2
 offset_right = 1552.0
-mouse_filter = 1
 
 [node name="HowToPlayControlsPanel" type="PanelContainer" parent="ContentArea"]
 visible = false
@@ -1283,7 +1280,7 @@ shape = SubResource("CylinderShape3D_vbos0")
 [node name="DamageableComponent" type="DamageableComponent" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram/Entities/BlueTurretInner"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
-_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/mercenaries/Barbarian.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn")
+_spawnable_scenes = PackedStringArray("res://resources/entities/Entity.tscn", "res://entities/mercenaries/Orc.tscn", "res://entities/box_entity.tscn", "res://entities/mercenaries/Barbarian_new.tscn", "res://entities/mercenaries/Orc_new.tscn", "res://entities/projectiles/TurretProjectile.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ContentArea/PanelWhenNothingIsActive/TextureRect/SubViewport/Aram"]
