@@ -1,9 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://d0khn1uw56sxd"]
+[gd_scene load_steps=16 format=3 uid="uid://d0khn1uw56sxd"]
 
 [ext_resource type="ButtonGroup" uid="uid://dcoayub2mcste" path="res://scenes/ui/CharacterSelectionBtnGroup.tres" id="1_dx5ol"]
 [ext_resource type="PackedScene" uid="uid://x3b3wxhlpsi2" path="res://scenes/ui/CharacterListElement.tscn" id="1_qnof2"]
-[ext_resource type="Texture2D" uid="uid://qhiy6ljrxf82" path="res://textures/icons/mercenaries/barbarian.png" id="2_rqdck"]
-[ext_resource type="Texture2D" uid="uid://cwrg0gbaq852l" path="res://textures/icons/mercenaries/orc.png" id="3_261bc"]
 [ext_resource type="Script" path="res://scripts/ui/character_selection/hover_change_tooltip.gd" id="6_uwql8"]
 [ext_resource type="Texture2D" uid="uid://d1oxyj5wujpii" path="res://textures/icons/ui/uncertainty.png" id="6_v7tpi"]
 [ext_resource type="Script" path="res://scripts/ui/character_selection/regex_tested_lineedit.tres.gd" id="7_1bq07"]
@@ -126,28 +124,42 @@ albedo_texture = ExtResource("6_v7tpi")
 [sub_resource type="QuadMesh" id="QuadMesh_xehsq"]
 material = SubResource("StandardMaterial3D_dvj7i")
 
-[node name="CharacterSelection" type="UserInterface" node_paths=PackedStringArray("main_menu")]
+[node name="CharacterSelection" type="UserInterface"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 offset_right = 1920.0
 offset_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
-main_menu = NodePath("PanelContainer")
+script = null
 
-[node name="PanelContainer" type="MainMenu" parent="." node_paths=PackedStringArray("ip_input", "nickname_input", "join_button", "character_select_area")]
+[node name="PanelContainer" type="MainMenu" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-ip_input = NodePath("HSplitContainer/CharacterArea/VBoxContainer/IpInput")
-nickname_input = NodePath("HSplitContainer/CharacterArea/VBoxContainer/NicknameInput")
-join_button = NodePath("HSplitContainer/CharacterArea/VBoxContainer/JoinBtn")
 character_button_group = ExtResource("1_dx5ol")
-character_select_area = NodePath("HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer")
+script = null
 
 [node name="HSplitContainer" type="HSplitContainer" parent="PanelContainer"]
-layout_mode = 2
 collapsed = true
 dragger_visibility = 2
 
@@ -188,16 +200,31 @@ theme_override_constants/v_separation = 16
 columns = 8
 
 [node name="Barbarian" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_qnof2")]
-layout_mode = 2
-character_index = "Barbarian_new"
-title = "Barbarian"
-icon = ExtResource("2_rqdck")
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+script = null
+
+[node name="Element" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer/Barbarian" index="0"]
+layout_mode = 3
 
 [node name="Orc" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/ScrollContainer/GridContainer" instance=ExtResource("1_qnof2")]
-layout_mode = 2
-character_index = "Orc_new"
-title = "Orc"
-icon = ExtResource("3_261bc")
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+script = null
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer"]
 layout_mode = 2
@@ -212,6 +239,7 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 size_flags_horizontal = 3
 script = SubResource("GDScript_hgcf2")
+mercenary_select_button_group = ExtResource("1_dx5ol")
 basic_attack_icon = NodePath("GridContainer/BasicAttackIcon")
 passive_ability_icon = NodePath("GridContainer/PassiveAbilityIcon")
 first_ability_icon = NodePath("GridContainer/FirstAbilityIcon")
@@ -220,7 +248,6 @@ third_ability_icon = NodePath("GridContainer/ThirdAbilityIcon")
 ultimate_ability_icon = NodePath("GridContainer/FourthAbilityIcon")
 where_to_put_mercenary = NodePath("CharacterModelPreview/SubViewport/RotatingNode3D")
 current_mercenary_model = NodePath("CharacterModelPreview/SubViewport/RotatingNode3D/MeshInstance3D2")
-mercenary_select_button_group = ExtResource("1_dx5ol")
 
 [node name="CharacterModelPreview" type="AspectRatioContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
 layout_mode = 2
@@ -327,18 +354,24 @@ stretch_mode = 5
 script = ExtResource("6_uwql8")
 tooltip = NodePath("../../AbilityTooltip1")
 
-[node name="AbilityTooltip1" type="AbilityTooltip" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview" node_paths=PackedStringArray("ability_icon_display", "ability_name_display", "ability_description_display")]
+[node name="AbilityTooltip1" type="AbilityTooltip" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 2
-ability_icon_display = NodePath("MarginContainer/VBoxContainer/FlowContainer/TextureRect")
-ability_name_display = NodePath("MarginContainer/VBoxContainer/FlowContainer/AbilityName")
-ability_description_display = NodePath("MarginContainer/VBoxContainer/AbilityText")
+script = null
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HSplitContainer/CharacterArea/MarginContainer2/MarginContainer/MarginContainer/AbilitySetPreview/AbilityTooltip1"]
-layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12

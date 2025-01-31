@@ -2,7 +2,7 @@ import sys
 import os
 
 build_target = input("Build target[Client/Server]:")
-is_editor_build = input("Editor build?[Yes/No]:")
+is_editor_build = input("Editor build?[Yes/No/Template]:")
 build_type = input("Build type[Debug/Release]:")
 platform = input("Platform[Linux/Windows]:")
 

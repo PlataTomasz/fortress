@@ -52,6 +52,12 @@ elif(build_subtype == "server"): # Server build only code
 else:
     print("\"game_target\" undefined!")
     Exit(255)
+    
+if(env["target"] == "editor"):
+    env_zip.Append(CPPDEFINES=["EDITOR_BUILD"])
+    
+print("Target is:")
+print(env["target"])
 
 # Both client and server
 sources += recursive_glob(sh_src_dir)

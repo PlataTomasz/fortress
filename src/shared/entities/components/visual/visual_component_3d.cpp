@@ -51,6 +51,7 @@ void VisualComponent3D::_on_movement_start() {
 }
 
 void VisualComponent3D::_on_movement_finish() {
+	AnimationState *old_animation_state = animation_state;
 	animation_state = animation_state->on_stop_walking();
 	animation_state->play_animation();
 	delete old_animation_state;

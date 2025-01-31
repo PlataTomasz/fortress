@@ -110,7 +110,7 @@ void GameCamera::_notification(int p_notification) {
 			break;
 
 		case NOTIFICATION_READY: {
-            Client *client = Object::cast_to<Client>(get_node_or_null(NodePath("/root/Client")));
+            Client *client = Client::get_instance();
             ERR_FAIL_NULL(client);
 
             Ref<Player> ply = client->get_player();

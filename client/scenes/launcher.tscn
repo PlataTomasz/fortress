@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://165n15th4y6h"]
+
+[ext_resource type="Script" path="res://scenes/launcher.gd" id="1_5deod"]
+[ext_resource type="PackedScene" uid="uid://cqomdo5bsl7q6" path="res://scenes/Client_new.tscn" id="2_aqxoq"]
+[ext_resource type="PackedScene" uid="uid://bbhigaegup74j" path="res://scenes/Server_with_scalablity_monitor.tscn" id="3_qv8b7"]
+
+[node name="Launcher" type="Node"]
+script = ExtResource("1_5deod")
+client_scene = ExtResource("2_aqxoq")
+server_scene = ExtResource("3_qv8b7")

@@ -33,6 +33,8 @@ private:
     Ref<Player> player;
     Dictionary playerdata;
 
+    static Client *instance;
+
     void _on_server_connect();
     void _on_server_disconnect();
     void _init();

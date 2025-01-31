@@ -1,4 +1,5 @@
 #include "ui_controler.h"
+#include <client/client.hpp>
 #include <shared/entities/entity.h>
 
 void UIController::_notification(int p_notification) {
@@ -14,10 +15,13 @@ void UIController::_notification(int p_notification) {
 
 void UIController::_ready() {
     //Hook into the level entities
-    Node *entities = get_node_or_null(NodePath("/root/Client/Game/Level/Entities"));
-    ERR_FAIL_NULL_MSG(entities, "Hooking into Level/Entities failed!");
 
-    entities->connect("child_entered_tree", callable_mp(this, &UIController::_on_new_entity_entered));
+    if(Client *client = Client::get_instance()) {
+        Node *entities = client->get_node_or_null(NodePath("Game/Level/Entities"));
+        ERR_FAIL_NULL_MSG(entities, "Hooking into Level/Entities failed!");
+
+        entities->connect("child_entered_tree", callable_mp(this, &UIController::_on_new_entity_entered));
+    }
 }
 
 void UIController::_enter_tree() {

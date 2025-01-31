@@ -24,12 +24,15 @@ protected:
         PackedStringArray file_names = directory_access->get_files();
 
         for(const String &filename : file_names) {
-            Ref<PackedScene> packed_status_effect = ResourceLoader::load(path + filename, PackedScene::get_class_static());
-            ERR_FAIL_COND(packed_status_effect.is_null());
+            // #ifdef EDITOR_BUILD
+                // Ref<PackedScene> packed_status_effect = ResourceLoader::load(path + filename);
+                // ERR_FAIL_COND(packed_status_effect.is_null());
+            // #else
+                PackedStringArray filename_without_remap = filename.split(".remap");
+                Ref<PackedScene> packed_status_effect = ResourceLoader::load(path + filename_without_remap[0]);
+                ERR_FAIL_COND(packed_status_effect.is_null());
+            // #endif
 
-            Ref<SceneState> scene_state = packed_status_effect->get_state();
-            // HACK: Temp fix untill I'll figure out why It's wrong
-            //ERR_FAIL_COND_MSG(scene_state->get_node_type(0) == T::get_class_static(), "Register of " + filename + " failed. PackedScene doesn't have " + T::get_class_static() + " as scene root!");
             PackedStringArray filename_split = filename.split(".");
             ERR_FAIL_COND(filename_split.size() < 1);
             String filename_no_extension = filename_split[0];

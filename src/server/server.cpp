@@ -15,6 +15,8 @@
 #include <server/core/console_cmd/disconnect_peer_console_command.h>
 #include <scene/main/scene_tree.h>
 
+Server *Server::instance = nullptr;
+
 void Server::_ready()
 {
     DISABLE_IN_EDITOR();
@@ -65,13 +67,7 @@ void Server::_on_peer_disconnect(int peer_id)
 }
 
 Server *Server::get_instance() {
-    ERR_FAIL_NULL_V(SceneTree::get_singleton(), nullptr);
-    ERR_FAIL_NULL_V(SceneTree::get_singleton()->get_root(), nullptr);
-
-    Server *server_instance = Object::cast_to<Server>(SceneTree::get_singleton()->get_root()->get_node_or_null(NodePath("Server")));
-    ERR_FAIL_NULL_V(server_instance, nullptr);
-
-    return server_instance;
+    return instance;
 }
 
 void Server::_on_peer_connect(int peer_id)
@@ -110,6 +106,8 @@ void Server::on_peer_disconnect(int peer_id) {
 */
 
 void Server::_init() {
+    instance = this;
+
     DISABLE_IN_EDITOR();
     //Setup networking
     server_peer.instantiate(); //Same as using memnew

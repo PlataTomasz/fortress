@@ -11,6 +11,8 @@
 
 #include <client/ui/main_menu.h>
 
+Client *Client::instance = nullptr;
+
 Client::Client()
 {
     DISABLE_IN_EDITOR();
@@ -118,6 +120,8 @@ void Client::_on_join_server_btn_press() {
 
 void Client::_init()
 {
+    instance = this;
+
     client_peer.instantiate(); //Same as using memnew
     scene_multiplayer.instantiate();
 }
@@ -275,12 +279,7 @@ UserInterface *Client::get_user_interface() {
 }
 
 Client *Client::get_instance() {
-    ERR_FAIL_NULL_V(SceneTree::get_singleton(), nullptr);
-    ERR_FAIL_NULL_V(SceneTree::get_singleton()->get_root(), nullptr);
-
-    Client *client_instance = Object::cast_to<Client>(SceneTree::get_singleton()->get_root()->get_node_or_null(NodePath("Client")));
-
-    return client_instance;
+    return instance;
 }
 
 void Client::disconnect_from_server() {
