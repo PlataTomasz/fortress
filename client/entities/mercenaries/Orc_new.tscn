@@ -31,7 +31,7 @@ resource_local_to_scene = true
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_g2ea8"]
 resource_local_to_scene = true
-base = 300.0
+base = 700.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_nldr1"]
 viewport_path = NodePath("EntityHealthBar/SubViewport")

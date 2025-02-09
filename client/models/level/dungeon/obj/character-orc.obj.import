@@ -4,14 +4,11 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cge81pd7xjrew"
-path="res://.godot/imported/character-orc.obj-8bc133b23cdc5465224a80668cbb47f8.mesh"
+valid=false
 
 [deps]
 
-files=["res://.godot/imported/character-orc.obj-8bc133b23cdc5465224a80668cbb47f8.mesh"]
-
 source_file="res://models/level/dungeon/obj/character-orc.obj"
-dest_files=["res://.godot/imported/character-orc.obj-8bc133b23cdc5465224a80668cbb47f8.mesh", "res://.godot/imported/character-orc.obj-8bc133b23cdc5465224a80668cbb47f8.mesh"]
 
 [params]
 

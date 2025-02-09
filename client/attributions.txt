@@ -52,7 +52,6 @@ The following files were created at https://game-icons.net/ using it's built-in 
 - ui/tattered-banner.png
 - ui/winged-shield.png
 
-
 Other attributions:
 - textures/skybox/BlueSkySkybox.png
  - Source: https://crystallotus.itch.io/skybox-textures
@@ -60,3 +59,9 @@ Other attributions:
  - 8.png
  - 9.png
  - 30.png
+
+No copyright - free to use:
+ - audio/bgm.mp3
+  - Author: Alkakrab
+  - Title: Clash of Arcane Titans
+  - Source: https://alkakrab.itch.io/free-25-fantasy-rpg-game-tracks
