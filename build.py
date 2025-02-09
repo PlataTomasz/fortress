@@ -2,7 +2,7 @@ import sys
 import os
 
 build_target = input("Build target[Client/Server]:")
-is_editor_build = input("Editor build?[Yes/No/Template]:")
+is_editor_build = input("Editor build?[Yes/No/DebugTemplate/ReleaseTemplate]:")
 build_type = input("Build type[Debug/Release]:")
 platform = input("Platform[Linux/Windows]:")
 
@@ -36,8 +36,10 @@ if not is_editor_build or is_editor_build[0] == "Yes"[0]:
 	build_append_options = build_append_options + " target=editor"
 elif is_editor_build[0] == "No"[0]:
 	build_append_options = build_append_options + " target=release"
-elif is_editor_build[0] == "Template"[0]:
-	build_append_options = build_append_options + " target=template_release"
+elif is_editor_build[0] == "DebugTemplate"[0]:
+	build_append_options = build_append_options + " target=template_debug"
+elif is_editor_build[0] == "ReleaseTemplate"[0]:
+	build_append_options = build_append_options + " target=template_release"   
 else:
 	print("Error: Is neither editor build nor release or template! Exiting.")
 	exit(4)

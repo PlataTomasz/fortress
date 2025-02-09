@@ -140,7 +140,7 @@ void MobaGamemode::_on_entity_death(Entity *entity, const Ref<DamageObject> &dam
     death_timer->set_one_shot(true);
 
     death_timer->connect("timeout", callable_mp(this, &MobaGamemode::_on_death_timer_expire).bind(entity));
-    death_timer->connect("timeout", callable_mp(this, &MobaGamemode::_death_timer_cleanup));
+    death_timer->connect("timeout", callable_mp(this, &MobaGamemode::_death_timer_cleanup).bind(death_timer));
 
     add_child(death_timer);
 }

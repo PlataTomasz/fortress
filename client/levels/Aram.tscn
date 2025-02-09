@@ -100,6 +100,8 @@ viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_v8vyn"]
 resource_local_to_scene = true
+max = 500.0
+current = 500.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_g8yga"]
 resource_local_to_scene = true
@@ -225,8 +227,8 @@ _data = {
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_tvbb7"]
 resource_local_to_scene = true
-max = 1.0
-current = 1.0
+max = 250.0
+current = 250.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_its8q"]
 resource_local_to_scene = true
@@ -281,6 +283,8 @@ shadow_mesh = SubResource("ArrayMesh_ewv87")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_dhu4d"]
 resource_local_to_scene = true
+max = 250.0
+current = 250.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_u16s2"]
 resource_local_to_scene = true
@@ -308,6 +312,8 @@ viewport_path = NodePath("EntityHealthBar/SubViewport")
 
 [sub_resource type="CappedResourceAttribute" id="CappedResourceAttribute_wmsr7"]
 resource_local_to_scene = true
+max = 250.0
+current = 250.0
 
 [sub_resource type="FloatAttribute" id="FloatAttribute_157a8"]
 resource_local_to_scene = true

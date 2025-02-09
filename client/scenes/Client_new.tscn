@@ -274,7 +274,7 @@ client = NodePath("../../../../..")
 client = NodePath("../../../../..")
 
 [node name="CharacterSelection" parent="MainMenu/ContentArea" index="0"]
-layout_mode = 0
+physics_interpolation_mode = 0
 
 [node name="TextureRect" parent="MainMenu/ContentArea/PanelWhenNothingIsActive" index="0"]
 texture = SubResource("ViewportTexture_r3oe8")
